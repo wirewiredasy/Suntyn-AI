@@ -1,0 +1,82 @@
+Frontend – Modern HTML + TailwindCSS + AlpineJS (React optional)
+🔧 Backend – Python (Flask) with Modular Tool Scripts
+☁️ Cloud Storage – Firebase
+
+DESIGN SYSTEM
+
+Use TailwindCSS (prebuilt utility classes)
+
+Use DaisyUI for styled components
+
+Mobile-First responsive layout
+
+Animation via Framer Motion / Animate.css / AOS
+
+Grid + Box Cards (for tool preview)
+
+Element	Details
+
+✅ Navbar	Fixed top with logo + Home/Tools/Docs/Contact
+✅ Hero Section	Animated intro (Toolora AI: One Place. All Tools.)
+✅ Tool Cards	Hover effects + Icons + "Open Tool" button
+✅ Footer	About, Social Icons, GitHub, Privacy, Sitemap
+✅ Mobile View	Hamburger menu, one-column layout
+✅ Color Palette	Indigo + Sky Blue (Professional feel)
+✅ Font	Inter or Poppins (Google Fonts)
+✅ Icons	Lucide Icons or Font Awesome
+
+SEO + META TAG SETUP
+
+Every page mein ye honi chahiye:
+
+Tool System Modular Setup
+
+Each tool ek component/route hona chahiye:
+
+UI: tools/pdf-merge.html
+
+Backend route: /api/pdf/merge
+Isse future mein add/edit easy hoga, and 85+ tools manageable rahenge.
+
+Category Filter (PDF, Image, AI, etc.)	Organize 85+ tools
+🔍 Search Bar with Suggestions	Easy tool discovery
+📌 Most Used / Popular Tools Section	Personalize for user
+🌙 Dark Mode Toggle	UX + trend advantage
+🧑‍💼 Recently Used by You	Smart dashboard for returning users
+
+User Panel (with Firebase Login)
+
+Feature	Use
+
+🔐 Login/Signup	Firebase Auth
+📁 Saved Files	User uploaded files
+🧾 History	Previously used tools
+🎨 Theme Settings	User prefers dark/light
+
+User Panel (with Firebase Login)
+
+Feature	Use
+
+🔐 Login/Signup	Firebase Auth
+📁 Saved Files	User uploaded files
+🧾 History	Previously used tools
+🎨 Theme Settings	User prefers dark/light
+
+9. SEO & Sitemap Boosters
+
+What	Why
+
+✅ sitemap.xml + robots.txt	Indexing & rank
+✅ Dynamic Meta Tags per tool	Better CTR
+✅ JSON-LD Schema	Rich results in Google
+✅ OG Meta + Twitter Cards	Link previews on social
+
+UI + Responsive + SEO	✔️ Ready
+✅ Modular Tools System	✔️ Possible now
+✅ Firebase Integration	✔️ Free, scalable
+✅ Admin/Settings Panel	✔️ No-code updates
+✅ Tool Routing + Smart Pages	✔️ Scalable
+✅ Mobile App	✔️ Free release
+✅ Security + Legal	✔️ Ready for monetization
+✅ AI Workflow Tools	✔️ Ready to integrate
+✅ Monetization	✔️ Passive
