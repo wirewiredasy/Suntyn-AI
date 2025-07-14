@@ -147,6 +147,59 @@ a {
 /* Ensure proper color inheritance for dynamic color classes */
 .text-red-600 { color: #dc2626; }
 .text-green-600 { color: #16a34a; }
+
+
+/* Custom Toolora AI Loading Animations */
+.toolora-spinner {
+    width: 50px;
+    height: 50px;
+    background-image: url('/static/images/toolora-icon.jpg');
+    background-size: cover;
+    background-position: center;
+    border-radius: 50%;
+    animation: tooloraSpin 1s linear infinite;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+@keyframes tooloraSpin {
+    0% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(180deg) scale(1.1); }
+    100% { transform: rotate(360deg) scale(1); }
+}
+
+/* Pulse animation for processing */
+.toolora-pulse {
+    animation: tooloraPulse 2s ease-in-out infinite;
+}
+
+@keyframes tooloraPulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(1.05); }
+}
+
+/* Tool category icons with Toolora branding */
+.tool-category-icon {
+    position: relative;
+}
+
+.tool-category-icon::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    right: -2px;
+    width: 16px;
+    height: 16px;
+    background-image: url('/static/images/toolora-icon.jpg');
+    background-size: cover;
+    border-radius: 50%;
+    border: 2px solid white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.dark .tool-category-icon::after {
+    border-color: #1f2937;
+}
+
 .text-blue-600 { color: #2563eb; }
 .text-purple-600 { color: #9333ea; }
 .text-orange-600 { color: #ea580c; }

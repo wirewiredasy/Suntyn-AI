@@ -2,30 +2,30 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Fast initialization to prevent flash
     document.body.style.opacity = '1';
-    
+
     // Initialize Lucide icons
     if (typeof lucide !== 'undefined') {
         lucide.createIcons();
     }
-    
+
     // Initialize tooltips
     initializeTooltips();
-    
+
     // Initialize file handlers
     initializeFileHandlers();
-    
+
     // Initialize search functionality
     initializeSearch();
-    
+
     // Initialize notification system
     initializeNotifications();
-    
+
     // Initialize analytics
     initializeAnalytics();
-    
+
     // Ensure chat widget never auto-opens
     preventChatAutoOpen();
-    
+
     // Add smooth page transitions
     addPageTransitions();
 });
@@ -45,11 +45,11 @@ function showTooltip(event) {
     tooltip.className = 'tooltip absolute z-50 px-2 py-1 text-sm bg-gray-900 text-white rounded shadow-lg';
     tooltip.textContent = text;
     document.body.appendChild(tooltip);
-    
+
     const rect = event.target.getBoundingClientRect();
     tooltip.style.left = rect.left + (rect.width / 2) - (tooltip.offsetWidth / 2) + 'px';
     tooltip.style.top = rect.top - tooltip.offsetHeight - 5 + 'px';
-    
+
     event.target._tooltip = tooltip;
 }
 
@@ -92,7 +92,7 @@ function handleDragLeave(event) {
 function handleDrop(event) {
     event.preventDefault();
     event.target.classList.remove('dragover');
-    
+
     const files = event.dataTransfer.files;
     if (files.length > 0) {
         // Trigger file input change event
@@ -116,7 +116,7 @@ function handleSearch(event) {
     const query = event.target.value.toLowerCase();
     const target = event.target.getAttribute('data-search');
     const items = document.querySelectorAll(target);
-    
+
     items.forEach(item => {
         const text = item.textContent.toLowerCase();
         if (text.includes(query)) {
@@ -152,7 +152,7 @@ function formatDuration(seconds) {
     const hrs = Math.floor(seconds / 3600);
     const mins = Math.floor((seconds % 3600) / 60);
     const secs = Math.floor(seconds % 60);
-    
+
     if (hrs > 0) {
         return `${hrs}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
     } else {
@@ -172,7 +172,7 @@ function copyToClipboard(text) {
         document.body.appendChild(textArea);
         textArea.focus();
         textArea.select();
-        
+
         try {
             document.execCommand('copy');
             document.body.removeChild(textArea);
@@ -198,21 +198,21 @@ function initializeNotifications() {
 function showNotification(message, type = 'info', duration = 5000) {
     const container = document.getElementById('notifications');
     const notification = document.createElement('div');
-    
+
     const colors = {
         info: 'bg-blue-600',
         success: 'bg-green-600',
         warning: 'bg-yellow-600',
         error: 'bg-red-600'
     };
-    
+
     const icons = {
         info: 'info',
         success: 'check-circle',
         warning: 'alert-triangle',
         error: 'alert-circle'
     };
-    
+
     notification.className = `toast flex items-center space-x-3 ${colors[type]} text-white px-4 py-3 rounded-lg shadow-lg max-w-sm`;
     notification.innerHTML = `
         <i data-lucide="${icons[type]}" class="w-5 h-5"></i>
@@ -221,14 +221,14 @@ function showNotification(message, type = 'info', duration = 5000) {
             <i data-lucide="x" class="w-4 h-4"></i>
         </button>
     `;
-    
+
     container.appendChild(notification);
-    
+
     // Re-initialize icons for the new notification
     if (typeof lucide !== 'undefined') {
         lucide.createIcons();
     }
-    
+
     // Auto-remove notification
     if (duration > 0) {
         setTimeout(() => {
@@ -249,14 +249,17 @@ function showLoading(element, text = 'Loading...') {
     if (typeof element === 'string') {
         element = document.querySelector(element);
     }
-    
+
     if (element) {
-        element.innerHTML = `
-            <div class="flex items-center justify-center space-x-2">
-                <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
-                <span>${text}</span>
+        // Show loading state with Toolora branding
+        const loadingHtml = `
+            <div class="flex flex-col items-center justify-center py-8">
+                <div class="toolora-spinner mb-4"></div>
+                <span class="text-gray-600 dark:text-gray-400 font-medium">Processing with Toolora AI...</span>
+                <span class="text-sm text-gray-500 dark:text-gray-500 mt-1">Please wait</span>
             </div>
         `;
+        element.innerHTML = loadingHtml;
         element.disabled = true;
     }
 }
@@ -265,7 +268,7 @@ function hideLoading(element, originalText = 'Submit') {
     if (typeof element === 'string') {
         element = document.querySelector(element);
     }
-    
+
     if (element) {
         element.innerHTML = originalText;
         element.disabled = false;
@@ -276,10 +279,10 @@ function hideLoading(element, originalText = 'Submit') {
 function validateForm(formSelector) {
     const form = document.querySelector(formSelector);
     if (!form) return false;
-    
+
     const inputs = form.querySelectorAll('input[required], select[required], textarea[required]');
     let isValid = true;
-    
+
     inputs.forEach(input => {
         if (!input.value.trim()) {
             showFieldError(input, 'This field is required');
@@ -287,7 +290,7 @@ function validateForm(formSelector) {
         } else {
             clearFieldError(input);
         }
-        
+
         // Email validation
         if (input.type === 'email' && input.value) {
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -296,7 +299,7 @@ function validateForm(formSelector) {
                 isValid = false;
             }
         }
-        
+
         // Password validation
         if (input.type === 'password' && input.value) {
             if (input.value.length < 6) {
@@ -305,17 +308,17 @@ function validateForm(formSelector) {
             }
         }
     });
-    
+
     return isValid;
 }
 
 function showFieldError(input, message) {
     clearFieldError(input);
-    
+
     const errorElement = document.createElement('div');
     errorElement.className = 'field-error text-red-500 text-sm mt-1';
     errorElement.textContent = message;
-    
+
     input.parentElement.appendChild(errorElement);
     input.classList.add('border-red-500');
 }
@@ -332,10 +335,10 @@ function clearFieldError(input) {
 function initializeAnalytics() {
     // Track page views
     trackPageView();
-    
+
     // Track tool usage
     trackToolUsage();
-    
+
     // Track user interactions
     trackUserInteractions();
 }
@@ -343,7 +346,7 @@ function initializeAnalytics() {
 function trackPageView() {
     const page = window.location.pathname;
     console.log('Page view:', page);
-    
+
     // Send to analytics service
     // This would typically send to Google Analytics, Mixpanel, etc.
 }
@@ -382,14 +385,14 @@ function initializePWA() {
                 console.log('SW registration failed:', error);
             });
     }
-    
+
     // Install prompt
     let deferredPrompt;
-    
+
     window.addEventListener('beforeinstallprompt', (event) => {
         event.preventDefault();
         deferredPrompt = event;
-        
+
         // Show install button
         const installButton = document.getElementById('install-button');
         if (installButton) {
@@ -414,7 +417,7 @@ function initializePerformanceMonitoring() {
         const loadTime = performance.timing.loadEventEnd - performance.timing.navigationStart;
         console.log('Page load time:', loadTime + 'ms');
     });
-    
+
     // Monitor resource loading
     const observer = new PerformanceObserver((list) => {
         list.getEntries().forEach((entry) => {
@@ -423,20 +426,20 @@ function initializePerformanceMonitoring() {
             }
         });
     });
-    
+
     observer.observe({entryTypes: ['resource']});
 }
 
 // Error handling
 window.addEventListener('error', (event) => {
     console.error('Global error:', event.error);
-    
+
     // Don't show notifications for Firebase config errors
     if (event.error && event.error.code && event.error.code.includes('auth/')) {
         console.log('Firebase auth error handled silently in demo mode');
         return;
     }
-    
+
     // Show user-friendly error message for other errors
     if (event.error && !event.error.message.includes('Firebase')) {
         showNotification('An error occurred. Please try again.', 'error');
@@ -445,13 +448,13 @@ window.addEventListener('error', (event) => {
 
 window.addEventListener('unhandledrejection', (event) => {
     console.error('Unhandled promise rejection:', event.reason);
-    
+
     // Don't show notifications for Firebase config errors
     if (event.reason && event.reason.code && event.reason.code.includes('auth/')) {
         console.log('Firebase auth promise rejection handled silently in demo mode');
         return;
     }
-    
+
     // Show user-friendly error message for other errors
     if (event.reason && !event.reason.message.includes('Firebase')) {
         showNotification('An error occurred. Please try again.', 'error');
@@ -468,7 +471,7 @@ document.addEventListener('keydown', (event) => {
             searchInput.focus();
         }
     }
-    
+
     // Escape to close modals
     if (event.key === 'Escape') {
         const modals = document.querySelectorAll('[data-modal]');
@@ -489,13 +492,13 @@ function preventChatAutoOpen() {
         if (chatWidget.__x) {
             chatWidget.__x.$data.isOpen = false;
         }
-        
+
         // Ensure chat window stays hidden
         const chatWindow = chatWidget.querySelector('[x-show="isOpen"]');
         if (chatWindow) {
             chatWindow.style.display = 'none';
         }
-        
+
         // Monitor and prevent any auto-opening
         const observer = new MutationObserver(() => {
             if (chatWidget.__x && chatWidget.__x.$data.isOpen) {
@@ -506,7 +509,7 @@ function preventChatAutoOpen() {
                 }
             }
         });
-        
+
         observer.observe(chatWidget, { 
             attributes: true, 
             childList: true, 
@@ -533,17 +536,17 @@ function addPageTransitions() {
             if (this.hostname !== window.location.hostname || this.getAttribute('href').startsWith('#')) {
                 return;
             }
-            
+
             // Add transition class
             document.body.classList.add('page-transition', 'loading');
-            
+
             // Small delay to show transition
             setTimeout(() => {
                 window.location = this.href;
             }, 100);
         });
     });
-    
+
     // Handle form submissions smoothly
     const forms = document.querySelectorAll('form');
     forms.forEach(form => {

@@ -24,7 +24,15 @@
     <meta name="twitter:image" content="{{ url_for('static', filename='images/twitter-card.jpg') }}">
 
     <!-- Favicon -->
+    <link rel="icon" type="image/jpeg" href="{{ url_for('static', filename='images/toolora-icon.jpg') }}">
     <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/favicon.svg') }}">
+    
+    <!-- App Icons for Mobile -->
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='images/toolora-icon.jpg') }}">
+    <meta name="theme-color" content="#3b82f6">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -88,17 +96,18 @@
         }
         
         .spinner {
-            width: 32px;
-            height: 32px;
-            border: 3px solid #e5e7eb;
-            border-top: 3px solid #3b82f6;
+            width: 40px;
+            height: 40px;
+            background-image: url('{{ url_for('static', filename='images/toolora-icon.jpg') }}');
+            background-size: cover;
+            background-position: center;
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
+            border: 2px solid rgba(59, 130, 246, 0.3);
         }
         
         .dark .spinner {
-            border-color: #374151;
-            border-top-color: #60a5fa;
+            border-color: rgba(96, 165, 250, 0.3);
         }
         
         @keyframes spin {
@@ -159,8 +168,14 @@
                 <!-- Logo -->
                 <div class="flex items-center space-x-2">
                     <a href="{{ url_for('main.index') }}" class="flex items-center space-x-2">
-                        <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                            <i data-lucide="brain" class="w-5 h-5 text-white"></i>
+                        <div class="w-8 h-8 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-600">
+                            <img src="{{ url_for('static', filename='images/toolora-icon.jpg') }}" 
+                                 alt="Toolora AI" 
+                                 class="w-full h-full object-cover"
+                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center" style="display: none;">
+                                <i data-lucide="brain" class="w-5 h-5 text-white"></i>
+                            </div>
                         </div>
                         <span class="text-xl font-bold text-gray-800 dark:text-white">Toolora AI</span>
                     </a>
@@ -583,3 +598,35 @@
     {% block scripts %}{% endblock %}
 </body>
 </html>
+
+
+    <!-- Custom Error Handler -->
+    <script>
+    // Handle image loading errors with Toolora branding
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add error handling for all tool icons
+        const toolIcons = document.querySelectorAll('.tool-card img, .category-icon img');
+        
+        toolIcons.forEach(img => {
+            img.onerror = function() {
+                // Replace with Toolora branded fallback
+                this.src = '{{ url_for('static', filename='images/toolora-icon.jpg') }}';
+                this.classList.add('toolora-pulse');
+                this.style.filter = 'brightness(0.8)';
+            };
+        });
+        
+        // Add Toolora branding to loading states
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                mutation.addedNodes.forEach(function(node) {
+                    if (node.nodeType === 1 && node.classList && node.classList.contains('spinner')) {
+                        node.classList.add('toolora-spinner');
+                    }
+                });
+            });
+        });
+        
+        observer.observe(document.body, { childList: true, subtree: true });
+    });
+    </script>
