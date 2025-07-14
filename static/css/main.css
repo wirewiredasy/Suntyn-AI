@@ -1,21 +1,17 @@
 /* Main CSS for Toolora AI */
 
-/* Animation improvements to prevent flash issues */
-.animate__animated {
-  animation-duration: 0.5s;
-  animation-fill-mode: both;
+/* Prevent white flash and FOUC */
+html {
+  background-color: #f9fafb;
 }
 
-.animate__fadeIn {
-  animation-duration: 0.3s;
+html.dark {
+  background-color: #111827;
 }
 
-.animate__fadeInUp {
-  animation-duration: 0.4s;
-}
-
-.animate__fadeInDown {
-  animation-duration: 0.3s;
+body {
+  background-color: inherit;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 /* Prevent flash of unstyled content */
@@ -23,9 +19,59 @@
   display: none !important;
 }
 
-/* Smooth transitions for dark mode */
+/* Prevent loading flash */
+.loading-overlay {
+  background-color: inherit;
+  transition: opacity 0.2s ease;
+}
+
+/* Animation improvements to prevent flash issues */
+.animate__animated {
+  animation-duration: 0.3s;
+  animation-fill-mode: both;
+}
+
+.animate__fadeIn {
+  animation-duration: 0.2s;
+}
+
+.animate__fadeInUp {
+  animation-duration: 0.3s;
+}
+
+.animate__fadeInDown {
+  animation-duration: 0.2s;
+}
+
+/* Smooth transitions for all elements */
 * {
-  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, opacity 0.2s ease;
+}
+
+/* Prevent button flash on click */
+button, a, [role="button"] {
+  transition: all 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:active, a:active, [role="button"]:active {
+  transform: scale(0.98);
+}
+
+/* Prevent link flash */
+a {
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+/* Page transition improvements */
+.page-transition {
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.page-transition.loading {
+  opacity: 0.8;
+  transform: scale(0.99);
 }
 
 /* Tool card hover effects */

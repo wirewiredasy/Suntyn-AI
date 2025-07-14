@@ -1,5 +1,8 @@
 // Main application JavaScript
 document.addEventListener('DOMContentLoaded', function() {
+    // Fast initialization to prevent flash
+    document.body.style.opacity = '1';
+    
     // Initialize Lucide icons
     if (typeof lucide !== 'undefined') {
         lucide.createIcons();
@@ -22,6 +25,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Ensure chat widget never auto-opens
     preventChatAutoOpen();
+    
+    // Add smooth page transitions
+    addPageTransitions();
 });
 
 // Tooltip initialization
@@ -517,6 +523,36 @@ document.addEventListener('click', function(event) {
     }
 });
 
+// Add smooth page transitions
+function addPageTransitions() {
+    // Smooth transitions for all links
+    const links = document.querySelectorAll('a[href^="/"], a[href^="' + window.location.origin + '"]');
+    links.forEach(link => {
+        link.addEventListener('click', function(e) {
+            // Don't interfere with external links or hash links
+            if (this.hostname !== window.location.hostname || this.getAttribute('href').startsWith('#')) {
+                return;
+            }
+            
+            // Add transition class
+            document.body.classList.add('page-transition', 'loading');
+            
+            // Small delay to show transition
+            setTimeout(() => {
+                window.location = this.href;
+            }, 100);
+        });
+    });
+    
+    // Handle form submissions smoothly
+    const forms = document.querySelectorAll('form');
+    forms.forEach(form => {
+        form.addEventListener('submit', function() {
+            document.body.classList.add('page-transition', 'loading');
+        });
+    });
+}
+
 // Export functions for use in other scripts
 window.tooloraApp = {
     showNotification,
@@ -527,5 +563,6 @@ window.tooloraApp = {
     formatDuration,
     copyToClipboard,
     debounce,
-    preventChatAutoOpen
+    preventChatAutoOpen,
+    addPageTransitions
 };

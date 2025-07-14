@@ -57,22 +57,29 @@
     <!-- Preload CSS to prevent flash -->
     <style>
         /* Prevent flash of unstyled content */
-        body { opacity: 0; transition: opacity 0.3s ease; }
+        html { background-color: #f9fafb; }
+        html.dark { background-color: #111827; }
+        
+        body { 
+            opacity: 0; 
+            transition: opacity 0.2s ease; 
+            background-color: inherit;
+        }
         body.loaded { opacity: 1; }
         
-        /* Loading overlay */
+        /* Loading overlay - inherit background to prevent flash */
         .loading-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: #f9fafb;
+            background-color: inherit;
             display: flex;
             align-items: center;
             justify-content: center;
             z-index: 9999;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.2s ease;
         }
         
         .loading-overlay.hidden {
@@ -80,22 +87,29 @@
             pointer-events: none;
         }
         
-        .dark .loading-overlay {
-            background: #111827;
+        .spinner {
+            width: 32px;
+            height: 32px;
+            border: 3px solid #e5e7eb;
+            border-top: 3px solid #3b82f6;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
         }
         
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 4px solid #e5e7eb;
-            border-top: 4px solid #3b82f6;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
+        .dark .spinner {
+            border-color: #374151;
+            border-top-color: #60a5fa;
         }
         
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
+        }
+        
+        /* Prevent button flash */
+        button, a, [role="button"] {
+            -webkit-tap-highlight-color: transparent;
+            transition: all 0.15s ease;
         }
     </style>
 
@@ -364,32 +378,39 @@
         }
     </script>
 
-    <!-- Initialize Lucide Icons -->
+    <!-- Fast initialization script -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Initialize Lucide Icons
-            lucide.createIcons();
+        // Immediate initialization
+        (function() {
+            // Show content immediately
+            document.body.classList.add('loaded');
             
-            // Hide loading overlay and show body
-            setTimeout(function() {
-                document.body.classList.add('loaded');
+            // Fast initialization when DOM is ready
+            const initializeApp = function() {
+                // Initialize Lucide Icons
+                if (typeof lucide !== 'undefined') {
+                    lucide.createIcons();
+                }
+                
+                // Hide loading overlay
                 const loadingOverlay = document.getElementById('loading-overlay');
                 if (loadingOverlay) {
                     loadingOverlay.classList.add('hidden');
-                    setTimeout(() => loadingOverlay.remove(), 300);
+                    setTimeout(() => {
+                        if (loadingOverlay.parentNode) {
+                            loadingOverlay.remove();
+                        }
+                    }, 200);
                 }
-            }, 100);
-        });
-        
-        // Backup initialization for faster loading
-        window.addEventListener('load', function() {
-            document.body.classList.add('loaded');
-            const loadingOverlay = document.getElementById('loading-overlay');
-            if (loadingOverlay) {
-                loadingOverlay.classList.add('hidden');
-                setTimeout(() => loadingOverlay.remove(), 300);
+            };
+            
+            // Initialize as soon as possible
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initializeApp);
+            } else {
+                initializeApp();
             }
-        });
+        })();
     </script>
 
     <!-- Live Chat Widget -->
