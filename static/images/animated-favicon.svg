@@ -1,0 +1,84 @@
+
+<svg width="32" height="32" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .toolora-icon {
+        animation: tooloraPulse 3s ease-in-out infinite;
+        transform-origin: 50% 50%;
+      }
+      
+      .color-strip-1 {
+        fill: #3b82f6;
+        animation: colorShift1 4s ease-in-out infinite;
+      }
+      
+      .color-strip-2 {
+        fill: #8b5cf6;
+        animation: colorShift2 4s ease-in-out infinite 0.5s;
+      }
+      
+      .color-strip-3 {
+        fill: #06b6d4;
+        animation: colorShift3 4s ease-in-out infinite 1s;
+      }
+      
+      .glow-effect {
+        filter: drop-shadow(0 0 3px rgba(59, 130, 246, 0.4));
+        animation: glowPulse 2s ease-in-out infinite alternate;
+      }
+      
+      @keyframes tooloraPulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+      }
+      
+      @keyframes colorShift1 {
+        0%, 100% { fill: #3b82f6; }
+        33% { fill: #8b5cf6; }
+        66% { fill: #06b6d4; }
+      }
+      
+      @keyframes colorShift2 {
+        0%, 100% { fill: #8b5cf6; }
+        33% { fill: #06b6d4; }
+        66% { fill: #3b82f6; }
+      }
+      
+      @keyframes colorShift3 {
+        0%, 100% { fill: #06b6d4; }
+        33% { fill: #3b82f6; }
+        66% { fill: #8b5cf6; }
+      }
+      
+      @keyframes glowPulse {
+        from { filter: drop-shadow(0 0 3px rgba(59, 130, 246, 0.4)); }
+        to { filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.8)); }
+      }
+    </style>
+  </defs>
+  
+  <!-- Main Toolora Icon with animated layers -->
+  <g class="toolora-icon glow-effect">
+    <!-- Background Circle -->
+    <circle cx="50" cy="50" r="45" fill="#f8fafc" stroke="#e2e8f0" stroke-width="2"/>
+    
+    <!-- Animated T Letter with color strips -->
+    <g transform="translate(50, 50)">
+      <!-- Top horizontal bar of T -->
+      <rect x="-20" y="-25" width="40" height="8" class="color-strip-1" rx="4"/>
+      
+      <!-- Vertical bar of T - divided into animated segments -->
+      <rect x="-4" y="-17" width="8" height="15" class="color-strip-2" rx="4"/>
+      <rect x="-4" y="-2" width="8" height="15" class="color-strip-3" rx="4"/>
+      <rect x="-4" y="13" width="8" height="12" class="color-strip-1" rx="4"/>
+    </g>
+    
+    <!-- Small Toolora branding dots -->
+    <circle cx="25" cy="25" r="2" class="color-strip-2" opacity="0.6">
+      <animate attributeName="opacity" values="0.6;1;0.6" dur="2s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="75" cy="75" r="2" class="color-strip-3" opacity="0.6">
+      <animate attributeName="opacity" values="0.6;1;0.6" dur="2s" repeatCount="indefinite" begin="0.5s"/>
+    </circle>
+  </g>
+</svg>

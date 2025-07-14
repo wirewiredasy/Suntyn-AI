@@ -1,0 +1,36 @@
+
+<svg width="32" height="32" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .static-icon {
+        filter: drop-shadow(0 0 3px rgba(59, 130, 246, 0.3));
+      }
+    </style>
+  </defs>
+  
+  <!-- Static Toolora Icon -->
+  <g class="static-icon">
+    <!-- Background Circle -->
+    <circle cx="50" cy="50" r="45" fill="#f8fafc" stroke="#e2e8f0" stroke-width="2"/>
+    
+    <!-- T Letter with color strips -->
+    <g transform="translate(50, 50)">
+      <!-- Top horizontal bar of T -->
+      <rect x="-20" y="-25" width="40" height="8" fill="#3b82f6" rx="4"/>
+      
+      <!-- Vertical bar of T with gradient effect -->
+      <defs>
+        <linearGradient id="tGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:1" />
+          <stop offset="50%" style="stop-color:#06b6d4;stop-opacity:1" />
+          <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1" />
+        </linearGradient>
+      </defs>
+      <rect x="-4" y="-17" width="8" height="42" fill="url(#tGradient)" rx="4"/>
+    </g>
+    
+    <!-- Small branding dots -->
+    <circle cx="25" cy="25" r="2" fill="#8b5cf6" opacity="0.8"/>
+    <circle cx="75" cy="75" r="2" fill="#06b6d4" opacity="0.8"/>
+  </g>
+</svg>
