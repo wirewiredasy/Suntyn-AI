@@ -1,0 +1,436 @@
+{% extends "base.html" %}
+
+{% block title %}AI Resume Generator - Create Professional Resumes | Toolora AI{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <!-- Header -->
+    <div class="text-center mb-12">
+        <div class="w-16 h-16 rounded-full bg-violet-100 dark:bg-violet-900 flex items-center justify-center mx-auto mb-4">
+            <i data-lucide="brain" class="w-8 h-8 text-violet-600 dark:text-violet-400"></i>
+        </div>
+        <h1 class="text-4xl md:text-5xl font-bold text-gray-800 dark:text-white mb-4">
+            AI Resume Generator
+        </h1>
+        <p class="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+            Create professional, ATS-friendly resumes in minutes with our AI-powered generator
+        </p>
+    </div>
+
+    <!-- Resume Builder -->
+    <div class="max-w-4xl mx-auto">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-8">
+            <div x-data="resumeBuilder()" x-init="init()">
+                <!-- Step 1: Personal Information -->
+                <div x-show="step === 1" class="space-y-6">
+                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">Personal Information</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Full Name *</label>
+                            <input type="text" x-model="personalInfo.name" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-violet-500 dark:bg-gray-700 dark:text-white">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email Address *</label>
+                            <input type="email" x-model="personalInfo.email" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-violet-500 dark:bg-gray-700 dark:text-white">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Phone Number *</label>
+                            <input type="tel" x-model="personalInfo.phone" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-violet-500 dark:bg-gray-700 dark:text-white">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Location</label>
+                            <input type="text" x-model="personalInfo.location" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-violet-500 dark:bg-gray-700 dark:text-white">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">LinkedIn Profile</label>
+                            <input type="url" x-model="personalInfo.linkedin" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-violet-500 dark:bg-gray-700 dark:text-white">
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-end">
+                        <button @click="nextStep()" class="btn btn-primary px-8 py-3">
+                            Next: Professional Summary
+                            <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 2: Professional Summary -->
+                <div x-show="step === 2" class="space-y-6">
+                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">Professional Summary</h2>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Job Title/Position</label>
+                        <input type="text" x-model="summary.jobTitle" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-violet-500 dark:bg-gray-700 dark:text-white">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Years of Experience</label>
+                        <select x-model="summary.experience" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-violet-500 dark:bg-gray-700 dark:text-white">
+                            <option value="0-1">0-1 years</option>
+                            <option value="2-5">2-5 years</option>
+                            <option value="5-10">5-10 years</option>
+                            <option value="10+">10+ years</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Professional Summary</label>
+                        <textarea x-model="summary.description" rows="4" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-violet-500 dark:bg-gray-700 dark:text-white" placeholder="Brief description of your professional background and key achievements"></textarea>
+                    </div>
+                    
+                    <div class="flex justify-between">
+                        <button @click="prevStep()" class="btn btn-outline px-8 py-3">
+                            <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i>
+                            Previous
+                        </button>
+                        <button @click="nextStep()" class="btn btn-primary px-8 py-3">
+                            Next: Work Experience
+                            <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 3: Work Experience -->
+                <div x-show="step === 3" class="space-y-6">
+                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">Work Experience</h2>
+                    
+                    <template x-for="(job, index) in workExperience" :key="index">
+                        <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 space-y-4">
+                            <div class="flex justify-between items-start">
+                                <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Job <span x-text="index + 1"></span></h3>
+                                <button @click="removeJob(index)" class="text-red-500 hover:text-red-700">
+                                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Job Title</label>
+                                    <input type="text" x-model="job.title" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-violet-500 dark:bg-gray-700 dark:text-white">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Company</label>
+                                    <input type="text" x-model="job.company" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-violet-500 dark:bg-gray-700 dark:text-white">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Start Date</label>
+                                    <input type="month" x-model="job.startDate" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-violet-500 dark:bg-gray-700 dark:text-white">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">End Date</label>
+                                    <input type="month" x-model="job.endDate" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-violet-500 dark:bg-gray-700 dark:text-white">
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Job Description</label>
+                                <textarea x-model="job.description" rows="3" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-violet-500 dark:bg-gray-700 dark:text-white" placeholder="Describe your responsibilities and achievements"></textarea>
+                            </div>
+                        </div>
+                    </template>
+                    
+                    <button @click="addJob()" class="btn btn-outline w-full py-3">
+                        <i data-lucide="plus" class="w-4 h-4 mr-2"></i>
+                        Add Another Job
+                    </button>
+                    
+                    <div class="flex justify-between">
+                        <button @click="prevStep()" class="btn btn-outline px-8 py-3">
+                            <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i>
+                            Previous
+                        </button>
+                        <button @click="nextStep()" class="btn btn-primary px-8 py-3">
+                            Next: Education & Skills
+                            <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 4: Education & Skills -->
+                <div x-show="step === 4" class="space-y-6">
+                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">Education & Skills</h2>
+                    
+                    <!-- Education -->
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Education</h3>
+                        <template x-for="(edu, index) in education" :key="index">
+                            <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 space-y-4 mb-4">
+                                <div class="flex justify-between items-start">
+                                    <h4 class="text-md font-medium text-gray-800 dark:text-white">Education <span x-text="index + 1"></span></h4>
+                                    <button @click="removeEducation(index)" class="text-red-500 hover:text-red-700">
+                                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                    </button>
+                                </div>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Degree</label>
+                                        <input type="text" x-model="edu.degree" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-violet-500 dark:bg-gray-700 dark:text-white">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Institution</label>
+                                        <input type="text" x-model="edu.institution" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-violet-500 dark:bg-gray-700 dark:text-white">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Year</label>
+                                        <input type="number" x-model="edu.year" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-violet-500 dark:bg-gray-700 dark:text-white">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">GPA (optional)</label>
+                                        <input type="text" x-model="edu.gpa" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-violet-500 dark:bg-gray-700 dark:text-white">
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                        
+                        <button @click="addEducation()" class="btn btn-outline w-full py-3">
+                            <i data-lucide="plus" class="w-4 h-4 mr-2"></i>
+                            Add Education
+                        </button>
+                    </div>
+                    
+                    <!-- Skills -->
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Skills</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Technical Skills</label>
+                                <input type="text" x-model="skillsInput.technical" @keyup.enter="addSkill('technical')" placeholder="e.g., Python, JavaScript, React (press Enter to add)" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-violet-500 dark:bg-gray-700 dark:text-white">
+                                <div class="flex flex-wrap gap-2 mt-2">
+                                    <template x-for="skill in skills.technical" :key="skill">
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200">
+                                            <span x-text="skill"></span>
+                                            <button @click="removeSkill('technical', skill)" class="ml-2 text-blue-600 hover:text-blue-800">
+                                                <i data-lucide="x" class="w-3 h-3"></i>
+                                            </button>
+                                        </span>
+                                    </template>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Soft Skills</label>
+                                <input type="text" x-model="skillsInput.soft" @keyup.enter="addSkill('soft')" placeholder="e.g., Leadership, Communication, Problem-solving" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-violet-500 dark:bg-gray-700 dark:text-white">
+                                <div class="flex flex-wrap gap-2 mt-2">
+                                    <template x-for="skill in skills.soft" :key="skill">
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200">
+                                            <span x-text="skill"></span>
+                                            <button @click="removeSkill('soft', skill)" class="ml-2 text-green-600 hover:text-green-800">
+                                                <i data-lucide="x" class="w-3 h-3"></i>
+                                            </button>
+                                        </span>
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-between">
+                        <button @click="prevStep()" class="btn btn-outline px-8 py-3">
+                            <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i>
+                            Previous
+                        </button>
+                        <button @click="generateResume()" class="btn btn-primary px-8 py-3" :disabled="generating">
+                            <span x-show="!generating">
+                                <i data-lucide="brain" class="w-4 h-4 mr-2"></i>
+                                Generate Resume
+                            </span>
+                            <span x-show="generating">Generating...</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 5: Download -->
+                <div x-show="step === 5" class="text-center space-y-6">
+                    <div class="w-16 h-16 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center mx-auto">
+                        <i data-lucide="check" class="w-8 h-8 text-green-600 dark:text-green-400"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white">
+                        Resume Generated Successfully!
+                    </h2>
+                    <p class="text-gray-600 dark:text-gray-300">
+                        Your professional resume has been created and is ready for download
+                    </p>
+                    
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <a :href="downloadUrl" class="btn btn-primary btn-lg px-8 py-3" download>
+                            <i data-lucide="download" class="w-5 h-5 mr-2"></i>
+                            Download Resume
+                        </a>
+                        <button @click="reset()" class="btn btn-outline btn-lg px-8 py-3">
+                            <i data-lucide="rotate-ccw" class="w-5 h-5 mr-2"></i>
+                            Create Another Resume
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function resumeBuilder() {
+    return {
+        step: 1,
+        generating: false,
+        downloadUrl: '',
+        
+        personalInfo: {
+            name: '',
+            email: '',
+            phone: '',
+            location: '',
+            linkedin: ''
+        },
+        
+        summary: {
+            jobTitle: '',
+            experience: '2-5',
+            description: ''
+        },
+        
+        workExperience: [
+            {
+                title: '',
+                company: '',
+                startDate: '',
+                endDate: '',
+                description: ''
+            }
+        ],
+        
+        education: [
+            {
+                degree: '',
+                institution: '',
+                year: '',
+                gpa: ''
+            }
+        ],
+        
+        skills: {
+            technical: [],
+            soft: []
+        },
+        
+        skillsInput: {
+            technical: '',
+            soft: ''
+        },
+        
+        init() {
+            // Initialize component
+        },
+        
+        nextStep() {
+            if (this.step < 5) {
+                this.step++;
+            }
+        },
+        
+        prevStep() {
+            if (this.step > 1) {
+                this.step--;
+            }
+        },
+        
+        addJob() {
+            this.workExperience.push({
+                title: '',
+                company: '',
+                startDate: '',
+                endDate: '',
+                description: ''
+            });
+        },
+        
+        removeJob(index) {
+            this.workExperience.splice(index, 1);
+        },
+        
+        addEducation() {
+            this.education.push({
+                degree: '',
+                institution: '',
+                year: '',
+                gpa: ''
+            });
+        },
+        
+        removeEducation(index) {
+            this.education.splice(index, 1);
+        },
+        
+        addSkill(type) {
+            const skill = this.skillsInput[type].trim();
+            if (skill && !this.skills[type].includes(skill)) {
+                this.skills[type].push(skill);
+                this.skillsInput[type] = '';
+            }
+        },
+        
+        removeSkill(type, skill) {
+            const index = this.skills[type].indexOf(skill);
+            if (index > -1) {
+                this.skills[type].splice(index, 1);
+            }
+        },
+        
+        async generateResume() {
+            this.generating = true;
+            
+            try {
+                const resumeData = {
+                    name: this.personalInfo.name,
+                    email: this.personalInfo.email,
+                    phone: this.personalInfo.phone,
+                    location: this.personalInfo.location,
+                    linkedin: this.personalInfo.linkedin,
+                    summary: this.summary,
+                    experience: this.workExperience,
+                    education: this.education,
+                    skills: [...this.skills.technical, ...this.skills.soft]
+                };
+                
+                const response = await fetch('/api/ai/resume', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(resumeData)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    this.downloadUrl = result.download_url;
+                    this.step = 5;
+                } else {
+                    throw new Error(result.error || 'Failed to generate resume');
+                }
+                
+            } catch (error) {
+                alert('Error generating resume: ' + error.message);
+            } finally {
+                this.generating = false;
+            }
+        },
+        
+        reset() {
+            this.step = 1;
+            this.generating = false;
+            this.downloadUrl = '';
+            // Reset all form data
+            this.personalInfo = { name: '', email: '', phone: '', location: '', linkedin: '' };
+            this.summary = { jobTitle: '', experience: '2-5', description: '' };
+            this.workExperience = [{ title: '', company: '', startDate: '', endDate: '', description: '' }];
+            this.education = [{ degree: '', institution: '', year: '', gpa: '' }];
+            this.skills = { technical: [], soft: [] };
+            this.skillsInput = { technical: '', soft: '' };
+        }
+    };
+}
+</script>
+{% endblock %}
