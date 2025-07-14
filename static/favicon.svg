@@ -1,39 +1,22 @@
-<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <!-- Enhanced gradient matching the new logo -->
-    <linearGradient id="toolora-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#10B981;stop-opacity:1" />
-      <stop offset="50%" style="stop-color:#06B6D4;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#8B5CF6;stop-opacity:1" />
+    <linearGradient id="faviconGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10B981"/>
+      <stop offset="50%" style="stop-color:#06B6D4"/>
+      <stop offset="100%" style="stop-color:#8B5CF6"/>
     </linearGradient>
-    
-    <!-- Inner gradient for 3D effect -->
-    <linearGradient id="inner-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#8B5CF6;stop-opacity:1" />
-      <stop offset="50%" style="stop-color:#3B82F6;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#06B6D4;stop-opacity:1" />
-    </linearGradient>
-    
-    <!-- Glow effect -->
-    <filter id="glow">
-      <feGaussianBlur stdDeviation="1" result="coloredBlur"/>
-      <feMerge>
-        <feMergeNode in="coloredBlur"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
-    </filter>
   </defs>
-  
-  <!-- Background with rounded corners -->
-  <rect width="32" height="32" rx="6" fill="url(#toolora-gradient)" filter="url(#glow)"/>
-  
-  <!-- Modern T shape -->
-  <path d="M8 10 L24 10 L24 14 L20 14 L20 22 L12 22 L12 14 L8 14 Z" 
+
+  <!-- Background -->
+  <rect x="0" y="0" width="32" height="32" fill="url(#faviconGradient)" rx="6"/>
+
+  <!-- T shape optimized for small size -->
+  <path d="M 6 10 L 26 10 L 26 14 L 20 14 L 20 22 L 12 22 L 12 14 L 6 14 Z" 
         fill="white" 
         opacity="0.95"/>
-        
-  <!-- Inner highlight for 3D effect -->
-  <path d="M9 11 L23 11 L23 13 L19 13 L19 21 L13 21 L13 13 L9 13 Z" 
-        fill="url(#inner-gradient)" 
+
+  <!-- Small highlight -->
+  <path d="M 8 12 L 24 12 L 24 13 L 18 13 L 18 20 L 14 20 L 14 13 L 8 13 Z" 
+        fill="white" 
         opacity="0.3"/>
 </svg>

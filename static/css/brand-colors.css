@@ -1,61 +1,208 @@
-/* Toolora AI Brand Colors and Hover Effects */
+/* Toolora AI Brand Colors and Enhanced Animations */
 :root {
     --toolora-purple: #8B5CF6;
     --toolora-cyan: #06B6D4;
     --toolora-emerald: #10B981;
-    --toolora-gradient: linear-gradient(135deg, var(--toolora-purple) 0%, var(--toolora-cyan) 50%, var(--toolora-emerald) 100%);
+    --toolora-gradient: linear-gradient(135deg, var(--toolora-emerald) 0%, var(--toolora-cyan) 50%, var(--toolora-purple) 100%);
+    --toolora-glow: 0 0 30px rgba(139, 92, 246, 0.3);
 }
 
-/* Enhanced hover effects for tool cards */
+/* Enhanced logo animations */
+.header-logo {
+    background: linear-gradient(135deg, #10B981 0%, #06B6D4 50%, #8B5CF6 100%);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 1.5rem;
+    font-weight: 800;
+    transition: all 0.5s ease;
+    position: relative;
+    animation: gradientShift 3s ease infinite;
+}
+
+@keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+.header-logo:hover {
+    animation: logoHover 0.6s ease-in-out;
+    filter: drop-shadow(0 0 10px rgba(139, 92, 246, 0.5));
+}
+
+@keyframes logoHover {
+    0%, 100% { transform: scale(1) rotate(0deg); }
+    25% { transform: scale(1.05) rotate(1deg); }
+    50% { transform: scale(1.1) rotate(0deg); }
+    75% { transform: scale(1.05) rotate(-1deg); }
+}
+
+/* Logo container with animated border */
+.logo-container {
+    position: relative;
+    display: inline-block;
+}
+
+.logo-container::before {
+    content: '';
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
+    background: linear-gradient(45deg, #10B981, #06B6D4, #8B5CF6, #10B981);
+    background-size: 300% 300%;
+    border-radius: 16px;
+    z-index: -1;
+    animation: borderGradient 4s ease infinite;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.logo-container:hover::before {
+    opacity: 0.6;
+}
+
+@keyframes borderGradient {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+/* Logo sparkle effect */
+.logo-sparkle {
+    position: relative;
+}
+
+.logo-sparkle::after {
+    content: '';
+    position: absolute;
+    top: 10%;
+    right: 10%;
+    width: 4px;
+    height: 4px;
+    background: radial-gradient(circle, #ffffff 0%, transparent 70%);
+    border-radius: 50%;
+    opacity: 0;
+    animation: sparkle 2s ease-in-out infinite;
+}
+
+@keyframes sparkle {
+    0%, 100% { opacity: 0; transform: scale(0) rotate(0deg); }
+    50% { opacity: 1; transform: scale(1) rotate(180deg); }
+}
+
+/* Enhanced tool card animations with new brand colors */
 .tool-card {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     border: 1px solid transparent;
-    background: linear-gradient(white, white) padding-box, var(--toolora-gradient) border-box;
+    background: linear-gradient(white, white) padding-box, 
+                linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.1), rgba(139, 92, 246, 0.1)) border-box;
+    position: relative;
+    overflow: hidden;
+}
+
+.tool-card::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: var(--toolora-gradient);
+    border-radius: inherit;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
 .tool-card:hover {
-    transform: translateY(-4px) scale(1.02);
-    box-shadow: 0 20px 40px rgba(139, 92, 246, 0.1), 0 8px 16px rgba(6, 182, 212, 0.1);
-    border: 1px solid transparent;
-    background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(6, 182, 212, 0.05) 50%, rgba(16, 185, 129, 0.05) 100%) padding-box, var(--toolora-gradient) border-box;
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 25px 50px rgba(139, 92, 246, 0.15), 
+                0 15px 25px rgba(6, 182, 212, 0.1),
+                0 5px 10px rgba(16, 185, 129, 0.1);
+}
+
+.tool-card:hover::before {
+    opacity: 1;
 }
 
 .tool-card .icon-container {
     background: var(--toolora-gradient);
-    transition: all 0.3s ease;
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
 }
 
 .tool-card:hover .icon-container {
-    transform: scale(1.1);
-    box-shadow: 0 8px 20px rgba(139, 92, 246, 0.3);
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: var(--toolora-glow);
 }
 
-/* Header with logo colors */
-.header-gradient {
+.tool-card .icon-container::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transform: rotate(45deg);
+    transition: all 0.5s ease;
+    opacity: 0;
+}
+
+.tool-card:hover .icon-container::after {
+    opacity: 1;
+    animation: shimmer 0.6s ease-in-out;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+    100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+}
+
+/* Floating particles effect */
+.floating-particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
     background: var(--toolora-gradient);
+    border-radius: 50%;
+    animation: float 6s ease-in-out infinite;
+    opacity: 0.6;
 }
 
-.header-logo {
-    background: var(--toolora-gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    font-weight: 800;
-    font-size: 1.5rem;
+@keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    33% { transform: translateY(-20px) rotate(120deg); }
+    66% { transform: translateY(-10px) rotate(240deg); }
 }
 
-/* Button hover effects */
+/* Enhanced button styles with brand colors */
 .btn-primary {
     background: var(--toolora-gradient);
-    transition: all 0.3s ease;
     border: none;
+    color: white;
+    font-weight: 600;
+    transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
 }
 
 .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4);
+    box-shadow: var(--toolora-glow);
 }
 
 .btn-primary::before {
@@ -66,262 +213,77 @@
     width: 100%;
     height: 100%;
     background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: left 0.5s;
+    transition: left 0.5s ease;
 }
 
 .btn-primary:hover::before {
     left: 100%;
 }
 
-/* Category cards with brand colors */
-.category-card {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-    overflow: hidden;
+/* Dark mode enhancements */
+.dark .tool-card {
+    background: linear-gradient(#1f2937, #1f2937) padding-box, 
+                linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(6, 182, 212, 0.2), rgba(139, 92, 246, 0.2)) border-box;
 }
 
-.category-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: var(--toolora-gradient);
-    opacity: 0;
-    transition: opacity 0.3s ease;
+.dark .logo-container .bg-white {
+    background: #1f2937 !important;
 }
 
-.category-card:hover::before {
-    opacity: 0.1;
-}
-
-.category-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 25px 50px rgba(139, 92, 246, 0.15);
-}
-
-/* Search bar enhancements */
-.search-bar {
-    position: relative;
-    transition: all 0.3s ease;
-}
-
-.search-bar:focus-within {
-    transform: scale(1.02);
-    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
-}
-
-.search-bar input:focus {
-    border-color: var(--toolora-purple);
-    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
-}
-
-/* Tool-specific feedback styles */
-.tool-feedback {
-    background: white;
-    border-radius: 16px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-    border: 1px solid #e5e7eb;
-    transition: all 0.3s ease;
-}
-
-.tool-feedback:hover {
-    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
-    transform: translateY(-2px);
-}
-
-.rating-star {
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.rating-star:hover {
-    transform: scale(1.1);
-}
-
-/* Gradient text utilities */
-.gradient-text {
-    background: var(--toolora-gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-/* Smooth animations */
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
+/* Responsive animations */
+@media (max-width: 768px) {
+    .header-logo {
+        font-size: 1.2rem;
     }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
 
-.animate-fade-in-up {
-    animation: fadeInUp 0.6s ease-out;
-}
-
-/* Staggered animations */
-.animate-stagger-1 { animation-delay: 0.1s; }
-.animate-stagger-2 { animation-delay: 0.2s; }
-.animate-stagger-3 { animation-delay: 0.3s; }
-.animate-stagger-4 { animation-delay: 0.4s; }
-
-/* Loading states */
-.loading-shimmer {
-    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-    background-size: 200% 100%;
-    animation: shimmer 1.5s infinite;
-}
-
-@keyframes shimmer {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
-}
-
-/* Enhanced logo animations */
-.header-logo {
-    background: linear-gradient(135deg, #8B5CF6 0%, #06B6D4 50%, #10B981 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    font-size: 1.5rem;
-    font-weight: 700;
-    transition: all 0.3s ease;
-    position: relative;
-}
-
-.header-logo::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, #8B5CF6 0%, #06B6D4 50%, #10B981 100%);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    z-index: -1;
-    filter: blur(10px);
-}
-
-.header-logo:hover::before {
-    opacity: 0.3;
-}
-
-/* Logo container with animated border */
-.logo-container {
-    position: relative;
-    display: inline-block;
-}
-
-.logo-container::after {
-    content: '';
-    position: absolute;
-    top: -2px;
-    left: -2px;
-    right: -2px;
-    bottom: -2px;
-    background: linear-gradient(45deg, #8B5CF6, #06B6D4, #10B981, #8B5CF6);
-    background-size: 300% 300%;
-    border-radius: 12px;
-    z-index: -1;
-    animation: gradientShift 3s ease infinite;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.logo-container:hover::after {
-    opacity: 0.7;
-}
-
-@keyframes gradientShift {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-
-/* Enhanced tool card animations */
-.tool-card {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-    overflow: hidden;
-}
-
-.tool-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-    transition: left 0.5s ease;
-}
-
-.tool-card:hover::before {
-    left: 100%;
-}
-
-.tool-card:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: 0 20px 40px rgba(139, 92, 246, 0.1);
-}
-
-/* Pulse effect for active elements */
-.pulse-effect {
-    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
-@keyframes pulse {
-    0%, 100% {
-        opacity: 1;
-    }
-    50% {
-        opacity: 0.7;
-    }
-}
-
-/* Shimmer effect for buttons */
-.btn-shimmer {
-    background: linear-gradient(135deg, #8B5CF6 0%, #06B6D4 50%, #10B981 100%);
-    background-size: 200% 200%;
-    animation: shimmer 2s ease-in-out infinite;
-    position: relative;
-    overflow: hidden;
-}
-
-.btn-shimmer::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-    transition: left 0.5s ease;
-}
-
-.btn-shimmer:hover::before {
-    left: 100%;
-}
-
-@keyframes shimmer {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-
-/* Dark mode support */
-@media (prefers-color-scheme: dark) {
-    .tool-card {
-        background: linear-gradient(rgba(30, 30, 30, 1), rgba(30, 30, 30, 1)) padding-box, var(--toolora-gradient) border-box;
-    }
-    
     .tool-card:hover {
-        background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(6, 182, 212, 0.1) 50%, rgba(16, 185, 129, 0.1) 100%) padding-box, var(--toolora-gradient) border-box;
+        transform: translateY(-3px) scale(1.01);
     }
+
+    .logo-container::before {
+        display: none;
+    }
+}
+
+/* Performance optimizations */
+.tool-card,
+.logo-container,
+.header-logo {
+    will-change: transform, opacity;
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+    .header-logo,
+    .tool-card,
+    .logo-sparkle::after {
+        animation: none !important;
+    }
+
+    .tool-card:hover,
+    .logo-container:hover {
+        transform: none !important;
+    }
+}
+
+/* Custom scrollbar with brand colors */
+::-webkit-scrollbar-thumb {
+    background: var(--toolora-gradient);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #0d9488 0%, #0891b2 50%, #7c3aed 100%);
+}
+
+/* Focus indicators with brand colors */
+.tool-card:focus-visible,
+.btn-primary:focus-visible {
+    outline: 2px solid var(--toolora-cyan);
+    outline-offset: 2px;
+}
+
+/* Text shadow utility */
+.text-shadow-glow {
+    text-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
 }

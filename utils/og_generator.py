@@ -49,20 +49,37 @@ def generate_og_image(title, description="Professional tools for creators", tool
     logo_x = 60
     logo_y = 60
     
-    # Draw logo background circle
+    # Draw logo background with gradient effect
     draw.ellipse([logo_x, logo_y, logo_x + logo_size, logo_y + logo_size], 
-                fill=(255, 255, 255, 240))
+                fill=(255, 255, 255, 250))
     
-    # Draw T letter
-    t_color = (139, 92, 246)  # Purple
+    # Create gradient-like effect for T letter
+    colors = [
+        (16, 185, 129),   # Emerald
+        (6, 182, 212),    # Cyan  
+        (139, 92, 246)    # Purple
+    ]
+    
     t_size = 80
     t_x = logo_x + (logo_size - t_size) // 2
     t_y = logo_y + (logo_size - t_size) // 2
     
-    # T horizontal bar
-    draw.rectangle([t_x, t_y, t_x + t_size, t_y + 15], fill=t_color)
-    # T vertical bar
-    draw.rectangle([t_x + t_size//2 - 10, t_y, t_x + t_size//2 + 10, t_y + t_size], fill=t_color)
+    # Draw T with gradient effect (multiple overlapping rectangles)
+    for i, color in enumerate(colors):
+        offset = i * 2
+        opacity = 255 - (i * 50)
+        
+        # T horizontal bar with gradient
+        draw.rectangle([t_x - offset, t_y - offset, t_x + t_size + offset, t_y + 18 + offset], 
+                      fill=color + (opacity,))
+        # T vertical bar with gradient
+        draw.rectangle([t_x + t_size//2 - 12 - offset, t_y - offset, 
+                       t_x + t_size//2 + 12 + offset, t_y + t_size + offset], 
+                      fill=color + (opacity,))
+    
+    # Add subtle glow effect
+    draw.ellipse([logo_x - 5, logo_y - 5, logo_x + logo_size + 5, logo_y + logo_size + 5], 
+                fill=(139, 92, 246, 30))
     
     # Add title text
     try:

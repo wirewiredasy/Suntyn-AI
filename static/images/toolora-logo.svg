@@ -1,53 +1,99 @@
+
 <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <!-- Main gradient for logo -->
-    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#10B981;stop-opacity:1" />
-      <stop offset="50%" style="stop-color:#06B6D4;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#8B5CF6;stop-opacity:1" />
+    <!-- Main gradient for the T shape -->
+    <linearGradient id="mainGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10B981;stop-opacity:1">
+        <animate attributeName="stop-color" 
+                 values="#10B981;#06B6D4;#8B5CF6;#10B981" 
+                 dur="4s" 
+                 repeatCount="indefinite"/>
+      </stop>
+      <stop offset="50%" style="stop-color:#06B6D4;stop-opacity:1">
+        <animate attributeName="stop-color" 
+                 values="#06B6D4;#8B5CF6;#10B981;#06B6D4" 
+                 dur="4s" 
+                 repeatCount="indefinite"/>
+      </stop>
+      <stop offset="100%" style="stop-color:#8B5CF6;stop-opacity:1">
+        <animate attributeName="stop-color" 
+                 values="#8B5CF6;#10B981;#06B6D4;#8B5CF6" 
+                 dur="4s" 
+                 repeatCount="indefinite"/>
+      </stop>
     </linearGradient>
     
-    <!-- Inner gradient for 3D effect -->
-    <linearGradient id="innerGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#8B5CF6;stop-opacity:1" />
-      <stop offset="50%" style="stop-color:#3B82F6;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#06B6D4;stop-opacity:1" />
-    </linearGradient>
-    
-    <!-- Shadow filter -->
-    <filter id="dropshadow" x="-50%" y="-50%" width="200%" height="200%">
-      <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
-      <feOffset dx="2" dy="2" result="offset"/>
-      <feComponentTransfer>
-        <feFuncA type="linear" slope="0.3"/>
-      </feComponentTransfer>
-      <feMerge> 
-        <feMergeNode/>
-        <feMergeNode in="SourceGraphic"/> 
+    <!-- Glow effect -->
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
       </feMerge>
     </filter>
+    
+    <!-- 3D effect shadow -->
+    <filter id="shadow3d" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="4" dy="4" stdDeviation="3" flood-color="#000" flood-opacity="0.3"/>
+    </filter>
+    
+    <!-- Subtle inner glow -->
+    <linearGradient id="innerGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.3"/>
+      <stop offset="50%" style="stop-color:#ffffff;stop-opacity:0.1"/>
+      <stop offset="100%" style="stop-color:#ffffff;stop-opacity:0.3"/>
+    </linearGradient>
   </defs>
   
-  <!-- Main T shape -->
-  <path d="M50 60 L150 60 L150 90 L125 90 L125 140 L75 140 L75 90 L50 90 Z" 
-        fill="url(#logoGradient)" 
-        filter="url(#dropshadow)"
+  <!-- Background circle for contrast -->
+  <circle cx="100" cy="100" r="95" fill="url(#mainGradient)" opacity="0.1" filter="url(#glow)">
+    <animate attributeName="r" values="95;100;95" dur="3s" repeatCount="indefinite"/>
+  </circle>
+  
+  <!-- Main T shape with 3D effect -->
+  <path d="M 40 60 L 160 60 L 160 85 L 130 85 L 130 140 L 70 140 L 70 85 L 40 85 Z" 
+        fill="url(#mainGradient)" 
+        filter="url(#shadow3d)"
         stroke="none">
-    <animate attributeName="d" 
-             values="M50 60 L150 60 L150 90 L125 90 L125 140 L75 140 L75 90 L50 90 Z;
-                     M48 58 L152 58 L152 92 L127 92 L127 142 L73 142 L73 92 L48 92 Z;
-                     M50 60 L150 60 L150 90 L125 90 L125 140 L75 140 L75 90 L50 90 Z"
-             dur="3s" 
-             repeatCount="indefinite"/>
+    <!-- Breathing animation -->
+    <animateTransform 
+      attributeName="transform" 
+      type="scale" 
+      values="1;1.05;1" 
+      dur="3s" 
+      repeatCount="indefinite"
+      transform-origin="100 100"/>
+    
+    <!-- Subtle rotation -->
+    <animateTransform 
+      attributeName="transform" 
+      type="rotate" 
+      values="0 100 100;2 100 100;0 100 100;-2 100 100;0 100 100" 
+      dur="6s" 
+      repeatCount="indefinite"
+      additive="sum"/>
   </path>
   
-  <!-- Inner highlight -->
-  <path d="M55 65 L145 65 L145 85 L120 85 L120 135 L80 135 L80 85 L55 85 Z" 
-        fill="url(#innerGradient)" 
-        opacity="0.7">
-    <animate attributeName="opacity" 
-             values="0.7;0.9;0.7" 
-             dur="2s" 
-             repeatCount="indefinite"/>
+  <!-- Inner highlight for depth -->
+  <path d="M 45 65 L 155 65 L 155 80 L 125 80 L 125 135 L 75 135 L 75 80 L 45 80 Z" 
+        fill="url(#innerGlow)" 
+        opacity="0.6">
+    <animate attributeName="opacity" values="0.6;0.9;0.6" dur="2s" repeatCount="indefinite"/>
   </path>
+  
+  <!-- Sparkle effects -->
+  <circle cx="70" cy="70" r="2" fill="#ffffff" opacity="0.8">
+    <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite"/>
+    <animate attributeName="r" values="1;3;1" dur="2s" repeatCount="indefinite"/>
+  </circle>
+  
+  <circle cx="130" cy="70" r="2" fill="#ffffff" opacity="0.8">
+    <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" begin="0.5s"/>
+    <animate attributeName="r" values="1;3;1" dur="2s" repeatCount="indefinite" begin="0.5s"/>
+  </circle>
+  
+  <circle cx="100" cy="130" r="2" fill="#ffffff" opacity="0.8">
+    <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" begin="1s"/>
+    <animate attributeName="r" values="1;3;1" dur="2s" repeatCount="indefinite" begin="1s"/>
+  </circle>
 </svg>

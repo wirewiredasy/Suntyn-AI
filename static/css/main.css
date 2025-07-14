@@ -757,21 +757,164 @@ html {
     }
 }
 
-/* Logo styling */
+/* Enhanced Logo Styling with Animations */
 .logo-container {
+    position: relative;
+    display: inline-block;
+}
+
+.logo-container .bg-white {
     background-color: white !important;
+    padding: 4px !important;
+    transition: all 0.3s ease;
+}
+
+.dark .logo-container .bg-white {
+    background-color: #1f2937 !important;
     padding: 4px !important;
 }
 
-.dark .logo-container {
-    background-color: white !important;
-    padding: 4px !important;
+/* Logo breathing animation */
+@keyframes logoBreathe {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
 }
 
-/* Ensure logo image has white background */
+.logo-container:hover {
+    animation: logoBreathe 2s ease-in-out infinite;
+}
+
+/* Floating particles for logo */
+.logo-container::after {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    background: radial-gradient(circle at 20% 20%, rgba(16, 185, 129, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(6, 182, 212, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.1) 0%, transparent 50%);
+    border-radius: 50%;
+    animation: logoAura 3s ease-in-out infinite;
+    opacity: 0;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.logo-container:hover::after {
+    opacity: 1;
+}
+
+@keyframes logoAura {
+    0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.5; }
+    50% { transform: scale(1.2) rotate(180deg); opacity: 0.8; }
+}
+
+/* Logo pulse effect */
+.logo-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+/* Enhanced logo image styling */
 nav img[alt="Toolora AI"] {
-    background-color: white;
-    border-radius: 6px;
+    background-color: transparent;
+    border-radius: 8px;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    filter: drop-shadow(0 0 10px rgba(139, 92, 246, 0.2));
+}
+
+nav img[alt="Toolora AI"]:hover {
+    filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.4)) 
+            drop-shadow(0 0 30px rgba(6, 182, 212, 0.3));
+}
+
+/* Logo text gradient animation */
+.header-logo {
+    background: linear-gradient(135deg, #10B981, #06B6D4, #8B5CF6);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientFlow 4s ease infinite;
+}
+
+@keyframes gradientFlow {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+/* Footer logo enhancements */
+footer img[alt="Toolora AI"] {
+    transition: all 0.3s ease;
+    filter: brightness(0.9);
+}
+
+footer img[alt="Toolora AI"]:hover {
+    filter: brightness(1.1) drop-shadow(0 0 15px rgba(139, 92, 246, 0.3));
+    transform: scale(1.1) rotate(10deg);
+}
+
+/* Mobile logo optimizations */
+@media (max-width: 768px) {
+    .logo-container {
+        transform: scale(0.9);
+    }
+    
+    .logo-container::after {
+        display: none;
+    }
+    
+    .header-logo {
+        font-size: 1.25rem;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .logo-container {
+        border: 2px solid currentColor;
+    }
+    
+    .header-logo {
+        color: currentColor;
+        background: none;
+        -webkit-text-fill-color: currentColor;
+    }
+}
+
+/* Reduced motion accessibility */
+@media (prefers-reduced-motion: reduce) {
+    .logo-container,
+    .header-logo,
+    nav img[alt="Toolora AI"],
+    footer img[alt="Toolora AI"] {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+/* Performance optimizations */
+.logo-container,
+.header-logo {
+    will-change: transform, opacity;
+    transform: translateZ(0);
+}
+
+/* Logo loading state */
+.logo-loading {
+    opacity: 0;
+    animation: fadeInLogo 1s ease-in-out forwards;
+}
+
+@keyframes fadeInLogo {
+    0% { opacity: 0; transform: scale(0.8); }
+    100% { opacity: 1; transform: scale(1); }
 }
 
 /* Ads banner styling */
