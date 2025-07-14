@@ -21,6 +21,71 @@
     animation: gradientShift 3s ease infinite;
 }
 
+/* Tool card text visibility fixes */
+.tool-card h3 {
+    color: #1f2937 !important;
+    font-weight: 700 !important;
+    text-shadow: none !important;
+    -webkit-text-fill-color: #1f2937 !important;
+    background: none !important;
+    font-size: 1.25rem !important;
+    line-height: 1.3 !important;
+}
+
+.dark .tool-card h3 {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
+}
+
+.tool-card p {
+    color: #6b7280 !important;
+    font-weight: 500 !important;
+    text-shadow: none !important;
+    -webkit-text-fill-color: #6b7280 !important;
+    background: none !important;
+    font-size: 0.95rem !important;
+    line-height: 1.4 !important;
+}
+
+.dark .tool-card p {
+    color: #d1d5db !important;
+    -webkit-text-fill-color: #d1d5db !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Category text visibility */
+.tool-card .category-tag {
+    color: #374151 !important;
+    background: rgba(59, 130, 246, 0.1) !important;
+    font-weight: 600 !important;
+    text-shadow: none !important;
+    -webkit-text-fill-color: #374151 !important;
+    background-clip: padding-box !important;
+}
+
+.dark .tool-card .category-tag {
+    color: #e5e7eb !important;
+    -webkit-text-fill-color: #e5e7eb !important;
+    background: rgba(59, 130, 246, 0.2) !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Button text visibility */
+.tool-card .use-tool-btn {
+    color: #ffffff !important;
+    font-weight: 600 !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
+    -webkit-text-fill-color: #ffffff !important;
+    background: linear-gradient(135deg, #3b82f6, #2563eb) !important;
+}
+
+.dark .tool-card .use-tool-btn {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4) !important;
+}
+
 @keyframes gradientShift {
     0%, 100% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
@@ -95,11 +160,25 @@
 /* Enhanced tool card animations with new brand colors */
 .tool-card {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    border: 1px solid transparent;
-    background: linear-gradient(white, white) padding-box, 
-                linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.1), rgba(139, 92, 246, 0.1)) border-box;
+    border: 1px solid #e5e7eb;
+    background: #ffffff;
     position: relative;
     overflow: hidden;
+    border-radius: 12px;
+}
+
+/* Ensure no gradient text effects on tool card content */
+.tool-card * {
+    background-clip: padding-box !important;
+    -webkit-background-clip: padding-box !important;
+}
+
+/* Override any text gradient effects in tool cards */
+.tool-card h1, .tool-card h2, .tool-card h3, .tool-card h4, .tool-card h5, .tool-card h6,
+.tool-card p, .tool-card span, .tool-card div, .tool-card a {
+    background: none !important;
+    -webkit-background-clip: border-box !important;
+    background-clip: border-box !important;
 }
 
 .tool-card::before {
@@ -222,8 +301,8 @@
 
 /* Dark mode enhancements */
 .dark .tool-card {
-    background: linear-gradient(#1f2937, #1f2937) padding-box, 
-                linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(6, 182, 212, 0.2), rgba(139, 92, 246, 0.2)) border-box;
+    background: #1f2937;
+    border-color: #374151;
 }
 
 .dark .logo-container .bg-white {

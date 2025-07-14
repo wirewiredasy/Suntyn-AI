@@ -1,0 +1,93 @@
+
+/* Text Visibility Enhancement for Toolora AI */
+
+/* High contrast text for better readability */
+.high-contrast-text {
+    color: #111827 !important;
+    font-weight: 600 !important;
+    text-shadow: none !important;
+    -webkit-text-fill-color: #111827 !important;
+    background: none !important;
+}
+
+.dark .high-contrast-text {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Professional text styling */
+.professional-text {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    font-weight: 500 !important;
+    line-height: 1.5 !important;
+    letter-spacing: -0.01em !important;
+}
+
+/* Tool card specific visibility fixes */
+.tool-visibility-fix h3 {
+    color: #111827 !important;
+    font-weight: 700 !important;
+    font-size: 1.25rem !important;
+    margin-bottom: 0.5rem !important;
+    text-shadow: none !important;
+    background: none !important;
+    -webkit-text-fill-color: #111827 !important;
+}
+
+.tool-visibility-fix p {
+    color: #4b5563 !important;
+    font-weight: 500 !important;
+    font-size: 0.95rem !important;
+    line-height: 1.5 !important;
+    text-shadow: none !important;
+    background: none !important;
+    -webkit-text-fill-color: #4b5563 !important;
+}
+
+.dark .tool-visibility-fix h3 {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5) !important;
+}
+
+.dark .tool-visibility-fix p {
+    color: #d1d5db !important;
+    -webkit-text-fill-color: #d1d5db !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Accessibility improvements */
+@media (prefers-contrast: high) {
+    .tool-card h3, .tool-card p {
+        text-shadow: none !important;
+        background: none !important;
+    }
+    
+    .tool-card h3 {
+        color: #000000 !important;
+        font-weight: 800 !important;
+    }
+    
+    .tool-card p {
+        color: #333333 !important;
+        font-weight: 600 !important;
+    }
+    
+    .dark .tool-card h3 {
+        color: #ffffff !important;
+    }
+    
+    .dark .tool-card p {
+        color: #e5e7eb !important;
+    }
+}
+
+/* Remove any gradient or special effects that affect readability */
+.readable-text, .readable-text * {
+    background: none !important;
+    -webkit-background-clip: border-box !important;
+    background-clip: border-box !important;
+    -webkit-text-fill-color: inherit !important;
+    text-shadow: none !important;
+}
