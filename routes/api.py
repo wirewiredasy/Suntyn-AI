@@ -470,4 +470,3 @@ def get_user_files():
         'created_at': f.created_at.isoformat(),
         'download_url': f'/api/download/{f.saved_filename}'
     } for f in files])
-```
