@@ -117,24 +117,27 @@
     box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
 }
 
-/* Floating elements */
-.floating-feedback {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background: var(--toolora-gradient);
-    color: white;
-    padding: 12px 20px;
-    border-radius: 50px;
-    box-shadow: 0 4px 20px rgba(139, 92, 246, 0.3);
+/* Tool-specific feedback styles */
+.tool-feedback {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e5e7eb;
     transition: all 0.3s ease;
-    cursor: pointer;
-    z-index: 1000;
 }
 
-.floating-feedback:hover {
+.tool-feedback:hover {
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
     transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(139, 92, 246, 0.4);
+}
+
+.rating-star {
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.rating-star:hover {
+    transform: scale(1.1);
 }
 
 /* Gradient text utilities */

@@ -602,3 +602,36 @@ def track_analytics():
             'success': False,
             'error': str(e)
         }), 500
+
+@api_bp.route('/tool-feedback', methods=['POST'])
+def submit_tool_feedback():
+    """Submit tool-specific feedback"""
+    try:
+        data = request.get_json()
+        
+        # Log tool feedback to console (in production, save to database)
+        print(f"TOOL FEEDBACK: Tool={data.get('tool_name')}, Category={data.get('tool_category')}, Rating={data.get('rating')}")
+        print(f"Type={data.get('type')}, Message={data.get('message')}")
+        
+        # Here you would save to database
+        # tool_feedback = ToolFeedback(
+        #     tool_name=data.get('tool_name'),
+        #     tool_category=data.get('tool_category'),
+        #     rating=data.get('rating'),
+        #     type=data.get('type'),
+        #     message=data.get('message'),
+        #     url=data.get('url'),
+        #     timestamp=datetime.utcnow()
+        # )
+        # db.session.add(tool_feedback)
+        # db.session.commit()
+        
+        return jsonify({
+            'success': True,
+            'message': 'Tool feedback submitted successfully'
+        })
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500

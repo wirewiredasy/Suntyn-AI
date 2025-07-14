@@ -382,48 +382,7 @@
         {% block content %}{% endblock %}
     </main>
 
-    <!-- Floating Feedback Widget -->
-    <div id="floating-feedback" class="floating-feedback pulse-effect" x-data="{ open: false }">
-        <div @click="open = true" class="flex items-center space-x-2 cursor-pointer">
-            <span class="text-xl">💬</span>
-            <span class="font-medium">Feedback</span>
-        </div>
-        
-        <!-- Feedback Modal -->
-        <div x-show="open" @click.away="open = false" x-transition
-             class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div class="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4">
-                <h3 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Send Feedback</h3>
-                <form id="feedback-form" class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Type</label>
-                        <select name="type" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500">
-                            <option value="bug">Bug Report</option>
-                            <option value="feature">Feature Request</option>
-                            <option value="improvement">Improvement</option>
-                            <option value="other">Other</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Message</label>
-                        <textarea name="message" rows="4" 
-                                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
-                                  placeholder="Tell us what you think..."></textarea>
-                    </div>
-                    <div class="flex space-x-3">
-                        <button type="submit" 
-                                class="px-4 py-2 btn-shimmer text-white rounded-md hover:shadow-lg transition-all">
-                            Send Feedback
-                        </button>
-                        <button type="button" @click="open = false" 
-                                class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition-colors">
-                            Cancel
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+
 
     <!-- Footer -->
     <footer class="bg-gray-800 dark:bg-gray-900 text-white py-12 mt-16">
