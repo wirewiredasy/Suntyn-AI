@@ -1,0 +1,301 @@
+
+{% extends "base.html" %}
+
+{% block title %}Frequently Asked Questions - Toolora AI{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <!-- Header -->
+    <div class="text-center mb-12">
+        <div class="w-16 h-16 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center mx-auto mb-4">
+            <i data-lucide="help-circle" class="w-8 h-8 text-purple-600 dark:text-purple-400"></i>
+        </div>
+        <h1 class="text-4xl md:text-5xl font-bold text-gray-800 dark:text-white mb-6">
+            Frequently Asked Questions
+        </h1>
+        <p class="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+            Find answers to common questions about Toolora AI's features, pricing, and usage.
+        </p>
+    </div>
+
+    <div class="max-w-4xl mx-auto">
+        <!-- Search Bar -->
+        <div class="mb-8">
+            <div class="relative">
+                <input type="text" 
+                       placeholder="Search FAQ..." 
+                       class="w-full px-4 py-3 pl-12 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                       x-data=""
+                       x-model="searchQuery"
+                       @input="filterFAQs()">
+                <i data-lucide="search" class="w-5 h-5 text-gray-400 absolute left-4 top-1/2 transform -translate-y-1/2"></i>
+            </div>
+        </div>
+
+        <!-- FAQ Categories -->
+        <div x-data="faqManager()" x-init="init()">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                <button @click="setCategory('all')" 
+                        class="btn btn-outline btn-sm"
+                        :class="{ 'btn-active': activeCategory === 'all' }">
+                    All Questions
+                </button>
+                <button @click="setCategory('tools')" 
+                        class="btn btn-outline btn-sm"
+                        :class="{ 'btn-active': activeCategory === 'tools' }">
+                    Tools & Features
+                </button>
+                <button @click="setCategory('account')" 
+                        class="btn btn-outline btn-sm"
+                        :class="{ 'btn-active': activeCategory === 'account' }">
+                    Account & Billing
+                </button>
+                <button @click="setCategory('technical')" 
+                        class="btn btn-outline btn-sm"
+                        :class="{ 'btn-active': activeCategory === 'technical' }">
+                    Technical Support
+                </button>
+            </div>
+
+            <!-- FAQ Items -->
+            <div class="space-y-4">
+                <!-- Tools & Features -->
+                <template x-for="faq in filteredFAQs" :key="faq.id">
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700">
+                        <button @click="toggleFAQ(faq.id)" 
+                                class="w-full text-left p-6 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-xl">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-lg font-semibold text-gray-800 dark:text-white pr-8" x-text="faq.question"></h3>
+                                <i data-lucide="chevron-down" 
+                                   class="w-5 h-5 text-gray-500 dark:text-gray-400 transition-transform flex-shrink-0"
+                                   :class="{ 'rotate-180': openFAQs.includes(faq.id) }"></i>
+                            </div>
+                        </button>
+                        <div x-show="openFAQs.includes(faq.id)" 
+                             x-transition:enter="transition ease-out duration-200"
+                             x-transition:enter-start="opacity-0 transform -translate-y-2"
+                             x-transition:enter-end="opacity-100 transform translate-y-0"
+                             class="px-6 pb-6">
+                            <div class="text-gray-600 dark:text-gray-300" x-html="faq.answer"></div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+
+            <!-- No Results -->
+            <div x-show="filteredFAQs.length === 0" class="text-center py-12">
+                <div class="w-16 h-16 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center mx-auto mb-4">
+                    <i data-lucide="search-x" class="w-8 h-8 text-gray-400"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-2">No matching questions found</h3>
+                <p class="text-gray-600 dark:text-gray-300 mb-4">Try adjusting your search or browse a different category.</p>
+                <button @click="resetFilters()" class="btn btn-primary">
+                    Show All Questions
+                </button>
+            </div>
+        </div>
+
+        <!-- Contact Section -->
+        <div class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl p-8 text-center text-white mt-12">
+            <h2 class="text-2xl font-bold mb-4">Still Need Help?</h2>
+            <p class="text-blue-100 mb-6">
+                Can't find the answer you're looking for? Our support team is here to help.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="{{ url_for('main.contact') }}" class="btn btn-outline btn-lg border-white text-white hover:bg-white hover:text-blue-600">
+                    <i data-lucide="mail" class="w-5 h-5 mr-2"></i>
+                    Contact Support
+                </a>
+                <a href="#" class="btn btn-lg bg-white text-blue-600 hover:bg-gray-100">
+                    <i data-lucide="message-circle" class="w-5 h-5 mr-2"></i>
+                    Live Chat
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function faqManager() {
+    return {
+        activeCategory: 'all',
+        openFAQs: [],
+        searchQuery: '',
+        filteredFAQs: [],
+        
+        faqs: [
+            // Tools & Features
+            {
+                id: 1,
+                category: 'tools',
+                question: 'Are all 85+ tools really free to use?',
+                answer: 'Yes! All 85+ tools on Toolora AI are completely free to use. There are no hidden fees, subscriptions, or usage limits. We believe professional tools should be accessible to everyone.'
+            },
+            {
+                id: 2,
+                category: 'tools',
+                question: 'What file formats do you support?',
+                answer: 'We support a wide range of file formats including:<br>• <strong>Images:</strong> JPEG, PNG, WebP, GIF, SVG, BMP<br>• <strong>Documents:</strong> PDF, DOCX, TXT, RTF<br>• <strong>Video:</strong> MP4, AVI, MOV, WebM<br>• <strong>Audio:</strong> MP3, WAV, AAC, OGG<br>And many more! Each tool specifies its supported formats.'
+            },
+            {
+                id: 3,
+                category: 'tools',
+                question: 'What is the maximum file size I can upload?',
+                answer: 'Most tools support files up to 16MB in size. Some specialized tools may have different limits:<br>• Image tools: Up to 16MB<br>• PDF tools: Up to 25MB<br>• Video tools: Up to 100MB<br>• AI tools: Varies by tool<br>The limit is clearly displayed on each tool page.'
+            },
+            {
+                id: 4,
+                category: 'tools',
+                question: 'Do you store my files on your servers?',
+                answer: 'No! Your privacy is our priority. Files are processed securely on our servers but are automatically deleted within 24 hours. We never access your files manually, and all processing is automated.'
+            },
+            {
+                id: 5,
+                category: 'tools',
+                question: 'Can I use these tools for commercial purposes?',
+                answer: 'Absolutely! All our tools can be used for both personal and commercial purposes. There are no restrictions on using the processed files in your business, client work, or commercial projects.'
+            },
+            {
+                id: 6,
+                category: 'tools',
+                question: 'How accurate are the AI-powered tools?',
+                answer: 'Our AI tools use state-of-the-art models and are continuously updated for better accuracy. However, AI-generated content should always be reviewed and edited as needed. Accuracy varies by tool and content type.'
+            },
+            
+            // Account & Billing
+            {
+                id: 7,
+                category: 'account',
+                question: 'Do I need to create an account to use the tools?',
+                answer: 'No! You can use all tools without creating an account. However, registering gives you benefits like usage history, saved preferences, and faster processing for returning users.'
+            },
+            {
+                id: 8,
+                category: 'account',
+                question: 'How do I create an account?',
+                answer: 'Click the "Sign In" button and choose from our authentication options:<br>• Google Account<br>• Email and Password<br>• GitHub Account<br>Account creation is instant and requires minimal information.'
+            },
+            {
+                id: 9,
+                category: 'account',
+                question: 'Can I delete my account and data?',
+                answer: 'Yes, you have full control over your account. Go to Account Settings → Delete Account to permanently remove your account and all associated data. This action cannot be undone.'
+            },
+            {
+                id: 10,
+                category: 'account',
+                question: 'Do you offer premium plans?',
+                answer: 'Currently, all features are free! We may introduce premium plans in the future for advanced features like higher file size limits, priority processing, and exclusive tools, but the core functionality will always remain free.'
+            },
+            {
+                id: 11,
+                category: 'account',
+                question: 'How do I change my account settings?',
+                answer: 'After signing in, click your profile picture → Account Settings. Here you can update your profile, change preferences, view usage history, and manage privacy settings.'
+            },
+            
+            // Technical Support
+            {
+                id: 12,
+                category: 'technical',
+                question: 'The tool is not working. What should I do?',
+                answer: 'Try these troubleshooting steps:<br>1. Refresh the page and try again<br>2. Clear your browser cache and cookies<br>3. Try a different browser<br>4. Check your internet connection<br>5. Ensure your file meets the size and format requirements<br>If the issue persists, contact our support team.'
+            },
+            {
+                id: 13,
+                category: 'technical',
+                question: 'Which browsers do you support?',
+                answer: 'Toolora AI works on all modern browsers:<br>• <strong>Recommended:</strong> Chrome, Firefox, Safari, Edge<br>• <strong>Minimum versions:</strong> Chrome 80+, Firefox 75+, Safari 13+, Edge 80+<br>• <strong>Mobile:</strong> iOS Safari, Chrome Mobile, Samsung Internet<br>For the best experience, keep your browser updated.'
+            },
+            {
+                id: 14,
+                category: 'technical',
+                question: 'Can I use Toolora AI on mobile devices?',
+                answer: 'Yes! All our tools are fully optimized for mobile devices and tablets. The interface adapts to your screen size, and all functionality is available on mobile browsers.'
+            },
+            {
+                id: 15,
+                category: 'technical',
+                question: 'Why is the tool taking a long time to process?',
+                answer: 'Processing time depends on several factors:<br>• File size and complexity<br>• Tool type (AI tools take longer)<br>• Current server load<br>• Your internet connection<br>Most tools process files in under 30 seconds. Large files or complex operations may take up to 2-3 minutes.'
+            },
+            {
+                id: 16,
+                category: 'technical',
+                question: 'Can I process multiple files at once?',
+                answer: 'Yes! Many tools support batch processing. Look for the "Add More Files" option or drag multiple files into the upload area. Batch processing saves time when working with multiple files.'
+            },
+            {
+                id: 17,
+                category: 'technical',
+                question: 'Is my data secure during processing?',
+                answer: 'Absolutely! We use industry-standard security measures:<br>• SSL/TLS encryption for all data transmission<br>• Secure server infrastructure<br>• Automated file deletion within 24 hours<br>• No human access to your files<br>• GDPR and privacy law compliance'
+            },
+            
+            // General
+            {
+                id: 18,
+                category: 'tools',
+                question: 'How often do you add new tools?',
+                answer: 'We regularly add new tools based on user feedback and emerging needs. Typically, we release 2-3 new tools per month and continuously improve existing ones. Follow our updates for announcements!'
+            },
+            {
+                id: 19,
+                category: 'tools',
+                question: 'Can I suggest a new tool?',
+                answer: 'We love hearing from our users! Send your tool suggestions to <a href="mailto:suggestions@toolora.ai" class="text-blue-600 hover:underline">suggestions@toolora.ai</a> or use the feedback form on our contact page. Popular requests are prioritized for development.'
+            },
+            {
+                id: 20,
+                category: 'technical',
+                question: 'Do you have an API for developers?',
+                answer: 'We\'re currently developing an API for developers. If you\'re interested in integrating Toolora AI tools into your application, please contact us at <a href="mailto:api@toolora.ai" class="text-blue-600 hover:underline">api@toolora.ai</a> to join our early access program.'
+            }
+        ],
+        
+        init() {
+            this.filteredFAQs = this.faqs;
+        },
+        
+        setCategory(category) {
+            this.activeCategory = category;
+            this.filterFAQs();
+        },
+        
+        toggleFAQ(id) {
+            if (this.openFAQs.includes(id)) {
+                this.openFAQs = this.openFAQs.filter(faqId => faqId !== id);
+            } else {
+                this.openFAQs.push(id);
+            }
+        },
+        
+        filterFAQs() {
+            let filtered = this.faqs;
+            
+            // Filter by category
+            if (this.activeCategory !== 'all') {
+                filtered = filtered.filter(faq => faq.category === this.activeCategory);
+            }
+            
+            // Filter by search query
+            if (this.searchQuery) {
+                const query = this.searchQuery.toLowerCase();
+                filtered = filtered.filter(faq => 
+                    faq.question.toLowerCase().includes(query) ||
+                    faq.answer.toLowerCase().includes(query)
+                );
+            }
+            
+            this.filteredFAQs = filtered;
+        },
+        
+        resetFilters() {
+            this.activeCategory = 'all';
+            this.searchQuery = '';
+            this.filteredFAQs = this.faqs;
+        }
+    }
+}
+</script>
+{% endblock %}

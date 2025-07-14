@@ -1,0 +1,330 @@
+
+{% extends "base.html" %}
+
+{% block title %}Cookie Policy - Toolora AI{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <!-- Header -->
+    <div class="text-center mb-12">
+        <div class="w-16 h-16 rounded-full bg-orange-100 dark:bg-orange-900 flex items-center justify-center mx-auto mb-4">
+            <i data-lucide="cookie" class="w-8 h-8 text-orange-600 dark:text-orange-400"></i>
+        </div>
+        <h1 class="text-4xl md:text-5xl font-bold text-gray-800 dark:text-white mb-6">
+            Cookie Policy
+        </h1>
+        <p class="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+            Learn how we use cookies and similar technologies to enhance your experience on Toolora AI.
+        </p>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mt-4">
+            Last updated: {{ moment().format('MMMM DD, YYYY') }}
+        </p>
+    </div>
+
+    <div class="max-w-4xl mx-auto">
+        <!-- Cookie Summary -->
+        <div class="bg-orange-50 dark:bg-orange-900 rounded-xl p-6 mb-8">
+            <h2 class="text-xl font-semibold text-orange-900 dark:text-orange-100 mb-4">Cookie Summary</h2>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-orange-800 dark:text-orange-200">4</div>
+                    <div class="text-sm text-orange-700 dark:text-orange-300">Essential Cookies</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-orange-800 dark:text-orange-200">2</div>
+                    <div class="text-sm text-orange-700 dark:text-orange-300">Analytics Cookies</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-orange-800 dark:text-orange-200">3</div>
+                    <div class="text-sm text-orange-700 dark:text-orange-300">Preference Cookies</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-orange-800 dark:text-orange-200">0</div>
+                    <div class="text-sm text-orange-700 dark:text-orange-300">Marketing Cookies</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 space-y-8">
+            <!-- What Are Cookies -->
+            <section>
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">What Are Cookies?</h2>
+                <p class="text-gray-600 dark:text-gray-400 mb-4">
+                    Cookies are small text files that are placed on your computer or mobile device when you visit a website. 
+                    They are widely used to make websites work more efficiently and provide information to the site owners.
+                </p>
+                <p class="text-gray-600 dark:text-gray-400">
+                    Cookies help us understand how you interact with our tools, remember your preferences, and improve 
+                    your overall experience on Toolora AI.
+                </p>
+            </section>
+
+            <!-- Types of Cookies -->
+            <section>
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">Types of Cookies We Use</h2>
+                
+                <!-- Essential Cookies -->
+                <div class="mb-6">
+                    <div class="flex items-center mb-3">
+                        <div class="w-8 h-8 rounded-full bg-red-100 dark:bg-red-900 flex items-center justify-center mr-3">
+                            <i data-lucide="shield" class="w-4 h-4 text-red-600 dark:text-red-400"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 dark:text-white">Essential Cookies</h3>
+                        <span class="ml-2 px-2 py-1 bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 text-xs rounded-full">Required</span>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">
+                        These cookies are necessary for the website to function properly. They enable basic functionality 
+                        and security features.
+                    </p>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead>
+                                <tr class="border-b border-gray-200 dark:border-gray-700">
+                                    <th class="text-left py-2 px-3 font-semibold text-gray-800 dark:text-white">Cookie Name</th>
+                                    <th class="text-left py-2 px-3 font-semibold text-gray-800 dark:text-white">Purpose</th>
+                                    <th class="text-left py-2 px-3 font-semibold text-gray-800 dark:text-white">Duration</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-gray-600 dark:text-gray-400">
+                                <tr class="border-b border-gray-100 dark:border-gray-700">
+                                    <td class="py-2 px-3 font-mono">session_id</td>
+                                    <td class="py-2 px-3">Maintains your session while using tools</td>
+                                    <td class="py-2 px-3">Session</td>
+                                </tr>
+                                <tr class="border-b border-gray-100 dark:border-gray-700">
+                                    <td class="py-2 px-3 font-mono">csrf_token</td>
+                                    <td class="py-2 px-3">Protects against cross-site request forgery</td>
+                                    <td class="py-2 px-3">Session</td>
+                                </tr>
+                                <tr class="border-b border-gray-100 dark:border-gray-700">
+                                    <td class="py-2 px-3 font-mono">auth_token</td>
+                                    <td class="py-2 px-3">Keeps you logged in securely</td>
+                                    <td class="py-2 px-3">30 days</td>
+                                </tr>
+                                <tr class="border-b border-gray-100 dark:border-gray-700">
+                                    <td class="py-2 px-3 font-mono">cookie_consent</td>
+                                    <td class="py-2 px-3">Remembers your cookie preferences</td>
+                                    <td class="py-2 px-3">1 year</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Analytics Cookies -->
+                <div class="mb-6">
+                    <div class="flex items-center mb-3">
+                        <div class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center mr-3">
+                            <i data-lucide="bar-chart" class="w-4 h-4 text-blue-600 dark:text-blue-400"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 dark:text-white">Analytics Cookies</h3>
+                        <span class="ml-2 px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs rounded-full">Optional</span>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">
+                        These cookies help us understand how visitors interact with our website by collecting and 
+                        reporting information anonymously.
+                    </p>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead>
+                                <tr class="border-b border-gray-200 dark:border-gray-700">
+                                    <th class="text-left py-2 px-3 font-semibold text-gray-800 dark:text-white">Cookie Name</th>
+                                    <th class="text-left py-2 px-3 font-semibold text-gray-800 dark:text-white">Purpose</th>
+                                    <th class="text-left py-2 px-3 font-semibold text-gray-800 dark:text-white">Duration</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-gray-600 dark:text-gray-400">
+                                <tr class="border-b border-gray-100 dark:border-gray-700">
+                                    <td class="py-2 px-3 font-mono">_ga</td>
+                                    <td class="py-2 px-3">Distinguishes unique users for analytics</td>
+                                    <td class="py-2 px-3">2 years</td>
+                                </tr>
+                                <tr class="border-b border-gray-100 dark:border-gray-700">
+                                    <td class="py-2 px-3 font-mono">_tool_usage</td>
+                                    <td class="py-2 px-3">Tracks tool usage patterns (anonymized)</td>
+                                    <td class="py-2 px-3">90 days</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Preference Cookies -->
+                <div class="mb-6">
+                    <div class="flex items-center mb-3">
+                        <div class="w-8 h-8 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center mr-3">
+                            <i data-lucide="settings" class="w-4 h-4 text-purple-600 dark:text-purple-400"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 dark:text-white">Preference Cookies</h3>
+                        <span class="ml-2 px-2 py-1 bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 text-xs rounded-full">Optional</span>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">
+                        These cookies remember your choices and preferences to provide a more personalized experience.
+                    </p>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead>
+                                <tr class="border-b border-gray-200 dark:border-gray-700">
+                                    <th class="text-left py-2 px-3 font-semibold text-gray-800 dark:text-white">Cookie Name</th>
+                                    <th class="text-left py-2 px-3 font-semibold text-gray-800 dark:text-white">Purpose</th>
+                                    <th class="text-left py-2 px-3 font-semibold text-gray-800 dark:text-white">Duration</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-gray-600 dark:text-gray-400">
+                                <tr class="border-b border-gray-100 dark:border-gray-700">
+                                    <td class="py-2 px-3 font-mono">theme_preference</td>
+                                    <td class="py-2 px-3">Remembers your dark/light mode choice</td>
+                                    <td class="py-2 px-3">1 year</td>
+                                </tr>
+                                <tr class="border-b border-gray-100 dark:border-gray-700">
+                                    <td class="py-2 px-3 font-mono">language_preference</td>
+                                    <td class="py-2 px-3">Stores your language selection</td>
+                                    <td class="py-2 px-3">1 year</td>
+                                </tr>
+                                <tr class="border-b border-gray-100 dark:border-gray-700">
+                                    <td class="py-2 px-3 font-mono">tool_favorites</td>
+                                    <td class="py-2 px-3">Saves your favorite tools for quick access</td>
+                                    <td class="py-2 px-3">6 months</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Third-Party Cookies -->
+            <section>
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Third-Party Services</h2>
+                <p class="text-gray-600 dark:text-gray-400 mb-4">
+                    We use carefully selected third-party services that may set their own cookies:
+                </p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                        <h3 class="font-semibold text-gray-800 dark:text-white mb-2">Firebase Authentication</h3>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                            Provides secure user authentication and account management.
+                        </p>
+                        <a href="https://policies.google.com/privacy" target="_blank" class="text-blue-600 dark:text-blue-400 hover:underline text-sm">
+                            Google Privacy Policy
+                        </a>
+                    </div>
+                    
+                    <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                        <h3 class="font-semibold text-gray-800 dark:text-white mb-2">Google Analytics</h3>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                            Helps us understand website usage patterns (anonymized data only).
+                        </p>
+                        <a href="https://policies.google.com/privacy" target="_blank" class="text-blue-600 dark:text-blue-400 hover:underline text-sm">
+                            Google Analytics Privacy
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Managing Cookies -->
+            <section>
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Managing Your Cookie Preferences</h2>
+                
+                <div class="bg-green-50 dark:bg-green-900 rounded-lg p-6 mb-6">
+                    <h3 class="font-semibold text-green-800 dark:text-green-200 mb-3">Cookie Consent Center</h3>
+                    <p class="text-green-700 dark:text-green-300 text-sm mb-4">
+                        You can update your cookie preferences at any time using our consent center.
+                    </p>
+                    <button class="btn btn-sm bg-green-600 hover:bg-green-700 text-white" onclick="showCookieConsent()">
+                        <i data-lucide="settings" class="w-4 h-4 mr-2"></i>
+                        Manage Cookie Preferences
+                    </button>
+                </div>
+                
+                <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-3">Browser Settings</h3>
+                <p class="text-gray-600 dark:text-gray-400 mb-4">
+                    You can also manage cookies through your browser settings. Here's how:
+                </p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                        <h4 class="font-semibold text-gray-800 dark:text-white mb-2">Chrome</h4>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">
+                            Settings → Privacy and Security → Cookies and other site data
+                        </p>
+                    </div>
+                    
+                    <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                        <h4 class="font-semibold text-gray-800 dark:text-white mb-2">Firefox</h4>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">
+                            Settings → Privacy & Security → Cookies and Site Data
+                        </p>
+                    </div>
+                    
+                    <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                        <h4 class="font-semibold text-gray-800 dark:text-white mb-2">Safari</h4>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">
+                            Preferences → Privacy → Cookies and website data
+                        </p>
+                    </div>
+                    
+                    <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                        <h4 class="font-semibold text-gray-800 dark:text-white mb-2">Edge</h4>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">
+                            Settings → Cookies and site permissions → Cookies and site data
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="bg-yellow-50 dark:bg-yellow-900 rounded-lg p-4 mt-4">
+                    <p class="text-yellow-800 dark:text-yellow-200 text-sm">
+                        <strong>Note:</strong> Disabling essential cookies may affect the functionality of our tools 
+                        and prevent you from using certain features.
+                    </p>
+                </div>
+            </section>
+
+            <!-- Updates to Policy -->
+            <section>
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Updates to This Policy</h2>
+                <p class="text-gray-600 dark:text-gray-400 mb-4">
+                    We may update this Cookie Policy from time to time to reflect changes in our practices or 
+                    applicable laws. We will notify you of any material changes by posting the new policy on this page.
+                </p>
+                <p class="text-gray-600 dark:text-gray-400">
+                    We encourage you to review this policy periodically to stay informed about how we use cookies.
+                </p>
+            </section>
+
+            <!-- Contact -->
+            <section>
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Questions About Cookies</h2>
+                <p class="text-gray-600 dark:text-gray-400 mb-4">
+                    If you have any questions about our use of cookies, please contact us:
+                </p>
+                
+                <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                    <div class="space-y-2">
+                        <p class="text-gray-800 dark:text-white">
+                            <strong>Email:</strong> 
+                            <a href="mailto:privacy@toolora.ai" class="text-blue-600 dark:text-blue-400 hover:underline">
+                                privacy@toolora.ai
+                            </a>
+                        </p>
+                        <p class="text-gray-800 dark:text-white">
+                            <strong>Subject:</strong> Cookie Policy Question
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+
+<script>
+function showCookieConsent() {
+    // This would trigger the cookie consent modal
+    alert('Cookie preference center would open here');
+}
+</script>
+{% endblock %}

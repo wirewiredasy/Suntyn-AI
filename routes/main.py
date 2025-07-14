@@ -60,6 +60,22 @@ def contact():
 def privacy():
     return render_template('privacy.html')
 
+@main_bp.route('/terms')
+def terms():
+    return render_template('terms.html')
+
+@main_bp.route('/cookies')
+def cookies():
+    return render_template('cookies.html')
+
+@main_bp.route('/faq')
+def faq():
+    return render_template('faq.html')
+
+@main_bp.route('/blog')
+def blog():
+    return render_template('blog.html')
+
 @main_bp.route('/sitemap.xml')
 def sitemap():
     """Generate dynamic sitemap for SEO"""
@@ -80,7 +96,52 @@ def sitemap():
             <changefreq>daily</changefreq>
             <priority>0.9</priority>
         </url>
-    '''.format(datetime.datetime.now().strftime('%Y-%m-%d'), datetime.datetime.now().strftime('%Y-%m-%d'))
+        <url>
+            <loc>https://toolora-ai.replit.app/about</loc>
+            <lastmod>{}</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.7</priority>
+        </url>
+        <url>
+            <loc>https://toolora-ai.replit.app/contact</loc>
+            <lastmod>{}</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.7</priority>
+        </url>
+        <url>
+            <loc>https://toolora-ai.replit.app/privacy</loc>
+            <lastmod>{}</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.6</priority>
+        </url>
+        <url>
+            <loc>https://toolora-ai.replit.app/terms</loc>
+            <lastmod>{}</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.6</priority>
+        </url>
+        <url>
+            <loc>https://toolora-ai.replit.app/cookies</loc>
+            <lastmod>{}</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.5</priority>
+        </url>
+        <url>
+            <loc>https://toolora-ai.replit.app/faq</loc>
+            <lastmod>{}</lastmod>
+            <changefreq>weekly</changefreq>
+            <priority>0.8</priority>
+        </url>
+    '''.format(
+        datetime.datetime.now().strftime('%Y-%m-%d'), 
+        datetime.datetime.now().strftime('%Y-%m-%d'),
+        datetime.datetime.now().strftime('%Y-%m-%d'),
+        datetime.datetime.now().strftime('%Y-%m-%d'),
+        datetime.datetime.now().strftime('%Y-%m-%d'),
+        datetime.datetime.now().strftime('%Y-%m-%d'),
+        datetime.datetime.now().strftime('%Y-%m-%d'),
+        datetime.datetime.now().strftime('%Y-%m-%d')
+    )
     
     # Add all tool URLs
     for category_id, category_data in Config.TOOL_CATEGORIES.items():

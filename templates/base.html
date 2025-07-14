@@ -4,47 +4,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Toolora AI - One Place. All Tools.{% endblock %}</title>
-    
+
     <!-- SEO Meta Tags -->
     <meta name="description" content="{% block description %}Professional toolkit with 85+ tools for PDF, Image, Video, AI and more. Free, fast, and secure online tools.{% endblock %}">
     <meta name="keywords" content="{% block keywords %}PDF tools, image editor, video converter, AI tools, online tools, free tools{% endblock %}">
     <meta name="author" content="Toolora AI">
-    
+
     <!-- Open Graph Meta Tags -->
     <meta property="og:title" content="{% block og_title %}Toolora AI - Professional Online Tools{% endblock %}">
     <meta property="og:description" content="{% block og_description %}85+ professional tools for PDF, Image, Video, AI processing and more. Free, fast, and secure.{% endblock %}">
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ request.url }}">
     <meta property="og:image" content="{{ url_for('static', filename='images/og-image.jpg') }}">
-    
+
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="{% block twitter_title %}Toolora AI - Professional Online Tools{% endblock %}">
     <meta name="twitter:description" content="{% block twitter_description %}85+ professional tools for PDF, Image, Video, AI processing and more.{% endblock %}">
     <meta name="twitter:image" content="{{ url_for('static', filename='images/twitter-card.jpg') }}">
-    
+
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/favicon.svg') }}">
-    
+
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+
     <!-- TailwindCSS & DaisyUI -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.20/dist/full.min.css" rel="stylesheet" type="text/css" />
-    
+
     <!-- Alpine.js -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    
+
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-    
+
     <!-- Animate.css -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-    
+
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
-    
+
     <!-- Tailwind Config -->
     <script>
         tailwind.config = {
@@ -103,7 +103,7 @@
                         <button @click="userMenuOpen = !userMenuOpen" class="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                             <i data-lucide="user" class="w-5 h-5 text-gray-700 dark:text-gray-300"></i>
                         </button>
-                        
+
                         <div x-show="userMenuOpen" @click.away="userMenuOpen = false" x-transition class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700">
                             <div class="py-2">
                                 <a href="{{ url_for('main.dashboard') }}" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">Dashboard</a>
@@ -131,7 +131,7 @@
                         <i data-lucide="x" class="w-5 h-5 text-gray-700 dark:text-gray-300"></i>
                     </button>
                 </div>
-                
+
                 <nav class="space-y-4">
                     <a href="{{ url_for('main.index') }}" class="block py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">Home</a>
                     <a href="{{ url_for('tools.index') }}" class="block py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">Tools</a>
@@ -146,47 +146,76 @@
 
     <!-- Main Content -->
     <main class="pt-16 min-h-screen">
+        <!-- Breadcrumb Navigation -->
+        {% if request.endpoint != 'main.index' %}
+        <nav class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+            <div class="container mx-auto px-4 py-3">
+                <div class="flex items-center space-x-2 text-sm">
+                    <a href="{{ url_for('main.index') }}" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                        Home
+                    </a>
+                    <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i>
+
+                    {% if request.endpoint.startswith('tools.') %}
+                        <a href="{{ url_for('tools.index') }}" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                            Tools
+                        </a>
+                        {% if request.endpoint == 'tools.tool_view' %}
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i>
+                            <span class="text-gray-700 dark:text-gray-300 font-medium">
+                                {{ request.view_args.tool_name.replace('-', ' ').title() }}
+                            </span>
+                        {% endif %}
+                    {% elif request.endpoint == 'main.about' %}
+                        <span class="text-gray-700 dark:text-gray-300 font-medium">About</span>
+                    {% elif request.endpoint == 'main.contact' %}
+                        <span class="text-gray-700 dark:text-gray-300 font-medium">Contact</span>
+                    {% elif request.endpoint == 'main.privacy' %}
+                        <span class="text-gray-700 dark:text-gray-300 font-medium">Privacy Policy</span>
+                    {% elif request.endpoint == 'main.terms' %}
+                        <span class="text-gray-700 dark:text-gray-300 font-medium">Terms of Service</span>
+                    {% elif request.endpoint == 'main.cookies' %}
+                        <span class="text-gray-700 dark:text-gray-300 font-medium">Cookie Policy</span>
+                    {% elif request.endpoint == 'main.faq' %}
+                        <span class="text-gray-700 dark:text-gray-300 font-medium">FAQ</span>
+                    {% elif request.endpoint == 'main.dashboard' %}
+                        <span class="text-gray-700 dark:text-gray-300 font-medium">Dashboard</span>
+                    {% endif %}
+                </div>
+            </div>
+        </nav>
+        {% endif %}
+
         {% block content %}{% endblock %}
     </main>
 
     <!-- Footer -->
     <footer class="bg-gray-800 dark:bg-gray-900 text-white py-12 mt-16">
         <div class="container mx-auto px-4">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <!-- Company Info -->
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-8">
+                <!-- Company -->
                 <div>
-                    <div class="flex items-center space-x-2 mb-4">
-                        <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                            <i data-lucide="brain" class="w-5 h-5 text-white"></i>
-                        </div>
-                        <span class="text-xl font-bold">Toolora AI</span>
-                    </div>
-                    <p class="text-gray-400 mb-4">Professional toolkit with 85+ tools for all your needs. Free, fast, and secure.</p>
-                    <div class="flex space-x-4">
-                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
-                            <i data-lucide="github" class="w-5 h-5"></i>
-                        </a>
-                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
-                            <i data-lucide="twitter" class="w-5 h-5"></i>
-                        </a>
-                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
-                            <i data-lucide="linkedin" class="w-5 h-5"></i>
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Quick Links -->
-                <div>
-                    <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                    <h3 class="text-lg font-semibold mb-4">Company</h3>
                     <ul class="space-y-2">
-                        <li><a href="{{ url_for('main.index') }}" class="text-gray-400 hover:text-white transition-colors">Home</a></li>
-                        <li><a href="{{ url_for('tools.index') }}" class="text-gray-400 hover:text-white transition-colors">All Tools</a></li>
-                        <li><a href="{{ url_for('main.about') }}" class="text-gray-400 hover:text-white transition-colors">About</a></li>
+                        <li><a href="{{ url_for('main.about') }}" class="text-gray-400 hover:text-white transition-colors">About Us</a></li>
                         <li><a href="{{ url_for('main.contact') }}" class="text-gray-400 hover:text-white transition-colors">Contact</a></li>
+                        <li><a href="{{ url_for('main.faq') }}" class="text-gray-400 hover:text-white transition-colors">FAQ</a></li>
+                        <li><a href="{{ url_for('main.blog') }}" class="text-gray-400 hover:text-white transition-colors">Blog</a></li>
                     </ul>
                 </div>
 
-                <!-- Tool Categories -->
+                <!-- Tools -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Popular Tools</h3>
+                    <ul class="space-y-2">
+                        <li><a href="{{ url_for('tools.tool_view', tool_name='pdf-merge') }}" class="text-gray-400 hover:text-white transition-colors">PDF Merger</a></li>
+                        <li><a href="{{ url_for('tools.tool_view', tool_name='image-compress') }}" class="text-gray-400 hover:text-white transition-colors">Image Compressor</a></li>
+                        <li><a href="{{ url_for('tools.tool_view', tool_name='video-trim') }}" class="text-gray-400 hover:text-white transition-colors">Video Trimmer</a></li>
+                        <li><a href="{{ url_for('tools.tool_view', tool_name='resume-generator') }}" class="text-gray-400 hover:text-white transition-colors">Resume Generator</a></li>
+                    </ul>
+                </div>
+
+                <!-- Categories -->
                 <div>
                     <h3 class="text-lg font-semibold mb-4">Categories</h3>
                     <ul class="space-y-2">
@@ -197,17 +226,29 @@
                     </ul>
                 </div>
 
+                <!-- Support -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Support</h3>
+                    <ul class="space-y-2">
+                        <li><a href="{{ url_for('main.faq') }}" class="text-gray-400 hover:text-white transition-colors">Help Center</a></li>
+                        <li><a href="{{ url_for('main.contact') }}" class="text-gray-400 hover:text-white transition-colors">Contact Support</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Feature Requests</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Status Page</a></li>
+                    </ul>
+                </div>
+
                 <!-- Legal -->
                 <div>
                     <h3 class="text-lg font-semibold mb-4">Legal</h3>
                     <ul class="space-y-2">
                         <li><a href="{{ url_for('main.privacy') }}" class="text-gray-400 hover:text-white transition-colors">Privacy Policy</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Terms of Service</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Cookie Policy</a></li>
+                        <li><a href="{{ url_for('main.terms') }}" class="text-gray-400 hover:text-white transition-colors">Terms of Service</a></li>
+                        <li><a href="{{ url_for('main.cookies') }}" class="text-gray-400 hover:text-white transition-colors">Cookie Policy</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">GDPR</a></li>
                     </ul>
                 </div>
             </div>
-            
+
             <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
                 <p>&copy; 2024 Toolora AI. All rights reserved. Made with ❤️ for productivity.</p>
             </div>
@@ -253,7 +294,7 @@
     <script src="{{ url_for('static', filename='js/search-tools.js') }}"></script>
     <script src="{{ url_for('static', filename='js/tool-animations.js') }}"></script>
     <script src="{{ url_for('static', filename='js/tool-handlers.js') }}"></script>
-    
+
     {% block scripts %}{% endblock %}
 </body>
 </html>

@@ -1,0 +1,82 @@
+
+{% extends "base.html" %}
+
+{% block title %}Blog - Toolora AI{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <!-- Header -->
+    <div class="text-center mb-12">
+        <div class="w-16 h-16 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center mx-auto mb-4">
+            <i data-lucide="book-open" class="w-8 h-8 text-indigo-600 dark:text-indigo-400"></i>
+        </div>
+        <h1 class="text-4xl md:text-5xl font-bold text-gray-800 dark:text-white mb-6">
+            Toolora AI Blog
+        </h1>
+        <p class="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+            Tips, tutorials, and insights to help you get the most out of our tools.
+        </p>
+    </div>
+
+    <!-- Coming Soon -->
+    <div class="max-w-2xl mx-auto text-center">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-12">
+            <div class="w-24 h-24 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center mx-auto mb-6">
+                <i data-lucide="edit-3" class="w-12 h-12 text-indigo-600 dark:text-indigo-400"></i>
+            </div>
+            <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-4">
+                Coming Soon!
+            </h2>
+            <p class="text-gray-600 dark:text-gray-300 mb-8">
+                We're working on bringing you helpful content, tutorials, and updates. 
+                Stay tuned for productivity tips, tool guides, and industry insights.
+            </p>
+            
+            <!-- Newsletter Signup -->
+            <div class="bg-indigo-50 dark:bg-indigo-900 rounded-lg p-6">
+                <h3 class="text-lg font-semibold text-indigo-900 dark:text-indigo-100 mb-3">
+                    Get Notified When We Launch
+                </h3>
+                <form class="flex flex-col sm:flex-row gap-3">
+                    <input type="email" 
+                           placeholder="Enter your email" 
+                           class="flex-1 px-4 py-2 border border-indigo-200 dark:border-indigo-700 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white">
+                    <button type="submit" class="btn btn-primary px-6 py-2">
+                        Subscribe
+                    </button>
+                </form>
+                <p class="text-xs text-indigo-700 dark:text-indigo-300 mt-2">
+                    No spam, unsubscribe at any time.
+                </p>
+            </div>
+        </div>
+        
+        <!-- What to Expect -->
+        <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="text-center p-6">
+                <div class="w-12 h-12 rounded-lg bg-green-100 dark:bg-green-900 flex items-center justify-center mx-auto mb-4">
+                    <i data-lucide="lightbulb" class="w-6 h-6 text-green-600 dark:text-green-400"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">Tips & Tricks</h3>
+                <p class="text-gray-600 dark:text-gray-300 text-sm">Learn how to maximize your productivity with our tools</p>
+            </div>
+            
+            <div class="text-center p-6">
+                <div class="w-12 h-12 rounded-lg bg-blue-100 dark:bg-blue-900 flex items-center justify-center mx-auto mb-4">
+                    <i data-lucide="video" class="w-6 h-6 text-blue-600 dark:text-blue-400"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">Tutorials</h3>
+                <p class="text-gray-600 dark:text-gray-300 text-sm">Step-by-step guides for complex workflows</p>
+            </div>
+            
+            <div class="text-center p-6">
+                <div class="w-12 h-12 rounded-lg bg-purple-100 dark:bg-purple-900 flex items-center justify-center mx-auto mb-4">
+                    <i data-lucide="trending-up" class="w-6 h-6 text-purple-600 dark:text-purple-400"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">Updates</h3>
+                <p class="text-gray-600 dark:text-gray-300 text-sm">Latest features and tool announcements</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
