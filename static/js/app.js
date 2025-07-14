@@ -479,13 +479,43 @@ function preventChatAutoOpen() {
     // Override any potential auto-open functionality
     const chatWidget = document.getElementById('chat-widget');
     if (chatWidget) {
-        // Ensure chat starts closed
+        // Force close on any Alpine.js data
+        if (chatWidget.__x) {
+            chatWidget.__x.$data.isOpen = false;
+        }
+        
+        // Ensure chat window stays hidden
         const chatWindow = chatWidget.querySelector('[x-show="isOpen"]');
         if (chatWindow) {
             chatWindow.style.display = 'none';
         }
+        
+        // Monitor and prevent any auto-opening
+        const observer = new MutationObserver(() => {
+            if (chatWidget.__x && chatWidget.__x.$data.isOpen) {
+                // Only close if it wasn't manually opened
+                const recentClick = Date.now() - (window.lastChatClick || 0) < 1000;
+                if (!recentClick) {
+                    chatWidget.__x.$data.isOpen = false;
+                }
+            }
+        });
+        
+        observer.observe(chatWidget, { 
+            attributes: true, 
+            childList: true, 
+            subtree: true 
+        });
     }
 }
+
+// Track manual chat button clicks
+document.addEventListener('click', function(event) {
+    const chatButton = event.target.closest('#chat-widget button');
+    if (chatButton) {
+        window.lastChatClick = Date.now();
+    }
+});
 
 // Export functions for use in other scripts
 window.tooloraApp = {

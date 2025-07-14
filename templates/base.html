@@ -311,7 +311,7 @@
     </script>
 
     <!-- Live Chat Widget -->
-    <div id="chat-widget" x-data="chatWidget()" class="fixed bottom-4 right-4 z-50">
+    <div id="chat-widget" x-data="chatWidget()" x-init="init()" class="fixed bottom-4 right-4 z-50">
         <!-- Chat Button -->
         <button @click="toggleChat()" 
                 class="w-14 h-14 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg flex items-center justify-center transition-all duration-300"
@@ -388,8 +388,20 @@
             messages: [],
             newMessage: '',
             
+            // Ensure chat never auto-opens
+            init() {
+                this.isOpen = false;
+                // Override any potential auto-open triggers
+                setTimeout(() => {
+                    this.isOpen = false;
+                }, 100);
+            },
+            
             toggleChat() {
-                this.isOpen = !this.isOpen;
+                // Only allow manual toggle
+                if (event && event.isTrusted) {
+                    this.isOpen = !this.isOpen;
+                }
             },
             
             sendMessage() {
@@ -443,6 +455,17 @@
             }
         }
     }
+    
+    // Prevent any automatic chat opening on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        // Force chat to stay closed
+        setTimeout(() => {
+            const chatWidget = document.getElementById('chat-widget');
+            if (chatWidget && chatWidget.__x) {
+                chatWidget.__x.$data.isOpen = false;
+            }
+        }, 500);
+    });
     </script>
 
     <!-- Custom JavaScript -->
