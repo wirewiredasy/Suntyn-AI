@@ -482,24 +482,31 @@ class EnhancedToolHandler {
         const toolCategory = this.getToolCategory(this.currentTool);
         const endpoint = this.getAPIEndpoint(this.currentTool, toolCategory);
         
-        const response = await fetch(endpoint, {
-            method: 'POST',
-            body: formData
-        });
+        try {
+            const response = await fetch(endpoint, {
+                method: 'POST',
+                body: formData
+            });
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error('API call failed:', error);
+            throw error;
         }
-
-        return await response.json();
     }
 
     getToolCategory(toolName) {
         const categories = {
-            'pdf': ['pdf-merge', 'pdf-split', 'pdf-compress', 'pdf-to-word', 'word-to-pdf'],
-            'image': ['image-compress', 'image-resize', 'image-convert', 'image-crop'],
-            'video': ['video-to-mp3', 'video-trimmer', 'video-compress'],
-            'ai': ['resume-generator', 'business-name-generator', 'qr-generator']
+            'pdf': ['pdf-merge', 'pdf-split', 'pdf-compress', 'pdf-to-word', 'word-to-pdf', 'pdf-watermark', 'pdf-rotate', 'pdf-extract-pages'],
+            'image': ['image-compress', 'image-resize', 'image-convert', 'image-crop', 'image-rotate', 'background-remover', 'image-watermark'],
+            'video': ['video-to-mp3', 'video-trimmer', 'video-compress', 'video-converter', 'audio-remover'],
+            'ai': ['resume-generator', 'business-name-generator', 'blog-title-generator', 'product-description', 'ad-copy-generator', 'faq-generator'],
+            'utility': ['qr-generator', 'barcode-generator', 'password-generator', 'text-case-converter']
         };
 
         for (const [category, tools] of Object.entries(categories)) {
@@ -512,15 +519,29 @@ class EnhancedToolHandler {
 
     getAPIEndpoint(toolName, category) {
         const endpoints = {
+            // PDF tools
             'pdf-merge': '/api/pdf/merge',
             'pdf-split': '/api/pdf/split',
             'pdf-compress': '/api/pdf/compress',
+            
+            // Image tools
             'image-compress': '/api/image/compress',
             'image-resize': '/api/image/resize',
             'image-convert': '/api/image/convert',
+            
+            // Video tools
             'video-to-mp3': '/api/video/extract-audio',
             'video-trimmer': '/api/video/trim',
+            
+            // AI tools
             'resume-generator': '/api/ai/resume',
+            'business-name-generator': '/api/ai/business-names',
+            'blog-title-generator': '/api/ai/blog-titles',
+            'product-description': '/api/ai/product-description',
+            'ad-copy-generator': '/api/ai/ad-copy',
+            'faq-generator': '/api/ai/faq',
+            
+            // Utility tools
             'qr-generator': '/api/utility/qr-code'
         };
 

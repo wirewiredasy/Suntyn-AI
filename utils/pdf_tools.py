@@ -9,14 +9,15 @@ import io
 
 class PDFProcessor:
     @staticmethod
-    def merge_pdfs(files):
+    def merge_pdfs(file_paths):
         """Merge multiple PDF files into one"""
         writer = PdfWriter()
         
-        for file in files:
-            reader = PdfReader(file)
-            for page in reader.pages:
-                writer.add_page(page)
+        for file_path in file_paths:
+            with open(file_path, 'rb') as file:
+                reader = PdfReader(file)
+                for page in reader.pages:
+                    writer.add_page(page)
         
         # Save to uploads directory
         os.makedirs('uploads', exist_ok=True)
@@ -29,49 +30,51 @@ class PDFProcessor:
         return output_path
     
     @staticmethod
-    def split_pdf(file, pages_per_file=1):
+    def split_pdf(file_path, pages_per_file=1):
         """Split PDF into separate files"""
-        reader = PdfReader(file)
-        total_pages = len(reader.pages)
-        output_files = []
-        
-        os.makedirs('uploads', exist_ok=True)
-        
-        for i in range(0, total_pages, pages_per_file):
+        with open(file_path, 'rb') as file:
+            reader = PdfReader(file)
+            total_pages = len(reader.pages)
+            output_files = []
+            
+            os.makedirs('uploads', exist_ok=True)
+            
+            for i in range(0, total_pages, pages_per_file):
+                writer = PdfWriter()
+                
+                # Add pages to writer
+                for j in range(i, min(i + pages_per_file, total_pages)):
+                    writer.add_page(reader.pages[j])
+                
+                # Save split file
+                output_filename = f"split_part_{i//pages_per_file + 1}.pdf"
+                output_path = os.path.join('uploads', output_filename)
+                
+                with open(output_path, 'wb') as output_file:
+                    writer.write(output_file)
+                
+                output_files.append(output_path)
+            
+            return output_files
+    
+    @staticmethod
+    def compress_pdf(file_path, quality=0.7):
+        """Compress PDF file"""
+        with open(file_path, 'rb') as file:
+            reader = PdfReader(file)
             writer = PdfWriter()
             
-            # Add pages to writer
-            for j in range(i, min(i + pages_per_file, total_pages)):
-                writer.add_page(reader.pages[j])
+            for page in reader.pages:
+                writer.add_page(page)
             
-            # Save split file
-            output_filename = f"split_part_{i//pages_per_file + 1}.pdf"
+            os.makedirs('uploads', exist_ok=True)
+            output_filename = f"compressed_{secure_filename(os.path.basename(file_path))}"
             output_path = os.path.join('uploads', output_filename)
             
             with open(output_path, 'wb') as output_file:
                 writer.write(output_file)
             
-            output_files.append(output_path)
-        
-        return output_files
-    
-    @staticmethod
-    def compress_pdf(file, quality=0.7):
-        """Compress PDF file"""
-        reader = PdfReader(file)
-        writer = PdfWriter()
-        
-        for page in reader.pages:
-            writer.add_page(page)
-        
-        os.makedirs('uploads', exist_ok=True)
-        output_filename = f"compressed_{secure_filename(file.filename)}"
-        output_path = os.path.join('uploads', output_filename)
-        
-        with open(output_path, 'wb') as output_file:
-            writer.write(output_file)
-        
-        return output_path
+            return output_path
     
     @staticmethod
     def add_watermark(file, watermark_text, position='center', opacity=0.5):

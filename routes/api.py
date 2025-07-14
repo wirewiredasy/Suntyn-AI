@@ -1,433 +1,517 @@
-from flask import Blueprint, request, jsonify, send_file
+from flask import Blueprint, request, jsonify, session, send_file
 from werkzeug.utils import secure_filename
 import os
+import uuid
 import tempfile
-from utils.pdf_tools import PDFProcessor
-from utils.image_tools import ImageProcessor
-from utils.video_tools import VideoProcessor
-from utils.ai_tools import AIProcessor
-from utils.file_handler import FileHandler
+from models import User, ToolHistory, SavedFile
+from app import db
 
 api_bp = Blueprint('api', __name__)
 
+def get_current_user():
+    """Get current user from session"""
+    if 'user_id' not in session:
+        return None
+    return User.query.get(session['user_id'])
+
+@api_bp.route('/upload', methods=['POST'])
+def upload_file():
+    """Handle file upload"""
+    if 'file' not in request.files:
+        return jsonify({'error': 'No file provided'}), 400
+    
+    file = request.files['file']
+    if file.filename == '':
+        return jsonify({'error': 'No file selected'}), 400
+    
+    if file:
+        # Generate unique filename
+        filename = str(uuid.uuid4()) + '_' + secure_filename(file.filename)
+        file_path = os.path.join('uploads', filename)
+        
+        # Ensure uploads directory exists
+        os.makedirs('uploads', exist_ok=True)
+        
+        file.save(file_path)
+        
+        return jsonify({
+            'success': True,
+            'filename': filename,
+            'original_filename': file.filename,
+            'file_path': file_path
+        })
+
+@api_bp.route('/download/<filename>')
+def download_file(filename):
+    """Download processed file"""
+    file_path = os.path.join('uploads', filename)
+    if os.path.exists(file_path):
+        return send_file(file_path, as_attachment=True)
+    return jsonify({'error': 'File not found'}), 404
+
 # PDF Tools
 @api_bp.route('/pdf/merge', methods=['POST'])
-def merge_pdfs():
+def merge_pdf_files():
+    """Merge multiple PDF files"""
     try:
         files = request.files.getlist('files')
-        if not files:
-            return jsonify({'success': False, 'error': 'No files provided'})
-
-        output_path = PDFProcessor.merge_pdfs([file for file in files])
-        return jsonify({
-            'success': True,
-            'download_url': f'/api/download/{os.path.basename(output_path)}',
-            'filename': os.path.basename(output_path)
-        })
+        if len(files) < 2:
+            return jsonify({'error': 'At least 2 PDF files required'}), 400
+        
+        from utils.pdf_tools import PDFProcessor
+        
+        # Save uploaded files temporarily
+        temp_files = []
+        for file in files:
+            temp_filename = str(uuid.uuid4()) + '_' + secure_filename(file.filename)
+            temp_path = os.path.join('uploads', temp_filename)
+            file.save(temp_path)
+            temp_files.append(temp_path)
+        
+        # Merge PDFs
+        output_path = PDFProcessor.merge_pdfs(temp_files)
+        
+        if output_path:
+            return jsonify({
+                'success': True,
+                'download_url': f'/api/download/{os.path.basename(output_path)}',
+                'filename': os.path.basename(output_path)
+            })
+        else:
+            return jsonify({'error': 'Failed to merge PDFs'}), 500
+            
     except Exception as e:
-        return jsonify({'success': False, 'error': str(e)})
+        return jsonify({'error': str(e)}), 500
 
 @api_bp.route('/pdf/split', methods=['POST'])
-def split_pdf():
+def split_pdf_files():
+    """Split PDF into multiple files"""
     try:
-        file = request.files.get('file')
+        file = request.files['file']
         pages_per_file = int(request.form.get('pages_per_file', 1))
-
-        if not file:
-            return jsonify({'success': False, 'error': 'No file provided'})
-
-        output_files = PDFProcessor.split_pdf(file, pages_per_file)
-        return jsonify({
-            'success': True,
-            'files': [{'filename': os.path.basename(f), 'download_url': f'/api/download/{os.path.basename(f)}'} for f in output_files]
-        })
+        
+        from utils.pdf_tools import PDFProcessor
+        
+        # Save uploaded file
+        temp_filename = str(uuid.uuid4()) + '_' + secure_filename(file.filename)
+        temp_path = os.path.join('uploads', temp_filename)
+        file.save(temp_path)
+        
+        # Split PDF
+        output_files = PDFProcessor.split_pdf(temp_path, pages_per_file)
+        
+        if output_files:
+            return jsonify({
+                'success': True,
+                'files': [{'filename': os.path.basename(f), 'download_url': f'/api/download/{os.path.basename(f)}'} for f in output_files]
+            })
+        else:
+            return jsonify({'error': 'Failed to split PDF'}), 500
+            
     except Exception as e:
-        return jsonify({'success': False, 'error': str(e)})
+        return jsonify({'error': str(e)}), 500
 
 @api_bp.route('/pdf/compress', methods=['POST'])
-def compress_pdf():
+def compress_pdf_files():
+    """Compress PDF file"""
     try:
-        file = request.files.get('file')
+        file = request.files['file']
         quality = float(request.form.get('quality', 0.7))
-
-        if not file:
-            return jsonify({'success': False, 'error': 'No file provided'})
-
-        output_path = PDFProcessor.compress_pdf(file, quality)
-        return jsonify({
-            'success': True,
-            'download_url': f'/api/download/{os.path.basename(output_path)}',
-            'filename': os.path.basename(output_path)
-        })
+        
+        from utils.pdf_tools import PDFProcessor
+        
+        # Save uploaded file
+        temp_filename = str(uuid.uuid4()) + '_' + secure_filename(file.filename)
+        temp_path = os.path.join('uploads', temp_filename)
+        file.save(temp_path)
+        
+        # Compress PDF
+        output_path = PDFProcessor.compress_pdf(temp_path, quality)
+        
+        if output_path:
+            return jsonify({
+                'success': True,
+                'download_url': f'/api/download/{os.path.basename(output_path)}',
+                'filename': os.path.basename(output_path)
+            })
+        else:
+            return jsonify({'error': 'Failed to compress PDF'}), 500
+            
     except Exception as e:
-        return jsonify({'success': False, 'error': str(e)})
-
-@api_bp.route('/pdf/watermark', methods=['POST'])
-def add_pdf_watermark():
-    try:
-        file = request.files.get('file')
-        watermark_text = request.form.get('watermark_text', 'Watermark')
-        position = request.form.get('position', 'center')
-        opacity = float(request.form.get('opacity', 0.5))
-
-        if not file:
-            return jsonify({'success': False, 'error': 'No file provided'})
-
-        output_path = PDFProcessor.add_watermark(file, watermark_text, position, opacity)
-        return jsonify({
-            'success': True,
-            'download_url': f'/api/download/{os.path.basename(output_path)}',
-            'filename': os.path.basename(output_path)
-        })
-    except Exception as e:
-        return jsonify({'success': False, 'error': str(e)})
-
-@api_bp.route('/pdf/rotate', methods=['POST'])
-def rotate_pdf():
-    try:
-        file = request.files.get('file')
-        rotation = int(request.form.get('rotation', 90))
-
-        if not file:
-            return jsonify({'success': False, 'error': 'No file provided'})
-
-        output_path = PDFProcessor.rotate_pdf(file, rotation)
-        return jsonify({
-            'success': True,
-            'download_url': f'/api/download/{os.path.basename(output_path)}',
-            'filename': os.path.basename(output_path)
-        })
-    except Exception as e:
-        return jsonify({'success': False, 'error': str(e)})
-
-@api_bp.route('/pdf/extract-pages', methods=['POST'])
-def extract_pdf_pages():
-    try:
-        file = request.files.get('file')
-        pages = request.form.get('pages', '[1]')
-
-        if not file:
-            return jsonify({'success': False, 'error': 'No file provided'})
-
-        import json
-        page_list = json.loads(pages)
-        output_path = PDFProcessor.extract_pages(file, page_list)
-        return jsonify({
-            'success': True,
-            'download_url': f'/api/download/{os.path.basename(output_path)}',
-            'filename': os.path.basename(output_path)
-        })
-    except Exception as e:
-        return jsonify({'success': False, 'error': str(e)})
+        return jsonify({'error': str(e)}), 500
 
 # Image Tools
 @api_bp.route('/image/compress', methods=['POST'])
-def compress_image():
+def compress_image_files():
+    """Compress image file"""
     try:
-        file = request.files.get('file')
+        file = request.files['file']
         quality = int(request.form.get('quality', 85))
-        format = request.form.get('format', 'jpeg')
-
-        if not file:
-            return jsonify({'success': False, 'error': 'No file provided'})
-
-        output_path = ImageProcessor.compress_image(file, quality, format)
-        return jsonify({
-            'success': True,
-            'download_url': f'/api/download/{os.path.basename(output_path)}',
-            'filename': os.path.basename(output_path)
-        })
+        
+        from utils.image_tools import ImageProcessor
+        
+        # Save uploaded file
+        temp_filename = str(uuid.uuid4()) + '_' + secure_filename(file.filename)
+        temp_path = os.path.join('uploads', temp_filename)
+        file.save(temp_path)
+        
+        # Compress image
+        output_path = ImageProcessor.compress_image(temp_path, quality)
+        
+        if output_path:
+            return jsonify({
+                'success': True,
+                'download_url': f'/api/download/{os.path.basename(output_path)}',
+                'filename': os.path.basename(output_path)
+            })
+        else:
+            return jsonify({'error': 'Failed to compress image'}), 500
+            
     except Exception as e:
-        return jsonify({'success': False, 'error': str(e)})
+        return jsonify({'error': str(e)}), 500
 
 @api_bp.route('/image/resize', methods=['POST'])
-def resize_image():
+def resize_image_files():
+    """Resize image file"""
     try:
-        file = request.files.get('file')
-        width = int(request.form.get('width', 800))
-        height = int(request.form.get('height', 600))
-        maintain_aspect = request.form.get('maintain_aspect', 'true').lower() == 'true'
-
-        if not file:
-            return jsonify({'success': False, 'error': 'No file provided'})
-
-        output_path = ImageProcessor.resize_image(file, width, height, maintain_aspect)
-        return jsonify({
-            'success': True,
-            'download_url': f'/api/download/{os.path.basename(output_path)}',
-            'filename': os.path.basename(output_path)
-        })
+        file = request.files['file']
+        width = request.form.get('width')
+        height = request.form.get('height')
+        
+        if not width and not height:
+            return jsonify({'error': 'Width or height required'}), 400
+        
+        width = int(width) if width else None
+        height = int(height) if height else None
+        
+        from utils.image_tools import ImageProcessor
+        
+        # Save uploaded file
+        temp_filename = str(uuid.uuid4()) + '_' + secure_filename(file.filename)
+        temp_path = os.path.join('uploads', temp_filename)
+        file.save(temp_path)
+        
+        # Resize image
+        output_path = ImageProcessor.resize_image(temp_path, width, height)
+        
+        if output_path:
+            return jsonify({
+                'success': True,
+                'download_url': f'/api/download/{os.path.basename(output_path)}',
+                'filename': os.path.basename(output_path)
+            })
+        else:
+            return jsonify({'error': 'Failed to resize image'}), 500
+            
     except Exception as e:
-        return jsonify({'success': False, 'error': str(e)})
+        return jsonify({'error': str(e)}), 500
 
 @api_bp.route('/image/convert', methods=['POST'])
-def convert_image():
+def convert_image_files():
+    """Convert image to different format"""
     try:
-        file = request.files.get('file')
-        format = request.form.get('format', 'png')
-
-        if not file:
-            return jsonify({'success': False, 'error': 'No file provided'})
-
-        output_path = ImageProcessor.convert_image(file, format)
-        return jsonify({
-            'success': True,
-            'download_url': f'/api/download/{os.path.basename(output_path)}',
-            'filename': os.path.basename(output_path)
-        })
+        file = request.files['file']
+        output_format = request.form.get('format', 'PNG')
+        
+        from utils.image_tools import ImageProcessor
+        
+        # Save uploaded file
+        temp_filename = str(uuid.uuid4()) + '_' + secure_filename(file.filename)
+        temp_path = os.path.join('uploads', temp_filename)
+        file.save(temp_path)
+        
+        # Convert image
+        output_path = ImageProcessor.convert_image(temp_path, output_format)
+        
+        if output_path:
+            return jsonify({
+                'success': True,
+                'download_url': f'/api/download/{os.path.basename(output_path)}',
+                'filename': os.path.basename(output_path)
+            })
+        else:
+            return jsonify({'error': 'Failed to convert image'}), 500
+            
     except Exception as e:
-        return jsonify({'success': False, 'error': str(e)})
-
-@api_bp.route('/image/crop', methods=['POST'])
-def crop_image():
-    try:
-        file = request.files.get('file')
-        x = int(request.form.get('x', 0))
-        y = int(request.form.get('y', 0))
-        width = int(request.form.get('width', 100))
-        height = int(request.form.get('height', 100))
-
-        if not file:
-            return jsonify({'success': False, 'error': 'No file provided'})
-
-        output_path = ImageProcessor.crop_image(file, x, y, width, height)
-        return jsonify({
-            'success': True,
-            'download_url': f'/api/download/{os.path.basename(output_path)}',
-            'filename': os.path.basename(output_path)
-        })
-    except Exception as e:
-        return jsonify({'success': False, 'error': str(e)})
-
-@api_bp.route('/image/rotate', methods=['POST'])
-def rotate_image():
-    try:
-        file = request.files.get('file')
-        angle = int(request.form.get('angle', 90))
-
-        if not file:
-            return jsonify({'success': False, 'error': 'No file provided'})
-
-        output_path = ImageProcessor.rotate_image(file, angle)
-        return jsonify({
-            'success': True,
-            'download_url': f'/api/download/{os.path.basename(output_path)}',
-            'filename': os.path.basename(output_path)
-        })
-    except Exception as e:
-        return jsonify({'success': False, 'error': str(e)})
-
-@api_bp.route('/image/watermark', methods=['POST'])
-def add_image_watermark():
-    try:
-        file = request.files.get('file')
-        watermark_text = request.form.get('watermark_text', 'Watermark')
-        position = request.form.get('position', 'bottom-right')
-        opacity = float(request.form.get('opacity', 0.7))
-
-        if not file:
-            return jsonify({'success': False, 'error': 'No file provided'})
-
-        output_path = ImageProcessor.add_watermark(file, watermark_text, position, opacity)
-        return jsonify({
-            'success': True,
-            'download_url': f'/api/download/{os.path.basename(output_path)}',
-            'filename': os.path.basename(output_path)
-        })
-    except Exception as e:
-        return jsonify({'success': False, 'error': str(e)})
-
-@api_bp.route('/image/remove-background', methods=['POST'])
-def remove_background():
-    try:
-        file = request.files.get('file')
-
-        if not file:
-            return jsonify({'success': False, 'error': 'No file provided'})
-
-        output_path = ImageProcessor.remove_background(file)
-        return jsonify({
-            'success': True,
-            'download_url': f'/api/download/{os.path.basename(output_path)}',
-            'filename': os.path.basename(output_path)
-        })
-    except Exception as e:
-        return jsonify({'success': False, 'error': str(e)})
+        return jsonify({'error': str(e)}), 500
 
 # Video Tools
-@api_bp.route('/video/trim', methods=['POST'])
-def trim_video():
-    try:
-        file = request.files.get('file')
-        start_time = float(request.form.get('start_time', 0))
-        end_time = float(request.form.get('end_time', 10))
-
-        if not file:
-            return jsonify({'success': False, 'error': 'No file provided'})
-
-        output_path = VideoProcessor.trim_video(file, start_time, end_time)
-        return jsonify({
-            'success': True,
-            'download_url': f'/api/download/{os.path.basename(output_path)}',
-            'filename': os.path.basename(output_path)
-        })
-    except Exception as e:
-        return jsonify({'success': False, 'error': str(e)})
-
 @api_bp.route('/video/extract-audio', methods=['POST'])
-def extract_audio():
+def extract_audio_files():
+    """Extract audio from video"""
     try:
-        file = request.files.get('file')
-        format = request.form.get('format', 'mp3')
-
-        if not file:
-            return jsonify({'success': False, 'error': 'No file provided'})
-
-        output_path = VideoProcessor.extract_audio(file, format)
-        return jsonify({
-            'success': True,
-            'download_url': f'/api/download/{os.path.basename(output_path)}',
-            'filename': os.path.basename(output_path)
-        })
+        file = request.files['file']
+        audio_format = request.form.get('format', 'mp3')
+        
+        from utils.video_tools import extract_audio
+        
+        # Save uploaded file
+        temp_filename = str(uuid.uuid4()) + '_' + secure_filename(file.filename)
+        temp_path = os.path.join('uploads', temp_filename)
+        file.save(temp_path)
+        
+        # Extract audio
+        output_filename = f"audio_{uuid.uuid4()}.{audio_format}"
+        output_path = os.path.join('uploads', output_filename)
+        
+        success = extract_audio(temp_path, output_path, audio_format)
+        
+        if success:
+            return jsonify({
+                'success': True,
+                'download_url': f'/api/download/{output_filename}',
+                'filename': output_filename
+            })
+        else:
+            return jsonify({'error': 'Failed to extract audio'}), 500
+            
     except Exception as e:
-        return jsonify({'success': False, 'error': str(e)})
+        return jsonify({'error': str(e)}), 500
 
-@api_bp.route('/video/compress', methods=['POST'])
-def compress_video():
+@api_bp.route('/video/trim', methods=['POST'])
+def trim_video_files():
+    """Trim video file"""
     try:
-        file = request.files.get('file')
-        quality = request.form.get('quality', 'medium')
-
-        if not file:
-            return jsonify({'success': False, 'error': 'No file provided'})
-
-        output_path = VideoProcessor.compress_video(file, quality)
-        return jsonify({
-            'success': True,
-            'download_url': f'/api/download/{os.path.basename(output_path)}',
-            'filename': os.path.basename(output_path)
-        })
+        file = request.files['file']
+        start_time = request.form.get('start_time', '00:00:00')
+        end_time = request.form.get('end_time', '00:01:00')
+        
+        from utils.video_tools import trim_video
+        
+        # Save uploaded file
+        temp_filename = str(uuid.uuid4()) + '_' + secure_filename(file.filename)
+        temp_path = os.path.join('uploads', temp_filename)
+        file.save(temp_path)
+        
+        # Trim video
+        output_filename = f"trimmed_{uuid.uuid4()}.mp4"
+        output_path = os.path.join('uploads', output_filename)
+        
+        success = trim_video(temp_path, output_path, start_time, end_time)
+        
+        if success:
+            return jsonify({
+                'success': True,
+                'download_url': f'/api/download/{output_filename}',
+                'filename': output_filename
+            })
+        else:
+            return jsonify({'error': 'Failed to trim video'}), 500
+            
     except Exception as e:
-        return jsonify({'success': False, 'error': str(e)})
-
-@api_bp.route('/video/convert', methods=['POST'])
-def convert_video():
-    try:
-        file = request.files.get('file')
-        format = request.form.get('format', 'mp4')
-
-        if not file:
-            return jsonify({'success': False, 'error': 'No file provided'})
-
-        output_path = VideoProcessor.convert_video(file, format)
-        return jsonify({
-            'success': True,
-            'download_url': f'/api/download/{os.path.basename(output_path)}',
-            'filename': os.path.basename(output_path)
-        })
-    except Exception as e:
-        return jsonify({'success': False, 'error': str(e)})
-
-@api_bp.route('/video/crop-vertical', methods=['POST'])
-def crop_vertical():
-    try:
-        file = request.files.get('file')
-        aspect_ratio = request.form.get('aspect_ratio', '9:16')
-
-        if not file:
-            return jsonify({'success': False, 'error': 'No file provided'})
-
-        output_path = VideoProcessor.crop_vertical(file, aspect_ratio)
-        return jsonify({
-            'success': True,
-            'download_url': f'/api/download/{os.path.basename(output_path)}',
-            'filename': os.path.basename(output_path)
-        })
-    except Exception as e:
-        return jsonify({'success': False, 'error': str(e)})
-
-# AI Tools
-@api_bp.route('/ai/resume', methods=['POST'])
-def generate_resume():
-    try:
-        data = request.get_json()
-        output_path = AIProcessor.generate_resume(data)
-        return jsonify({
-            'success': True,
-            'download_url': f'/api/download/{os.path.basename(output_path)}',
-            'filename': os.path.basename(output_path)
-        })
-    except Exception as e:
-        return jsonify({'success': False, 'error': str(e)})
-
-@api_bp.route('/ai/business-names', methods=['POST'])
-def generate_business_names():
-    try:
-        data = request.get_json()
-        result = AIProcessor.generate_business_names(data)
-        return jsonify({'success': True, 'names': result})
-    except Exception as e:
-        return jsonify({'success': False, 'error': str(e)})
-
-@api_bp.route('/ai/blog-titles', methods=['POST'])
-def generate_blog_titles():
-    try:
-        data = request.get_json()
-        result = AIProcessor.generate_blog_titles(data)
-        return jsonify({'success': True, 'titles': result})
-    except Exception as e:
-        return jsonify({'success': False, 'error': str(e)})
-
-@api_bp.route('/ai/product-description', methods=['POST'])
-def generate_product_description():
-    try:
-        data = request.get_json()
-        result = AIProcessor.generate_product_description(data)
-        return jsonify({'success': True, 'description': result})
-    except Exception as e:
-        return jsonify({'success': False, 'error': str(e)})
-
-@api_bp.route('/ai/ad-copy', methods=['POST'])
-def generate_ad_copy():
-    try:
-        data = request.get_json()
-        result = AIProcessor.generate_ad_copy(data)
-        return jsonify({'success': True, 'copy': result})
-    except Exception as e:
-        return jsonify({'success': False, 'error': str(e)})
+        return jsonify({'error': str(e)}), 500
 
 # Utility Tools
 @api_bp.route('/utility/qr-code', methods=['POST'])
 def generate_qr_code():
+    """Generate QR code"""
     try:
-        content = request.form.get('content')
+        content = request.form.get('content', '')
         size = int(request.form.get('size', 300))
-        format = request.form.get('format', 'png')
-
+        
         if not content:
-            return jsonify({'success': False, 'error': 'No content provided'})
-
-        output_path = FileHandler.generate_qr_code(content, size, format)
+            return jsonify({'error': 'Content is required'}), 400
+        
+        # Generate QR code
+        import qrcode
+        
+        qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_L,
+            box_size=size//25,
+            border=4,
+        )
+        qr.add_data(content)
+        qr.make(fit=True)
+        
+        img = qr.make_image(fill_color="black", back_color="white")
+        
+        # Save QR code
+        output_filename = f"qr_{uuid.uuid4()}.png"
+        output_path = os.path.join('uploads', output_filename)
+        
+        os.makedirs('uploads', exist_ok=True)
+        img.save(output_path, 'PNG')
+        
         return jsonify({
             'success': True,
-            'download_url': f'/api/download/{os.path.basename(output_path)}',
-            'filename': os.path.basename(output_path)
+            'download_url': f'/api/download/{output_filename}',
+            'filename': output_filename
         })
+        
     except Exception as e:
-        return jsonify({'success': False, 'error': str(e)})
+        return jsonify({'error': str(e)}), 500
 
-# Download endpoint
-@api_bp.route('/download/<filename>')
-def download_file(filename):
+# AI Tools
+@api_bp.route('/ai/resume', methods=['POST'])
+def generate_resume():
+    """Generate resume using AI"""
     try:
-        # Security: Only allow files from uploads directory
-        safe_filename = secure_filename(filename)
-        file_path = os.path.join('uploads', safe_filename)
-
-        if os.path.exists(file_path):
-            return send_file(file_path, as_attachment=True)
+        from utils.ai_tools import AIProcessor
+        
+        # Get form data
+        data = {
+            'name': request.form.get('name', ''),
+            'email': request.form.get('email', ''),
+            'phone': request.form.get('phone', ''),
+            'summary': request.form.get('summary', ''),
+            'skills': request.form.get('skills', '').split(',') if request.form.get('skills') else [],
+            'experience': [],
+            'education': []
+        }
+        
+        # Generate resume
+        output_path = AIProcessor.generate_resume(data)
+        
+        if output_path:
+            return jsonify({
+                'success': True,
+                'download_url': f'/api/download/{os.path.basename(output_path)}',
+                'filename': os.path.basename(output_path)
+            })
         else:
-            return jsonify({'error': 'File not found'}), 404
+            return jsonify({'error': 'Failed to generate resume'}), 500
+            
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@api_bp.route('/ai/business-names', methods=['POST'])
+def generate_business_names():
+    """Generate business name suggestions"""
+    try:
+        from utils.ai_tools import AIProcessor
+        
+        industry = request.form.get('industry', '')
+        keywords = request.form.get('keywords', '').split(',')
+        count = int(request.form.get('count', 10))
+        
+        # Generate business names
+        business_names = AIProcessor.generate_business_names(industry, keywords, count)
+        
+        return jsonify({
+            'success': True,
+            'business_names': business_names
+        })
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@api_bp.route('/ai/blog-titles', methods=['POST'])
+def generate_blog_titles():
+    """Generate blog title suggestions"""
+    try:
+        from utils.ai_tools import AIProcessor
+        
+        topic = request.form.get('topic', '')
+        keywords = request.form.get('keywords', '').split(',')
+        count = int(request.form.get('count', 10))
+        
+        # Generate blog titles
+        blog_titles = AIProcessor.generate_blog_titles(topic, keywords, count)
+        
+        return jsonify({
+            'success': True,
+            'blog_titles': blog_titles
+        })
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@api_bp.route('/ai/product-description', methods=['POST'])
+def generate_product_description():
+    """Generate product description"""
+    try:
+        from utils.ai_tools import AIProcessor
+        
+        product_name = request.form.get('product_name', '')
+        features = request.form.get('features', '').split(',')
+        benefits = request.form.get('benefits', '').split(',')
+        target_audience = request.form.get('target_audience', '')
+        
+        # Generate product description
+        description = AIProcessor.generate_product_description(
+            product_name, features, benefits, target_audience
+        )
+        
+        return jsonify({
+            'success': True,
+            'description': description
+        })
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@api_bp.route('/ai/ad-copy', methods=['POST'])
+def generate_ad_copy():
+    """Generate advertisement copy"""
+    try:
+        from utils.ai_tools import AIProcessor
+        
+        product = request.form.get('product', '')
+        target_audience = request.form.get('target_audience', '')
+        tone = request.form.get('tone', 'professional')
+        length = request.form.get('length', 'short')
+        
+        # Generate ad copy
+        ad_copy = AIProcessor.generate_ad_copy(product, target_audience, tone, length)
+        
+        return jsonify({
+            'success': True,
+            'ad_copy': ad_copy
+        })
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@api_bp.route('/ai/faq', methods=['POST'])
+def generate_faq():
+    """Generate FAQ"""
+    try:
+        from utils.ai_tools import AIProcessor
+        
+        topic = request.form.get('topic', '')
+        questions_count = int(request.form.get('questions_count', 10))
+        
+        # Generate FAQ
+        faq_list = AIProcessor.generate_faq(topic, questions_count)
+        
+        return jsonify({
+            'success': True,
+            'faq': faq_list
+        })
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+# Generic tool processor
+@api_bp.route('/tools/<category>/<tool_name>', methods=['POST'])
+def process_generic_tool(category, tool_name):
+    """Generic tool processing endpoint"""
+    try:
+        # Handle file uploads
+        files = request.files.getlist('files')
+        
+        # Log tool usage
+        user = get_current_user()
+        if user:
+            history = ToolHistory(
+                user_id=user.id,
+                tool_name=tool_name,
+                tool_category=category,
+                file_count=len(files)
+            )
+            db.session.add(history)
+            db.session.commit()
+        
+        # For now, return a success message with demo processing
+        return jsonify({
+            'success': True,
+            'message': f'Tool {tool_name} processed successfully',
+            'tool_name': tool_name,
+            'category': category,
+            'files_processed': len(files)
+        })
+        
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 

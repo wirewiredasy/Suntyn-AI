@@ -5,16 +5,16 @@ from werkzeug.utils import secure_filename
 
 class ImageProcessor:
     @staticmethod
-    def compress_image(file, quality=85, format='JPEG'):
+    def compress_image(file_path, quality=85, format='JPEG'):
         """Compress image file"""
-        image = Image.open(file)
+        image = Image.open(file_path)
         
         # Convert to RGB if necessary
         if image.mode in ('RGBA', 'P'):
             image = image.convert('RGB')
         
         os.makedirs('uploads', exist_ok=True)
-        filename = secure_filename(file.filename)
+        filename = secure_filename(os.path.basename(file_path))
         name, ext = os.path.splitext(filename)
         output_filename = f"compressed_{name}.{format.lower()}"
         output_path = os.path.join('uploads', output_filename)
@@ -23,9 +23,9 @@ class ImageProcessor:
         return output_path
     
     @staticmethod
-    def resize_image(file, width, height, maintain_aspect=True):
+    def resize_image(file_path, width, height, maintain_aspect=True):
         """Resize image"""
-        image = Image.open(file)
+        image = Image.open(file_path)
         
         if maintain_aspect:
             image.thumbnail((width, height), Image.Resampling.LANCZOS)
@@ -33,7 +33,7 @@ class ImageProcessor:
             image = image.resize((width, height), Image.Resampling.LANCZOS)
         
         os.makedirs('uploads', exist_ok=True)
-        filename = secure_filename(file.filename)
+        filename = secure_filename(os.path.basename(file_path))
         name, ext = os.path.splitext(filename)
         output_filename = f"resized_{name}{ext}"
         output_path = os.path.join('uploads', output_filename)
@@ -42,16 +42,16 @@ class ImageProcessor:
         return output_path
     
     @staticmethod
-    def convert_image(file, format='PNG'):
+    def convert_image(file_path, format='PNG'):
         """Convert image format"""
-        image = Image.open(file)
+        image = Image.open(file_path)
         
         # Convert to RGB for JPEG
         if format.upper() == 'JPEG' and image.mode in ('RGBA', 'P'):
             image = image.convert('RGB')
         
         os.makedirs('uploads', exist_ok=True)
-        filename = secure_filename(file.filename)
+        filename = secure_filename(os.path.basename(file_path))
         name, ext = os.path.splitext(filename)
         output_filename = f"converted_{name}.{format.lower()}"
         output_path = os.path.join('uploads', output_filename)
