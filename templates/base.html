@@ -339,15 +339,6 @@
             <!-- Chat Messages -->
             <div class="flex-1 p-4 overflow-y-auto" id="chat-messages">
                 <div class="space-y-3">
-                    <div class="flex items-start space-x-2">
-                        <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
-                            <i data-lucide="user" class="w-4 h-4 text-white"></i>
-                        </div>
-                        <div class="bg-gray-100 dark:bg-gray-700 rounded-lg p-2 max-w-xs">
-                            <p class="text-sm">Hello! How can I help you today?</p>
-                        </div>
-                    </div>
-                    
                     <template x-for="message in messages" :key="message.id">
                         <div class="flex items-start space-x-2" :class="message.sender === 'user' ? 'flex-row-reverse space-x-reverse' : ''">
                             <div class="w-8 h-8 rounded-full flex items-center justify-center"
@@ -361,6 +352,15 @@
                             </div>
                         </div>
                     </template>
+                    
+                    <!-- Show empty state when no messages -->
+                    <div x-show="messages.length === 0" class="text-center py-8">
+                        <div class="w-12 h-12 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <i data-lucide="message-circle" class="w-6 h-6 text-gray-400"></i>
+                        </div>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Start a conversation</p>
+                        <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">We're here to help!</p>
+                    </div>
                 </div>
             </div>
 
@@ -390,6 +390,15 @@
             
             toggleChat() {
                 this.isOpen = !this.isOpen;
+                // Only add welcome message when user manually opens chat
+                if (this.isOpen && this.messages.length === 0) {
+                    this.messages.push({
+                        id: Date.now(),
+                        text: 'Hello! How can I help you today?',
+                        sender: 'support',
+                        time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+                    });
+                }
             },
             
             sendMessage() {
@@ -407,7 +416,9 @@
                     // Auto-scroll to bottom
                     setTimeout(() => {
                         const chatMessages = document.getElementById('chat-messages');
-                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                        if (chatMessages) {
+                            chatMessages.scrollTop = chatMessages.scrollHeight;
+                        }
                     }, 100);
                     
                     // Simulate support response
@@ -418,6 +429,14 @@
                             sender: 'support',
                             time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
                         });
+                        
+                        // Auto-scroll again after response
+                        setTimeout(() => {
+                            const chatMessages = document.getElementById('chat-messages');
+                            if (chatMessages) {
+                                chatMessages.scrollTop = chatMessages.scrollHeight;
+                            }
+                        }, 100);
                     }, 1000);
                 }
             }
