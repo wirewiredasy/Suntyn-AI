@@ -96,12 +96,13 @@
 
     <!-- Critical CSS for instant loading and anti-flash -->
     <style>
-        /* Critical anti-flash system */
+        /* Ultimate Anti-Flash System */
         html { 
             background-color: #f9fafb !important;
             min-height: 100vh;
-            transition: background-color 0.1s ease !important;
+            transition: none !important;
             overflow-x: hidden;
+            scroll-behavior: smooth;
         }
         html.dark { 
             background-color: #111827 !important; 
@@ -113,10 +114,35 @@
             min-height: 100vh;
             margin: 0;
             padding: 0;
-            transition: opacity 0.1s ease !important;
+            transition: none !important;
             visibility: visible !important;
             font-display: swap;
             -webkit-font-smoothing: antialiased;
+            transform: translateZ(0);
+            backface-visibility: hidden;
+        }
+
+        /* Instant load indicators */
+        .page-loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            transform: scaleX(0);
+            transform-origin: left;
+            z-index: 10000;
+        }
+
+        .page-loader.active {
+            animation: pageLoad 0.5s ease-out;
+        }
+
+        @keyframes pageLoad {
+            0% { transform: scaleX(0); }
+            50% { transform: scaleX(0.7); }
+            100% { transform: scaleX(1); opacity: 0; }
         }
 
         /* Instant loading indicators */
@@ -254,6 +280,7 @@
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     <script src="{{ url_for('static', filename='js/feedback.js') }}"></script>
     <script src="{{ url_for('static', filename='js/logo-enhancer.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/ultra-smooth.js') }}"></script>
 
     <!-- Enhanced Search -->
     <script src="{{ url_for('static', filename='js/enhanced-search.js') }}"></script>

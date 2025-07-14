@@ -735,38 +735,114 @@ body {
     background: inherit;
 }
 
-/* Instant page transitions */
-.page-transition-out {
-    opacity: 0.95;
-    transform: translateY(-2px);
-    transition: all 0.1s ease;
+/* Ultimate Smooth Transitions */
+.page-transition {
+    position: relative;
+    overflow: hidden;
 }
 
-/* Complete Anti-Flash System */
+.page-transition::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+    z-index: 9999;
+    transition: left var(--transition-speed) var(--ease-curve);
+    pointer-events: none;
+}
+
+.page-transition.active::before {
+    left: 100%;
+}
+
+/* Smooth navigation overlay */
+.nav-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, #3b82f6, #8b5cf6, #3b82f6);
+    background-size: 200% 100%;
+    transform: scaleX(0);
+    transform-origin: left;
+    z-index: 10000;
+    animation: navProgress 0.8s ease-in-out;
+}
+
+@keyframes navProgress {
+    0% { transform: scaleX(0); background-position: 0% 50%; }
+    50% { transform: scaleX(0.7); background-position: 100% 50%; }
+    100% { transform: scaleX(1); background-position: 200% 50%; opacity: 0; }
+}
+
+/* Enhanced back navigation */
+.back-nav-smooth {
+    animation: fadeInFast 0.2s ease-out;
+}
+
+@keyframes fadeInFast {
+    from { opacity: 0.95; transform: translateY(-2px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Ultimate Anti-Flash & Smooth Animation System */
+:root {
+    --bg-light: #f9fafb;
+    --bg-dark: #111827;
+    --transition-speed: 0.15s;
+    --ease-curve: cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+* {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+}
+
 html {
-    background-color: #f9fafb !important;
+    background-color: var(--bg-light) !important;
     min-height: 100vh;
     margin: 0;
     padding: 0;
-    transition: background-color 0.1s ease !important;
+    transition: none !important;
     overflow-x: hidden;
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
 }
 
 html.dark {
-    background-color: #111827 !important;
+    background-color: var(--bg-dark) !important;
 }
 
 body {
-    background-color: inherit !important;
+    background: inherit !important;
     opacity: 1 !important;
     visibility: visible !important;
     display: block !important;
     margin: 0;
     padding: 0;
-    transition: opacity 0.1s ease !important;
+    transition: none !important;
     font-display: swap;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    transform: translateZ(0);
+    will-change: auto;
+}
+
+/* Instant page load system */
+body.loading {
+    opacity: 0.98 !important;
+    transition: opacity 0.1s ease !important;
+}
+
+body.loaded {
+    opacity: 1 !important;
+    transition: opacity 0.1s ease !important;
 }
 
 /* Instant page load fix */
@@ -798,23 +874,73 @@ body {
     transform: none !important;
 }
 
-/* Ultra-fast tool card interactions */
+/* Ultra-smooth tool card system */
 .tool-card {
-    transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), 
-                box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-    will-change: transform;
+    position: relative;
+    transition: all var(--transition-speed) var(--ease-curve);
+    will-change: transform, box-shadow;
     transform: translateZ(0);
     backface-visibility: hidden;
+    isolation: isolate;
+}
+
+.tool-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), rgba(139, 92, 246, 0.05));
+    border-radius: inherit;
+    opacity: 0;
+    transition: opacity var(--transition-speed) var(--ease-curve);
+    pointer-events: none;
 }
 
 .tool-card:hover {
-    transform: translateY(-3px) translateZ(0);
-    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.15);
+    transform: translateY(-4px) translateZ(0) scale(1.02);
+    box-shadow: 
+        0 10px 40px -10px rgba(59, 130, 246, 0.2),
+        0 0 0 1px rgba(59, 130, 246, 0.1);
+}
+
+.tool-card:hover::before {
+    opacity: 1;
 }
 
 .tool-card:active {
-    transform: translateY(-1px) translateZ(0);
-    transition: all 0.05s ease;
+    transform: translateY(-2px) translateZ(0) scale(1.01);
+    transition: all 0.1s ease;
+}
+
+/* Click ripple effect */
+.tool-card {
+    overflow: hidden;
+}
+
+.tool-card::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.3) 0%, transparent 70%);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.6s ease;
+}
+
+.tool-card.clicked::after {
+    width: 300px;
+    height: 300px;
+    opacity: 1;
+    animation: ripple 0.6s ease-out;
+}
+
+@keyframes ripple {
+    0% { width: 0; height: 0; opacity: 1; }
+    100% { width: 300px; height: 300px; opacity: 0; }
 }
 
 /* Smooth sidebar animations */

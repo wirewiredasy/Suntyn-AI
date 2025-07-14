@@ -45,40 +45,87 @@ window.ToolaraApp = {
         
         this.isNavigating = true;
         
-        // Add minimal loading state
-        document.body.classList.add('spa-transition', 'loading');
+        // Create smooth navigation overlay
+        this.createNavOverlay();
         
-        // Navigate after minimal delay for smooth transition
-        setTimeout(() => {
+        // Add smooth transition
+        document.body.classList.add('page-transition', 'loading');
+        
+        // Instant navigation with visual feedback
+        requestAnimationFrame(() => {
             window.location.href = url;
-        }, 50);
+        });
         
-        // Reset after navigation
+        // Reset state
         setTimeout(() => {
             this.isNavigating = false;
-            document.body.classList.remove('spa-transition', 'loading');
-        }, 200);
+            document.body.classList.remove('page-transition', 'loading');
+        }, 100);
+    },
+
+    createNavOverlay: function() {
+        // Remove existing overlay
+        const existingOverlay = document.querySelector('.nav-overlay');
+        if (existingOverlay) {
+            existingOverlay.remove();
+        }
+
+        // Create new overlay
+        const overlay = document.createElement('div');
+        overlay.className = 'nav-overlay';
+        document.body.appendChild(overlay);
+
+        // Remove after animation
+        setTimeout(() => {
+            if (overlay.parentNode) {
+                overlay.remove();
+            }
+        }, 800);
     },
 
     setupInstantPageLoad: function() {
-        // Instant page load optimizations
+        // Ultra-fast page load system
         document.addEventListener('DOMContentLoaded', () => {
-            // Remove any flash
+            // Instant visibility
             document.body.style.opacity = '1';
             document.body.style.visibility = 'visible';
+            document.body.classList.add('loaded');
             
             // Preload critical pages
             this.preloadCriticalPages();
         });
         
-        // Back navigation fix
+        // Enhanced back navigation with smooth animation
         window.addEventListener('pageshow', (e) => {
-            if (e.persisted) {
+            // Force immediate visibility
+            document.body.style.opacity = '1';
+            document.body.style.visibility = 'visible';
+            document.body.classList.remove('page-transition', 'loading');
+            document.body.classList.add('loaded', 'back-nav-smooth');
+            
+            // Remove animation class after animation
+            setTimeout(() => {
+                document.body.classList.remove('back-nav-smooth');
+            }, 200);
+        });
+
+        // Handle visibility change smoothly
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) {
                 document.body.style.opacity = '1';
-                document.body.style.visibility = 'visible';
-                document.body.classList.remove('spa-transition', 'loading');
+                document.body.classList.add('loaded');
             }
         });
+    },
+
+    addRippleEffect: function(element, event) {
+        // Add ripple effect to clicked element
+        element.classList.add('clicked');
+        
+        // Remove the class after animation
+        setTimeout(() => {
+            element.classList.remove('clicked');
+        }, 600);
     },
 
     preloadCriticalPages: function() {
@@ -197,7 +244,7 @@ window.ToolaraApp = {
     },
 
     setupToolClicks: function() {
-        // Handle tool card clicks
+        // Handle tool card clicks with smooth animations
         document.addEventListener('click', function(e) {
             const toolCard = e.target.closest('.tool-card');
             if (toolCard) {
@@ -215,11 +262,15 @@ window.ToolaraApp = {
                 // Console log for debugging
                 console.log('Tool used:', toolName);
                 
-                // Add click animation
-                toolCard.style.transform = 'scale(0.98)';
+                // Enhanced click animation with ripple
+                ToolaraApp.addRippleEffect(toolCard, e);
+                
+                // Smooth scale animation
+                toolCard.style.transform = 'translateY(-2px) scale(0.98) translateZ(0)';
+                
                 setTimeout(() => {
                     toolCard.style.transform = '';
-                }, 150);
+                }, 200);
             }
         });
 
