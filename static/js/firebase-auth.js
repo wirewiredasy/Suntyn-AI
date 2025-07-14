@@ -231,6 +231,16 @@ class FirebaseAuthHandler {
     }
 
     handleAuthError(error) {
+        // Handle unauthorized domain specifically
+        if (error.code === 'auth/unauthorized-domain') {
+            console.error('Domain not authorized. Current domain:', window.location.hostname);
+            return {
+                code: error.code,
+                message: 'This domain is not authorized for Firebase Auth. Please contact support.',
+                originalMessage: error.message
+            };
+        }
+        
         const errorMessages = {
             'auth/user-not-found': 'No account found with this email address.',
             'auth/wrong-password': 'Incorrect password. Please try again.',
