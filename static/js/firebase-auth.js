@@ -8,19 +8,19 @@ class FirebaseAuthHandler {
 
     async initialize() {
         if (this.initialized) return;
-        
+
         try {
             // Wait for Firebase to be loaded
             await this.waitForFirebase();
-            
+
             this.auth = window.firebaseAuth;
-            
+
             // Set up auth state observer
             this.auth.onAuthStateChanged((user) => {
                 this.currentUser = user;
                 this.onAuthStateChanged(user);
             });
-            
+
             this.initialized = true;
             console.log('Firebase Auth initialized');
         } catch (error) {
@@ -37,9 +37,9 @@ class FirebaseAuthHandler {
                     setTimeout(checkFirebase, 100);
                 }
             };
-            
+
             checkFirebase();
-            
+
             // Timeout after 10 seconds
             setTimeout(() => {
                 reject(new Error('Firebase took too long to load'));
@@ -50,10 +50,10 @@ class FirebaseAuthHandler {
     onAuthStateChanged(user) {
         // Update UI based on auth state
         this.updateUserInterface(user);
-        
+
         // Update navigation
         this.updateNavigation(user);
-        
+
         // Handle protected routes
         this.handleProtectedRoutes(user);
     }
@@ -62,7 +62,7 @@ class FirebaseAuthHandler {
         const userElements = document.querySelectorAll('[data-user-info]');
         const loginElements = document.querySelectorAll('[data-login-required]');
         const logoutElements = document.querySelectorAll('[data-logout-required]');
-        
+
         userElements.forEach(element => {
             if (user) {
                 element.textContent = user.displayName || user.email || 'User';
@@ -71,11 +71,11 @@ class FirebaseAuthHandler {
                 element.style.display = 'none';
             }
         });
-        
+
         loginElements.forEach(element => {
             element.style.display = user ? 'none' : 'block';
         });
-        
+
         logoutElements.forEach(element => {
             element.style.display = user ? 'block' : 'none';
         });
@@ -84,7 +84,7 @@ class FirebaseAuthHandler {
     updateNavigation(user) {
         const userAvatar = document.querySelector('[data-user-avatar]');
         const userEmail = document.querySelector('[data-user-email]');
-        
+
         if (userAvatar && user) {
             if (user.photoURL) {
                 userAvatar.src = user.photoURL;
@@ -92,7 +92,7 @@ class FirebaseAuthHandler {
                 userAvatar.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || user.email)}&background=3b82f6&color=fff`;
             }
         }
-        
+
         if (userEmail && user) {
             userEmail.textContent = user.email;
         }
@@ -101,7 +101,7 @@ class FirebaseAuthHandler {
     handleProtectedRoutes(user) {
         const protectedPages = ['/dashboard', '/profile', '/settings'];
         const currentPath = window.location.pathname;
-        
+
         if (protectedPages.includes(currentPath) && !user) {
             window.location.href = '/auth/login';
         }
@@ -110,16 +110,16 @@ class FirebaseAuthHandler {
     async signInWithGoogle() {
         try {
             const { GoogleAuthProvider, signInWithPopup } = await import('https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js');
-            
+
             const provider = new GoogleAuthProvider();
             provider.addScope('profile');
             provider.addScope('email');
-            
+
             const result = await signInWithPopup(this.auth, provider);
-            
+
             // Send ID token to server
             await this.verifyTokenWithServer(result.user);
-            
+
             return result.user;
         } catch (error) {
             console.error('Google sign-in error:', error);
@@ -130,12 +130,12 @@ class FirebaseAuthHandler {
     async signInWithEmail(email, password) {
         try {
             const { signInWithEmailAndPassword } = await import('https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js');
-            
+
             const result = await signInWithEmailAndPassword(this.auth, email, password);
-            
+
             // Send ID token to server
             await this.verifyTokenWithServer(result.user);
-            
+
             return result.user;
         } catch (error) {
             console.error('Email sign-in error:', error);
@@ -146,17 +146,17 @@ class FirebaseAuthHandler {
     async signUpWithEmail(email, password, displayName = '') {
         try {
             const { createUserWithEmailAndPassword, updateProfile } = await import('https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js');
-            
+
             const result = await createUserWithEmailAndPassword(this.auth, email, password);
-            
+
             // Update profile with display name
             if (displayName) {
                 await updateProfile(result.user, { displayName });
             }
-            
+
             // Send ID token to server
             await this.verifyTokenWithServer(result.user);
-            
+
             return result.user;
         } catch (error) {
             console.error('Email sign-up error:', error);
@@ -167,7 +167,7 @@ class FirebaseAuthHandler {
     async signOut() {
         try {
             await this.auth.signOut();
-            
+
             // Clear server session
             await fetch('/auth/logout', {
                 method: 'POST',
@@ -175,7 +175,7 @@ class FirebaseAuthHandler {
                     'Content-Type': 'application/json'
                 }
             });
-            
+
             // Redirect to home page
             window.location.href = '/';
         } catch (error) {
@@ -187,9 +187,9 @@ class FirebaseAuthHandler {
     async resetPassword(email) {
         try {
             const { sendPasswordResetEmail } = await import('https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js');
-            
+
             await sendPasswordResetEmail(this.auth, email);
-            
+
             return true;
         } catch (error) {
             console.error('Password reset error:', error);
@@ -200,7 +200,7 @@ class FirebaseAuthHandler {
     async verifyTokenWithServer(user) {
         try {
             const idToken = await user.getIdToken();
-            
+
             const response = await fetch('/auth/verify-token', {
                 method: 'POST',
                 headers: {
@@ -216,13 +216,13 @@ class FirebaseAuthHandler {
                     }
                 })
             });
-            
+
             const result = await response.json();
-            
+
             if (!result.success) {
                 throw new Error(result.error || 'Token verification failed');
             }
-            
+
             return result;
         } catch (error) {
             console.error('Token verification error:', error);
@@ -240,7 +240,7 @@ class FirebaseAuthHandler {
                 originalMessage: error.message
             };
         }
-        
+
         const errorMessages = {
             'auth/user-not-found': 'No account found with this email address.',
             'auth/wrong-password': 'Incorrect password. Please try again.',
@@ -332,9 +332,9 @@ class FirebaseAuthHandler {
             'auth/invalid-custom-token': 'The provided custom token is invalid.',
             'auth/custom-token-mismatch': 'The custom token corresponds to a different audience.'
         };
-        
+
         const userMessage = errorMessages[error.code] || 'An error occurred during authentication. Please try again.';
-        
+
         return {
             code: error.code,
             message: userMessage,
@@ -354,7 +354,7 @@ class FirebaseAuthHandler {
         if (!this.currentUser) {
             throw new Error('No user is currently signed in');
         }
-        
+
         return await this.currentUser.getIdToken();
     }
 
@@ -362,7 +362,7 @@ class FirebaseAuthHandler {
         if (!this.currentUser) {
             throw new Error('No user is currently signed in');
         }
-        
+
         return await this.currentUser.getIdToken(true);
     }
 }

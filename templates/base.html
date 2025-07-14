@@ -35,6 +35,15 @@
 
     <!-- Alpine.js -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <!-- Alpine.js Store Initialization -->
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.store('navigation', {
+                mobileMenuOpen: false
+            });
+        });
+    </script>
 
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
@@ -113,7 +122,7 @@
                     </div>
 
                     <!-- Mobile Menu Toggle -->
-                    <button x-data="{ mobileMenuOpen: false }" @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <button @click="$store.navigation.mobileMenuOpen = !$store.navigation.mobileMenuOpen" class="md:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                         <i data-lucide="menu" class="w-6 h-6 text-gray-700 dark:text-gray-300"></i>
                     </button>
                 </div>
@@ -122,12 +131,12 @@
     </nav>
 
     <!-- Mobile Menu -->
-    <div x-data="{ mobileMenuOpen: false }" x-show="mobileMenuOpen" @click.away="mobileMenuOpen = false" class="md:hidden fixed inset-0 z-40 bg-black bg-opacity-50" x-transition>
+    <div x-show="$store.navigation.mobileMenuOpen" @click.away="$store.navigation.mobileMenuOpen = false" class="md:hidden fixed inset-0 z-40 bg-black bg-opacity-50" x-transition>
         <div class="fixed inset-y-0 left-0 w-64 bg-white dark:bg-gray-800 shadow-lg">
             <div class="p-4">
                 <div class="flex items-center justify-between mb-8">
                     <span class="text-lg font-bold text-gray-800 dark:text-white">Menu</span>
-                    <button @click="mobileMenuOpen = false" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                    <button @click="$store.navigation.mobileMenuOpen = false" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
                         <i data-lucide="x" class="w-5 h-5 text-gray-700 dark:text-gray-300"></i>
                     </button>
                 </div>
@@ -262,22 +271,33 @@
         import { getStorage } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-storage.js';
 
         const firebaseConfig = {
-            apiKey: "{{ firebase_api_key }}",
-            authDomain: "{{ firebase_project_id }}.firebaseapp.com",
-            projectId: "{{ firebase_project_id }}",
-            storageBucket: "{{ firebase_project_id }}.firebasestorage.app",
-            appId: "{{ firebase_app_id }}",
+            apiKey: "{{ firebase_api_key or 'demo-key' }}",
+            authDomain: "{{ firebase_project_id or 'demo-project' }}.firebaseapp.com",
+            projectId: "{{ firebase_project_id or 'demo-project' }}",
+            storageBucket: "{{ firebase_project_id or 'demo-project' }}.firebasestorage.app",
+            appId: "{{ firebase_app_id or 'demo-app-id' }}",
         };
 
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const storage = getStorage(app);
+        // Only initialize Firebase if we have valid config
+        if (firebaseConfig.apiKey !== 'demo-key') {
+            try {
+                // Initialize Firebase
+                const app = initializeApp(firebaseConfig);
+                const auth = getAuth(app);
+                const storage = getStorage(app);
 
-        // Make available globally
-        window.firebaseApp = app;
-        window.firebaseAuth = auth;
-        window.firebaseStorage = storage;
+                // Make available globally
+                window.firebaseApp = app;
+                window.firebaseAuth = auth;
+                window.firebaseStorage = storage;
+            } catch (error) {
+                console.warn('Firebase initialization failed:', error.message);
+            }
+        } else {
+            console.log('Firebase not configured - using demo mode');
+        }
+
+        
     </script>
 
     <!-- Initialize Lucide Icons -->
