@@ -17,63 +17,64 @@ class ToolSearchManager {
         // This would be populated from the server-side config
         this.tools = [
             // PDF Tools
-            { name: 'pdf-merge', category: 'pdf', categoryName: 'PDF Toolkit', icon: 'file-text', color: 'red', description: 'Combine multiple PDF files into one document' },
-            { name: 'pdf-split', category: 'pdf', categoryName: 'PDF Toolkit', icon: 'file-text', color: 'red', description: 'Split PDF into multiple files or pages' },
-            { name: 'pdf-compress', category: 'pdf', categoryName: 'PDF Toolkit', icon: 'file-text', color: 'red', description: 'Reduce PDF file size without quality loss' },
+            { name: 'pdf-merge', category: 'pdf', categoryName: 'PDF Toolkit', icon: 'layers', color: 'red', description: 'Merge multiple PDF files into one document' },
+            { name: 'pdf-split', category: 'pdf', categoryName: 'PDF Toolkit', icon: 'scissors', color: 'red', description: 'Split PDF into multiple files or pages' },
+            { name: 'pdf-compress', category: 'pdf', categoryName: 'PDF Toolkit', icon: 'archive', color: 'red', description: 'Reduce PDF file size without quality loss' },
             { name: 'pdf-to-word', category: 'pdf', categoryName: 'PDF Toolkit', icon: 'file-text', color: 'red', description: 'Convert PDF to Word document' },
-            { name: 'word-to-pdf', category: 'pdf', categoryName: 'PDF Toolkit', icon: 'file-text', color: 'red', description: 'Convert Word document to PDF' },
-            { name: 'pdf-to-jpg', category: 'pdf', categoryName: 'PDF Toolkit', icon: 'file-text', color: 'red', description: 'Convert PDF pages to JPG images' },
-            { name: 'jpg-to-pdf', category: 'pdf', categoryName: 'PDF Toolkit', icon: 'file-text', color: 'red', description: 'Convert JPG images to PDF' },
-            { name: 'pdf-watermark', category: 'pdf', categoryName: 'PDF Toolkit', icon: 'file-text', color: 'red', description: 'Add watermark to PDF documents' },
-            { name: 'pdf-page-numbers', category: 'pdf', categoryName: 'PDF Toolkit', icon: 'file-text', color: 'red', description: 'Add page numbers to PDF' },
-            { name: 'pdf-unlock', category: 'pdf', categoryName: 'PDF Toolkit', icon: 'file-text', color: 'red', description: 'Remove password from PDF' },
-            { name: 'pdf-protect', category: 'pdf', categoryName: 'PDF Toolkit', icon: 'file-text', color: 'red', description: 'Add password protection to PDF' },
-            { name: 'pdf-rotate', category: 'pdf', categoryName: 'PDF Toolkit', icon: 'file-text', color: 'red', description: 'Rotate PDF pages' },
-            { name: 'pdf-extract-pages', category: 'pdf', categoryName: 'PDF Toolkit', icon: 'file-text', color: 'red', description: 'Extract specific pages from PDF' },
-            { name: 'pdf-chat', category: 'pdf', categoryName: 'PDF Toolkit', icon: 'file-text', color: 'red', description: 'Chat with PDF using AI' },
+            { name: 'pdf-to-jpg', category: 'pdf', categoryName: 'PDF Toolkit', icon: 'image', color: 'red', description: 'Convert PDF pages to JPG images' },
+            { name: 'word-to-pdf', category: 'pdf', categoryName: 'PDF Toolkit', icon: 'file-pdf', color: 'red', description: 'Convert Word document to PDF' },
+            { name: 'jpg-to-pdf', category: 'pdf', categoryName: 'PDF Toolkit', icon: 'file-image', color: 'red', description: 'Convert JPG images to PDF' },
+            { name: 'pdf-watermark', category: 'pdf', categoryName: 'PDF Toolkit', icon: 'droplets', color: 'red', description: 'Add watermark to PDF documents' },
+            { name: 'pdf-annotator', category: 'pdf', categoryName: 'PDF Toolkit', icon: 'edit-3', color: 'red', description: 'Add annotations and comments to PDF' },
+            { name: 'pdf-page-numbers', category: 'pdf', categoryName: 'PDF Toolkit', icon: 'hash', color: 'red', description: 'Add page numbers to PDF' },
+            { name: 'pdf-unlock', category: 'pdf', categoryName: 'PDF Toolkit', icon: 'unlock', color: 'red', description: 'Remove password from PDF' },
+            { name: 'pdf-protect', category: 'pdf', categoryName: 'PDF Toolkit', icon: 'lock', color: 'red', description: 'Add password protection to PDF' },
+            { name: 'pdf-rotate', category: 'pdf', categoryName: 'PDF Toolkit', icon: 'rotate-cw', color: 'red', description: 'Rotate PDF pages' },
+            { name: 'pdf-extract-pages', category: 'pdf', categoryName: 'PDF Toolkit', icon: 'file-minus', color: 'red', description: 'Extract specific pages from PDF' },
+            { name: 'pdf-chat', category: 'pdf', categoryName: 'PDF Toolkit', icon: 'message-circle', color: 'red', description: 'Chat with PDF using AI' },
             { name: 'pdf-summarize', category: 'pdf', categoryName: 'PDF Toolkit', icon: 'file-text', color: 'red', description: 'Summarize PDF content with AI' },
-            
+
             // Image Tools
-            { name: 'image-compress', category: 'image', categoryName: 'Image Toolkit', icon: 'image', color: 'green', description: 'Reduce image file size while maintaining quality' },
-            { name: 'image-resize', category: 'image', categoryName: 'Image Toolkit', icon: 'image', color: 'green', description: 'Resize images to specific dimensions' },
-            { name: 'image-convert', category: 'image', categoryName: 'Image Toolkit', icon: 'image', color: 'green', description: 'Convert images between formats' },
-            { name: 'image-crop', category: 'image', categoryName: 'Image Toolkit', icon: 'image', color: 'green', description: 'Crop images to specific dimensions' },
-            { name: 'image-rotate', category: 'image', categoryName: 'Image Toolkit', icon: 'image', color: 'green', description: 'Rotate images by specified angle' },
-            { name: 'image-ocr', category: 'image', categoryName: 'Image Toolkit', icon: 'image', color: 'green', description: 'Extract text from images' },
-            { name: 'background-remover', category: 'image', categoryName: 'Image Toolkit', icon: 'image', color: 'green', description: 'Remove background from images' },
-            { name: 'meme-generator', category: 'image', categoryName: 'Image Toolkit', icon: 'image', color: 'green', description: 'Create memes with text overlays' },
-            { name: 'image-watermark', category: 'image', categoryName: 'Image Toolkit', icon: 'image', color: 'green', description: 'Add watermark to images' },
-            { name: 'signature-extractor', category: 'image', categoryName: 'Image Toolkit', icon: 'image', color: 'green', description: 'Extract signatures from documents' },
-            { name: 'image-enhancer', category: 'image', categoryName: 'Image Toolkit', icon: 'image', color: 'green', description: 'Enhance image quality with AI' },
-            { name: 'color-picker', category: 'image', categoryName: 'Image Toolkit', icon: 'image', color: 'green', description: 'Pick colors from images' },
-            { name: 'social-crop', category: 'image', categoryName: 'Image Toolkit', icon: 'image', color: 'green', description: 'Crop images for social media' },
-            { name: 'image-caption', category: 'image', categoryName: 'Image Toolkit', icon: 'image', color: 'green', description: 'Generate captions for images' },
-            { name: 'profile-pic-maker', category: 'image', categoryName: 'Image Toolkit', icon: 'image', color: 'green', description: 'Create professional profile pictures' },
-            
+            { name: 'image-compress', category: 'image', categoryName: 'Image Toolkit', icon: 'archive', color: 'green', description: 'Reduce image file size while maintaining quality' },
+            { name: 'image-resize', category: 'image', categoryName: 'Image Toolkit', icon: 'maximize', color: 'green', description: 'Resize images to specific dimensions' },
+            { name: 'image-convert', category: 'image', categoryName: 'Image Toolkit', icon: 'repeat', color: 'green', description: 'Convert images between different formats' },
+            { name: 'image-crop', category: 'image', categoryName: 'Image Toolkit', icon: 'crop', color: 'green', description: 'Crop images to desired size' },
+            { name: 'image-rotate', category: 'image', categoryName: 'Image Toolkit', icon: 'rotate-cw', color: 'green', description: 'Rotate images to any angle' },
+            { name: 'image-ocr', category: 'image', categoryName: 'Image Toolkit', icon: 'eye', color: 'green', description: 'Extract text from images' },
+            { name: 'background-remover', category: 'image', categoryName: 'Image Toolkit', icon: 'eraser', color: 'green', description: 'Remove background from images' },
+            { name: 'meme-generator', category: 'image', categoryName: 'Image Toolkit', icon: 'message-square', color: 'green', description: 'Create memes with text overlays' },
+            { name: 'image-watermark', category: 'image', categoryName: 'Image Toolkit', icon: 'droplets', color: 'green', description: 'Add watermark to images' },
+            { name: 'signature-extractor', category: 'image', categoryName: 'Image Toolkit', icon: 'pen-line', color: 'green', description: 'Extract signatures from documents' },
+            { name: 'image-enhancer', category: 'image', categoryName: 'Image Toolkit', icon: 'sun', color: 'green', description: 'Enhance image quality with AI' },
+            { name: 'color-picker', category: 'image', categoryName: 'Image Toolkit', icon: 'palette', color: 'green', description: 'Pick colors from images' },
+            { name: 'social-crop', category: 'image', categoryName: 'Image Toolkit', icon: 'smartphone', color: 'green', description: 'Crop images for social media' },
+            { name: 'image-caption', category: 'image', categoryName: 'Image Toolkit', icon: 'type', color: 'green', description: 'Generate captions for images' },
+            { name: 'profile-pic-maker', category: 'image', categoryName: 'Image Toolkit', icon: 'user-circle', color: 'green', description: 'Create professional profile pictures' },
+
             // Video Tools
-            { name: 'video-to-mp3', category: 'video', categoryName: 'Video & Audio', icon: 'video', color: 'purple', description: 'Extract audio from video files' },
-            { name: 'audio-remover', category: 'video', categoryName: 'Video & Audio', icon: 'video', color: 'purple', description: 'Remove audio from video files' },
-            { name: 'video-trimmer', category: 'video', categoryName: 'Video & Audio', icon: 'video', color: 'purple', description: 'Trim video clips with precision' },
-            { name: 'voice-remover', category: 'video', categoryName: 'Video & Audio', icon: 'video', color: 'purple', description: 'Remove vocals from audio' },
-            { name: 'subtitle-generator', category: 'video', categoryName: 'Video & Audio', icon: 'video', color: 'purple', description: 'Generate subtitles for videos' },
-            { name: 'subtitle-merger', category: 'video', categoryName: 'Video & Audio', icon: 'video', color: 'purple', description: 'Merge subtitles with video' },
-            { name: 'video-compress', category: 'video', categoryName: 'Video & Audio', icon: 'video', color: 'purple', description: 'Compress video files' },
+            { name: 'video-to-mp3', category: 'video', categoryName: 'Video & Audio', icon: 'music', color: 'purple', description: 'Extract audio from video files' },
+            { name: 'audio-remover', category: 'video', categoryName: 'Video & Audio', icon: 'volume-x', color: 'purple', description: 'Remove audio from video files' },
+            { name: 'video-trimmer', category: 'video', categoryName: 'Video & Audio', icon: 'cut', color: 'purple', description: 'Trim video clips with precision' },
+            { name: 'voice-remover', category: 'video', categoryName: 'Video & Audio', icon: 'mic-off', color: 'purple', description: 'Remove vocals from audio' },
+            { name: 'subtitle-generator', category: 'video', categoryName: 'Video & Audio', icon: 'closed-captioning', color: 'purple', description: 'Generate subtitles for videos' },
+            { name: 'subtitle-merger', category: 'video', categoryName: 'Video & Audio', icon: 'subtitles', color: 'purple', description: 'Merge subtitles with video' },
+            { name: 'video-compress', category: 'video', categoryName: 'Video & Audio', icon: 'compress', color: 'purple', description: 'Compress video files' },
             { name: 'video-converter', category: 'video', categoryName: 'Video & Audio', icon: 'video', color: 'purple', description: 'Convert video formats' },
-            { name: 'dubbing-tool', category: 'video', categoryName: 'Video & Audio', icon: 'video', color: 'purple', description: 'Add voice dubbing to videos' },
-            { name: 'shorts-cropper', category: 'video', categoryName: 'Video & Audio', icon: 'video', color: 'purple', description: 'Crop videos for shorts format' },
-            
+            { name: 'dubbing-tool', category: 'video', categoryName: 'Video & Audio', icon: 'mic', color: 'purple', description: 'Add voice dubbing to videos' },
+            { name: 'shorts-cropper', category: 'video', categoryName: 'Video & Audio', icon: 'layout', color: 'purple', description: 'Crop videos for shorts format' },
+
             // AI Tools
-            { name: 'resume-generator', category: 'ai', categoryName: 'AI Tools', icon: 'brain', color: 'violet', description: 'Generate professional resumes with AI' },
-            { name: 'business-name-generator', category: 'ai', categoryName: 'AI Tools', icon: 'brain', color: 'violet', description: 'Generate creative business names' },
-            { name: 'blog-title-generator', category: 'ai', categoryName: 'AI Tools', icon: 'brain', color: 'violet', description: 'Generate catchy blog titles' },
-            { name: 'product-description', category: 'ai', categoryName: 'AI Tools', icon: 'brain', color: 'violet', description: 'Generate product descriptions' },
-            { name: 'script-writer', category: 'ai', categoryName: 'AI Tools', icon: 'brain', color: 'violet', description: 'Write scripts for videos' },
-            { name: 'ad-copy-generator', category: 'ai', categoryName: 'AI Tools', icon: 'brain', color: 'violet', description: 'Generate advertising copy' },
-            { name: 'faq-generator', category: 'ai', categoryName: 'AI Tools', icon: 'brain', color: 'violet', description: 'Generate FAQ sections' },
-            { name: 'idea-explainer', category: 'ai', categoryName: 'AI Tools', icon: 'brain', color: 'violet', description: 'Explain complex ideas simply' },
-            { name: 'bio-generator', category: 'ai', categoryName: 'AI Tools', icon: 'brain', color: 'violet', description: 'Generate professional bios' },
-            { name: 'doc-to-slides', category: 'ai', categoryName: 'AI Tools', icon: 'brain', color: 'violet', description: 'Convert documents to slides' },
-            
+            { name: 'resume-generator', category: 'ai', categoryName: 'AI Tools', icon: 'file-text', color: 'violet', description: 'Generate professional resumes with AI' },
+            { name: 'business-name-generator', category: 'ai', categoryName: 'AI Tools', icon: 'briefcase', color: 'violet', description: 'Generate creative business names' },
+            { name: 'blog-title-generator', category: 'ai', categoryName: 'AI Tools', icon: 'edit', color: 'violet', description: 'Generate catchy blog titles' },
+            { name: 'product-description', category: 'ai', categoryName: 'AI Tools', icon: 'tag', color: 'violet', description: 'Generate product descriptions' },
+            { name: 'script-writer', category: 'ai', categoryName: 'AI Tools', icon: 'tv', color: 'violet', description: 'Write scripts for videos' },
+            { name: 'ad-copy-generator', category: 'ai', categoryName: 'AI Tools', icon: 'monitor', color: 'violet', description: 'Generate advertising copy' },
+            { name: 'faq-generator', category: 'ai', categoryName: 'AI Tools', icon: 'help-circle', color: 'violet', description: 'Generate FAQ sections' },
+            { name: 'idea-explainer', category: 'ai', categoryName: 'AI Tools', icon: 'lightbulb', color: 'violet', description: 'Explain complex ideas simply' },
+            { name: 'bio-generator', category: 'ai', categoryName: 'AI Tools', icon: 'user', color: 'violet', description: 'Generate professional bios' },
+            { name: 'doc-to-slides', category: 'ai', categoryName: 'AI Tools', icon: 'layout', color: 'violet', description: 'Convert documents to slides' },
+
             // Add more tools from other categories...
         ];
     }
@@ -167,7 +168,7 @@ class ToolSearchManager {
 
     attachSearchToInput(input) {
         let searchTimeout;
-        
+
         input.addEventListener('input', (e) => {
             clearTimeout(searchTimeout);
             searchTimeout = setTimeout(() => {
@@ -197,12 +198,12 @@ class ToolSearchManager {
         // Create results dropdown
         const dropdown = document.createElement('div');
         dropdown.className = 'search-results-dropdown absolute w-full mt-2 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 z-50 max-h-96 overflow-y-auto';
-        
+
         results.forEach(tool => {
             const item = document.createElement('a');
             item.href = `/tools/${tool.name}`;
             item.className = 'block px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700 border-b border-gray-100 dark:border-gray-700 last:border-b-0';
-            
+
             item.innerHTML = `
                 <div class="flex items-center space-x-3">
                     <div class="w-8 h-8 rounded-lg bg-${tool.color}-100 dark:bg-${tool.color}-900 flex items-center justify-center">
@@ -218,7 +219,7 @@ class ToolSearchManager {
                     </div>
                 </div>
             `;
-            
+
             dropdown.appendChild(item);
         });
 
@@ -240,7 +241,7 @@ class ToolSearchManager {
                 document.removeEventListener('click', closeDropdown);
             }
         };
-        
+
         setTimeout(() => {
             document.addEventListener('click', closeDropdown);
         }, 100);

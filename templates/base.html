@@ -22,14 +22,14 @@
     <meta name="twitter:title" content="{% block twitter_title %}Toolora AI - Professional Online Tools{% endblock %}">
     <meta name="twitter:description" content="{% block twitter_description %}85+ professional tools for PDF, Image, Video, AI processing and more.{% endblock %}">
     <meta name="twitter:image" content="{{ url_for('static', filename='images/twitter-card.jpg') }}">
-    
+
     <!-- Additional SEO Meta Tags -->
     <meta name="robots" content="index, follow">
     <meta name="language" content="English">
     <meta name="revisit-after" content="3 days">
     <meta name="distribution" content="global">
     <meta name="rating" content="general">
-    
+
     <!-- Structured Data for SEO -->
     <script type="application/ld+json">
     {
@@ -223,8 +223,10 @@
     </script>
 
     <!-- Main JavaScript -->
+    <script src="{{ url_for('static', filename='js/tool-icons.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/icon-loader.js') }}"></script>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
-    
+
     <!-- Enhanced Search -->
     <script src="{{ url_for('static', filename='js/enhanced-search.js') }}"></script>
 </head>
@@ -613,12 +615,12 @@
                         time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
                     }
                 ];
-                
+
                 // Prevent auto-opening on navigation
                 window.addEventListener('popstate', () => {
                     this.isOpen = false;
                 });
-                
+
                 window.addEventListener('pageshow', () => {
                     this.isOpen = false;
                 });
@@ -701,13 +703,13 @@
             links.forEach(link => {
                 link.addEventListener('click', function(e) {
                     if (this.target === '_blank') return;
-                    
+
                     e.preventDefault();
-                    
+
                     // Add instant loading effect
                     document.body.style.opacity = '0.95';
                     document.body.style.transition = 'opacity 0.1s ease';
-                    
+
                     // Navigate after minimal delay
                     setTimeout(() => {
                         window.location.href = this.href;
@@ -715,40 +717,40 @@
                 });
             });
         };
-        
+
         // Track page views
         window.trackPageView = function(page) {
             console.log('Page view:', page);
         };
-        
+
         // Track events
         window.trackEvent = function(eventName, data) {
             console.log('Event:', eventName, data);
         };
-        
+
         // Firebase authentication status
         window.checkAuth = function() {
             return window.firebaseAuth || null;
         };
-        
+
         // Domain helper
         window.getCurrentDomain = function() {
             return window.location.hostname;
         };
-        
+
         // Page initialization - Fixed
         document.addEventListener('DOMContentLoaded', function() {
             // Track page view
             trackPageView(window.location.pathname);
-            
+
             // Domain detection
             const domain = getCurrentDomain();
             console.log('Current domain:', domain);
-            
+
             if (domain.includes('replit.dev')) {
                 console.log('Replit domain detected:', domain);
             }
-            
+
             // Initialize page transitions - Fixed
             setTimeout(() => {
                 addPageTransitions();

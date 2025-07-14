@@ -1,0 +1,56 @@
+
+/**
+ * Dynamic Icon Loader - Updates tool icons based on tool name
+ */
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Load tool icons script if not loaded
+    if (typeof window.ToolIcons === 'undefined') {
+        const script = document.createElement('script');
+        script.src = '/static/js/tool-icons.js';
+        script.onload = function() {
+            updateToolIcons();
+        };
+        document.head.appendChild(script);
+    } else {
+        updateToolIcons();
+    }
+});
+
+function updateToolIcons() {
+    if (typeof window.ToolIcons === 'undefined') return;
+    
+    // Update tool cards
+    const toolCards = document.querySelectorAll('.tool-card');
+    toolCards.forEach(card => {
+        const toolName = card.getAttribute('data-tool');
+        if (toolName) {
+            const icon = card.querySelector('[data-lucide]');
+            if (icon) {
+                const customIcon = window.ToolIcons.getToolIcon(toolName);
+                icon.setAttribute('data-lucide', customIcon);
+            }
+        }
+    });
+    
+    // Update search results
+    const searchResults = document.querySelectorAll('.search-result-item');
+    searchResults.forEach(result => {
+        const toolName = result.getAttribute('data-tool');
+        if (toolName) {
+            const icon = result.querySelector('[data-lucide]');
+            if (icon) {
+                const customIcon = window.ToolIcons.getToolIcon(toolName);
+                icon.setAttribute('data-lucide', customIcon);
+            }
+        }
+    });
+    
+    // Reinitialize Lucide icons
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+    }
+}
+
+// Export for use
+window.updateToolIcons = updateToolIcons;
