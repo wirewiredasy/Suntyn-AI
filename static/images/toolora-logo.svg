@@ -1,0 +1,53 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Main gradient for logo -->
+    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10B981;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#06B6D4;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8B5CF6;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Inner gradient for 3D effect -->
+    <linearGradient id="innerGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8B5CF6;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#3B82F6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#06B6D4;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Shadow filter -->
+    <filter id="dropshadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+      <feOffset dx="2" dy="2" result="offset"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.3"/>
+      </feComponentTransfer>
+      <feMerge> 
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/> 
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Main T shape -->
+  <path d="M50 60 L150 60 L150 90 L125 90 L125 140 L75 140 L75 90 L50 90 Z" 
+        fill="url(#logoGradient)" 
+        filter="url(#dropshadow)"
+        stroke="none">
+    <animate attributeName="d" 
+             values="M50 60 L150 60 L150 90 L125 90 L125 140 L75 140 L75 90 L50 90 Z;
+                     M48 58 L152 58 L152 92 L127 92 L127 142 L73 142 L73 92 L48 92 Z;
+                     M50 60 L150 60 L150 90 L125 90 L125 140 L75 140 L75 90 L50 90 Z"
+             dur="3s" 
+             repeatCount="indefinite"/>
+  </path>
+  
+  <!-- Inner highlight -->
+  <path d="M55 65 L145 65 L145 85 L120 85 L120 135 L80 135 L80 85 L55 85 Z" 
+        fill="url(#innerGradient)" 
+        opacity="0.7">
+    <animate attributeName="opacity" 
+             values="0.7;0.9;0.7" 
+             dur="2s" 
+             repeatCount="indefinite"/>
+  </path>
+</svg>

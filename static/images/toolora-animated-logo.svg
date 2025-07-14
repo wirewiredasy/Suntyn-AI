@@ -1,0 +1,98 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Animated gradient -->
+    <linearGradient id="animatedGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10B981;stop-opacity:1">
+        <animate attributeName="stop-color" 
+                 values="#10B981;#06B6D4;#8B5CF6;#10B981" 
+                 dur="4s" 
+                 repeatCount="indefinite"/>
+      </stop>
+      <stop offset="50%" style="stop-color:#06B6D4;stop-opacity:1">
+        <animate attributeName="stop-color" 
+                 values="#06B6D4;#8B5CF6;#10B981;#06B6D4" 
+                 dur="4s" 
+                 repeatCount="indefinite"/>
+      </stop>
+      <stop offset="100%" style="stop-color:#8B5CF6;stop-opacity:1">
+        <animate attributeName="stop-color" 
+                 values="#8B5CF6;#10B981;#06B6D4;#8B5CF6" 
+                 dur="4s" 
+                 repeatCount="indefinite"/>
+      </stop>
+    </linearGradient>
+    
+    <!-- Pulsing effect -->
+    <filter id="pulse">
+      <feGaussianBlur stdDeviation="0" result="coloredBlur">
+        <animate attributeName="stdDeviation" 
+                 values="0;3;0" 
+                 dur="2s" 
+                 repeatCount="indefinite"/>
+      </feGaussianBlur>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    
+    <!-- Floating particles -->
+    <circle id="particle" r="2" fill="white" opacity="0.6">
+      <animate attributeName="cy" 
+               values="180;20;180" 
+               dur="3s" 
+               repeatCount="indefinite"/>
+      <animate attributeName="opacity" 
+               values="0;0.6;0" 
+               dur="3s" 
+               repeatCount="indefinite"/>
+    </circle>
+  </defs>
+  
+  <!-- Background circle -->
+  <circle cx="100" cy="100" r="90" fill="url(#animatedGradient)" filter="url(#pulse)"/>
+  
+  <!-- Main T shape with morphing -->
+  <path d="M40 80 L160 80 L160 110 L135 110 L135 160 L65 160 L65 110 L40 110 Z" 
+        fill="white" 
+        opacity="0.95">
+    <animateTransform attributeName="transform" 
+                      type="scale" 
+                      values="1;1.05;1" 
+                      dur="3s" 
+                      repeatCount="indefinite"/>
+  </path>
+  
+  <!-- Inner glow -->
+  <path d="M45 85 L155 85 L155 105 L130 105 L130 155 L70 155 L70 105 L45 105 Z" 
+        fill="url(#animatedGradient)" 
+        opacity="0.3">
+    <animate attributeName="opacity" 
+             values="0.3;0.6;0.3" 
+             dur="2s" 
+             repeatCount="indefinite"/>
+  </path>
+  
+  <!-- Floating particles -->
+  <use href="#particle" x="60" y="180">
+    <animate attributeName="cy" 
+             values="180;20;180" 
+             dur="3s" 
+             begin="0s"
+             repeatCount="indefinite"/>
+  </use>
+  <use href="#particle" x="140" y="180">
+    <animate attributeName="cy" 
+             values="180;20;180" 
+             dur="3s" 
+             begin="1s"
+             repeatCount="indefinite"/>
+  </use>
+  <use href="#particle" x="100" y="180">
+    <animate attributeName="cy" 
+             values="180;20;180" 
+             dur="3s" 
+             begin="2s"
+             repeatCount="indefinite"/>
+  </use>
+</svg>

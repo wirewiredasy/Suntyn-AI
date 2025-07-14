@@ -1,185 +1,133 @@
 """
 OG Image Generator for Toolora AI
-Generates social media preview images for each tool
+Generates social media preview images with the new logo
 """
 
 from PIL import Image, ImageDraw, ImageFont
 import os
-import textwrap
+import io
+import base64
 
-class OGImageGenerator:
-    def __init__(self):
-        self.width = 1200
-        self.height = 630
-        self.output_dir = "static/images/og"
-        os.makedirs(self.output_dir, exist_ok=True)
-        
-        # Brand colors
-        self.purple = (139, 92, 246)
-        self.cyan = (6, 182, 212)
-        self.emerald = (16, 185, 129)
-        
-    def create_gradient_bg(self):
-        """Create gradient background"""
-        img = Image.new('RGB', (self.width, self.height), (255, 255, 255))
-        draw = ImageDraw.Draw(img)
-        
-        # Create gradient
-        for y in range(self.height):
-            # Interpolate between purple and cyan
-            ratio = y / self.height
-            r = int(self.purple[0] + (self.cyan[0] - self.purple[0]) * ratio)
-            g = int(self.purple[1] + (self.cyan[1] - self.purple[1]) * ratio)
-            b = int(self.purple[2] + (self.cyan[2] - self.purple[2]) * ratio)
-            
-            draw.line([(0, y), (self.width, y)], fill=(r, g, b))
-        
-        return img
-        
-    def get_font(self, size):
-        """Get font with fallback"""
-        font_paths = [
-            "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
-            "/System/Library/Fonts/Helvetica.ttc",
-            "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf"
-        ]
-        
-        for path in font_paths:
-            try:
-                if os.path.exists(path):
-                    return ImageFont.truetype(path, size)
-            except:
-                continue
-        
-        return ImageFont.load_default()
+def generate_og_image(title, description="Professional tools for creators", tool_category=None):
+    """
+    Generate OG image with enhanced Toolora branding
+    """
+    # Image dimensions for social media
+    width, height = 1200, 630
     
-    def generate_tool_og_image(self, tool_name, tool_description, category_name):
-        """Generate OG image for a specific tool"""
-        # Create gradient background
-        img = self.create_gradient_bg()
+    # Create image with gradient background
+    img = Image.new('RGB', (width, height), color='#1a1a1a')
+    draw = ImageDraw.Draw(img)
+    
+    # Create gradient background
+    for y in range(height):
+        gradient_ratio = y / height
+        r = int(139 * (1 - gradient_ratio) + 16 * gradient_ratio)  # Purple to dark
+        g = int(92 * (1 - gradient_ratio) + 185 * gradient_ratio)   # Purple to emerald
+        b = int(246 * (1 - gradient_ratio) + 129 * gradient_ratio)  # Purple to emerald
         
-        # Add semi-transparent overlay
-        overlay = Image.new('RGBA', (self.width, self.height), (0, 0, 0, 120))
-        img = Image.alpha_composite(img.convert('RGBA'), overlay)
+        color = (r, g, b)
+        draw.line([(0, y), (width, y)], fill=color)
+    
+    # Add subtle pattern overlay
+    for x in range(0, width, 40):
+        for y in range(0, height, 40):
+            draw.ellipse([x, y, x+2, y+2], fill=(255, 255, 255, 20))
+    
+    # Load or create logo
+    try:
+        logo_path = os.path.join('static', 'images', 'toolora-logo.svg')
+        if os.path.exists(logo_path):
+            # In a real implementation, you'd convert SVG to PIL Image
+            # For now, we'll create a simple logo representation
+            pass
+    except:
+        pass
+    
+    # Create logo representation
+    logo_size = 120
+    logo_x = 60
+    logo_y = 60
+    
+    # Draw logo background circle
+    draw.ellipse([logo_x, logo_y, logo_x + logo_size, logo_y + logo_size], 
+                fill=(255, 255, 255, 240))
+    
+    # Draw T letter
+    t_color = (139, 92, 246)  # Purple
+    t_size = 80
+    t_x = logo_x + (logo_size - t_size) // 2
+    t_y = logo_y + (logo_size - t_size) // 2
+    
+    # T horizontal bar
+    draw.rectangle([t_x, t_y, t_x + t_size, t_y + 15], fill=t_color)
+    # T vertical bar
+    draw.rectangle([t_x + t_size//2 - 10, t_y, t_x + t_size//2 + 10, t_y + t_size], fill=t_color)
+    
+    # Add title text
+    try:
+        title_font = ImageFont.truetype("Arial", 64)
+        subtitle_font = ImageFont.truetype("Arial", 36)
+    except:
+        title_font = ImageFont.load_default()
+        subtitle_font = ImageFont.load_default()
+    
+    # Title
+    title_x = logo_x + logo_size + 40
+    title_y = logo_y + 10
+    draw.text((title_x, title_y), title, fill=(255, 255, 255), font=title_font)
+    
+    # Subtitle
+    draw.text((title_x, title_y + 80), description, fill=(200, 200, 200), font=subtitle_font)
+    
+    # Add category badge if provided
+    if tool_category:
+        badge_x = title_x
+        badge_y = title_y + 140
+        badge_width = 200
+        badge_height = 40
         
-        draw = ImageDraw.Draw(img)
+        # Badge background
+        draw.rounded_rectangle([badge_x, badge_y, badge_x + badge_width, badge_y + badge_height], 
+                             radius=20, fill=(6, 182, 212))
         
-        # Fonts
-        title_font = self.get_font(64)
-        subtitle_font = self.get_font(32)
-        desc_font = self.get_font(24)
-        brand_font = self.get_font(40)
-        
-        # Brand name
-        brand_text = "Toolora AI"
-        brand_bbox = draw.textbbox((0, 0), brand_text, font=brand_font)
-        brand_width = brand_bbox[2] - brand_bbox[0]
-        draw.text((50, 50), brand_text, font=brand_font, fill=(255, 255, 255))
-        
-        # Tool name
-        tool_display_name = tool_name.replace('-', ' ').title()
-        title_bbox = draw.textbbox((0, 0), tool_display_name, font=title_font)
-        title_width = title_bbox[2] - title_bbox[0]
-        title_height = title_bbox[3] - title_bbox[1]
-        
-        title_x = (self.width - title_width) // 2
-        title_y = 200
-        draw.text((title_x, title_y), tool_display_name, font=title_font, fill=(255, 255, 255))
-        
-        # Category badge
-        category_text = f"📁 {category_name}"
-        category_bbox = draw.textbbox((0, 0), category_text, font=subtitle_font)
-        category_width = category_bbox[2] - category_bbox[0]
-        category_x = (self.width - category_width) // 2
-        category_y = title_y + title_height + 20
-        
-        # Category background
-        draw.rounded_rectangle([category_x - 20, category_y - 10, category_x + category_width + 20, category_y + 40], 
-                             radius=20, fill=(255, 255, 255, 80))
-        draw.text((category_x, category_y), category_text, font=subtitle_font, fill=(255, 255, 255))
-        
-        # Description
-        if tool_description:
-            wrapped_desc = textwrap.fill(tool_description, width=60)
-            desc_lines = wrapped_desc.split('\n')
-            
-            desc_y = category_y + 80
-            for line in desc_lines:
-                desc_bbox = draw.textbbox((0, 0), line, font=desc_font)
-                desc_width = desc_bbox[2] - desc_bbox[0]
-                desc_x = (self.width - desc_width) // 2
-                draw.text((desc_x, desc_y), line, font=desc_font, fill=(255, 255, 255, 200))
-                desc_y += 30
-        
-        # Bottom branding
-        footer_text = "Free • Fast • Secure • 85+ Tools"
-        footer_bbox = draw.textbbox((0, 0), footer_text, font=subtitle_font)
-        footer_width = footer_bbox[2] - footer_bbox[0]
-        footer_x = (self.width - footer_width) // 2
-        draw.text((footer_x, self.height - 100), footer_text, font=subtitle_font, fill=(255, 255, 255, 180))
-        
-        # Save image
-        filename = f"{tool_name}-og.png"
-        filepath = os.path.join(self.output_dir, filename)
-        img.convert('RGB').save(filepath, "PNG", optimize=True)
-        
-        return filepath
-        
-    def generate_default_og_image(self):
-        """Generate default OG image for main pages"""
-        img = self.create_gradient_bg()
-        
-        # Add semi-transparent overlay
-        overlay = Image.new('RGBA', (self.width, self.height), (0, 0, 0, 100))
-        img = Image.alpha_composite(img.convert('RGBA'), overlay)
-        
-        draw = ImageDraw.Draw(img)
-        
-        # Fonts
-        title_font = self.get_font(72)
-        subtitle_font = self.get_font(36)
-        desc_font = self.get_font(28)
-        
-        # Main title
-        title_text = "Toolora AI"
-        title_bbox = draw.textbbox((0, 0), title_text, font=title_font)
-        title_width = title_bbox[2] - title_bbox[0]
-        title_height = title_bbox[3] - title_bbox[1]
-        title_x = (self.width - title_width) // 2
-        title_y = 180
-        draw.text((title_x, title_y), title_text, font=title_font, fill=(255, 255, 255))
-        
-        # Subtitle
-        subtitle_text = "One Place. All Tools."
-        subtitle_bbox = draw.textbbox((0, 0), subtitle_text, font=subtitle_font)
-        subtitle_width = subtitle_bbox[2] - subtitle_bbox[0]
-        subtitle_x = (self.width - subtitle_width) // 2
-        subtitle_y = title_y + title_height + 20
-        draw.text((subtitle_x, subtitle_y), subtitle_text, font=subtitle_font, fill=(255, 255, 255, 200))
-        
-        # Description
-        desc_text = "85+ Professional Tools for PDF, Image, Video, AI & More"
-        desc_bbox = draw.textbbox((0, 0), desc_text, font=desc_font)
-        desc_width = desc_bbox[2] - desc_bbox[0]
-        desc_x = (self.width - desc_width) // 2
-        desc_y = subtitle_y + 80
-        draw.text((desc_x, desc_y), desc_text, font=desc_font, fill=(255, 255, 255, 180))
-        
-        # Features
-        features_text = "🚀 Fast • 🔒 Secure • 🆓 Free • 🌐 No Sign-up Required"
-        features_bbox = draw.textbbox((0, 0), features_text, font=desc_font)
-        features_width = features_bbox[2] - features_bbox[0]
-        features_x = (self.width - features_width) // 2
-        draw.text((features_x, self.height - 100), features_text, font=desc_font, fill=(255, 255, 255, 160))
-        
-        # Save image
-        filepath = os.path.join(self.output_dir, "default-og.png")
-        img.convert('RGB').save(filepath, "PNG", optimize=True)
-        
-        return filepath
+        # Badge text
+        draw.text((badge_x + 20, badge_y + 8), tool_category.title(), 
+                 fill=(255, 255, 255), font=subtitle_font)
+    
+    # Add bottom branding
+    brand_text = "Toolora AI - Professional Tools Platform"
+    brand_y = height - 60
+    draw.text((60, brand_y), brand_text, fill=(160, 160, 160), font=subtitle_font)
+    
+    return img
 
-# Generate default OG image on import
-if __name__ == "__main__":
-    generator = OGImageGenerator()
-    generator.generate_default_og_image()
-    print("Default OG image generated successfully!")
+def save_og_image(img, filename):
+    """Save OG image to static folder"""
+    og_dir = os.path.join('static', 'images', 'og')
+    os.makedirs(og_dir, exist_ok=True)
+    
+    filepath = os.path.join(og_dir, filename)
+    img.save(filepath, 'PNG', optimize=True)
+    
+    return filepath
+
+def generate_tool_og_image(tool_name, category):
+    """Generate OG image for specific tool"""
+    title = tool_name.replace('-', ' ').title()
+    description = f"Professional {category} tool - Free online"
+    
+    img = generate_og_image(title, description, category)
+    filename = f"{tool_name}-og.png"
+    
+    return save_og_image(img, filename)
+
+def generate_category_og_image(category_name, tool_count):
+    """Generate OG image for tool category"""
+    title = f"{category_name} Tools"
+    description = f"{tool_count} professional tools available"
+    
+    img = generate_og_image(title, description, category_name)
+    filename = f"{category_name}-category-og.png"
+    
+    return save_og_image(img, filename)
