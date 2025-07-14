@@ -390,19 +390,20 @@
             
             toggleChat() {
                 this.isOpen = !this.isOpen;
-                // Only add welcome message when user manually opens chat
-                if (this.isOpen && this.messages.length === 0) {
-                    this.messages.push({
-                        id: Date.now(),
-                        text: 'Hello! How can I help you today?',
-                        sender: 'support',
-                        time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
-                    });
-                }
             },
             
             sendMessage() {
                 if (this.newMessage.trim()) {
+                    // Add welcome message only when user sends first message
+                    if (this.messages.length === 0) {
+                        this.messages.push({
+                            id: Date.now() - 1,
+                            text: 'Hello! How can I help you today?',
+                            sender: 'support',
+                            time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+                        });
+                    }
+                    
                     const message = {
                         id: Date.now(),
                         text: this.newMessage,

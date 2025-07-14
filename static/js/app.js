@@ -19,6 +19,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Initialize analytics
     initializeAnalytics();
+    
+    // Ensure chat widget never auto-opens
+    preventChatAutoOpen();
 });
 
 // Tooltip initialization
@@ -471,6 +474,19 @@ document.addEventListener('keydown', (event) => {
     }
 });
 
+// Prevent chat widget from auto-opening
+function preventChatAutoOpen() {
+    // Override any potential auto-open functionality
+    const chatWidget = document.getElementById('chat-widget');
+    if (chatWidget) {
+        // Ensure chat starts closed
+        const chatWindow = chatWidget.querySelector('[x-show="isOpen"]');
+        if (chatWindow) {
+            chatWindow.style.display = 'none';
+        }
+    }
+}
+
 // Export functions for use in other scripts
 window.tooloraApp = {
     showNotification,
@@ -480,5 +496,6 @@ window.tooloraApp = {
     formatFileSize,
     formatDuration,
     copyToClipboard,
-    debounce
+    debounce,
+    preventChatAutoOpen
 };
