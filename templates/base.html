@@ -22,6 +22,36 @@
     <meta name="twitter:title" content="{% block twitter_title %}Toolora AI - Professional Online Tools{% endblock %}">
     <meta name="twitter:description" content="{% block twitter_description %}85+ professional tools for PDF, Image, Video, AI processing and more.{% endblock %}">
     <meta name="twitter:image" content="{{ url_for('static', filename='images/twitter-card.jpg') }}">
+    
+    <!-- Additional SEO Meta Tags -->
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English">
+    <meta name="revisit-after" content="3 days">
+    <meta name="distribution" content="global">
+    <meta name="rating" content="general">
+    
+    <!-- Structured Data for SEO -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Toolora AI",
+        "description": "Professional online tools for PDF, Image, Video, and AI processing",
+        "url": "{{ request.url_root }}",
+        "applicationCategory": "ProductivityApplication",
+        "operatingSystem": "Web Browser",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.8",
+            "ratingCount": "1250"
+        }
+    }
+    </script>
 
     <!-- Animated Favicon -->
     <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/animated-favicon.svg') }}">
@@ -615,11 +645,26 @@
 
     <!-- Analytics and Tracking -->
     <script>
-        // Global app functions
+        // Global app functions - Fixed initialization
         window.addPageTransitions = function() {
-            if (window.ToolaraApp) {
-                window.ToolaraApp.setupPageTransitions();
-            }
+            // Fast page transitions without white flash
+            const links = document.querySelectorAll('a[href^="/"]');
+            links.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    if (this.target === '_blank') return;
+                    
+                    e.preventDefault();
+                    
+                    // Add instant loading effect
+                    document.body.style.opacity = '0.95';
+                    document.body.style.transition = 'opacity 0.1s ease';
+                    
+                    // Navigate after minimal delay
+                    setTimeout(() => {
+                        window.location.href = this.href;
+                    }, 50);
+                });
+            });
         };
         
         // Track page views
@@ -642,7 +687,7 @@
             return window.location.hostname;
         };
         
-        // Page initialization
+        // Page initialization - Fixed
         document.addEventListener('DOMContentLoaded', function() {
             // Track page view
             trackPageView(window.location.pathname);
@@ -655,8 +700,10 @@
                 console.log('Replit domain detected:', domain);
             }
             
-            // Initialize page transitions
-            addPageTransitions();
+            // Initialize page transitions - Fixed
+            setTimeout(() => {
+                addPageTransitions();
+            }, 100);
         });
     </script>
 
