@@ -422,15 +422,31 @@ function initializePerformanceMonitoring() {
 window.addEventListener('error', (event) => {
     console.error('Global error:', event.error);
     
-    // Show user-friendly error message
-    showNotification('An error occurred. Please try again.', 'error');
+    // Don't show notifications for Firebase config errors
+    if (event.error && event.error.code && event.error.code.includes('auth/')) {
+        console.log('Firebase auth error handled silently in demo mode');
+        return;
+    }
+    
+    // Show user-friendly error message for other errors
+    if (event.error && !event.error.message.includes('Firebase')) {
+        showNotification('An error occurred. Please try again.', 'error');
+    }
 });
 
 window.addEventListener('unhandledrejection', (event) => {
     console.error('Unhandled promise rejection:', event.reason);
     
-    // Show user-friendly error message
-    showNotification('An error occurred. Please try again.', 'error');
+    // Don't show notifications for Firebase config errors
+    if (event.reason && event.reason.code && event.reason.code.includes('auth/')) {
+        console.log('Firebase auth promise rejection handled silently in demo mode');
+        return;
+    }
+    
+    // Show user-friendly error message for other errors
+    if (event.reason && !event.reason.message.includes('Firebase')) {
+        showNotification('An error occurred. Please try again.', 'error');
+    }
 });
 
 // Keyboard shortcuts

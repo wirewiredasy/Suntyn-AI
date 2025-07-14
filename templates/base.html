@@ -271,15 +271,15 @@
         import { getStorage } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-storage.js';
 
         const firebaseConfig = {
-            apiKey: "{{ firebase_api_key or 'demo-key' }}",
-            authDomain: "{{ firebase_project_id or 'demo-project' }}.firebaseapp.com",
-            projectId: "{{ firebase_project_id or 'demo-project' }}",
-            storageBucket: "{{ firebase_project_id or 'demo-project' }}.firebasestorage.app",
-            appId: "{{ firebase_app_id or 'demo-app-id' }}",
+            apiKey: "{{ firebase_api_key or '' }}",
+            authDomain: "{{ firebase_project_id or '' }}.firebaseapp.com",
+            projectId: "{{ firebase_project_id or '' }}",
+            storageBucket: "{{ firebase_project_id or '' }}.firebasestorage.app",
+            appId: "{{ firebase_app_id or '' }}",
         };
 
         // Only initialize Firebase if we have valid config
-        if (firebaseConfig.apiKey !== 'demo-key') {
+        if (firebaseConfig.apiKey && firebaseConfig.apiKey.length > 10) {
             try {
                 // Initialize Firebase
                 const app = initializeApp(firebaseConfig);
@@ -290,14 +290,17 @@
                 window.firebaseApp = app;
                 window.firebaseAuth = auth;
                 window.firebaseStorage = storage;
+                console.log('Firebase initialized successfully');
             } catch (error) {
                 console.warn('Firebase initialization failed:', error.message);
+                // Create mock auth for development
+                window.firebaseAuth = null;
             }
         } else {
             console.log('Firebase not configured - using demo mode');
+            // Create mock auth for development
+            window.firebaseAuth = null;
         }
-
-        
     </script>
 
     <!-- Initialize Lucide Icons -->
@@ -384,9 +387,13 @@
             isOpen: false,
             messages: [],
             newMessage: '',
+            autoOpened: false,
             
             toggleChat() {
                 this.isOpen = !this.isOpen;
+                if (this.isOpen && !this.autoOpened) {
+                    this.autoOpened = true;
+                }
             },
             
             sendMessage() {

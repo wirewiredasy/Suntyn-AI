@@ -15,6 +15,13 @@ class FirebaseAuthHandler {
 
             this.auth = window.firebaseAuth;
 
+            // Check if Firebase is properly configured
+            if (!this.auth) {
+                console.log('Firebase Auth not configured - running in demo mode');
+                this.initialized = true;
+                return;
+            }
+
             // Set up auth state observer
             this.auth.onAuthStateChanged((user) => {
                 this.currentUser = user;
@@ -24,26 +31,29 @@ class FirebaseAuthHandler {
             this.initialized = true;
             console.log('Firebase Auth initialized');
         } catch (error) {
-            console.error('Firebase Auth initialization failed:', error);
+            console.warn('Firebase Auth initialization failed - running in demo mode:', error.message);
+            this.initialized = true;
         }
     }
 
     waitForFirebase() {
         return new Promise((resolve, reject) => {
+            let attempts = 0;
+            const maxAttempts = 30; // 3 seconds max wait
+            
             const checkFirebase = () => {
-                if (window.firebaseAuth) {
+                attempts++;
+                
+                if (window.firebaseAuth !== undefined) {
                     resolve();
+                } else if (attempts >= maxAttempts) {
+                    resolve(); // Resolve anyway to continue in demo mode
                 } else {
                     setTimeout(checkFirebase, 100);
                 }
             };
 
             checkFirebase();
-
-            // Timeout after 10 seconds
-            setTimeout(() => {
-                reject(new Error('Firebase took too long to load'));
-            }, 10000);
         });
     }
 
