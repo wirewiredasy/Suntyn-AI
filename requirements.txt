@@ -22,3 +22,11 @@ flask-sqlalchemy
 gunicorn
 psycopg2-binary
 qrcode[pil]
+Pillow
+PyPDF2
+qrcode[pil]
+reportlab
+Pillow
+PyPDF2
+qrcode[pil]
+reportlab

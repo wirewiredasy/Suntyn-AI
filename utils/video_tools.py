@@ -1,6 +1,7 @@
 import os
 import subprocess
 import tempfile
+from werkzeug.utils import secure_filename
 
 def get_video_info(input_path):
     """Get video information using ffprobe"""
@@ -158,3 +159,72 @@ def add_subtitles(input_path, subtitle_path, output_path):
     except Exception as e:
         print(f"Error adding subtitles: {e}")
         return False
+
+class VideoProcessor:
+    @staticmethod
+    def trim_video(file, start_time, end_time):
+        """Trim video file"""
+        # Note: This is a placeholder - you'll need moviepy or ffmpeg for actual video processing
+        os.makedirs('uploads', exist_ok=True)
+        filename = secure_filename(file.filename)
+        name, ext = os.path.splitext(filename)
+        output_filename = f"trimmed_{name}{ext}"
+        output_path = os.path.join('uploads', output_filename)
+
+        # Save the original file for now (placeholder)
+        file.save(output_path)
+        return output_path
+
+    @staticmethod
+    def extract_audio(file, format='mp3'):
+        """Extract audio from video"""
+        os.makedirs('uploads', exist_ok=True)
+        filename = secure_filename(file.filename)
+        name, ext = os.path.splitext(filename)
+        output_filename = f"audio_{name}.{format}"
+        output_path = os.path.join('uploads', output_filename)
+
+        # Placeholder - you'll need moviepy or ffmpeg
+        with open(output_path, 'wb') as f:
+            f.write(b'placeholder audio file')
+
+        return output_path
+
+    @staticmethod
+    def compress_video(file, quality='medium'):
+        """Compress video file"""
+        os.makedirs('uploads', exist_ok=True)
+        filename = secure_filename(file.filename)
+        name, ext = os.path.splitext(filename)
+        output_filename = f"compressed_{name}{ext}"
+        output_path = os.path.join('uploads', output_filename)
+
+        # Placeholder
+        file.save(output_path)
+        return output_path
+
+    @staticmethod
+    def convert_video(file, format='mp4'):
+        """Convert video format"""
+        os.makedirs('uploads', exist_ok=True)
+        filename = secure_filename(file.filename)
+        name, ext = os.path.splitext(filename)
+        output_filename = f"converted_{name}.{format}"
+        output_path = os.path.join('uploads', output_filename)
+
+        # Placeholder
+        file.save(output_path)
+        return output_path
+
+    @staticmethod
+    def crop_vertical(file, aspect_ratio='9:16'):
+        """Crop video to vertical format"""
+        os.makedirs('uploads', exist_ok=True)
+        filename = secure_filename(file.filename)
+        name, ext = os.path.splitext(filename)
+        output_filename = f"vertical_{name}{ext}"
+        output_path = os.path.join('uploads', output_filename)
+
+        # Placeholder
+        file.save(output_path)
+        return output_path

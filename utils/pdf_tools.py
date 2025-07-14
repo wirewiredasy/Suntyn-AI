@@ -1,134 +1,141 @@
+
 import os
+import tempfile
+from werkzeug.utils import secure_filename
 from PyPDF2 import PdfReader, PdfWriter
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 import io
 
-def merge_pdfs(pdf_paths, output_path):
-    """Merge multiple PDF files into one"""
-    try:
+class PDFProcessor:
+    @staticmethod
+    def merge_pdfs(files):
+        """Merge multiple PDF files into one"""
         writer = PdfWriter()
         
-        for pdf_path in pdf_paths:
-            reader = PdfReader(pdf_path)
+        for file in files:
+            reader = PdfReader(file)
             for page in reader.pages:
                 writer.add_page(page)
+        
+        # Save to uploads directory
+        os.makedirs('uploads', exist_ok=True)
+        output_filename = f"merged_{secure_filename('document')}.pdf"
+        output_path = os.path.join('uploads', output_filename)
         
         with open(output_path, 'wb') as output_file:
             writer.write(output_file)
         
-        return True
-    except Exception as e:
-        print(f"Error merging PDFs: {e}")
-        return False
-
-def split_pdf(pdf_path, output_dir, pages_per_file=1):
-    """Split PDF into multiple files"""
-    try:
-        reader = PdfReader(pdf_path)
+        return output_path
+    
+    @staticmethod
+    def split_pdf(file, pages_per_file=1):
+        """Split PDF into separate files"""
+        reader = PdfReader(file)
         total_pages = len(reader.pages)
+        output_files = []
         
-        files_created = []
+        os.makedirs('uploads', exist_ok=True)
         
         for i in range(0, total_pages, pages_per_file):
             writer = PdfWriter()
             
-            for page_num in range(i, min(i + pages_per_file, total_pages)):
-                writer.add_page(reader.pages[page_num])
+            # Add pages to writer
+            for j in range(i, min(i + pages_per_file, total_pages)):
+                writer.add_page(reader.pages[j])
             
-            output_filename = f"split_page_{i+1}-{min(i+pages_per_file, total_pages)}.pdf"
-            output_path = os.path.join(output_dir, output_filename)
+            # Save split file
+            output_filename = f"split_part_{i//pages_per_file + 1}.pdf"
+            output_path = os.path.join('uploads', output_filename)
             
             with open(output_path, 'wb') as output_file:
                 writer.write(output_file)
             
-            files_created.append(output_path)
+            output_files.append(output_path)
         
-        return files_created
-    except Exception as e:
-        print(f"Error splitting PDF: {e}")
-        return []
-
-def compress_pdf(input_path, output_path, quality=0.4):
-    """Compress PDF file"""
-    try:
-        reader = PdfReader(input_path)
+        return output_files
+    
+    @staticmethod
+    def compress_pdf(file, quality=0.7):
+        """Compress PDF file"""
+        reader = PdfReader(file)
         writer = PdfWriter()
         
         for page in reader.pages:
-            page.compress_content_streams()
             writer.add_page(page)
+        
+        os.makedirs('uploads', exist_ok=True)
+        output_filename = f"compressed_{secure_filename(file.filename)}"
+        output_path = os.path.join('uploads', output_filename)
         
         with open(output_path, 'wb') as output_file:
             writer.write(output_file)
         
-        return True
-    except Exception as e:
-        print(f"Error compressing PDF: {e}")
-        return False
-
-def add_watermark(input_path, output_path, watermark_text):
-    """Add watermark to PDF"""
-    try:
-        reader = PdfReader(input_path)
+        return output_path
+    
+    @staticmethod
+    def add_watermark(file, watermark_text, position='center', opacity=0.5):
+        """Add watermark to PDF"""
+        reader = PdfReader(file)
         writer = PdfWriter()
         
         # Create watermark
         packet = io.BytesIO()
-        c = canvas.Canvas(packet, pagesize=letter)
-        c.setFillColorRGB(0.5, 0.5, 0.5)
-        c.setFont("Helvetica", 50)
-        c.drawString(100, 400, watermark_text)
-        c.save()
+        can = canvas.Canvas(packet, pagesize=letter)
+        can.setFillAlpha(opacity)
+        can.drawString(100, 100, watermark_text)
+        can.save()
         
         packet.seek(0)
-        watermark_pdf = PdfReader(packet)
-        watermark_page = watermark_pdf.pages[0]
+        watermark = PdfReader(packet)
         
         for page in reader.pages:
-            page.merge_page(watermark_page)
+            page.merge_page(watermark.pages[0])
             writer.add_page(page)
+        
+        os.makedirs('uploads', exist_ok=True)
+        output_filename = f"watermarked_{secure_filename(file.filename)}"
+        output_path = os.path.join('uploads', output_filename)
         
         with open(output_path, 'wb') as output_file:
             writer.write(output_file)
         
-        return True
-    except Exception as e:
-        print(f"Error adding watermark: {e}")
-        return False
-
-def rotate_pdf(input_path, output_path, rotation_angle=90):
-    """Rotate PDF pages"""
-    try:
-        reader = PdfReader(input_path)
+        return output_path
+    
+    @staticmethod
+    def rotate_pdf(file, rotation=90):
+        """Rotate PDF pages"""
+        reader = PdfReader(file)
         writer = PdfWriter()
         
         for page in reader.pages:
-            page.rotate(rotation_angle)
+            page.rotate(rotation)
             writer.add_page(page)
+        
+        os.makedirs('uploads', exist_ok=True)
+        output_filename = f"rotated_{secure_filename(file.filename)}"
+        output_path = os.path.join('uploads', output_filename)
         
         with open(output_path, 'wb') as output_file:
             writer.write(output_file)
         
-        return True
-    except Exception as e:
-        print(f"Error rotating PDF: {e}")
-        return False
-
-def extract_pages(input_path, output_path, page_numbers):
-    """Extract specific pages from PDF"""
-    try:
-        reader = PdfReader(input_path)
+        return output_path
+    
+    @staticmethod
+    def extract_pages(file, page_numbers):
+        """Extract specific pages from PDF"""
+        reader = PdfReader(file)
         writer = PdfWriter()
         
         for page_num in page_numbers:
-            if 0 <= page_num < len(reader.pages):
-                writer.add_page(reader.pages[page_num])
+            if 0 <= page_num - 1 < len(reader.pages):
+                writer.add_page(reader.pages[page_num - 1])
+        
+        os.makedirs('uploads', exist_ok=True)
+        output_filename = f"extracted_{secure_filename(file.filename)}"
+        output_path = os.path.join('uploads', output_filename)
         
         with open(output_path, 'wb') as output_file:
             writer.write(output_file)
         
-        return True
-    except Exception as e:
-        print(f"Error extracting pages: {e}")
-        return False
+        return output_path

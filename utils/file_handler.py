@@ -2,6 +2,7 @@ import os
 import shutil
 import mimetypes
 from werkzeug.utils import secure_filename
+import qrcode
 
 class FileHandler:
     """Utility class for handling file operations"""
@@ -66,3 +67,25 @@ class FileHandler:
         """Get MIME type of file"""
         mime_type, _ = mimetypes.guess_type(file_path)
         return mime_type or 'application/octet-stream'
+
+    @staticmethod
+    def generate_qr_code(content, size=300, format='PNG'):
+        """Generate QR code"""
+        qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_L,
+            box_size=10,
+            border=4,
+        )
+        qr.add_data(content)
+        qr.make(fit=True)
+
+        img = qr.make_image(fill_color="black", back_color="white")
+        img = img.resize((size, size))
+
+        os.makedirs('uploads', exist_ok=True)
+        output_filename = f"qr_code_{hash(content) % 10000}.{format.lower()}"
+        output_path = os.path.join('uploads', output_filename)
+
+        img.save(output_path)
+        return output_path
