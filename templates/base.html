@@ -177,6 +177,9 @@
         {% endif %}
     </script>
 
+    <!-- Main JavaScript -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    
     <!-- Enhanced Search -->
     <script src="{{ url_for('static', filename='js/enhanced-search.js') }}"></script>
 </head>
@@ -530,20 +533,20 @@
             messages: [],
             newMessage: '',
 
-            // Ensure chat never auto-opens
             init() {
                 this.isOpen = false;
-                // Override any potential auto-open triggers
-                setTimeout(() => {
-                    this.isOpen = false;
-                }, 100);
+                this.messages = [
+                    {
+                        id: 1,
+                        sender: 'bot',
+                        text: 'Hello! How can I help you with our tools today?',
+                        time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+                    }
+                ];
             },
 
             toggleChat() {
-                // Only allow manual toggle
-                if (event && event.isTrusted) {
-                    this.isOpen = !this.isOpen;
-                }
+                this.isOpen = !this.isOpen;
             },
 
             sendMessage() {
@@ -610,14 +613,52 @@
     });
     </script>
 
-    <!-- Custom JavaScript -->
-    <script src="{{ url_for('static', filename='js/domain-helper.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/firebase-auth.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/theme.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/search-tools.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/tool-animations.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/tool-handlers.js') }}"></script>
+    <!-- Analytics and Tracking -->
+    <script>
+        // Global app functions
+        window.addPageTransitions = function() {
+            if (window.ToolaraApp) {
+                window.ToolaraApp.setupPageTransitions();
+            }
+        };
+        
+        // Track page views
+        window.trackPageView = function(page) {
+            console.log('Page view:', page);
+        };
+        
+        // Track events
+        window.trackEvent = function(eventName, data) {
+            console.log('Event:', eventName, data);
+        };
+        
+        // Firebase authentication status
+        window.checkAuth = function() {
+            return window.firebaseAuth || null;
+        };
+        
+        // Domain helper
+        window.getCurrentDomain = function() {
+            return window.location.hostname;
+        };
+        
+        // Page initialization
+        document.addEventListener('DOMContentLoaded', function() {
+            // Track page view
+            trackPageView(window.location.pathname);
+            
+            // Domain detection
+            const domain = getCurrentDomain();
+            console.log('Current domain:', domain);
+            
+            if (domain.includes('replit.dev')) {
+                console.log('Replit domain detected:', domain);
+            }
+            
+            // Initialize page transitions
+            addPageTransitions();
+        });
+    </script>
 
     {% block scripts %}{% endblock %}
 </body>
