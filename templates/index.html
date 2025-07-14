@@ -1,0 +1,315 @@
+{% extends "base.html" %}
+
+{% block title %}Toolora AI - Professional Online Tools | 85+ Free Tools{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-800 dark:to-gray-900 py-20">
+    <div class="container mx-auto px-4">
+        <div class="text-center max-w-4xl mx-auto">
+            <h1 class="text-5xl md:text-6xl font-bold text-gray-800 dark:text-white mb-6 animate__animated animate__fadeInUp">
+                <span class="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Toolora AI</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8 animate__animated animate__fadeInUp animate__delay-1s">
+                One Place. All Tools. <span class="text-blue-600 font-semibold">85+ Professional Tools</span>
+            </p>
+            <p class="text-lg text-gray-500 dark:text-gray-400 mb-12 animate__animated animate__fadeInUp animate__delay-2s">
+                PDF, Image, Video, AI Tools and More. Free, Fast, and Secure.
+            </p>
+            
+            <!-- CTA Buttons -->
+            <div class="flex flex-col sm:flex-row gap-4 justify-center animate__animated animate__fadeInUp animate__delay-3s">
+                <a href="{{ url_for('tools.index') }}" class="btn btn-primary btn-lg px-8 py-3 text-lg">
+                    <i data-lucide="play-circle" class="w-6 h-6 mr-2"></i>
+                    Explore All Tools
+                </a>
+                <a href="#popular-tools" class="btn btn-outline btn-lg px-8 py-3 text-lg">
+                    <i data-lucide="trending-up" class="w-6 h-6 mr-2"></i>
+                    Popular Tools
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Search Section -->
+<section class="py-12 bg-white dark:bg-gray-800">
+    <div class="container mx-auto px-4">
+        <div class="max-w-2xl mx-auto">
+            <div class="relative" x-data="{ searchOpen: false, searchQuery: '', searchResults: [] }">
+                <div class="relative">
+                    <i data-lucide="search" class="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"></i>
+                    <input 
+                        type="text" 
+                        x-model="searchQuery"
+                        @input="searchTools()"
+                        @focus="searchOpen = true"
+                        placeholder="Search from 85+ tools... (e.g., PDF merge, image compress)" 
+                        class="w-full pl-12 pr-4 py-4 text-lg border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    >
+                </div>
+                
+                <!-- Search Results -->
+                <div x-show="searchOpen && searchResults.length > 0" @click.away="searchOpen = false" class="absolute w-full mt-2 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 z-50">
+                    <template x-for="result in searchResults" :key="result.tool">
+                        <a :href="`/tools/${result.tool}`" class="block px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700 border-b border-gray-100 dark:border-gray-700 last:border-b-0">
+                            <div class="flex items-center space-x-3">
+                                <div :class="`w-8 h-8 rounded-lg bg-${result.color}-100 dark:bg-${result.color}-900 flex items-center justify-center`">
+                                    <i :data-lucide="result.icon" class="w-4 h-4 text-gray-700 dark:text-gray-300"></i>
+                                </div>
+                                <div>
+                                    <div class="font-medium text-gray-900 dark:text-white" x-text="result.tool.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())"></div>
+                                    <div class="text-sm text-gray-500 dark:text-gray-400" x-text="result.category_name"></div>
+                                </div>
+                            </div>
+                        </a>
+                    </template>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Tool Categories -->
+<section class="py-16 bg-gray-50 dark:bg-gray-900">
+    <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-800 dark:text-white mb-4">
+                8 Categories. 85+ Professional Tools.
+            </h2>
+            <p class="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+                Everything you need for productivity, creativity, and professional work.
+            </p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {% for category_id, category_data in categories.items() %}
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                <div class="p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 rounded-lg bg-{{ category_data.color }}-100 dark:bg-{{ category_data.color }}-900 flex items-center justify-center">
+                            <i data-lucide="{{ category_data.icon }}" class="w-6 h-6 text-{{ category_data.color }}-600 dark:text-{{ category_data.color }}-400"></i>
+                        </div>
+                        <span class="text-sm font-medium text-{{ category_data.color }}-600 dark:text-{{ category_data.color }}-400">
+                            {{ category_data.tools|length }} Tools
+                        </span>
+                    </div>
+                    
+                    <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-2">
+                        {{ category_data.name }}
+                    </h3>
+                    
+                    <p class="text-gray-600 dark:text-gray-300 mb-4">
+                        {{ category_data.description }}
+                    </p>
+                    
+                    <a href="{{ url_for('tools.index', category=category_id) }}" 
+                       class="inline-flex items-center text-{{ category_data.color }}-600 dark:text-{{ category_data.color }}-400 hover:text-{{ category_data.color }}-700 dark:hover:text-{{ category_data.color }}-300 font-medium">
+                        View Tools
+                        <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Popular Tools -->
+<section id="popular-tools" class="py-16 bg-white dark:bg-gray-800">
+    <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-800 dark:text-white mb-4">
+                Most Popular Tools
+            </h2>
+            <p class="text-lg text-gray-600 dark:text-gray-300">
+                Top tools used by thousands of professionals daily
+            </p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Static popular tools for demo -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-200 dark:border-gray-700">
+                <div class="p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 rounded-lg bg-red-100 dark:bg-red-900 flex items-center justify-center">
+                            <i data-lucide="file-text" class="w-6 h-6 text-red-600 dark:text-red-400"></i>
+                        </div>
+                        <span class="text-xs bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-400 px-2 py-1 rounded-full">
+                            Popular
+                        </span>
+                    </div>
+                    
+                    <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">
+                        PDF Merge
+                    </h3>
+                    
+                    <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">
+                        Combine multiple PDF files into one document
+                    </p>
+                    
+                    <a href="{{ url_for('tools.pdf_merge') }}" 
+                       class="btn btn-primary btn-sm w-full">
+                        Use Tool
+                    </a>
+                </div>
+            </div>
+            
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-200 dark:border-gray-700">
+                <div class="p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 rounded-lg bg-green-100 dark:bg-green-900 flex items-center justify-center">
+                            <i data-lucide="image" class="w-6 h-6 text-green-600 dark:text-green-400"></i>
+                        </div>
+                        <span class="text-xs bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 px-2 py-1 rounded-full">
+                            Trending
+                        </span>
+                    </div>
+                    
+                    <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">
+                        Image Compress
+                    </h3>
+                    
+                    <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">
+                        Reduce image file size without quality loss
+                    </p>
+                    
+                    <a href="{{ url_for('tools.image_compress') }}" 
+                       class="btn btn-primary btn-sm w-full">
+                        Use Tool
+                    </a>
+                </div>
+            </div>
+            
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-200 dark:border-gray-700">
+                <div class="p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 rounded-lg bg-purple-100 dark:bg-purple-900 flex items-center justify-center">
+                            <i data-lucide="video" class="w-6 h-6 text-purple-600 dark:text-purple-400"></i>
+                        </div>
+                        <span class="text-xs bg-purple-100 dark:bg-purple-900 text-purple-600 dark:text-purple-400 px-2 py-1 rounded-full">
+                            New
+                        </span>
+                    </div>
+                    
+                    <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">
+                        Video Trimmer
+                    </h3>
+                    
+                    <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">
+                        Cut and trim video clips with precision
+                    </p>
+                    
+                    <a href="{{ url_for('tools.video_trim') }}" 
+                       class="btn btn-primary btn-sm w-full">
+                        Use Tool
+                    </a>
+                </div>
+            </div>
+            
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-200 dark:border-gray-700">
+                <div class="p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 rounded-lg bg-violet-100 dark:bg-violet-900 flex items-center justify-center">
+                            <i data-lucide="brain" class="w-6 h-6 text-violet-600 dark:text-violet-400"></i>
+                        </div>
+                        <span class="text-xs bg-red-100 dark:bg-red-900 text-red-600 dark:text-red-400 px-2 py-1 rounded-full">
+                            AI
+                        </span>
+                    </div>
+                    
+                    <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">
+                        Resume Generator
+                    </h3>
+                    
+                    <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">
+                        Create professional resumes with AI
+                    </p>
+                    
+                    <a href="{{ url_for('tools.tool_page', tool_name='resume-generator') }}" 
+                       class="btn btn-primary btn-sm w-full">
+                        Use Tool
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-16 bg-gray-50 dark:bg-gray-900">
+    <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-800 dark:text-white mb-4">
+                Why Choose Toolora AI?
+            </h2>
+            <p class="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+                Built for professionals, creators, and businesses who value quality and efficiency.
+            </p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="text-center">
+                <div class="w-16 h-16 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center mx-auto mb-4">
+                    <i data-lucide="shield-check" class="w-8 h-8 text-blue-600 dark:text-blue-400"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-2">100% Secure</h3>
+                <p class="text-gray-600 dark:text-gray-300">All files are processed locally and deleted after use. Your privacy is our priority.</p>
+            </div>
+            
+            <div class="text-center">
+                <div class="w-16 h-16 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center mx-auto mb-4">
+                    <i data-lucide="zap" class="w-8 h-8 text-green-600 dark:text-green-400"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-2">Lightning Fast</h3>
+                <p class="text-gray-600 dark:text-gray-300">Optimized algorithms ensure quick processing without compromising quality.</p>
+            </div>
+            
+            <div class="text-center">
+                <div class="w-16 h-16 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center mx-auto mb-4">
+                    <i data-lucide="smartphone" class="w-8 h-8 text-purple-600 dark:text-purple-400"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-2">Mobile Friendly</h3>
+                <p class="text-gray-600 dark:text-gray-300">Works perfectly on all devices. Use your favorite tools anywhere, anytime.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-16 bg-gradient-to-r from-blue-600 to-purple-600">
+    <div class="container mx-auto px-4">
+        <div class="text-center text-white">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">
+                Ready to Boost Your Productivity?
+            </h2>
+            <p class="text-xl mb-8 text-blue-100">
+                Join thousands of professionals using Toolora AI daily
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="{{ url_for('tools.index') }}" class="btn btn-outline btn-lg px-8 py-3 text-lg border-white text-white hover:bg-white hover:text-blue-600">
+                    Start Using Tools
+                </a>
+                <a href="{{ url_for('auth.login') }}" class="btn btn-lg px-8 py-3 text-lg bg-white text-blue-600 hover:bg-gray-100">
+                    Create Free Account
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+// Search functionality
+function searchTools() {
+    const query = document.querySelector('[x-model="searchQuery"]').value;
+    if (query.length < 2) return;
+    
+    fetch(`/search?q=${encodeURIComponent(query)}`)
+        .then(response => response.json())
+        .then(data => {
+            document.querySelector('[x-data]').__x.$data.searchResults = data.slice(0, 5);
+        })
+        .catch(error => console.error('Search error:', error));
+}
+</script>
+{% endblock %}

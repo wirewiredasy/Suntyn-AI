@@ -1,0 +1,197 @@
+{% extends "base.html" %}
+
+{% block title %}About Us - Toolora AI{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <!-- Hero Section -->
+    <div class="text-center mb-16">
+        <h1 class="text-4xl md:text-5xl font-bold text-gray-800 dark:text-white mb-6">
+            About Toolora AI
+        </h1>
+        <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+            We're on a mission to make professional tools accessible to everyone. 
+            85+ powerful tools, all free, secure, and easy to use.
+        </p>
+    </div>
+
+    <!-- Mission Section -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 mb-12">
+        <div class="text-center mb-8">
+            <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-4">Our Mission</h2>
+            <p class="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+                Democratizing access to professional-grade tools for creators, students, and professionals worldwide.
+            </p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="text-center">
+                <div class="w-16 h-16 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center mx-auto mb-4">
+                    <i data-lucide="users" class="w-8 h-8 text-blue-600 dark:text-blue-400"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-2">For Everyone</h3>
+                <p class="text-gray-600 dark:text-gray-300">
+                    No technical expertise required. Our tools are designed for users of all skill levels.
+                </p>
+            </div>
+            
+            <div class="text-center">
+                <div class="w-16 h-16 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center mx-auto mb-4">
+                    <i data-lucide="shield-check" class="w-8 h-8 text-green-600 dark:text-green-400"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-2">Privacy First</h3>
+                <p class="text-gray-600 dark:text-gray-300">
+                    Your files are processed locally and never stored on our servers. Complete privacy guaranteed.
+                </p>
+            </div>
+            
+            <div class="text-center">
+                <div class="w-16 h-16 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center mx-auto mb-4">
+                    <i data-lucide="zap" class="w-8 h-8 text-purple-600 dark:text-purple-400"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-2">Lightning Fast</h3>
+                <p class="text-gray-600 dark:text-gray-300">
+                    Optimized algorithms ensure quick processing without compromising on quality.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
+        <div>
+            <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-6">What Makes Us Different</h2>
+            <div class="space-y-6">
+                <div class="flex items-start space-x-4">
+                    <div class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center flex-shrink-0">
+                        <i data-lucide="check" class="w-5 h-5 text-blue-600 dark:text-blue-400"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">85+ Professional Tools</h3>
+                        <p class="text-gray-600 dark:text-gray-300">
+                            From PDF processing to AI-powered content generation, we have tools for every need.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="flex items-start space-x-4">
+                    <div class="w-8 h-8 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center flex-shrink-0">
+                        <i data-lucide="check" class="w-5 h-5 text-green-600 dark:text-green-400"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">No Registration Required</h3>
+                        <p class="text-gray-600 dark:text-gray-300">
+                            Use any tool instantly without creating an account. Registration is optional for additional features.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="flex items-start space-x-4">
+                    <div class="w-8 h-8 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center flex-shrink-0">
+                        <i data-lucide="check" class="w-5 h-5 text-purple-600 dark:text-purple-400"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">Mobile Optimized</h3>
+                        <p class="text-gray-600 dark:text-gray-300">
+                            All tools work perfectly on mobile devices. Edit on-the-go with our responsive design.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="flex items-start space-x-4">
+                    <div class="w-8 h-8 rounded-full bg-orange-100 dark:bg-orange-900 flex items-center justify-center flex-shrink-0">
+                        <i data-lucide="check" class="w-5 h-5 text-orange-600 dark:text-orange-400"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">Regular Updates</h3>
+                        <p class="text-gray-600 dark:text-gray-300">
+                            We continuously add new tools and improve existing ones based on user feedback.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-800 dark:to-gray-700 rounded-xl p-8">
+            <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-6">Our Story</h2>
+            <div class="space-y-4 text-gray-600 dark:text-gray-300">
+                <p>
+                    Toolora AI was born from a simple frustration: why do professional tools have to be 
+                    expensive, complicated, or require multiple subscriptions?
+                </p>
+                <p>
+                    We believe that everyone should have access to the tools they need to be productive, 
+                    creative, and successful. That's why we've created a comprehensive platform that 
+                    brings together 85+ professional tools in one place.
+                </p>
+                <p>
+                    Our team of developers, designers, and AI specialists work tirelessly to ensure 
+                    that every tool meets the highest standards of quality, security, and usability.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tool Categories -->
+    <div class="mb-16">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-4">
+                8 Categories. 85+ Tools.
+            </h2>
+            <p class="text-lg text-gray-600 dark:text-gray-300">
+                Everything you need for productivity, creativity, and professional work.
+            </p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 text-center">
+                <div class="w-12 h-12 rounded-lg bg-red-100 dark:bg-red-900 flex items-center justify-center mx-auto mb-4">
+                    <i data-lucide="file-text" class="w-6 h-6 text-red-600 dark:text-red-400"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">PDF Toolkit</h3>
+                <p class="text-sm text-gray-600 dark:text-gray-300">15 Tools</p>
+            </div>
+            
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 text-center">
+                <div class="w-12 h-12 rounded-lg bg-green-100 dark:bg-green-900 flex items-center justify-center mx-auto mb-4">
+                    <i data-lucide="image" class="w-6 h-6 text-green-600 dark:text-green-400"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">Image Toolkit</h3>
+                <p class="text-sm text-gray-600 dark:text-gray-300">15 Tools</p>
+            </div>
+            
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 text-center">
+                <div class="w-12 h-12 rounded-lg bg-purple-100 dark:bg-purple-900 flex items-center justify-center mx-auto mb-4">
+                    <i data-lucide="video" class="w-6 h-6 text-purple-600 dark:text-purple-400"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">Video & Audio</h3>
+                <p class="text-sm text-gray-600 dark:text-gray-300">10 Tools</p>
+            </div>
+            
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 text-center">
+                <div class="w-12 h-12 rounded-lg bg-violet-100 dark:bg-violet-900 flex items-center justify-center mx-auto mb-4">
+                    <i data-lucide="brain" class="w-6 h-6 text-violet-600 dark:text-violet-400"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">AI Tools</h3>
+                <p class="text-sm text-gray-600 dark:text-gray-300">10 Tools</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl p-8 text-center text-white">
+        <h2 class="text-3xl font-bold mb-4">Ready to Get Started?</h2>
+        <p class="text-xl mb-6 text-blue-100">
+            Join thousands of users who trust Toolora AI for their daily productivity needs.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="{{ url_for('tools.index') }}" class="btn btn-outline btn-lg px-8 py-3 border-white text-white hover:bg-white hover:text-blue-600">
+                Explore All Tools
+            </a>
+            <a href="{{ url_for('auth.login') }}" class="btn btn-lg px-8 py-3 bg-white text-blue-600 hover:bg-gray-100">
+                Create Free Account
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

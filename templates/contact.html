@@ -1,0 +1,280 @@
+{% extends "base.html" %}
+
+{% block title %}Contact Us - Toolora AI{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <!-- Header -->
+    <div class="text-center mb-16">
+        <h1 class="text-4xl md:text-5xl font-bold text-gray-800 dark:text-white mb-6">
+            Get in Touch
+        </h1>
+        <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+            Have questions, suggestions, or need help? We'd love to hear from you.
+        </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <!-- Contact Form -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8">
+            <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">Send us a message</h2>
+            
+            <form x-data="contactForm()" @submit.prevent="submitForm()">
+                <div class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="firstName" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                First Name
+                            </label>
+                            <input type="text" 
+                                   id="firstName" 
+                                   x-model="form.firstName"
+                                   class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                                   required>
+                        </div>
+                        
+                        <div>
+                            <label for="lastName" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Last Name
+                            </label>
+                            <input type="text" 
+                                   id="lastName" 
+                                   x-model="form.lastName"
+                                   class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                                   required>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Email Address
+                        </label>
+                        <input type="email" 
+                               id="email" 
+                               x-model="form.email"
+                               class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                               required>
+                    </div>
+                    
+                    <div>
+                        <label for="subject" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Subject
+                        </label>
+                        <select id="subject" 
+                                x-model="form.subject"
+                                class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                                required>
+                            <option value="">Select a subject</option>
+                            <option value="general">General Inquiry</option>
+                            <option value="support">Technical Support</option>
+                            <option value="feature">Feature Request</option>
+                            <option value="bug">Bug Report</option>
+                            <option value="partnership">Partnership</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label for="message" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Message
+                        </label>
+                        <textarea id="message" 
+                                  x-model="form.message"
+                                  rows="6"
+                                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                                  placeholder="Tell us how we can help you..."
+                                  required></textarea>
+                    </div>
+                    
+                    <div class="flex items-center">
+                        <input type="checkbox" 
+                               id="newsletter" 
+                               x-model="form.newsletter"
+                               class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                        <label for="newsletter" class="ml-2 block text-sm text-gray-700 dark:text-gray-300">
+                            Subscribe to our newsletter for updates and tips
+                        </label>
+                    </div>
+                    
+                    <button type="submit" 
+                            class="w-full btn btn-primary btn-lg"
+                            :disabled="submitting"
+                            :class="{ 'loading': submitting }">
+                        <span x-show="!submitting">Send Message</span>
+                        <span x-show="submitting">Sending...</span>
+                    </button>
+                </div>
+            </form>
+            
+            <!-- Success Message -->
+            <div x-show="submitted" class="mt-6 p-4 bg-green-50 dark:bg-green-900 border border-green-200 dark:border-green-700 rounded-lg">
+                <div class="flex items-center">
+                    <i data-lucide="check-circle" class="w-5 h-5 text-green-600 dark:text-green-400 mr-2"></i>
+                    <p class="text-green-800 dark:text-green-200">
+                        Thank you for your message! We'll get back to you soon.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Information -->
+        <div class="space-y-8">
+            <!-- Quick Contact -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8">
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">Quick Contact</h2>
+                
+                <div class="space-y-4">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 rounded-lg bg-blue-100 dark:bg-blue-900 flex items-center justify-center">
+                            <i data-lucide="mail" class="w-6 h-6 text-blue-600 dark:text-blue-400"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-gray-800 dark:text-white">Email</h3>
+                            <p class="text-gray-600 dark:text-gray-300">hello@toolora.ai</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 rounded-lg bg-green-100 dark:bg-green-900 flex items-center justify-center">
+                            <i data-lucide="message-circle" class="w-6 h-6 text-green-600 dark:text-green-400"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-gray-800 dark:text-white">Live Chat</h3>
+                            <p class="text-gray-600 dark:text-gray-300">Available 24/7</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 rounded-lg bg-purple-100 dark:bg-purple-900 flex items-center justify-center">
+                            <i data-lucide="twitter" class="w-6 h-6 text-purple-600 dark:text-purple-400"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-gray-800 dark:text-white">Twitter</h3>
+                            <p class="text-gray-600 dark:text-gray-300">@toolora_ai</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8">
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">Frequently Asked Questions</h2>
+                
+                <div class="space-y-4">
+                    <div x-data="{ open: false }">
+                        <button @click="open = !open" class="w-full text-left p-4 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700">
+                            <div class="flex items-center justify-between">
+                                <h3 class="font-semibold text-gray-800 dark:text-white">
+                                    Are your tools really free?
+                                </h3>
+                                <i data-lucide="chevron-down" class="w-5 h-5 text-gray-500 dark:text-gray-400 transition-transform" :class="{ 'rotate-180': open }"></i>
+                            </div>
+                        </button>
+                        <div x-show="open" class="px-4 pb-4">
+                            <p class="text-gray-600 dark:text-gray-300">
+                                Yes! All 85+ tools are completely free to use. No hidden fees, no subscriptions, no limits.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div x-data="{ open: false }">
+                        <button @click="open = !open" class="w-full text-left p-4 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700">
+                            <div class="flex items-center justify-between">
+                                <h3 class="font-semibold text-gray-800 dark:text-white">
+                                    Is my data safe?
+                                </h3>
+                                <i data-lucide="chevron-down" class="w-5 h-5 text-gray-500 dark:text-gray-400 transition-transform" :class="{ 'rotate-180': open }"></i>
+                            </div>
+                        </button>
+                        <div x-show="open" class="px-4 pb-4">
+                            <p class="text-gray-600 dark:text-gray-300">
+                                Absolutely. All processing happens locally in your browser. We never store your files on our servers.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div x-data="{ open: false }">
+                        <button @click="open = !open" class="w-full text-left p-4 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700">
+                            <div class="flex items-center justify-between">
+                                <h3 class="font-semibold text-gray-800 dark:text-white">
+                                    Can I use these tools on mobile?
+                                </h3>
+                                <i data-lucide="chevron-down" class="w-5 h-5 text-gray-500 dark:text-gray-400 transition-transform" :class="{ 'rotate-180': open }"></i>
+                            </div>
+                        </button>
+                        <div x-show="open" class="px-4 pb-4">
+                            <p class="text-gray-600 dark:text-gray-300">
+                                Yes! All tools are fully responsive and work perfectly on mobile devices and tablets.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Response Time -->
+            <div class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl p-8 text-white">
+                <h2 class="text-2xl font-bold mb-4">Response Time</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <h3 class="font-semibold mb-2">General Inquiries</h3>
+                        <p class="text-blue-100">Within 24 hours</p>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold mb-2">Technical Support</h3>
+                        <p class="text-blue-100">Within 6 hours</p>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold mb-2">Bug Reports</h3>
+                        <p class="text-blue-100">Within 2 hours</p>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold mb-2">Emergency Issues</h3>
+                        <p class="text-blue-100">Immediate</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function contactForm() {
+    return {
+        form: {
+            firstName: '',
+            lastName: '',
+            email: '',
+            subject: '',
+            message: '',
+            newsletter: false
+        },
+        submitting: false,
+        submitted: false,
+        
+        async submitForm() {
+            this.submitting = true;
+            
+            // Simulate form submission
+            setTimeout(() => {
+                this.submitting = false;
+                this.submitted = true;
+                
+                // Reset form
+                this.form = {
+                    firstName: '',
+                    lastName: '',
+                    email: '',
+                    subject: '',
+                    message: '',
+                    newsletter: false
+                };
+                
+                // Hide success message after 5 seconds
+                setTimeout(() => {
+                    this.submitted = false;
+                }, 5000);
+            }, 1000);
+        }
+    }
+}
+</script>
+{% endblock %}

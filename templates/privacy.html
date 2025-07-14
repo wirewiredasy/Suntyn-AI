@@ -1,0 +1,420 @@
+{% extends "base.html" %}
+
+{% block title %}Privacy Policy - Toolora AI{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <!-- Header -->
+    <div class="text-center mb-12">
+        <h1 class="text-4xl md:text-5xl font-bold text-gray-800 dark:text-white mb-6">
+            Privacy Policy
+        </h1>
+        <p class="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+            Your privacy is important to us. This policy explains how we collect, use, and protect your information.
+        </p>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mt-4">
+            Last updated: {{ moment().format('MMMM DD, YYYY') }}
+        </p>
+    </div>
+
+    <div class="max-w-4xl mx-auto">
+        <!-- Privacy Highlights -->
+        <div class="bg-blue-50 dark:bg-blue-900 rounded-xl p-6 mb-8">
+            <h2 class="text-xl font-semibold text-blue-900 dark:text-blue-100 mb-4">Privacy Highlights</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="flex items-center space-x-3">
+                    <div class="w-8 h-8 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center">
+                        <i data-lucide="shield-check" class="w-4 h-4 text-green-600 dark:text-green-400"></i>
+                    </div>
+                    <span class="text-sm text-blue-800 dark:text-blue-200">Files processed locally</span>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <div class="w-8 h-8 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center">
+                        <i data-lucide="trash-2" class="w-4 h-4 text-green-600 dark:text-green-400"></i>
+                    </div>
+                    <span class="text-sm text-blue-800 dark:text-blue-200">Auto-deleted after processing</span>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <div class="w-8 h-8 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center">
+                        <i data-lucide="eye-off" class="w-4 h-4 text-green-600 dark:text-green-400"></i>
+                    </div>
+                    <span class="text-sm text-blue-800 dark:text-blue-200">No personal data stored</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 space-y-8">
+            <!-- Information We Collect -->
+            <section>
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Information We Collect</h2>
+                
+                <div class="space-y-6">
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">Files You Upload</h3>
+                        <p class="text-gray-600 dark:text-gray-400">
+                            When you use our tools, you may upload files for processing. These files are:
+                        </p>
+                        <ul class="list-disc list-inside text-gray-600 dark:text-gray-400 mt-2 space-y-1">
+                            <li>Processed entirely on our servers</li>
+                            <li>Automatically deleted within 24 hours</li>
+                            <li>Never accessed by human reviewers</li>
+                            <li>Not used for training or analytics</li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">Account Information</h3>
+                        <p class="text-gray-600 dark:text-gray-400">
+                            If you create an account, we collect:
+                        </p>
+                        <ul class="list-disc list-inside text-gray-600 dark:text-gray-400 mt-2 space-y-1">
+                            <li>Email address</li>
+                            <li>Display name (optional)</li>
+                            <li>Profile picture (optional)</li>
+                            <li>Authentication tokens from third-party providers</li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">Usage Information</h3>
+                        <p class="text-gray-600 dark:text-gray-400">
+                            We automatically collect:
+                        </p>
+                        <ul class="list-disc list-inside text-gray-600 dark:text-gray-400 mt-2 space-y-1">
+                            <li>IP address and location (city/country level)</li>
+                            <li>Browser type and version</li>
+                            <li>Device information</li>
+                            <li>Usage patterns and tool preferences</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- How We Use Information -->
+            <section>
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">How We Use Your Information</h2>
+                
+                <div class="space-y-4">
+                    <div class="flex items-start space-x-3">
+                        <div class="w-6 h-6 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center flex-shrink-0 mt-1">
+                            <i data-lucide="settings" class="w-3 h-3 text-blue-600 dark:text-blue-400"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-gray-800 dark:text-white">Provide Services</h3>
+                            <p class="text-gray-600 dark:text-gray-400">Process your files and provide the tools you request</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start space-x-3">
+                        <div class="w-6 h-6 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center flex-shrink-0 mt-1">
+                            <i data-lucide="bar-chart" class="w-3 h-3 text-blue-600 dark:text-blue-400"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-gray-800 dark:text-white">Improve Services</h3>
+                            <p class="text-gray-600 dark:text-gray-400">Analyze usage patterns to improve our tools and user experience</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start space-x-3">
+                        <div class="w-6 h-6 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center flex-shrink-0 mt-1">
+                            <i data-lucide="shield" class="w-3 h-3 text-blue-600 dark:text-blue-400"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-gray-800 dark:text-white">Security</h3>
+                            <p class="text-gray-600 dark:text-gray-400">Detect and prevent fraud, abuse, and security threats</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start space-x-3">
+                        <div class="w-6 h-6 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center flex-shrink-0 mt-1">
+                            <i data-lucide="mail" class="w-3 h-3 text-blue-600 dark:text-blue-400"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-gray-800 dark:text-white">Communication</h3>
+                            <p class="text-gray-600 dark:text-gray-400">Send important updates and respond to your inquiries</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Data Sharing -->
+            <section>
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Data Sharing</h2>
+                
+                <div class="bg-green-50 dark:bg-green-900 rounded-lg p-4 mb-4">
+                    <div class="flex items-center space-x-2 mb-2">
+                        <i data-lucide="check-circle" class="w-5 h-5 text-green-600 dark:text-green-400"></i>
+                        <span class="font-semibold text-green-800 dark:text-green-200">We do not sell your data</span>
+                    </div>
+                    <p class="text-green-700 dark:text-green-300 text-sm">
+                        We never sell, rent, or trade your personal information to third parties for marketing purposes.
+                    </p>
+                </div>
+
+                <p class="text-gray-600 dark:text-gray-400 mb-4">
+                    We may share your information only in these limited circumstances:
+                </p>
+
+                <div class="space-y-4">
+                    <div>
+                        <h3 class="font-semibold text-gray-800 dark:text-white mb-2">Service Providers</h3>
+                        <p class="text-gray-600 dark:text-gray-400">
+                            We work with trusted third-party providers for hosting, analytics, and customer support. 
+                            These providers are contractually required to protect your information.
+                        </p>
+                    </div>
+
+                    <div>
+                        <h3 class="font-semibold text-gray-800 dark:text-white mb-2">Legal Requirements</h3>
+                        <p class="text-gray-600 dark:text-gray-400">
+                            We may disclose information if required by law or to protect our rights and users' safety.
+                        </p>
+                    </div>
+
+                    <div>
+                        <h3 class="font-semibold text-gray-800 dark:text-white mb-2">Business Transfers</h3>
+                        <p class="text-gray-600 dark:text-gray-400">
+                            In the event of a merger or acquisition, user information may be transferred to the new entity.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Data Security -->
+            <section>
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Data Security</h2>
+                
+                <p class="text-gray-600 dark:text-gray-400 mb-4">
+                    We implement industry-standard security measures to protect your information:
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                        <div class="flex items-center space-x-2 mb-2">
+                            <i data-lucide="lock" class="w-5 h-5 text-gray-600 dark:text-gray-400"></i>
+                            <span class="font-semibold text-gray-800 dark:text-white">Encryption</span>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm">
+                            All data is encrypted in transit and at rest using industry-standard protocols.
+                        </p>
+                    </div>
+
+                    <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                        <div class="flex items-center space-x-2 mb-2">
+                            <i data-lucide="server" class="w-5 h-5 text-gray-600 dark:text-gray-400"></i>
+                            <span class="font-semibold text-gray-800 dark:text-white">Secure Infrastructure</span>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm">
+                            Our servers are hosted in secure, monitored data centers with strict access controls.
+                        </p>
+                    </div>
+
+                    <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                        <div class="flex items-center space-x-2 mb-2">
+                            <i data-lucide="eye" class="w-5 h-5 text-gray-600 dark:text-gray-400"></i>
+                            <span class="font-semibold text-gray-800 dark:text-white">Access Controls</span>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm">
+                            Access to user data is limited to authorized personnel on a need-to-know basis.
+                        </p>
+                    </div>
+
+                    <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                        <div class="flex items-center space-x-2 mb-2">
+                            <i data-lucide="refresh-cw" class="w-5 h-5 text-gray-600 dark:text-gray-400"></i>
+                            <span class="font-semibold text-gray-800 dark:text-white">Regular Audits</span>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm">
+                            We conduct regular security audits and updates to maintain the highest standards.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Your Rights -->
+            <section>
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Your Rights</h2>
+                
+                <p class="text-gray-600 dark:text-gray-400 mb-4">
+                    You have the following rights regarding your personal information:
+                </p>
+
+                <div class="space-y-3">
+                    <div class="flex items-start space-x-3">
+                        <i data-lucide="check" class="w-5 h-5 text-green-600 dark:text-green-400 mt-1"></i>
+                        <div>
+                            <span class="font-semibold text-gray-800 dark:text-white">Access:</span>
+                            <span class="text-gray-600 dark:text-gray-400"> Request a copy of your personal information</span>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start space-x-3">
+                        <i data-lucide="check" class="w-5 h-5 text-green-600 dark:text-green-400 mt-1"></i>
+                        <div>
+                            <span class="font-semibold text-gray-800 dark:text-white">Correction:</span>
+                            <span class="text-gray-600 dark:text-gray-400"> Update or correct inaccurate information</span>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start space-x-3">
+                        <i data-lucide="check" class="w-5 h-5 text-green-600 dark:text-green-400 mt-1"></i>
+                        <div>
+                            <span class="font-semibold text-gray-800 dark:text-white">Deletion:</span>
+                            <span class="text-gray-600 dark:text-gray-400"> Request deletion of your personal information</span>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start space-x-3">
+                        <i data-lucide="check" class="w-5 h-5 text-green-600 dark:text-green-400 mt-1"></i>
+                        <div>
+                            <span class="font-semibold text-gray-800 dark:text-white">Portability:</span>
+                            <span class="text-gray-600 dark:text-gray-400"> Export your data in a portable format</span>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start space-x-3">
+                        <i data-lucide="check" class="w-5 h-5 text-green-600 dark:text-green-400 mt-1"></i>
+                        <div>
+                            <span class="font-semibold text-gray-800 dark:text-white">Objection:</span>
+                            <span class="text-gray-600 dark:text-gray-400"> Object to certain types of processing</span>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="text-gray-600 dark:text-gray-400 mt-4">
+                    To exercise these rights, please contact us at 
+                    <a href="mailto:privacy@toolora.ai" class="text-blue-600 dark:text-blue-400 hover:underline">privacy@toolora.ai</a>
+                </p>
+            </section>
+
+            <!-- Cookies -->
+            <section>
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Cookies and Tracking</h2>
+                
+                <p class="text-gray-600 dark:text-gray-400 mb-4">
+                    We use cookies and similar technologies to enhance your experience:
+                </p>
+
+                <div class="space-y-4">
+                    <div>
+                        <h3 class="font-semibold text-gray-800 dark:text-white mb-2">Essential Cookies</h3>
+                        <p class="text-gray-600 dark:text-gray-400">
+                            Required for basic functionality like authentication and security.
+                        </p>
+                    </div>
+
+                    <div>
+                        <h3 class="font-semibold text-gray-800 dark:text-white mb-2">Analytics Cookies</h3>
+                        <p class="text-gray-600 dark:text-gray-400">
+                            Help us understand how users interact with our tools to improve performance.
+                        </p>
+                    </div>
+
+                    <div>
+                        <h3 class="font-semibold text-gray-800 dark:text-white mb-2">Preference Cookies</h3>
+                        <p class="text-gray-600 dark:text-gray-400">
+                            Remember your settings like theme preference and language.
+                        </p>
+                    </div>
+                </div>
+
+                <p class="text-gray-600 dark:text-gray-400 mt-4">
+                    You can control cookie preferences through your browser settings or our cookie consent banner.
+                </p>
+            </section>
+
+            <!-- International Transfers -->
+            <section>
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">International Transfers</h2>
+                
+                <p class="text-gray-600 dark:text-gray-400">
+                    Our services are hosted globally. If you're located outside our primary hosting regions, 
+                    your information may be transferred to and processed in countries with different data protection laws. 
+                    We ensure appropriate safeguards are in place for all international transfers.
+                </p>
+            </section>
+
+            <!-- Data Retention -->
+            <section>
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Data Retention</h2>
+                
+                <div class="space-y-4">
+                    <div>
+                        <h3 class="font-semibold text-gray-800 dark:text-white mb-2">Uploaded Files</h3>
+                        <p class="text-gray-600 dark:text-gray-400">
+                            Automatically deleted within 24 hours of processing
+                        </p>
+                    </div>
+
+                    <div>
+                        <h3 class="font-semibold text-gray-800 dark:text-white mb-2">Account Information</h3>
+                        <p class="text-gray-600 dark:text-gray-400">
+                            Retained until you delete your account or request deletion
+                        </p>
+                    </div>
+
+                    <div>
+                        <h3 class="font-semibold text-gray-800 dark:text-white mb-2">Usage Analytics</h3>
+                        <p class="text-gray-600 dark:text-gray-400">
+                            Anonymized data may be retained for up to 2 years for service improvement
+                        </p>
+                    </div>
+
+                    <div>
+                        <h3 class="font-semibold text-gray-800 dark:text-white mb-2">Legal Requirements</h3>
+                        <p class="text-gray-600 dark:text-gray-400">
+                            Some information may be retained longer if required by law
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Children's Privacy -->
+            <section>
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Children's Privacy</h2>
+                
+                <p class="text-gray-600 dark:text-gray-400">
+                    Our services are not intended for children under 13. We do not knowingly collect personal 
+                    information from children under 13. If you believe we have collected information from a child, 
+                    please contact us immediately.
+                </p>
+            </section>
+
+            <!-- Updates -->
+            <section>
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Policy Updates</h2>
+                
+                <p class="text-gray-600 dark:text-gray-400">
+                    We may update this privacy policy from time to time. We'll notify you of significant changes 
+                    by posting a notice on our website or sending you an email. Your continued use of our services 
+                    after any changes indicates your acceptance of the updated policy.
+                </p>
+            </section>
+
+            <!-- Contact -->
+            <section>
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Contact Us</h2>
+                
+                <p class="text-gray-600 dark:text-gray-400 mb-4">
+                    If you have any questions about this privacy policy or our data practices, please contact us:
+                </p>
+
+                <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                    <div class="space-y-2">
+                        <p class="text-gray-800 dark:text-white">
+                            <strong>Email:</strong> 
+                            <a href="mailto:privacy@toolora.ai" class="text-blue-600 dark:text-blue-400 hover:underline">
+                                privacy@toolora.ai
+                            </a>
+                        </p>
+                        <p class="text-gray-800 dark:text-white">
+                            <strong>Response Time:</strong> We aim to respond within 48 hours
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+{% endblock %}

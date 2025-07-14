@@ -1,0 +1,286 @@
+{% extends "base.html" %}
+
+{% block title %}PDF Merge Tool - Combine Multiple PDFs | Toolora AI{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <!-- Header -->
+    <div class="text-center mb-12">
+        <div class="w-16 h-16 rounded-full bg-red-100 dark:bg-red-900 flex items-center justify-center mx-auto mb-4">
+            <i data-lucide="file-text" class="w-8 h-8 text-red-600 dark:text-red-400"></i>
+        </div>
+        <h1 class="text-4xl md:text-5xl font-bold text-gray-800 dark:text-white mb-4">
+            PDF Merge Tool
+        </h1>
+        <p class="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+            Combine multiple PDF files into a single document. Fast, secure, and completely free.
+        </p>
+    </div>
+
+    <!-- Tool Interface -->
+    <div class="max-w-4xl mx-auto">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-8">
+            <div x-data="pdfMerger()" x-init="init()">
+                <!-- Step 1: File Upload -->
+                <div x-show="step === 1" class="space-y-6">
+                    <div class="text-center">
+                        <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">
+                            Select PDF Files to Merge
+                        </h2>
+                        <p class="text-gray-600 dark:text-gray-300 mb-6">
+                            Choose at least 2 PDF files to combine
+                        </p>
+                    </div>
+
+                    <!-- File Drop Area -->
+                    <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-8 text-center"
+                         @dragover.prevent
+                         @drop.prevent="handleDrop($event)"
+                         @click="$refs.fileInput.click()"
+                         class="cursor-pointer hover:border-blue-400 dark:hover:border-blue-500 transition-colors">
+                        
+                        <input type="file" 
+                               x-ref="fileInput" 
+                               multiple 
+                               accept=".pdf" 
+                               @change="handleFileSelect($event)"
+                               class="hidden">
+                        
+                        <div class="space-y-4">
+                            <div class="w-16 h-16 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center mx-auto">
+                                <i data-lucide="upload" class="w-8 h-8 text-blue-600 dark:text-blue-400"></i>
+                            </div>
+                            <div>
+                                <p class="text-lg font-medium text-gray-800 dark:text-white">
+                                    Drop PDF files here or click to browse
+                                </p>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">
+                                    Supports multiple files up to 16MB each
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Selected Files -->
+                    <div x-show="files.length > 0" class="space-y-4">
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-white">
+                            Selected Files (<span x-text="files.length"></span>)
+                        </h3>
+                        
+                        <div class="space-y-2">
+                            <template x-for="(file, index) in files" :key="index">
+                                <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                    <div class="flex items-center space-x-3">
+                                        <i data-lucide="file-text" class="w-5 h-5 text-red-600 dark:text-red-400"></i>
+                                        <div>
+                                            <p class="font-medium text-gray-800 dark:text-white" x-text="file.name"></p>
+                                            <p class="text-sm text-gray-500 dark:text-gray-400" x-text="formatFileSize(file.size)"></p>
+                                        </div>
+                                    </div>
+                                    <button @click="removeFile(index)" class="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300">
+                                        <i data-lucide="x" class="w-4 h-4"></i>
+                                    </button>
+                                </div>
+                            </template>
+                        </div>
+                        
+                        <div class="flex justify-center">
+                            <button @click="mergeFiles()" 
+                                    :disabled="files.length < 2 || processing"
+                                    class="btn btn-primary btn-lg px-8 py-3"
+                                    :class="{ 'loading': processing }">
+                                <span x-show="!processing">
+                                    <i data-lucide="layers" class="w-5 h-5 mr-2"></i>
+                                    Merge PDFs
+                                </span>
+                                <span x-show="processing">Processing...</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Processing -->
+                <div x-show="step === 2" class="text-center space-y-6">
+                    <div class="w-16 h-16 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center mx-auto">
+                        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white">
+                        Merging Your PDFs...
+                    </h2>
+                    <p class="text-gray-600 dark:text-gray-300">
+                        Please wait while we combine your files
+                    </p>
+                </div>
+
+                <!-- Step 3: Download -->
+                <div x-show="step === 3" class="text-center space-y-6">
+                    <div class="w-16 h-16 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center mx-auto">
+                        <i data-lucide="check" class="w-8 h-8 text-green-600 dark:text-green-400"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white">
+                        PDF Merged Successfully!
+                    </h2>
+                    <p class="text-gray-600 dark:text-gray-300">
+                        Your combined PDF is ready for download
+                    </p>
+                    
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <a :href="downloadUrl" 
+                           class="btn btn-success btn-lg px-8 py-3"
+                           download>
+                            <i data-lucide="download" class="w-5 h-5 mr-2"></i>
+                            Download Merged PDF
+                        </a>
+                        <button @click="reset()" class="btn btn-outline btn-lg px-8 py-3">
+                            <i data-lucide="refresh-cw" class="w-5 h-5 mr-2"></i>
+                            Merge Another PDF
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Error State -->
+                <div x-show="error" class="text-center space-y-6">
+                    <div class="w-16 h-16 rounded-full bg-red-100 dark:bg-red-900 flex items-center justify-center mx-auto">
+                        <i data-lucide="alert-circle" class="w-8 h-8 text-red-600 dark:text-red-400"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white">
+                        Something went wrong
+                    </h2>
+                    <p class="text-red-600 dark:text-red-400" x-text="errorMessage"></p>
+                    
+                    <button @click="reset()" class="btn btn-primary btn-lg px-8 py-3">
+                        <i data-lucide="refresh-cw" class="w-5 h-5 mr-2"></i>
+                        Try Again
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features -->
+    <div class="max-w-4xl mx-auto mt-12">
+        <div class="text-center mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">
+                Why Choose Our PDF Merge Tool?
+            </h2>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="text-center p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg">
+                <div class="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center mx-auto mb-4">
+                    <i data-lucide="shield-check" class="w-6 h-6 text-blue-600 dark:text-blue-400"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">100% Secure</h3>
+                <p class="text-gray-600 dark:text-gray-300">Files are processed locally and automatically deleted</p>
+            </div>
+            
+            <div class="text-center p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg">
+                <div class="w-12 h-12 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center mx-auto mb-4">
+                    <i data-lucide="zap" class="w-6 h-6 text-green-600 dark:text-green-400"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">Lightning Fast</h3>
+                <p class="text-gray-600 dark:text-gray-300">Merge multiple PDFs in seconds</p>
+            </div>
+            
+            <div class="text-center p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg">
+                <div class="w-12 h-12 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center mx-auto mb-4">
+                    <i data-lucide="smartphone" class="w-6 h-6 text-purple-600 dark:text-purple-400"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">Mobile Friendly</h3>
+                <p class="text-gray-600 dark:text-gray-300">Works on all devices and browsers</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function pdfMerger() {
+    return {
+        step: 1,
+        files: [],
+        processing: false,
+        error: false,
+        errorMessage: '',
+        downloadUrl: '',
+        
+        init() {
+            // Initialize component
+        },
+        
+        handleFileSelect(event) {
+            const newFiles = Array.from(event.target.files);
+            this.addFiles(newFiles);
+        },
+        
+        handleDrop(event) {
+            const newFiles = Array.from(event.dataTransfer.files);
+            this.addFiles(newFiles.filter(file => file.type === 'application/pdf'));
+        },
+        
+        addFiles(newFiles) {
+            newFiles.forEach(file => {
+                if (file.type === 'application/pdf' && file.size <= 16 * 1024 * 1024) {
+                    this.files.push(file);
+                }
+            });
+        },
+        
+        removeFile(index) {
+            this.files.splice(index, 1);
+        },
+        
+        formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        },
+        
+        async mergeFiles() {
+            if (this.files.length < 2) return;
+            
+            this.processing = true;
+            this.step = 2;
+            this.error = false;
+            
+            try {
+                const formData = new FormData();
+                this.files.forEach(file => {
+                    formData.append('files', file);
+                });
+                
+                const response = await fetch('/api/pdf/merge', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    this.downloadUrl = result.download_url;
+                    this.step = 3;
+                } else {
+                    this.error = true;
+                    this.errorMessage = result.error || 'Failed to merge PDFs';
+                }
+            } catch (error) {
+                this.error = true;
+                this.errorMessage = 'Network error. Please try again.';
+            } finally {
+                this.processing = false;
+            }
+        },
+        
+        reset() {
+            this.step = 1;
+            this.files = [];
+            this.processing = false;
+            this.error = false;
+            this.errorMessage = '';
+            this.downloadUrl = '';
+        }
+    }
+}
+</script>
+{% endblock %}

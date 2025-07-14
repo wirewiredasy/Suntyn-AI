@@ -1,0 +1,115 @@
+# Toolora AI - Professional Online Tools Platform
+
+## Overview
+
+Toolora AI is a comprehensive web-based platform offering 85+ professional tools across 8 categories (PDF, Image, Video, AI, Government Documents, etc.). The platform provides free, secure, and easy-to-use tools for creators, students, and professionals worldwide.
+
+## User Preferences
+
+Preferred communication style: Simple, everyday language.
+
+## System Architecture
+
+The application follows a modular Flask-based architecture with the following key components:
+
+### Backend Architecture
+- **Framework**: Flask (Python) with SQLAlchemy ORM
+- **Database**: SQLite (default) with PostgreSQL support via environment variables
+- **Authentication**: Firebase Authentication with session management
+- **File Processing**: Modular utility system for different tool categories
+- **API Design**: RESTful API with Blueprint-based route organization
+
+### Frontend Architecture
+- **Core Technologies**: Modern HTML5, TailwindCSS, DaisyUI components
+- **Interactivity**: Alpine.js for reactive components
+- **Icons**: Lucide Icons for consistent UI elements
+- **Responsive Design**: Mobile-first approach with dark mode support
+- **Animations**: Animate.css for smooth transitions
+
+### Database Schema
+The system uses SQLAlchemy models with the following key entities:
+- **User**: Firebase UID, email, display name, theme preferences
+- **ToolHistory**: User activity tracking for analytics
+- **SavedFile**: File metadata and storage tracking
+- **ToolCategory**: Tool categorization and organization
+
+## Key Components
+
+### 1. Tool Processing System
+- **Modular Design**: Each tool category has dedicated utility modules
+- **File Handlers**: Centralized file upload, validation, and cleanup
+- **Processing Queue**: Concurrent processing with configurable limits
+- **Format Support**: Extensive file format support across categories
+
+### 2. User Management
+- **Firebase Integration**: OAuth providers (Google, email/password)
+- **Session Management**: Server-side session handling
+- **User Preferences**: Theme, language, and personalization settings
+- **Usage Analytics**: Tool usage tracking and history
+
+### 3. Tool Categories
+- **PDF Toolkit**: 15 tools (merge, split, compress, convert, etc.)
+- **Image Toolkit**: 15 tools (compress, resize, convert, OCR, etc.)
+- **Video & Audio**: 10 tools (trim, convert, extract audio, etc.)
+- **AI Tools**: Resume generation, text processing, etc.
+- **Government Documents**: India-specific document tools
+- **Additional Categories**: Text, QR codes, utilities
+
+### 4. File Management
+- **Upload System**: Drag-and-drop with file validation
+- **Temporary Storage**: Local processing with automatic cleanup
+- **Size Limits**: Configurable file size restrictions (16MB default)
+- **Security**: Filename sanitization and MIME type validation
+
+## Data Flow
+
+1. **User Authentication**: Firebase handles OAuth, server creates/updates user records
+2. **Tool Selection**: Users browse categorized tools with search functionality
+3. **File Upload**: Client-side validation, server-side processing
+4. **Processing**: Queued processing with progress tracking
+5. **Download**: Temporary URLs for processed files
+6. **Cleanup**: Automatic file cleanup after processing
+7. **Analytics**: Usage tracking for popular tools and user insights
+
+## External Dependencies
+
+### Required Services
+- **Firebase**: Authentication, user management
+- **Database**: SQLite (development) / PostgreSQL (production)
+
+### Python Libraries
+- **Flask**: Web framework and extensions
+- **SQLAlchemy**: Database ORM
+- **PyPDF2**: PDF processing
+- **Pillow**: Image processing
+- **ReportLab**: PDF generation
+- **FFmpeg**: Video/audio processing (system dependency)
+
+### Frontend Libraries
+- **TailwindCSS**: Utility-first CSS framework
+- **DaisyUI**: Component library
+- **Alpine.js**: Reactive frontend framework
+- **Lucide Icons**: Icon library
+- **Animate.css**: CSS animations
+
+## Deployment Strategy
+
+### Development Environment
+- **Local Development**: Flask development server with SQLite
+- **Hot Reload**: Debug mode enabled for rapid development
+- **Environment Variables**: Configuration via .env files
+
+### Production Considerations
+- **Database**: PostgreSQL for production workloads
+- **File Storage**: Local filesystem with cleanup processes
+- **Security**: Environment-based secrets management
+- **Performance**: File processing optimization and caching
+- **Monitoring**: Usage analytics and error tracking
+
+### Configuration Management
+- **Environment Variables**: Database URLs, Firebase credentials
+- **Tool Configuration**: Centralized tool category definitions
+- **Feature Flags**: Modular tool enabling/disabling
+- **Security Settings**: Session secrets, upload limits
+
+The architecture prioritizes modularity, security, and scalability while maintaining simplicity for rapid development and deployment. The system is designed to handle high-volume file processing while ensuring user privacy through local processing and automatic cleanup.

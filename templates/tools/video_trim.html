@@ -1,0 +1,448 @@
+{% extends "base.html" %}
+
+{% block title %}Video Trimmer - Cut Video Online | Toolora AI{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <!-- Header -->
+    <div class="text-center mb-12">
+        <div class="w-16 h-16 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center mx-auto mb-4">
+            <i data-lucide="video" class="w-8 h-8 text-purple-600 dark:text-purple-400"></i>
+        </div>
+        <h1 class="text-4xl md:text-5xl font-bold text-gray-800 dark:text-white mb-4">
+            Video Trimmer
+        </h1>
+        <p class="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+            Cut and trim video clips with precision. Support for MP4, AVI, MOV and other popular formats.
+        </p>
+    </div>
+
+    <!-- Tool Interface -->
+    <div class="max-w-4xl mx-auto">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-8">
+            <div x-data="videoTrimmer()" x-init="init()">
+                <!-- Step 1: File Upload -->
+                <div x-show="step === 1" class="space-y-6">
+                    <div class="text-center">
+                        <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">
+                            Upload Video to Trim
+                        </h2>
+                        <p class="text-gray-600 dark:text-gray-300 mb-6">
+                            Choose a video file to cut and trim
+                        </p>
+                    </div>
+
+                    <!-- File Drop Area -->
+                    <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-8 text-center cursor-pointer hover:border-purple-400 dark:hover:border-purple-500 transition-colors"
+                         @dragover.prevent
+                         @drop.prevent="handleDrop($event)"
+                         @click="$refs.fileInput.click()">
+                        
+                        <input type="file" 
+                               x-ref="fileInput" 
+                               accept="video/*" 
+                               @change="handleFileSelect($event)"
+                               class="hidden">
+                        
+                        <div class="space-y-4">
+                            <div class="w-16 h-16 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center mx-auto">
+                                <i data-lucide="video" class="w-8 h-8 text-purple-600 dark:text-purple-400"></i>
+                            </div>
+                            <div>
+                                <p class="text-lg font-medium text-gray-800 dark:text-white">
+                                    Drop video here or click to browse
+                                </p>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">
+                                    Supports MP4, AVI, MOV, WMV up to 100MB
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Video Preview -->
+                    <div x-show="selectedFile" class="space-y-4">
+                        <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-12 h-12 rounded-lg bg-purple-100 dark:bg-purple-900 flex items-center justify-center">
+                                    <i data-lucide="video" class="w-6 h-6 text-purple-600 dark:text-purple-400"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="font-medium text-gray-800 dark:text-white" x-text="selectedFile?.name"></p>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">
+                                        <span x-text="formatFileSize(selectedFile?.size)"></span> • 
+                                        <span x-text="videoDuration"></span>
+                                    </p>
+                                </div>
+                                <button @click="removeFile()" class="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300">
+                                    <i data-lucide="x" class="w-5 h-5"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Video Player -->
+                        <div class="bg-black rounded-lg overflow-hidden">
+                            <video x-ref="videoPlayer" 
+                                   class="w-full h-64 object-contain"
+                                   controls
+                                   @loadedmetadata="onVideoLoaded()"
+                                   @timeupdate="onTimeUpdate()">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                        
+                        <!-- Trim Controls -->
+                        <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 space-y-4">
+                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white">
+                                Trim Settings
+                            </h3>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                        Start Time (seconds)
+                                    </label>
+                                    <input type="number" 
+                                           x-model="startTime" 
+                                           :max="duration - 1"
+                                           min="0"
+                                           step="0.1"
+                                           class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-purple-500 dark:bg-gray-600 dark:text-white">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                        End Time (seconds)
+                                    </label>
+                                    <input type="number" 
+                                           x-model="endTime" 
+                                           :max="duration"
+                                           :min="startTime + 0.1"
+                                           step="0.1"
+                                           class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-purple-500 dark:bg-gray-600 dark:text-white">
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center space-x-4">
+                                <button @click="setCurrentAsStart()" 
+                                        class="btn btn-sm btn-outline">
+                                    <i data-lucide="play" class="w-4 h-4 mr-1"></i>
+                                    Set Current as Start
+                                </button>
+                                <button @click="setCurrentAsEnd()" 
+                                        class="btn btn-sm btn-outline">
+                                    <i data-lucide="square" class="w-4 h-4 mr-1"></i>
+                                    Set Current as End
+                                </button>
+                                <button @click="previewTrim()" 
+                                        class="btn btn-sm btn-primary">
+                                    <i data-lucide="eye" class="w-4 h-4 mr-1"></i>
+                                    Preview Trim
+                                </button>
+                            </div>
+                            
+                            <div class="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-600">
+                                <p class="text-sm text-gray-600 dark:text-gray-300">
+                                    <strong>Clip Duration:</strong> 
+                                    <span x-text="formatDuration(endTime - startTime)"></span>
+                                </p>
+                                <p class="text-sm text-gray-600 dark:text-gray-300">
+                                    <strong>Output Size:</strong> 
+                                    <span x-text="formatFileSize(selectedFile?.size * ((endTime - startTime) / duration))"></span> (estimated)
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-center">
+                            <button @click="trimVideo()" 
+                                    :disabled="!selectedFile || processing || startTime >= endTime"
+                                    class="btn btn-primary btn-lg px-8 py-3"
+                                    :class="{ 'loading': processing }">
+                                <span x-show="!processing">
+                                    <i data-lucide="scissors" class="w-5 h-5 mr-2"></i>
+                                    Trim Video
+                                </span>
+                                <span x-show="processing">Processing...</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Processing -->
+                <div x-show="step === 2" class="text-center space-y-6">
+                    <div class="w-16 h-16 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center mx-auto">
+                        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white">
+                        Trimming Your Video...
+                    </h2>
+                    <p class="text-gray-600 dark:text-gray-300">
+                        Please wait while we process your video clip
+                    </p>
+                    <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                        <div class="bg-purple-600 h-2 rounded-full transition-all duration-300" 
+                             :style="`width: ${progress}%`"></div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Download -->
+                <div x-show="step === 3" class="text-center space-y-6">
+                    <div class="w-16 h-16 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center mx-auto">
+                        <i data-lucide="check" class="w-8 h-8 text-green-600 dark:text-green-400"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white">
+                        Video Trimmed Successfully!
+                    </h2>
+                    <p class="text-gray-600 dark:text-gray-300">
+                        Your trimmed video is ready for download
+                    </p>
+                    
+                    <!-- Result Preview -->
+                    <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
+                            <div>
+                                <p class="text-sm text-gray-600 dark:text-gray-300">
+                                    <strong>Original Duration:</strong> <span x-text="formatDuration(duration)"></span>
+                                </p>
+                                <p class="text-sm text-gray-600 dark:text-gray-300">
+                                    <strong>Trimmed Duration:</strong> <span x-text="formatDuration(endTime - startTime)"></span>
+                                </p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-600 dark:text-gray-300">
+                                    <strong>Original Size:</strong> <span x-text="formatFileSize(selectedFile?.size)"></span>
+                                </p>
+                                <p class="text-sm text-gray-600 dark:text-gray-300">
+                                    <strong>Trimmed Size:</strong> <span x-text="formatFileSize(selectedFile?.size * ((endTime - startTime) / duration))"></span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <a :href="downloadUrl" 
+                           class="btn btn-success btn-lg px-8 py-3"
+                           download>
+                            <i data-lucide="download" class="w-5 h-5 mr-2"></i>
+                            Download Trimmed Video
+                        </a>
+                        <button @click="reset()" class="btn btn-outline btn-lg px-8 py-3">
+                            <i data-lucide="refresh-cw" class="w-5 h-5 mr-2"></i>
+                            Trim Another Video
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Error State -->
+                <div x-show="error" class="text-center space-y-6">
+                    <div class="w-16 h-16 rounded-full bg-red-100 dark:bg-red-900 flex items-center justify-center mx-auto">
+                        <i data-lucide="alert-circle" class="w-8 h-8 text-red-600 dark:text-red-400"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white">
+                        Something went wrong
+                    </h2>
+                    <p class="text-red-600 dark:text-red-400" x-text="errorMessage"></p>
+                    
+                    <button @click="reset()" class="btn btn-primary btn-lg px-8 py-3">
+                        <i data-lucide="refresh-cw" class="w-5 h-5 mr-2"></i>
+                        Try Again
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features -->
+    <div class="max-w-4xl mx-auto mt-12">
+        <div class="text-center mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">
+                Professional Video Trimming Features
+            </h2>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="text-center p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg">
+                <div class="w-12 h-12 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center mx-auto mb-4">
+                    <i data-lucide="scissors" class="w-6 h-6 text-purple-600 dark:text-purple-400"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">Precision Cutting</h3>
+                <p class="text-gray-600 dark:text-gray-300">Frame-accurate trimming with millisecond precision</p>
+            </div>
+            
+            <div class="text-center p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg">
+                <div class="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center mx-auto mb-4">
+                    <i data-lucide="eye" class="w-6 h-6 text-blue-600 dark:text-blue-400"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">Real-time Preview</h3>
+                <p class="text-gray-600 dark:text-gray-300">Preview your cuts before processing</p>
+            </div>
+            
+            <div class="text-center p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg">
+                <div class="w-12 h-12 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center mx-auto mb-4">
+                    <i data-lucide="file-video" class="w-6 h-6 text-green-600 dark:text-green-400"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">Multiple Formats</h3>
+                <p class="text-gray-600 dark:text-gray-300">Support for MP4, AVI, MOV, WMV and more</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function videoTrimmer() {
+    return {
+        step: 1,
+        selectedFile: null,
+        duration: 0,
+        startTime: 0,
+        endTime: 0,
+        currentTime: 0,
+        videoDuration: '',
+        processing: false,
+        progress: 0,
+        downloadUrl: '',
+        error: false,
+        errorMessage: '',
+        
+        init() {
+            // Initialize component
+        },
+        
+        handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (file) {
+                this.loadVideo(file);
+            }
+        },
+        
+        handleDrop(event) {
+            const file = event.dataTransfer.files[0];
+            if (file && file.type.startsWith('video/')) {
+                this.loadVideo(file);
+            }
+        },
+        
+        loadVideo(file) {
+            if (file.size > 100 * 1024 * 1024) { // 100MB limit
+                this.error = true;
+                this.errorMessage = 'File too large. Maximum size is 100MB.';
+                return;
+            }
+            
+            this.selectedFile = file;
+            const url = URL.createObjectURL(file);
+            this.$refs.videoPlayer.src = url;
+        },
+        
+        onVideoLoaded() {
+            this.duration = this.$refs.videoPlayer.duration;
+            this.endTime = this.duration;
+            this.videoDuration = this.formatDuration(this.duration);
+        },
+        
+        onTimeUpdate() {
+            this.currentTime = this.$refs.videoPlayer.currentTime;
+        },
+        
+        setCurrentAsStart() {
+            this.startTime = this.currentTime;
+        },
+        
+        setCurrentAsEnd() {
+            this.endTime = this.currentTime;
+        },
+        
+        previewTrim() {
+            this.$refs.videoPlayer.currentTime = this.startTime;
+            this.$refs.videoPlayer.play();
+            
+            setTimeout(() => {
+                this.$refs.videoPlayer.pause();
+            }, (this.endTime - this.startTime) * 1000);
+        },
+        
+        formatDuration(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        },
+        
+        formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        },
+        
+        removeFile() {
+            this.selectedFile = null;
+            this.duration = 0;
+            this.startTime = 0;
+            this.endTime = 0;
+            this.videoDuration = '';
+            this.$refs.videoPlayer.src = '';
+        },
+        
+        async trimVideo() {
+            if (!this.selectedFile || this.startTime >= this.endTime) return;
+            
+            this.processing = true;
+            this.step = 2;
+            this.error = false;
+            this.progress = 0;
+            
+            try {
+                const formData = new FormData();
+                formData.append('file', this.selectedFile);
+                formData.append('start_time', this.startTime);
+                formData.append('end_time', this.endTime);
+                
+                // Simulate progress
+                const progressInterval = setInterval(() => {
+                    this.progress = Math.min(this.progress + 10, 90);
+                }, 500);
+                
+                const response = await fetch('/api/video/trim', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                clearInterval(progressInterval);
+                this.progress = 100;
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    this.downloadUrl = result.download_url;
+                    this.step = 3;
+                } else {
+                    this.error = true;
+                    this.errorMessage = result.error || 'Failed to trim video';
+                }
+            } catch (error) {
+                this.error = true;
+                this.errorMessage = 'Network error. Please try again.';
+            } finally {
+                this.processing = false;
+            }
+        },
+        
+        reset() {
+            this.step = 1;
+            this.selectedFile = null;
+            this.duration = 0;
+            this.startTime = 0;
+            this.endTime = 0;
+            this.currentTime = 0;
+            this.videoDuration = '';
+            this.processing = false;
+            this.progress = 0;
+            this.downloadUrl = '';
+            this.error = false;
+            this.errorMessage = '';
+            this.$refs.videoPlayer.src = '';
+        }
+    }
+}
+</script>
+{% endblock %}

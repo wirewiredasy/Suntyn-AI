@@ -1,0 +1,74 @@
+from flask import Blueprint, render_template, request, jsonify, redirect, url_for
+from config import Config
+import os
+
+tools_bp = Blueprint('tools', __name__)
+
+@tools_bp.route('/')
+def index():
+    category = request.args.get('category', 'all')
+    search_query = request.args.get('search', '')
+    
+    return render_template('tools/index.html',
+                         categories=Config.TOOL_CATEGORIES,
+                         selected_category=category,
+                         search_query=search_query,
+                         firebase_api_key=os.environ.get("FIREBASE_API_KEY", ""),
+                         firebase_project_id=os.environ.get("FIREBASE_PROJECT_ID", ""),
+                         firebase_app_id=os.environ.get("FIREBASE_APP_ID", ""))
+
+@tools_bp.route('/<tool_name>')
+def tool_page(tool_name):
+    # Find which category this tool belongs to
+    tool_category = None
+    tool_info = None
+    
+    for category_id, category_data in Config.TOOL_CATEGORIES.items():
+        if tool_name in category_data['tools']:
+            tool_category = category_id
+            tool_info = category_data
+            break
+    
+    if not tool_category:
+        return redirect(url_for('tools.index'))
+    
+    # Try to render specific template for tool, fallback to generic
+    try:
+        return render_template(f'tools/{tool_name}.html',
+                             tool_name=tool_name,
+                             tool_category=tool_category,
+                             tool_info=tool_info,
+                             firebase_api_key=os.environ.get("FIREBASE_API_KEY", ""),
+                             firebase_project_id=os.environ.get("FIREBASE_PROJECT_ID", ""),
+                             firebase_app_id=os.environ.get("FIREBASE_APP_ID", ""))
+    except:
+        # Fallback to generic tool template
+        return render_template('tools/generic_tool.html',
+                             tool_name=tool_name,
+                             tool_category=tool_category,
+                             tool_info=tool_info,
+                             firebase_api_key=os.environ.get("FIREBASE_API_KEY", ""),
+                             firebase_project_id=os.environ.get("FIREBASE_PROJECT_ID", ""),
+                             firebase_app_id=os.environ.get("FIREBASE_APP_ID", ""))
+
+# Individual tool routes for better SEO
+@tools_bp.route('/pdf-merge')
+def pdf_merge():
+    return render_template('tools/pdf_merge.html',
+                         firebase_api_key=os.environ.get("FIREBASE_API_KEY", ""),
+                         firebase_project_id=os.environ.get("FIREBASE_PROJECT_ID", ""),
+                         firebase_app_id=os.environ.get("FIREBASE_APP_ID", ""))
+
+@tools_bp.route('/image-compress')
+def image_compress():
+    return render_template('tools/image_compress.html',
+                         firebase_api_key=os.environ.get("FIREBASE_API_KEY", ""),
+                         firebase_project_id=os.environ.get("FIREBASE_PROJECT_ID", ""),
+                         firebase_app_id=os.environ.get("FIREBASE_APP_ID", ""))
+
+@tools_bp.route('/video-trim')
+def video_trim():
+    return render_template('tools/video_trim.html',
+                         firebase_api_key=os.environ.get("FIREBASE_API_KEY", ""),
+                         firebase_project_id=os.environ.get("FIREBASE_PROJECT_ID", ""),
+                         firebase_app_id=os.environ.get("FIREBASE_APP_ID", ""))

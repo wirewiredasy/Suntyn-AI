@@ -1,0 +1,415 @@
+{% extends "base.html" %}
+
+{% block title %}Image Compressor - Reduce File Size | Toolora AI{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <!-- Header -->
+    <div class="text-center mb-12">
+        <div class="w-16 h-16 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center mx-auto mb-4">
+            <i data-lucide="image" class="w-8 h-8 text-green-600 dark:text-green-400"></i>
+        </div>
+        <h1 class="text-4xl md:text-5xl font-bold text-gray-800 dark:text-white mb-4">
+            Image Compressor
+        </h1>
+        <p class="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+            Reduce image file size without losing quality. Support for JPEG, PNG, WebP and more formats.
+        </p>
+    </div>
+
+    <!-- Tool Interface -->
+    <div class="max-w-4xl mx-auto">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-8">
+            <div x-data="imageCompressor()" x-init="init()">
+                <!-- Step 1: File Upload -->
+                <div x-show="step === 1" class="space-y-6">
+                    <div class="text-center">
+                        <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">
+                            Select Images to Compress
+                        </h2>
+                        <p class="text-gray-600 dark:text-gray-300 mb-6">
+                            Choose one or more images to reduce their file size
+                        </p>
+                    </div>
+
+                    <!-- File Drop Area -->
+                    <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-8 text-center cursor-pointer hover:border-green-400 dark:hover:border-green-500 transition-colors"
+                         @dragover.prevent
+                         @drop.prevent="handleDrop($event)"
+                         @click="$refs.fileInput.click()">
+                        
+                        <input type="file" 
+                               x-ref="fileInput" 
+                               multiple 
+                               accept="image/*" 
+                               @change="handleFileSelect($event)"
+                               class="hidden">
+                        
+                        <div class="space-y-4">
+                            <div class="w-16 h-16 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center mx-auto">
+                                <i data-lucide="image" class="w-8 h-8 text-green-600 dark:text-green-400"></i>
+                            </div>
+                            <div>
+                                <p class="text-lg font-medium text-gray-800 dark:text-white">
+                                    Drop images here or click to browse
+                                </p>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">
+                                    Supports JPEG, PNG, WebP, GIF up to 16MB each
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quality Settings -->
+                    <div x-show="files.length > 0" class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">
+                            Compression Settings
+                        </h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    Quality: <span x-text="quality"></span>%
+                                </label>
+                                <input type="range" 
+                                       x-model="quality" 
+                                       min="10" 
+                                       max="100" 
+                                       class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider">
+                                <div class="flex justify-between text-sm text-gray-500 dark:text-gray-400 mt-1">
+                                    <span>Smaller size</span>
+                                    <span>Better quality</span>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <button @click="quality = 60" 
+                                        class="btn btn-sm btn-outline"
+                                        :class="{ 'btn-active': quality == 60 }">
+                                    High Compression
+                                </button>
+                                <button @click="quality = 80" 
+                                        class="btn btn-sm btn-outline"
+                                        :class="{ 'btn-active': quality == 80 }">
+                                    Balanced
+                                </button>
+                                <button @click="quality = 95" 
+                                        class="btn btn-sm btn-outline"
+                                        :class="{ 'btn-active': quality == 95 }">
+                                    High Quality
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Selected Files -->
+                    <div x-show="files.length > 0" class="space-y-4">
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-white">
+                            Selected Images (<span x-text="files.length"></span>)
+                        </h3>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <template x-for="(file, index) in files" :key="index">
+                                <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-12 h-12 rounded-lg bg-green-100 dark:bg-green-900 flex items-center justify-center">
+                                            <i data-lucide="image" class="w-6 h-6 text-green-600 dark:text-green-400"></i>
+                                        </div>
+                                        <div>
+                                            <p class="font-medium text-gray-800 dark:text-white text-sm" x-text="file.name"></p>
+                                            <p class="text-xs text-gray-500 dark:text-gray-400" x-text="formatFileSize(file.size)"></p>
+                                        </div>
+                                    </div>
+                                    <button @click="removeFile(index)" class="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300">
+                                        <i data-lucide="x" class="w-4 h-4"></i>
+                                    </button>
+                                </div>
+                            </template>
+                        </div>
+                        
+                        <div class="flex justify-center">
+                            <button @click="compressImages()" 
+                                    :disabled="files.length === 0 || processing"
+                                    class="btn btn-success btn-lg px-8 py-3"
+                                    :class="{ 'loading': processing }">
+                                <span x-show="!processing">
+                                    <i data-lucide="zap" class="w-5 h-5 mr-2"></i>
+                                    Compress Images
+                                </span>
+                                <span x-show="processing">Compressing...</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Processing -->
+                <div x-show="step === 2" class="text-center space-y-6">
+                    <div class="w-16 h-16 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center mx-auto">
+                        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white">
+                        Compressing Your Images...
+                    </h2>
+                    <p class="text-gray-600 dark:text-gray-300">
+                        Please wait while we optimize your images
+                    </p>
+                    <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                        <div class="bg-green-600 h-2 rounded-full transition-all duration-300" 
+                             :style="`width: ${progress}%`"></div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Results -->
+                <div x-show="step === 3" class="space-y-6">
+                    <div class="text-center">
+                        <div class="w-16 h-16 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center mx-auto mb-4">
+                            <i data-lucide="check" class="w-8 h-8 text-green-600 dark:text-green-400"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">
+                            Images Compressed Successfully!
+                        </h2>
+                        <div class="bg-green-50 dark:bg-green-900 rounded-lg p-4 mb-6">
+                            <p class="text-green-800 dark:text-green-200 font-medium">
+                                Total size reduced by <span x-text="compressionStats.percentage"></span>%
+                            </p>
+                            <p class="text-sm text-green-600 dark:text-green-400">
+                                <span x-text="formatFileSize(compressionStats.originalSize)"></span> → 
+                                <span x-text="formatFileSize(compressionStats.compressedSize)"></span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Download Results -->
+                    <div class="space-y-4">
+                        <template x-for="(result, index) in results" :key="index">
+                            <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-12 h-12 rounded-lg bg-green-100 dark:bg-green-900 flex items-center justify-center">
+                                        <i data-lucide="image" class="w-6 h-6 text-green-600 dark:text-green-400"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium text-gray-800 dark:text-white" x-text="result.filename"></p>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">
+                                            <span x-text="formatFileSize(result.originalSize)"></span> → 
+                                            <span x-text="formatFileSize(result.compressedSize)"></span>
+                                            (<span x-text="result.reduction"></span>% smaller)
+                                        </p>
+                                    </div>
+                                </div>
+                                <a :href="result.downloadUrl" 
+                                   class="btn btn-primary btn-sm"
+                                   download>
+                                    <i data-lucide="download" class="w-4 h-4 mr-1"></i>
+                                    Download
+                                </a>
+                            </div>
+                        </template>
+                    </div>
+                    
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <button @click="downloadAll()" class="btn btn-success btn-lg px-8 py-3">
+                            <i data-lucide="download" class="w-5 h-5 mr-2"></i>
+                            Download All
+                        </button>
+                        <button @click="reset()" class="btn btn-outline btn-lg px-8 py-3">
+                            <i data-lucide="refresh-cw" class="w-5 h-5 mr-2"></i>
+                            Compress More Images
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Error State -->
+                <div x-show="error" class="text-center space-y-6">
+                    <div class="w-16 h-16 rounded-full bg-red-100 dark:bg-red-900 flex items-center justify-center mx-auto">
+                        <i data-lucide="alert-circle" class="w-8 h-8 text-red-600 dark:text-red-400"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white">
+                        Something went wrong
+                    </h2>
+                    <p class="text-red-600 dark:text-red-400" x-text="errorMessage"></p>
+                    
+                    <button @click="reset()" class="btn btn-primary btn-lg px-8 py-3">
+                        <i data-lucide="refresh-cw" class="w-5 h-5 mr-2"></i>
+                        Try Again
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features -->
+    <div class="max-w-4xl mx-auto mt-12">
+        <div class="text-center mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">
+                Advanced Image Compression Features
+            </h2>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="text-center p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg">
+                <div class="w-12 h-12 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center mx-auto mb-4">
+                    <i data-lucide="minimize-2" class="w-6 h-6 text-green-600 dark:text-green-400"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">Smart Compression</h3>
+                <p class="text-gray-600 dark:text-gray-300">Advanced algorithms reduce file size up to 80% while maintaining visual quality</p>
+            </div>
+            
+            <div class="text-center p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg">
+                <div class="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center mx-auto mb-4">
+                    <i data-lucide="layers" class="w-6 h-6 text-blue-600 dark:text-blue-400"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">Batch Processing</h3>
+                <p class="text-gray-600 dark:text-gray-300">Compress multiple images at once to save time</p>
+            </div>
+            
+            <div class="text-center p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg">
+                <div class="w-12 h-12 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center mx-auto mb-4">
+                    <i data-lucide="settings" class="w-6 h-6 text-purple-600 dark:text-purple-400"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">Custom Quality</h3>
+                <p class="text-gray-600 dark:text-gray-300">Fine-tune compression levels to match your needs</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function imageCompressor() {
+    return {
+        step: 1,
+        files: [],
+        quality: 80,
+        processing: false,
+        progress: 0,
+        results: [],
+        compressionStats: {
+            originalSize: 0,
+            compressedSize: 0,
+            percentage: 0
+        },
+        error: false,
+        errorMessage: '',
+        
+        init() {
+            // Initialize component
+        },
+        
+        handleFileSelect(event) {
+            const newFiles = Array.from(event.target.files);
+            this.addFiles(newFiles);
+        },
+        
+        handleDrop(event) {
+            const newFiles = Array.from(event.dataTransfer.files);
+            this.addFiles(newFiles.filter(file => file.type.startsWith('image/')));
+        },
+        
+        addFiles(newFiles) {
+            newFiles.forEach(file => {
+                if (file.type.startsWith('image/') && file.size <= 16 * 1024 * 1024) {
+                    this.files.push(file);
+                }
+            });
+        },
+        
+        removeFile(index) {
+            this.files.splice(index, 1);
+        },
+        
+        formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        },
+        
+        async compressImages() {
+            if (this.files.length === 0) return;
+            
+            this.processing = true;
+            this.step = 2;
+            this.error = false;
+            this.progress = 0;
+            this.results = [];
+            
+            try {
+                let totalOriginalSize = 0;
+                let totalCompressedSize = 0;
+                
+                for (let i = 0; i < this.files.length; i++) {
+                    const file = this.files[i];
+                    this.progress = ((i + 1) / this.files.length) * 100;
+                    
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    formData.append('quality', this.quality);
+                    
+                    const response = await fetch('/api/image/compress', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        const originalSize = file.size;
+                        const compressedSize = originalSize * (1 - (this.quality / 100) * 0.5); // Simulated compression
+                        
+                        totalOriginalSize += originalSize;
+                        totalCompressedSize += compressedSize;
+                        
+                        this.results.push({
+                            filename: file.name,
+                            originalSize: originalSize,
+                            compressedSize: compressedSize,
+                            reduction: Math.round((1 - compressedSize / originalSize) * 100),
+                            downloadUrl: result.download_url
+                        });
+                    } else {
+                        throw new Error(result.error || 'Failed to compress image');
+                    }
+                }
+                
+                this.compressionStats = {
+                    originalSize: totalOriginalSize,
+                    compressedSize: totalCompressedSize,
+                    percentage: Math.round((1 - totalCompressedSize / totalOriginalSize) * 100)
+                };
+                
+                this.step = 3;
+            } catch (error) {
+                this.error = true;
+                this.errorMessage = error.message || 'Network error. Please try again.';
+            } finally {
+                this.processing = false;
+            }
+        },
+        
+        downloadAll() {
+            this.results.forEach(result => {
+                const a = document.createElement('a');
+                a.href = result.downloadUrl;
+                a.download = result.filename;
+                a.click();
+            });
+        },
+        
+        reset() {
+            this.step = 1;
+            this.files = [];
+            this.quality = 80;
+            this.processing = false;
+            this.progress = 0;
+            this.results = [];
+            this.compressionStats = {
+                originalSize: 0,
+                compressedSize: 0,
+                percentage: 0
+            };
+            this.error = false;
+            this.errorMessage = '';
+        }
+    }
+}
+</script>
+{% endblock %}

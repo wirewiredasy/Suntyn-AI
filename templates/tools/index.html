@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+
+{% block title %}All Tools - Toolora AI | 85+ Professional Online Tools{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <!-- Header -->
+    <div class="text-center mb-12">
+        <h1 class="text-4xl md:text-5xl font-bold text-gray-800 dark:text-white mb-4">
+            All Tools
+        </h1>
+        <p class="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+            Discover 85+ professional tools across 8 categories. Find the perfect tool for your needs.
+        </p>
+    </div>
+
+    <!-- Search and Filter -->
+    <div class="mb-8" x-data="{ selectedCategory: '{{ selected_category }}' }">
+        <div class="flex flex-col md:flex-row gap-4 mb-6">
+            <!-- Search Bar -->
+            <div class="flex-1">
+                <div class="relative">
+                    <i data-lucide="search" class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"></i>
+                    <input 
+                        type="text" 
+                        placeholder="Search tools..." 
+                        value="{{ search_query }}"
+                        class="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                        x-data="{ searchQuery: '{{ search_query }}' }"
+                        x-model="searchQuery"
+                        @input="filterTools()"
+                    >
+                </div>
+            </div>
+            
+            <!-- Category Filter -->
+            <div class="flex-shrink-0">
+                <select 
+                    class="px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                    x-model="selectedCategory"
+                    @change="window.location.href = '/tools?category=' + selectedCategory"
+                >
+                    <option value="all">All Categories</option>
+                    {% for category_id, category_data in categories.items() %}
+                    <option value="{{ category_id }}" {% if category_id == selected_category %}selected{% endif %}>
+                        {{ category_data.name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        
+        <!-- Category Pills -->
+        <div class="flex flex-wrap gap-2 mb-6">
+            <button 
+                @click="window.location.href = '/tools?category=all'"
+                class="px-4 py-2 rounded-full text-sm font-medium transition-colors {% if selected_category == 'all' %}bg-blue-600 text-white{% else %}bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600{% endif %}"
+            >
+                All Tools
+            </button>
+            {% for category_id, category_data in categories.items() %}
+            <button 
+                @click="window.location.href = '/tools?category={{ category_id }}'"
+                class="px-4 py-2 rounded-full text-sm font-medium transition-colors {% if category_id == selected_category %}bg-{{ category_data.color }}-600 text-white{% else %}bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600{% endif %}"
+            >
+                <i data-lucide="{{ category_data.icon }}" class="w-4 h-4 mr-1 inline"></i>
+                {{ category_data.name }}
+            </button>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Tools Grid -->
+    <div id="tools-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {% for category_id, category_data in categories.items() %}
+            {% if selected_category == 'all' or selected_category == category_id %}
+                {% for tool in category_data.tools %}
+                <div class="tool-card bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-200 dark:border-gray-700" data-category="{{ category_id }}" data-tool="{{ tool }}">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 rounded-lg bg-{{ category_data.color }}-100 dark:bg-{{ category_data.color }}-900 flex items-center justify-center">
+                                <i data-lucide="{{ category_data.icon }}" class="w-6 h-6 text-{{ category_data.color }}-600 dark:text-{{ category_data.color }}-400"></i>
+                            </div>
+                            <span class="text-xs bg-{{ category_data.color }}-100 dark:bg-{{ category_data.color }}-900 text-{{ category_data.color }}-600 dark:text-{{ category_data.color }}-400 px-2 py-1 rounded-full">
+                                {{ category_data.name }}
+                            </span>
+                        </div>
+                        
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">
+                            {{ tool.replace('-', ' ').title() }}
+                        </h3>
+                        
+                        <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">
+                            {% if tool == 'pdf-merge' %}
+                                Combine multiple PDF files into one document
+                            {% elif tool == 'pdf-split' %}
+                                Split PDF into multiple files or pages
+                            {% elif tool == 'pdf-compress' %}
+                                Reduce PDF file size without quality loss
+                            {% elif tool == 'image-compress' %}
+                                Reduce image file size while maintaining quality
+                            {% elif tool == 'image-resize' %}
+                                Resize images to specific dimensions
+                            {% elif tool == 'video-trim' %}
+                                Cut and trim video clips with precision
+                            {% elif tool == 'resume-generator' %}
+                                Create professional resumes with AI assistance
+                            {% else %}
+                                Professional {{ tool.replace('-', ' ') }} tool
+                            {% endif %}
+                        </p>
+                        
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <div class="flex items-center space-x-1">
+                                    <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-current"></i>
+                                    <span class="text-sm text-gray-600 dark:text-gray-300">4.8</span>
+                                </div>
+                                <span class="text-sm text-gray-500 dark:text-gray-400">•</span>
+                                <span class="text-sm text-gray-500 dark:text-gray-400">Free</span>
+                            </div>
+                            
+                            <a href="{{ url_for('tools.tool_page', tool_name=tool) }}" 
+                               class="btn btn-primary btn-sm">
+                                Use Tool
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <!-- Empty State -->
+    <div id="empty-state" class="hidden text-center py-12">
+        <div class="w-16 h-16 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center mx-auto mb-4">
+            <i data-lucide="search" class="w-8 h-8 text-gray-400"></i>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">No tools found</h3>
+        <p class="text-gray-600 dark:text-gray-300">Try adjusting your search or filter criteria</p>
+    </div>
+</div>
+
+<script>
+function filterTools() {
+    const searchQuery = document.querySelector('[x-model="searchQuery"]').value.toLowerCase();
+    const toolCards = document.querySelectorAll('.tool-card');
+    const emptyState = document.getElementById('empty-state');
+    let visibleCount = 0;
+    
+    toolCards.forEach(card => {
+        const toolName = card.dataset.tool.toLowerCase();
+        const category = card.dataset.category.toLowerCase();
+        
+        if (searchQuery === '' || toolName.includes(searchQuery) || category.includes(searchQuery)) {
+            card.style.display = 'block';
+            visibleCount++;
+        } else {
+            card.style.display = 'none';
+        }
+    });
+    
+    if (visibleCount === 0) {
+        emptyState.classList.remove('hidden');
+    } else {
+        emptyState.classList.add('hidden');
+    }
+}
+</script>
+{% endblock %}
