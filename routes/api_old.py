@@ -114,8 +114,134 @@ def merge_pdf_files():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+
+
+@api_bp.route('/image/compress', methods=['POST'])
+def compress_image_file():
+    """Compress image file"""
+    try:
+        file = request.files['file']
+        quality = int(request.form.get('quality', 85))
+        
+        # Save uploaded file
+        filename = str(uuid.uuid4()) + '_' + secure_filename(file.filename)
+        input_path = os.path.join('uploads', filename)
+        file.save(input_path)
+        
+        # Compress image
+        output_filename = f"compressed_{uuid.uuid4()}.jpg"
+        output_path = os.path.join('uploads', output_filename)
+        
+        success = compress_image(input_path, output_path, quality)
+        
+        if success:
+            # Log tool usage
+            user = get_current_user()
+            if user:
+                history = ToolHistory(
+                    user_id=user.id,
+                    tool_name='image-compress',
+                    tool_category='image'
+                )
+                db.session.add(history)
+                db.session.commit()
+            
+            return jsonify({
+                'success': True,
+                'download_url': f'/api/download/{output_filename}',
+                'filename': output_filename
+            })
+        else:
+            return jsonify({'error': 'Failed to compress image'}), 500
+            
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@api_bp.route('/ai/resume', methods=['POST'])
+def generate_resume_api():
+    """Generate resume using AI"""
+    try:
+        data = request.get_json()
+        
+        # Extract resume data
+        name = data.get('name', '')
+        email = data.get('email', '')
+        phone = data.get('phone', '')
+        experience = data.get('experience', [])
+        education = data.get('education', [])
+        skills = data.get('skills', [])
+        
+        # Generate resume
+        output_filename = f"resume_{uuid.uuid4()}.pdf"
+        output_path = os.path.join('uploads', output_filename)
+        
+        success = generate_resume(name, email, phone, experience, education, skills, output_path)
+        
+        if success:
+            # Log tool usage
+            user = get_current_user()
+            if user:
+                history = ToolHistory(
+                    user_id=user.id,
+                    tool_name='resume-generator',
+                    tool_category='ai'
+                )
+                db.session.add(history)
+                db.session.commit()
+            
+            return jsonify({
+                'success': True,
+                'download_url': f'/api/download/{output_filename}',
+                'filename': output_filename
+            })
+        else:
+            return jsonify({'error': 'Failed to generate resume'}), 500
+            
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@api_bp.route('/user/history')
+def get_user_history():
+    """Get user's tool usage history"""
+    user = get_current_user()
+    if not user:
+        return jsonify({'error': 'Not authenticated'}), 401
+    
+    history = ToolHistory.query.filter_by(user_id=user.id)\
+        .order_by(ToolHistory.used_at.desc())\
+        .limit(50).all()
+    
+    return jsonify([{
+        'tool_name': h.tool_name,
+        'tool_category': h.tool_category,
+        'used_at': h.used_at.isoformat(),
+        'file_count': h.file_count
+    } for h in history])
+
+@api_bp.route('/user/files')
+def get_user_files():
+    """Get user's saved files"""
+    user = get_current_user()
+    if not user:
+        return jsonify({'error': 'Not authenticated'}), 401
+    
+    files = SavedFile.query.filter_by(user_id=user.id)\
+        .order_by(SavedFile.created_at.desc())\
+        .limit(50).all()
+    
+    return jsonify([{
+        'id': f.id,
+        'original_filename': f.original_filename,
+        'file_size': f.file_size,
+        'mime_type': f.mime_type,
+        'tool_used': f.tool_used,
+        'created_at': f.created_at.isoformat(),
+        'download_url': f'/api/download/{f.saved_filename}'
+    } for f in files])
+
+# Additional PDF Tools
 @api_bp.route('/pdf/split', methods=['POST'])
-def split_pdf_files():
+def split_pdf_file():
     """Split PDF into multiple files"""
     try:
         file = request.files['file']
@@ -166,7 +292,7 @@ def split_pdf_files():
         return jsonify({'error': str(e)}), 500
 
 @api_bp.route('/pdf/compress', methods=['POST'])
-def compress_pdf_files():
+def compress_pdf_file():
     """Compress PDF file"""
     try:
         file = request.files['file']
@@ -206,50 +332,9 @@ def compress_pdf_files():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-# Image Tool APIs
-@api_bp.route('/image/compress', methods=['POST'])
-def compress_image_files():
-    """Compress image file"""
-    try:
-        file = request.files['file']
-        quality = int(request.form.get('quality', 85))
-        
-        # Save uploaded file
-        filename = str(uuid.uuid4()) + '_' + secure_filename(file.filename)
-        input_path = os.path.join('uploads', filename)
-        file.save(input_path)
-        
-        # Compress image
-        output_filename = f"compressed_{uuid.uuid4()}.jpg"
-        output_path = os.path.join('uploads', output_filename)
-        
-        success = compress_image(input_path, output_path, quality)
-        
-        if success:
-            # Log tool usage
-            user = get_current_user()
-            if user:
-                history = ToolHistory(
-                    user_id=user.id,
-                    tool_name='image-compress',
-                    tool_category='image'
-                )
-                db.session.add(history)
-                db.session.commit()
-            
-            return jsonify({
-                'success': True,
-                'download_url': f'/api/download/{output_filename}',
-                'filename': output_filename
-            })
-        else:
-            return jsonify({'error': 'Failed to compress image'}), 500
-            
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
+# Additional Image Tools
 @api_bp.route('/image/resize', methods=['POST'])
-def resize_image_files():
+def resize_image_file():
     """Resize image file"""
     try:
         file = request.files['file']
@@ -297,11 +382,11 @@ def resize_image_files():
         return jsonify({'error': str(e)}), 500
 
 @api_bp.route('/image/convert', methods=['POST'])
-def convert_image_files():
+def convert_image_file():
     """Convert image to different format"""
     try:
         file = request.files['file']
-        output_format = request.form.get('format', 'jpg')
+        output_format = request.form.get('format', 'jpg').lower()
         
         # Save uploaded file
         filename = str(uuid.uuid4()) + '_' + secure_filename(file.filename)
@@ -337,13 +422,58 @@ def convert_image_files():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-# Video Tool APIs
-@api_bp.route('/video/extract-audio', methods=['POST'])
-def extract_audio_files():
+# Video Tools
+@api_bp.route('/video/trim', methods=['POST'])
+def trim_video_file():
+    """Trim video file"""
+    try:
+        file = request.files['file']
+        start_time = request.form.get('start_time', '0')
+        end_time = request.form.get('end_time')
+        
+        if not end_time:
+            return jsonify({'error': 'End time required'}), 400
+        
+        # Save uploaded file
+        filename = str(uuid.uuid4()) + '_' + secure_filename(file.filename)
+        input_path = os.path.join('uploads', filename)
+        file.save(input_path)
+        
+        # Trim video
+        output_filename = f"trimmed_{uuid.uuid4()}.mp4"
+        output_path = os.path.join('uploads', output_filename)
+        
+        success = trim_video(input_path, output_path, start_time, end_time)
+        
+        if success:
+            # Log tool usage
+            user = get_current_user()
+            if user:
+                history = ToolHistory(
+                    user_id=user.id,
+                    tool_name='video-trim',
+                    tool_category='video'
+                )
+                db.session.add(history)
+                db.session.commit()
+            
+            return jsonify({
+                'success': True,
+                'download_url': f'/api/download/{output_filename}',
+                'filename': output_filename
+            })
+        else:
+            return jsonify({'error': 'Failed to trim video'}), 500
+            
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@api_bp.route('/video/extract_audio', methods=['POST'])
+def extract_audio_from_video():
     """Extract audio from video"""
     try:
         file = request.files['file']
-        quality = request.form.get('quality', '128k')
+        audio_format = request.form.get('format', 'mp3')
         
         # Save uploaded file
         filename = str(uuid.uuid4()) + '_' + secure_filename(file.filename)
@@ -351,10 +481,10 @@ def extract_audio_files():
         file.save(input_path)
         
         # Extract audio
-        output_filename = f"audio_{uuid.uuid4()}.mp3"
+        output_filename = f"audio_{uuid.uuid4()}.{audio_format}"
         output_path = os.path.join('uploads', output_filename)
         
-        success = extract_audio(input_path, output_path, quality)
+        success = extract_audio(input_path, output_path, audio_format)
         
         if success:
             # Log tool usage
@@ -379,237 +509,71 @@ def extract_audio_files():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-@api_bp.route('/video/trim', methods=['POST'])
-def trim_video_files():
-    """Trim video file"""
+# AI Tools
+@api_bp.route('/ai/business_names', methods=['POST'])
+def generate_business_names_api():
+    """Generate business name suggestions"""
     try:
-        file = request.files['file']
-        start_time = request.form.get('start_time', '00:00')
-        end_time = request.form.get('end_time', '01:00')
+        data = request.get_json()
+        industry = data.get('industry', '')
+        keywords = data.get('keywords', [])
+        count = int(data.get('count', 10))
         
-        # Save uploaded file
-        filename = str(uuid.uuid4()) + '_' + secure_filename(file.filename)
-        input_path = os.path.join('uploads', filename)
-        file.save(input_path)
-        
-        # Trim video
-        output_filename = f"trimmed_{uuid.uuid4()}.mp4"
-        output_path = os.path.join('uploads', output_filename)
-        
-        success = trim_video(input_path, output_path, start_time, end_time)
-        
-        if success:
-            # Log tool usage
-            user = get_current_user()
-            if user:
-                history = ToolHistory(
-                    user_id=user.id,
-                    tool_name='video-trimmer',
-                    tool_category='video'
-                )
-                db.session.add(history)
-                db.session.commit()
-            
-            return jsonify({
-                'success': True,
-                'download_url': f'/api/download/{output_filename}',
-                'filename': output_filename
-            })
-        else:
-            return jsonify({'error': 'Failed to trim video'}), 500
-            
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-# AI Tool APIs
-@api_bp.route('/ai/resume', methods=['POST'])
-def generate_resume_api():
-    """Generate resume using AI"""
-    try:
-        name = request.form.get('name', '')
-        email = request.form.get('email', '')
-        phone = request.form.get('phone', '')
-        template = request.form.get('template', 'modern')
-        
-        # Generate resume
-        output_filename = f"resume_{uuid.uuid4()}.pdf"
-        output_path = os.path.join('uploads', output_filename)
-        
-        success = generate_resume(name, email, phone, [], [], [], output_path)
-        
-        if success:
-            # Log tool usage
-            user = get_current_user()
-            if user:
-                history = ToolHistory(
-                    user_id=user.id,
-                    tool_name='resume-generator',
-                    tool_category='ai'
-                )
-                db.session.add(history)
-                db.session.commit()
-            
-            return jsonify({
-                'success': True,
-                'download_url': f'/api/download/{output_filename}',
-                'filename': output_filename
-            })
-        else:
-            return jsonify({'error': 'Failed to generate resume'}), 500
-            
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-@api_bp.route('/utility/qr-code', methods=['POST'])
-def generate_qr_code():
-    """Generate QR code"""
-    try:
-        content = request.form.get('content', '')
-        size = int(request.form.get('size', 300))
-        format_type = request.form.get('format', 'png')
-        
-        if not content:
-            return jsonify({'error': 'Content is required'}), 400
-        
-        # Generate QR code
-        import qrcode
-        from PIL import Image
-        
-        qr = qrcode.QRCode(
-            version=1,
-            error_correction=qrcode.constants.ERROR_CORRECT_L,
-            box_size=size//25,
-            border=4,
-        )
-        qr.add_data(content)
-        qr.make(fit=True)
-        
-        img = qr.make_image(fill_color="black", back_color="white")
-        
-        # Save QR code
-        output_filename = f"qr_{uuid.uuid4()}.{format_type}"
-        output_path = os.path.join('uploads', output_filename)
-        
-        if format_type == 'png':
-            img.save(output_path, 'PNG')
-        else:
-            img.save(output_path, 'PNG')  # Default to PNG
+        names = generate_business_names(industry, keywords, count)
         
         # Log tool usage
         user = get_current_user()
         if user:
             history = ToolHistory(
                 user_id=user.id,
-                tool_name='qr-generator',
-                tool_category='utility'
+                tool_name='business-name-generator',
+                tool_category='ai'
             )
             db.session.add(history)
             db.session.commit()
         
         return jsonify({
             'success': True,
-            'download_url': f'/api/download/{output_filename}',
-            'filename': output_filename
+            'names': names
         })
         
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-# Generic tool processor for remaining 85 tools
-@api_bp.route('/tools/<category>/<tool_name>', methods=['POST'])
+# Utility route for dynamic tool processing
+@api_bp.route('/<category>/<tool_name>', methods=['POST'])
 def process_generic_tool(category, tool_name):
     """Generic tool processing endpoint"""
     try:
-        # Handle file uploads
-        files = request.files.getlist('files')
-        if not files and tool_name not in ['resume-generator', 'qr-generator', 'business-name-generator']:
-            return jsonify({'error': 'No files provided'}), 400
+        # Map tool names to functions
+        tool_map = {
+            'pdf': {
+                'merge': merge_pdf_files,
+                'split': split_pdf_file,
+                'compress': compress_pdf_file,
+            },
+            'image': {
+                'compress': compress_image_file,
+                'resize': resize_image_file,
+                'convert': convert_image_file,
+            },
+            'video': {
+                'trim': trim_video_file,
+                'extract_audio': extract_audio_from_video,
+            },
+            'ai': {
+                'resume': generate_resume_api,
+                'business_names': generate_business_names_api,
+            }
+        }
         
-        # Process based on category
-        if category == 'pdf':
-            return process_pdf_tool(tool_name, files)
-        elif category == 'image':
-            return process_image_tool(tool_name, files)
-        elif category == 'video':
-            return process_video_tool(tool_name, files)
-        elif category == 'ai':
-            return process_ai_tool(tool_name, files)
+        if category in tool_map and tool_name in tool_map[category]:
+            return tool_map[category][tool_name]()
         else:
-            return process_utility_tool(tool_name, files)
+            return jsonify({'error': 'Tool not implemented yet'}), 501
             
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-
-def process_pdf_tool(tool_name, files):
-    """Process PDF tools"""
-    # Simple processing for now - just return success
-    return jsonify({
-        'success': True,
-        'message': f'PDF tool {tool_name} processed successfully',
-        'download_url': f'/api/download/sample_{uuid.uuid4()}.pdf'
-    })
-
-def process_image_tool(tool_name, files):
-    """Process image tools"""
-    # Simple processing for now - just return success
-    return jsonify({
-        'success': True,
-        'message': f'Image tool {tool_name} processed successfully',
-        'download_url': f'/api/download/sample_{uuid.uuid4()}.jpg'
-    })
-
-def process_video_tool(tool_name, files):
-    """Process video tools"""
-    # Simple processing for now - just return success
-    return jsonify({
-        'success': True,
-        'message': f'Video tool {tool_name} processed successfully',
-        'download_url': f'/api/download/sample_{uuid.uuid4()}.mp4'
-    })
-
-def process_ai_tool(tool_name, files):
-    """Process AI tools"""
-    # Simple processing for now - just return success
-    return jsonify({
-        'success': True,
-        'message': f'AI tool {tool_name} processed successfully',
-        'download_url': f'/api/download/sample_{uuid.uuid4()}.pdf'
-    })
-
-def process_utility_tool(tool_name, files):
-    """Process utility tools"""
-    # Simple processing for now - just return success
-    return jsonify({
-        'success': True,
-        'message': f'Utility tool {tool_name} processed successfully',
-        'download_url': f'/api/download/sample_{uuid.uuid4()}.png'
-    })
-
-# User data endpoints
-@api_bp.route('/user/history')
-def get_user_history():
-    """Get user's tool usage history"""
-    user = get_current_user()
-    if not user:
-        return jsonify({'error': 'Not authenticated'}), 401
-    
-    history = ToolHistory.query.filter_by(user_id=user.id)\
-        .order_by(ToolHistory.used_at.desc())\
-        .limit(50).all()
-    
-    return jsonify([{
-        'tool_name': h.tool_name,
-        'tool_category': h.tool_category,
-        'used_at': h.used_at.isoformat(),
-        'file_count': h.file_count
-    } for h in history])
-
-@api_bp.route('/user/files')
-def get_user_files():
-    """Get user's saved files"""
-    user = get_current_user()
-    if not user:
-        return jsonify({'error': 'Not authenticated'}), 401
     
     files = SavedFile.query.filter_by(user_id=user.id)\
         .order_by(SavedFile.created_at.desc())\
