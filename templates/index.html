@@ -119,10 +119,83 @@
 <section id="popular-tools" class="py-16 bg-white dark:bg-gray-800">
     <div class="container mx-auto px-4">
         <div class="text-center mb-12">
-            <h2 class="text-3xl md:text-4xl font-bold text-gray-800 dark:text-white mb-4">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-800 dark:text-white mb-4 animate__animated animate__fadeInUp">
                 Most Popular Tools
             </h2>
-            <p class="text-lg text-gray-600 dark:text-gray-300">
+            <p class="text-lg text-gray-600 dark:text-gray-300 animate__animated animate__fadeInUp animate__delay-1s">
+                The tools our users love most. Try them now!
+            </p>
+        </div>
+        
+        <!-- Popular Tools Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {% set popular_tool_list = [
+                {'name': 'pdf-merge', 'category': 'pdf', 'uses': '50K+'},
+                {'name': 'image-compress', 'category': 'image', 'uses': '45K+'},
+                {'name': 'video-trim', 'category': 'video', 'uses': '30K+'},
+                {'name': 'resume-generator', 'category': 'ai', 'uses': '25K+'},
+                {'name': 'pdf-split', 'category': 'pdf', 'uses': '22K+'},
+                {'name': 'image-resize', 'category': 'image', 'uses': '20K+'},
+                {'name': 'background-remover', 'category': 'image', 'uses': '18K+'},
+                {'name': 'qr-generator', 'category': 'utility', 'uses': '15K+'}
+            ] %}
+            
+            {% for tool_data in popular_tool_list %}
+                {% set category_info = categories[tool_data.category] %}
+                <div class="group bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-gray-200 dark:border-gray-700 hover:border-{{ category_info.color }}-300 dark:hover:border-{{ category_info.color }}-600 animate__animated animate__fadeInUp" 
+                     style="animation-delay: {{ loop.index0 * 0.15 }}s">
+                    <div class="p-6 relative overflow-hidden">
+                        <!-- Background Gradient -->
+                        <div class="absolute inset-0 bg-gradient-to-br from-{{ category_info.color }}-50 to-transparent dark:from-{{ category_info.color }}-900/20 dark:to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        
+                        <div class="relative">
+                            <!-- Icon and Badge -->
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="w-12 h-12 rounded-2xl bg-{{ category_info.color }}-100 dark:bg-{{ category_info.color }}-900 flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300">
+                                    <i data-lucide="{{ category_info.icon }}" class="w-6 h-6 text-{{ category_info.color }}-600 dark:text-{{ category_info.color }}-400"></i>
+                                </div>
+                                <span class="bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-400 text-xs px-2 py-1 rounded-full font-medium">
+                                    {{ tool_data.uses }}
+                                </span>
+                            </div>
+                            
+                            <!-- Title -->
+                            <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-2 group-hover:text-{{ category_info.color }}-600 dark:group-hover:text-{{ category_info.color }}-400 transition-colors duration-300">
+                                {{ tool_data.name.replace('-', ' ').title() }}
+                            </h3>
+                            
+                            <!-- Category -->
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">
+                                {{ category_info.name }}
+                            </p>
+                            
+                            <!-- Rating -->
+                            <div class="flex items-center space-x-1 mb-4">
+                                {% for i in range(5) %}
+                                <i data-lucide="star" class="w-3 h-3 text-yellow-400 fill-current"></i>
+                                {% endfor %}
+                                <span class="text-xs text-gray-500 dark:text-gray-400 ml-1">4.9 ({{ tool_data.uses }})</span>
+                            </div>
+                            
+                            <!-- Button -->
+                            <a href="{{ url_for('tools.tool_page', tool_name=tool_data.name) }}" 
+                               class="w-full btn bg-{{ category_info.color }}-600 hover:bg-{{ category_info.color }}-700 text-white border-none transform group-hover:scale-105 transition-all duration-300">
+                                <i data-lucide="play" class="w-4 h-4 mr-2"></i>
+                                Use Now
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        
+        <!-- View All Tools Button -->
+        <div class="text-center mt-12 animate__animated animate__fadeInUp animate__delay-2s">
+            <a href="{{ url_for('tools.index') }}" class="btn btn-outline btn-lg px-8 py-3">
+                <i data-lucide="grid" class="w-5 h-5 mr-2"></i>
+                View All 85+ Tools
+            </a>
+        </div>
                 Top tools used by thousands of professionals daily
             </p>
         </div>

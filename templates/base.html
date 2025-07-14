@@ -75,6 +75,18 @@
             }
         }
     </script>
+
+    <!-- Tools Configuration for JavaScript -->
+    <script>
+        {% if categories %}
+        window.toolsConfig = {{ categories | tojson }};
+        {% else %}
+        window.toolsConfig = {};
+        {% endif %}
+    </script>
+
+    <!-- Enhanced Search -->
+    <script src="{{ url_for('static', filename='js/enhanced-search.js') }}"></script>
 </head>
 <body class="font-inter bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
     <!-- Navigation -->

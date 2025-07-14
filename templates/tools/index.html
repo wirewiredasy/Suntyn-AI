@@ -75,54 +75,206 @@
         {% for category_id, category_data in categories.items() %}
             {% if selected_category == 'all' or selected_category == category_id %}
                 {% for tool in category_data.tools %}
-                <div class="tool-card bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-200 dark:border-gray-700" data-category="{{ category_id }}" data-tool="{{ tool }}">
-                    <div class="p-6">
-                        <div class="flex items-center justify-between mb-4">
-                            <div class="w-12 h-12 rounded-lg bg-{{ category_data.color }}-100 dark:bg-{{ category_data.color }}-900 flex items-center justify-center">
-                                <i data-lucide="{{ category_data.icon }}" class="w-6 h-6 text-{{ category_data.color }}-600 dark:text-{{ category_data.color }}-400"></i>
-                            </div>
-                            <span class="text-xs bg-{{ category_data.color }}-100 dark:bg-{{ category_data.color }}-900 text-{{ category_data.color }}-600 dark:text-{{ category_data.color }}-400 px-2 py-1 rounded-full">
-                                {{ category_data.name }}
-                            </span>
-                        </div>
+                <div class="tool-card group bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-gray-200 dark:border-gray-700 hover:border-{{ category_data.color }}-300 dark:hover:border-{{ category_data.color }}-600 animate__animated animate__fadeInUp" 
+                     data-category="{{ category_id }}" data-tool="{{ tool }}" style="animation-delay: {{ loop.index0 * 0.1 }}s">
+                    <div class="p-6 relative overflow-hidden">
+                        <!-- Background Gradient Overlay -->
+                        <div class="absolute inset-0 bg-gradient-to-br from-{{ category_data.color }}-50 to-transparent dark:from-{{ category_data.color }}-900/20 dark:to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                         
-                        <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">
-                            {{ tool.replace('-', ' ').title() }}
-                        </h3>
-                        
-                        <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">
-                            {% if tool == 'pdf-merge' %}
-                                Combine multiple PDF files into one document
-                            {% elif tool == 'pdf-split' %}
-                                Split PDF into multiple files or pages
-                            {% elif tool == 'pdf-compress' %}
-                                Reduce PDF file size without quality loss
-                            {% elif tool == 'image-compress' %}
-                                Reduce image file size while maintaining quality
-                            {% elif tool == 'image-resize' %}
-                                Resize images to specific dimensions
-                            {% elif tool == 'video-trim' %}
-                                Cut and trim video clips with precision
-                            {% elif tool == 'resume-generator' %}
-                                Create professional resumes with AI assistance
-                            {% else %}
-                                Professional {{ tool.replace('-', ' ') }} tool
-                            {% endif %}
-                        </p>
-                        
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center space-x-2">
-                                <div class="flex items-center space-x-1">
-                                    <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-current"></i>
-                                    <span class="text-sm text-gray-600 dark:text-gray-300">4.8</span>
+                        <div class="relative">
+                            <!-- Header -->
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="w-14 h-14 rounded-2xl bg-{{ category_data.color }}-100 dark:bg-{{ category_data.color }}-900 flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300 group-hover:rotate-6">
+                                    <i data-lucide="{{ category_data.icon }}" class="w-7 h-7 text-{{ category_data.color }}-600 dark:text-{{ category_data.color }}-400"></i>
                                 </div>
-                                <span class="text-sm text-gray-500 dark:text-gray-400">•</span>
-                                <span class="text-sm text-gray-500 dark:text-gray-400">Free</span>
+                                <div class="flex flex-col items-end">
+                                    <span class="text-xs bg-{{ category_data.color }}-100 dark:bg-{{ category_data.color }}-900 text-{{ category_data.color }}-600 dark:text-{{ category_data.color }}-400 px-3 py-1 rounded-full font-medium">
+                                        {{ category_data.name }}
+                                    </span>
+                                    <div class="flex items-center mt-2 space-x-1">
+                                        {% for i in range(5) %}
+                                        <i data-lucide="star" class="w-3 h-3 text-yellow-400 fill-current"></i>
+                                        {% endfor %}
+                                        <span class="text-xs text-gray-500 dark:text-gray-400 ml-1">4.9</span>
+                                    </div>
+                                </div>
                             </div>
                             
+                            <!-- Title -->
+                            <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-3 group-hover:text-{{ category_data.color }}-600 dark:group-hover:text-{{ category_data.color }}-400 transition-colors duration-300">
+                                {{ tool.replace('-', ' ').title() }}
+                            </h3>
+                            
+                            <!-- Description -->
+                            <p class="text-gray-600 dark:text-gray-300 text-sm mb-6 leading-relaxed">
+                                {% set tool_descriptions = {
+                                    'pdf-merge': 'Combine multiple PDF files into one document seamlessly',
+                                    'pdf-split': 'Split PDF into multiple files or individual pages',
+                                    'pdf-compress': 'Reduce PDF file size without quality loss using advanced compression',
+                                    'pdf-to-word': 'Convert PDF files to editable Word documents',
+                                    'word-to-pdf': 'Convert Word documents to professional PDF files',
+                                    'pdf-to-jpg': 'Convert PDF pages to high-quality JPG images',
+                                    'jpg-to-pdf': 'Convert JPG images to PDF documents',
+                                    'pdf-watermark': 'Add custom watermarks to PDF documents',
+                                    'pdf-page-numbers': 'Add page numbers to PDF documents',
+                                    'pdf-unlock': 'Remove password protection from PDF files',
+                                    'pdf-protect': 'Add password protection to PDF files',
+                                    'pdf-rotate': 'Rotate PDF pages to correct orientation',
+                                    'pdf-extract-pages': 'Extract specific pages from PDF documents',
+                                    'pdf-chat': 'Chat with your PDF using AI technology',
+                                    'pdf-summarize': 'Generate AI-powered summaries of PDF content',
+                                    'image-compress': 'Reduce image file size while maintaining quality',
+                                    'image-resize': 'Resize images to specific dimensions perfectly',
+                                    'image-convert': 'Convert between different image formats',
+                                    'image-crop': 'Crop images to focus on important areas',
+                                    'image-rotate': 'Rotate images to correct orientation',
+                                    'image-ocr': 'Extract text from images using OCR technology',
+                                    'background-remover': 'Remove backgrounds from images automatically',
+                                    'meme-generator': 'Create hilarious memes with custom text',
+                                    'image-watermark': 'Add watermarks to protect your images',
+                                    'signature-extractor': 'Extract signatures from documents',
+                                    'image-enhancer': 'Enhance image quality with AI technology',
+                                    'color-picker': 'Pick colors from images and get color codes',
+                                    'social-crop': 'Crop images for social media platforms',
+                                    'image-caption': 'Generate captions for images using AI',
+                                    'profile-pic-maker': 'Create professional profile pictures',
+                                    'video-to-mp3': 'Extract audio from video files as MP3',
+                                    'audio-remover': 'Remove audio tracks from video files',
+                                    'video-trimmer': 'Trim and cut video clips with precision',
+                                    'voice-remover': 'Remove vocals from audio files',
+                                    'subtitle-generator': 'Generate subtitles for videos automatically',
+                                    'subtitle-merger': 'Merge subtitle files with videos',
+                                    'video-compress': 'Compress videos to reduce file size',
+                                    'video-converter': 'Convert videos between different formats',
+                                    'dubbing-tool': 'Add dubbing to videos professionally',
+                                    'shorts-cropper': 'Crop videos for social media shorts',
+                                    'resume-generator': 'Create professional resumes with AI assistance',
+                                    'business-name-generator': 'Generate unique business names using AI',
+                                    'blog-title-generator': 'Create engaging blog titles with AI',
+                                    'product-description': 'Write compelling product descriptions',
+                                    'script-writer': 'Generate scripts for videos and presentations',
+                                    'ad-copy-generator': 'Create persuasive advertising copy',
+                                    'faq-generator': 'Generate FAQ sections for websites',
+                                    'idea-explainer': 'Explain complex ideas in simple terms',
+                                    'bio-generator': 'Create professional bios for social media',
+                                    'doc-to-slides': 'Convert documents to presentation slides',
+                                    'qr-generator': 'Generate QR codes for various purposes',
+                                    'barcode-generator': 'Create barcodes for products',
+                                    'text-case-converter': 'Convert text between different cases',
+                                    'age-bmi-calculator': 'Calculate age and BMI accurately',
+                                    'password-generator': 'Generate secure passwords',
+                                    'clipboard-notepad': 'Digital notepad for quick notes',
+                                    'file-renamer': 'Rename multiple files efficiently',
+                                    'url-shortener': 'Create short URLs for sharing',
+                                    'text-to-image': 'Convert text to images with styling',
+                                    'zip-unzip': 'Compress and extract ZIP files',
+                                    'loan-emi-calculator': 'Calculate loan EMI and interest',
+                                    'gst-calculator': 'Calculate GST for Indian businesses',
+                                    'currency-converter': 'Convert between world currencies',
+                                    'budget-planner': 'Plan and track your budget',
+                                    'income-tax-estimator': 'Estimate income tax calculations'
+                                } %}
+                                {{ tool_descriptions.get(tool, 'Professional ' + tool.replace('-', ' ') + ' tool for your needs') }}
+                            </p>
+                            
+                            <!-- Features -->
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center space-x-3 text-xs">
+                                    <div class="flex items-center space-x-1 text-green-600 dark:text-green-400">
+                                        <i data-lucide="zap" class="w-3 h-3"></i>
+                                        <span>Fast</span>
+                                    </div>
+                                    <div class="flex items-center space-x-1 text-blue-600 dark:text-blue-400">
+                                        <i data-lucide="shield" class="w-3 h-3"></i>
+                                        <span>Secure</span>
+                                    </div>
+                                    <div class="flex items-center space-x-1 text-purple-600 dark:text-purple-400">
+                                        <i data-lucide="heart" class="w-3 h-3"></i>
+                                        <span>Free</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Action Button -->
                             <a href="{{ url_for('tools.tool_page', tool_name=tool) }}" 
-                               class="btn btn-primary btn-sm">
+                               class="w-full btn bg-{{ category_data.color }}-600 hover:bg-{{ category_data.color }}-700 text-white border-none transform group-hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl group-hover:shadow-{{ category_data.color }}-500/25">
+                                <i data-lucide="play" class="w-4 h-4 mr-2"></i>
                                 Use Tool
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <!-- No Results Message -->
+    <div id="no-results" class="hidden text-center py-12">
+        <div class="max-w-md mx-auto">
+            <i data-lucide="search-x" class="w-16 h-16 text-gray-400 mx-auto mb-4"></i>
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">No tools found</h3>
+            <p class="text-gray-600 dark:text-gray-300 mb-4">Try adjusting your search terms or browse all categories.</p>
+            <button onclick="clearSearch()" class="btn btn-primary">
+                <i data-lucide="refresh-cw" class="w-4 h-4 mr-2"></i>
+                Clear Search
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+// Enhanced search functionality for tools page
+function filterTools() {
+    const searchInput = document.querySelector('input[placeholder*="Search tools"]');
+    const query = searchInput.value.toLowerCase().trim();
+    const toolCards = document.querySelectorAll('.tool-card');
+    const noResults = document.getElementById('no-results');
+    let visibleCount = 0;
+
+    toolCards.forEach(card => {
+        const toolName = card.getAttribute('data-tool').toLowerCase();
+        const toolDisplayName = toolName.replace('-', ' ');
+        const categoryName = card.getAttribute('data-category').toLowerCase();
+        
+        const isVisible = 
+            toolName.includes(query) ||
+            toolDisplayName.includes(query) ||
+            categoryName.includes(query) ||
+            card.textContent.toLowerCase().includes(query);
+
+        if (isVisible) {
+            card.style.display = 'block';
+            card.classList.add('animate__animated', 'animate__fadeInUp');
+            visibleCount++;
+        } else {
+            card.style.display = 'none';
+        }
+    });
+
+    // Show/hide no results message
+    if (visibleCount === 0 && query.length > 0) {
+        noResults.classList.remove('hidden');
+    } else {
+        noResults.classList.add('hidden');
+    }
+}
+
+function clearSearch() {
+    const searchInput = document.querySelector('input[placeholder*="Search tools"]');
+    searchInput.value = '';
+    filterTools();
+}
+
+// Initialize search functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.querySelector('input[placeholder*="Search tools"]');
+    if (searchInput) {
+        searchInput.addEventListener('input', filterTools);
+    }
+});
+</script>
+{% endblock %}
                             </a>
                         </div>
                     </div>
