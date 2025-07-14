@@ -3,31 +3,112 @@
  * Handles page transitions, animations, and global functionality
  */
 
-// Global app object
+// Enhanced Global app object with SPA features
 window.ToolaraApp = {
+    isNavigating: false,
+    
     init: function() {
-        this.setupPageTransitions();
+        this.setupSPANavigation();
+        this.setupInstantPageLoad();
         this.setupDarkMode();
         this.setupChatWidget();
         this.setupToolClicks();
         this.setupAnimations();
         this.setupFormHandlers();
+        this.optimizePerformance();
     },
 
-    setupPageTransitions: function() {
-        // Add smooth page transitions
-        document.addEventListener('click', function(e) {
+    setupSPANavigation: function() {
+        // Prevent white flash with SPA-style navigation
+        document.addEventListener('click', (e) => {
             const link = e.target.closest('a');
-            if (link && link.href && link.href.startsWith(window.location.origin)) {
-                // Add loading animation if needed
-                if (link.href !== window.location.href) {
-                    document.body.style.opacity = '0.9';
-                    setTimeout(() => {
-                        document.body.style.opacity = '1';
-                    }, 200);
-                }
+            if (link && link.href && link.href.startsWith(window.location.origin) && !link.target) {
+                const href = link.href;
+                
+                // Skip if same page
+                if (href === window.location.href) return;
+                
+                // Skip external links
+                if (link.hostname !== window.location.hostname) return;
+                
+                // Skip if already navigating
+                if (this.isNavigating) return;
+                
+                e.preventDefault();
+                this.navigateToPage(href);
             }
         });
+    },
+
+    navigateToPage: function(url) {
+        if (this.isNavigating) return;
+        
+        this.isNavigating = true;
+        
+        // Add minimal loading state
+        document.body.classList.add('spa-transition', 'loading');
+        
+        // Navigate after minimal delay for smooth transition
+        setTimeout(() => {
+            window.location.href = url;
+        }, 50);
+        
+        // Reset after navigation
+        setTimeout(() => {
+            this.isNavigating = false;
+            document.body.classList.remove('spa-transition', 'loading');
+        }, 200);
+    },
+
+    setupInstantPageLoad: function() {
+        // Instant page load optimizations
+        document.addEventListener('DOMContentLoaded', () => {
+            // Remove any flash
+            document.body.style.opacity = '1';
+            document.body.style.visibility = 'visible';
+            
+            // Preload critical pages
+            this.preloadCriticalPages();
+        });
+        
+        // Back navigation fix
+        window.addEventListener('pageshow', (e) => {
+            if (e.persisted) {
+                document.body.style.opacity = '1';
+                document.body.style.visibility = 'visible';
+                document.body.classList.remove('spa-transition', 'loading');
+            }
+        });
+    },
+
+    preloadCriticalPages: function() {
+        const criticalPages = ['/tools/', '/about', '/contact'];
+        criticalPages.forEach(page => {
+            const link = document.createElement('link');
+            link.rel = 'prefetch';
+            link.href = page;
+            document.head.appendChild(link);
+        });
+    },
+
+    optimizePerformance: function() {
+        // Debounce resize events
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                // Handle resize
+            }, 100);
+        });
+        
+        // Optimize scroll events
+        let scrollTimeout;
+        window.addEventListener('scroll', () => {
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                // Handle scroll
+            }, 16); // 60fps
+        }, { passive: true });
     },
 
     setupDarkMode: function() {
@@ -42,56 +123,77 @@ window.ToolaraApp = {
     },
 
     setupChatWidget: function() {
-        // Chat widget functionality
-        window.chatWidget = () => ({
-            isOpen: false,
-            messages: [],
-            newMessage: '',
-            
-            init() {
-                this.messages = [
-                    {
-                        id: 1,
-                        sender: 'bot',
-                        text: 'Hello! How can I help you today?',
-                        time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+        // Lazy load chat widget for better performance
+        setTimeout(() => {
+            window.chatWidget = () => ({
+                isOpen: false,
+                messages: [],
+                newMessage: '',
+                initialized: false,
+                
+                init() {
+                    if (!this.initialized) {
+                        this.messages = [
+                            {
+                                id: 1,
+                                sender: 'bot',
+                                text: 'Hello! How can I help you today?',
+                                time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+                            }
+                        ];
+                        this.initialized = true;
                     }
-                ];
-            },
-            
-            toggleChat() {
-                this.isOpen = !this.isOpen;
-                if (this.isOpen) {
-                    this.$nextTick(() => {
-                        const input = this.$refs.messageInput;
-                        if (input) input.focus();
-                    });
-                }
-            },
-            
-            sendMessage() {
-                if (this.newMessage.trim()) {
-                    this.messages.push({
-                        id: Date.now(),
-                        sender: 'user',
-                        text: this.newMessage,
-                        time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
-                    });
+                },
+                
+                toggleChat() {
+                    this.isOpen = !this.isOpen;
                     
-                    // Auto-reply (demo)
-                    setTimeout(() => {
+                    // Initialize on first open
+                    if (this.isOpen && !this.initialized) {
+                        this.init();
+                    }
+                    
+                    if (this.isOpen) {
+                        this.$nextTick(() => {
+                            const input = this.$refs.messageInput;
+                            if (input) input.focus();
+                        });
+                    }
+                },
+                
+                sendMessage() {
+                    if (this.newMessage.trim()) {
                         this.messages.push({
-                            id: Date.now() + 1,
-                            sender: 'bot',
-                            text: 'Thank you for your message! Our team will get back to you soon.',
+                            id: Date.now(),
+                            sender: 'user',
+                            text: this.newMessage,
                             time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
                         });
-                    }, 1000);
-                    
-                    this.newMessage = '';
+                        
+                        const userMessage = this.newMessage;
+                        this.newMessage = '';
+                        
+                        // Auto-reply with slight delay
+                        setTimeout(() => {
+                            this.messages.push({
+                                id: Date.now() + 1,
+                                sender: 'bot',
+                                text: 'Thank you for your message! Our team will get back to you soon.',
+                                time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+                            });
+                            
+                            // Auto-scroll to bottom
+                            this.$nextTick(() => {
+                                const chatMessages = document.getElementById('chat-messages');
+                                if (chatMessages) {
+                                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                                }
+                            });
+                        }, 800);
+                    }
                 }
-            }
-        });
+            });
+        }, 2000); // Load chat after 2 seconds
     },
 
     setupToolClicks: function() {

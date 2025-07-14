@@ -7,18 +7,38 @@
     --toolora-glow: 0 0 30px rgba(139, 92, 246, 0.3);
 }
 
-/* Enhanced logo animations */
+/* Enhanced logo text with better visibility */
 .header-logo {
-    background: linear-gradient(135deg, #10B981 0%, #06B6D4 50%, #8B5CF6 100%);
+    background: linear-gradient(135deg, #059669, #0891b2, #7c3aed);
     background-size: 200% 200%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    font-size: 1.5rem;
-    font-weight: 800;
-    transition: all 0.5s ease;
-    position: relative;
-    animation: gradientShift 3s ease infinite;
+    animation: gradientFlow 4s ease infinite;
+    font-weight: 700;
+    text-shadow: 0 0 1px rgba(0, 0, 0, 0.1);
+    filter: contrast(1.2) brightness(1.1);
+}
+
+/* Dark mode logo enhancement */
+.dark .header-logo {
+    background: linear-gradient(135deg, #10b981, #06b6d4, #a855f7);
+    filter: contrast(1.3) brightness(1.2);
+    text-shadow: 0 0 2px rgba(255, 255, 255, 0.1);
+}
+
+/* Logo text fallback for better visibility */
+@supports not (background-clip: text) {
+    .header-logo {
+        background: none;
+        color: #059669;
+        -webkit-text-fill-color: #059669;
+    }
+
+    .dark .header-logo {
+        color: #10b981;
+        -webkit-text-fill-color: #10b981;
+    }
 }
 
 /* Tool card text visibility fixes */
@@ -86,7 +106,7 @@
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4) !important;
 }
 
-@keyframes gradientShift {
+@keyframes gradientFlow {
     0%, 100% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
 }

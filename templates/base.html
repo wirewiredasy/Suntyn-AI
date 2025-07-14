@@ -94,13 +94,14 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/brand-colors.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/text-visibility.css') }}">
 
-    <!-- Critical CSS for instant loading -->
+    <!-- Critical CSS for instant loading and anti-flash -->
     <style>
-        /* Critical styles to prevent any flash */
+        /* Critical anti-flash system */
         html { 
             background-color: #f9fafb !important;
             min-height: 100vh;
-            transition: none !important;
+            transition: background-color 0.1s ease !important;
+            overflow-x: hidden;
         }
         html.dark { 
             background-color: #111827 !important; 
@@ -112,8 +113,32 @@
             min-height: 100vh;
             margin: 0;
             padding: 0;
-            transition: none !important;
+            transition: opacity 0.1s ease !important;
             visibility: visible !important;
+            font-display: swap;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Instant loading indicators */
+        .loading-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #3b82f6, transparent);
+            z-index: 9999;
+            display: none;
+        }
+
+        .loading-indicator.active {
+            display: block;
+            animation: loadingSlide 1s ease-in-out infinite;
+        }
+
+        @keyframes loadingSlide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
         }
 
         /* Prevent sidebar flash */
@@ -234,6 +259,9 @@
     <script src="{{ url_for('static', filename='js/enhanced-search.js') }}"></script>
 </head>
 <body class="font-inter bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+    <!-- Ultra-fast loading indicator -->
+    <div id="loading-indicator" class="loading-indicator"></div>
+
     <!-- Loading overlay -->
     <div id="loading-overlay" class="loading-overlay">
         <div class="spinner"></div>
@@ -516,57 +544,89 @@
         }
     </script>
 
-    <!-- Fast initialization script -->
+    <!-- Ultra-fast initialization script -->
     <script>
-        // Immediate initialization and back navigation fix
+        // Immediate initialization and anti-flash system
         (function() {
-            // Immediate stability
-            document.documentElement.style.backgroundColor = document.documentElement.classList.contains('dark') ? '#111827' : '#f9fafb';
+            // Instant stability and anti-flash
+            const isDark = document.documentElement.classList.contains('dark');
+            document.documentElement.style.backgroundColor = isDark ? '#111827' : '#f9fafb';
             document.body.style.opacity = '1';
             document.body.style.visibility = 'visible';
             document.body.classList.add('loaded');
 
+            // Show loading indicator for navigation
+            function showLoadingIndicator() {
+                const indicator = document.getElementById('loading-indicator');
+                if (indicator) {
+                    indicator.classList.add('active');
+                    setTimeout(() => {
+                        indicator.classList.remove('active');
+                    }, 500);
+                }
+            }
+
             // Fast initialization when DOM is ready
             const initializeApp = function() {
-                // Initialize Lucide Icons
+                // Initialize Lucide Icons with performance optimization
                 if (typeof lucide !== 'undefined') {
-                    lucide.createIcons();
+                    requestAnimationFrame(() => {
+                        lucide.createIcons();
+                    });
                 }
 
-                // Hide loading overlay
+                // Hide loading overlay instantly
                 const loadingOverlay = document.getElementById('loading-overlay');
                 if (loadingOverlay) {
-                    loadingOverlay.classList.add('hidden');
-                    setTimeout(() => {
-                        if (loadingOverlay.parentNode) {
-                            loadingOverlay.remove();
-                        }
-                    }, 200);
+                    loadingOverlay.style.display = 'none';
                 }
 
                 // Force close all menus on load
-                setTimeout(() => {
-                    if (window.Alpine && window.Alpine.store('navigation')) {
-                        window.Alpine.store('navigation').mobileMenuOpen = false;
-                    }
-                }, 100);
-            };
-
-            // Back navigation immediate fix
-            window.addEventListener('pageshow', function(event) {
-                document.body.style.opacity = '1';
-                document.body.style.visibility = 'visible';
                 if (window.Alpine && window.Alpine.store('navigation')) {
                     window.Alpine.store('navigation').mobileMenuOpen = false;
                 }
+
+                // Optimize images loading
+                const images = document.querySelectorAll('img[loading="lazy"]');
+                if ('IntersectionObserver' in window) {
+                    const imageObserver = new IntersectionObserver((entries) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                                const img = entry.target;
+                                img.src = img.dataset.src || img.src;
+                                imageObserver.unobserve(img);
+                            }
+                        });
+                    });
+                    images.forEach(img => imageObserver.observe(img));
+                }
+            };
+
+            // Enhanced back navigation fix
+            window.addEventListener('pageshow', function(event) {
+                document.body.style.opacity = '1';
+                document.body.style.visibility = 'visible';
+                document.body.classList.remove('spa-transition', 'loading');
+                
+                if (window.Alpine && window.Alpine.store('navigation')) {
+                    window.Alpine.store('navigation').mobileMenuOpen = false;
+                }
+                
+                // Re-initialize icons if needed
+                if (typeof lucide !== 'undefined') {
+                    lucide.createIcons();
+                }
             });
 
-            // Initialize as soon as possible
+            // Performance optimized initialization
             if (document.readyState === 'loading') {
                 document.addEventListener('DOMContentLoaded', initializeApp);
             } else {
-                initializeApp();
+                requestAnimationFrame(initializeApp);
             }
+
+            // Global navigation optimization
+            window.addEventListener('beforeunload', showLoadingIndicator);
         })();
     </script>
 
@@ -647,18 +707,12 @@
             isOpen: false,
             messages: [],
             newMessage: '',
+            initialized: false,
 
             init() {
-                // Force closed state
+                // Force closed state and lazy initialize
                 this.isOpen = false;
-                this.messages = [
-                    {
-                        id: 1,
-                        sender: 'bot',
-                        text: 'Hello! How can I help you with our tools today?',
-                        time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
-                    }
-                ];
+                this.initialized = false;
 
                 // Prevent auto-opening on navigation
                 window.addEventListener('popstate', () => {
@@ -668,10 +722,42 @@
                 window.addEventListener('pageshow', () => {
                     this.isOpen = false;
                 });
+
+                // Prevent any flash on back navigation
+                window.addEventListener('beforeunload', () => {
+                    document.body.style.opacity = '0.95';
+                });
+            },
+
+            initializeMessages() {
+                if (!this.initialized) {
+                    this.messages = [
+                        {
+                            id: 1,
+                            sender: 'bot',
+                            text: 'Hello! How can I help you with our tools today?',
+                            time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+                        }
+                    ];
+                    this.initialized = true;
+                }
             },
 
             toggleChat() {
+                // Initialize on first open
+                if (!this.initialized) {
+                    this.initializeMessages();
+                }
+                
                 this.isOpen = !this.isOpen;
+                
+                if (this.isOpen) {
+                    // Focus input with slight delay
+                    setTimeout(() => {
+                        const input = document.querySelector('#chat-widget input');
+                        if (input) input.focus();
+                    }, 100);
+                }
             },
 
             sendMessage() {

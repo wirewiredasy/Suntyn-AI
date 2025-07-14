@@ -742,24 +742,47 @@ body {
     transition: all 0.1s ease;
 }
 
-/* Prevent any white flash - Critical fix */
-html, body {
+/* Complete Anti-Flash System */
+html {
     background-color: #f9fafb !important;
     min-height: 100vh;
     margin: 0;
     padding: 0;
-    transition: none !important;
+    transition: background-color 0.1s ease !important;
+    overflow-x: hidden;
 }
 
-html.dark, html.dark body {
+html.dark {
     background-color: #111827 !important;
 }
 
-/* Back navigation specific fixes */
 body {
+    background-color: inherit !important;
     opacity: 1 !important;
     visibility: visible !important;
     display: block !important;
+    margin: 0;
+    padding: 0;
+    transition: opacity 0.1s ease !important;
+    font-display: swap;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Instant page load fix */
+.page-container, main, nav, footer {
+    background: inherit !important;
+    opacity: 1 !important;
+    will-change: auto;
+}
+
+/* SPA-style navigation */
+.spa-transition {
+    transition: opacity 0.1s ease;
+}
+
+.spa-transition.loading {
+    opacity: 0.95;
 }
 
 /* Prevent flash during navigation */
@@ -775,20 +798,49 @@ body {
     transform: none !important;
 }
 
-/* Fast tool card interactions */
+/* Ultra-fast tool card interactions */
 .tool-card {
-    transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
-    will-change: transform, box-shadow;
+    transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), 
+                box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
 }
 
 .tool-card:hover {
-    transform: translateY(-2px) scale(1.005);
-    box-shadow: 0 8px 25px -8px rgba(0, 0, 0, 0.2);
+    transform: translateY(-3px) translateZ(0);
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.15);
 }
 
 .tool-card:active {
-    transform: translateY(0) scale(0.999);
+    transform: translateY(-1px) translateZ(0);
     transition: all 0.05s ease;
+}
+
+/* Smooth sidebar animations */
+.sidebar, [x-show] {
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform, opacity;
+}
+
+/* Chat widget optimization */
+.chat-widget {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    transform: translateZ(0);
+    will-change: transform;
+}
+
+.chat-widget button {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+}
+
+.chat-widget button:hover {
+    transform: scale(1.05) translateZ(0);
 }
 
 /* Prevent layout shift during loading */
