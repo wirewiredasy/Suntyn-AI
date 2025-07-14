@@ -235,6 +235,14 @@
     <div id="loading-overlay" class="loading-overlay">
         <div class="spinner"></div>
     </div>
+
+    <!-- Ads Banner -->
+    <div class="bg-blue-100 border-b border-blue-200 py-2 text-center">
+        <p class="text-sm text-blue-700">
+            <!-- Add your Ads content here -->
+            Get 20% off on Toolora Pro! Use code TOOLORA20 at checkout.
+        </p>
+    </div>
     <!-- Navigation -->
     <nav class="bg-white dark:bg-gray-800 shadow-sm fixed w-full top-0 z-50 transition-colors duration-300">
         <div class="container mx-auto px-4">
@@ -242,13 +250,13 @@
                 <!-- Logo -->
                 <div class="flex items-center space-x-2">
                     <a href="{{ url_for('main.index') }}" class="flex items-center space-x-2">
-                        <div class="w-8 h-8 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-600">
+                        <div class="w-8 h-8 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-600 bg-white p-1">
                             <img src="{{ url_for('static', filename='images/toolora-icon.jpg') }}" 
                                  alt="Toolora AI" 
-                                 class="w-full h-full object-cover"
+                                 class="w-full h-full object-cover rounded-md"
                                  onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                            <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center" style="display: none;">
-                                <i data-lucide="brain" class="w-5 h-5 text-white"></i>
+                            <div class="w-full h-full bg-white rounded-md flex items-center justify-center" style="display: none;">
+                                <i data-lucide="brain" class="w-4 h-4 text-blue-600"></i>
                             </div>
                         </div>
                         <span class="text-xl font-bold text-gray-800 dark:text-white">Toolora AI</span>

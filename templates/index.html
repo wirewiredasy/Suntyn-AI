@@ -16,7 +16,7 @@
             <p class="text-lg text-gray-500 dark:text-gray-400 mb-12 animate__animated animate__fadeInUp animate__delay-2s">
                 PDF, Image, Video, AI Tools and More. Free, Fast, and Secure.
             </p>
-            
+
             <!-- CTA Buttons -->
             <div class="flex flex-col sm:flex-row gap-4 justify-center animate__animated animate__fadeInUp animate__delay-3s">
                 <a href="{{ url_for('tools.index') }}" class="btn btn-primary btn-lg px-8 py-3 text-lg">
@@ -48,7 +48,7 @@
                         class="w-full pl-12 pr-4 py-4 text-lg border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                     >
                 </div>
-                
+
                 <!-- Search Results -->
                 <div x-show="searchOpen && searchResults.length > 0" @click.away="searchOpen = false" class="absolute w-full mt-2 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 z-50">
                     <template x-for="result in searchResults" :key="result.tool">
@@ -81,7 +81,7 @@
                 Everything you need for productivity, creativity, and professional work.
             </p>
         </div>
-        
+
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {% for category_id, category_data in categories.items() %}
             <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
@@ -94,15 +94,15 @@
                             {{ category_data.tools|length }} Tools
                         </span>
                     </div>
-                    
+
                     <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-2">
                         {{ category_data.name }}
                     </h3>
-                    
+
                     <p class="text-gray-600 dark:text-gray-300 mb-4">
                         {{ category_data.description }}
                     </p>
-                    
+
                     <a href="{{ url_for('tools.index', category=category_id) }}" 
                        class="inline-flex items-center text-{{ category_data.color }}-600 dark:text-{{ category_data.color }}-400 hover:text-{{ category_data.color }}-700 dark:hover:text-{{ category_data.color }}-300 font-medium">
                         View Tools
@@ -126,7 +126,7 @@
                 The tools our users love most. Try them now!
             </p>
         </div>
-        
+
         <!-- Popular Tools Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {% set popular_tool_list = [
@@ -139,7 +139,7 @@
                 {'name': 'background-remover', 'category': 'image', 'uses': '18K+'},
                 {'name': 'qr-generator', 'category': 'utility', 'uses': '15K+'}
             ] %}
-            
+
             {% for tool_data in popular_tool_list %}
                 {% set category_info = categories[tool_data.category] %}
                 <div class="group bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-gray-200 dark:border-gray-700 hover:border-{{ category_info.color }}-300 dark:hover:border-{{ category_info.color }}-600 animate__animated animate__fadeInUp" 
@@ -147,7 +147,7 @@
                     <div class="p-6 relative overflow-hidden">
                         <!-- Background Gradient -->
                         <div class="absolute inset-0 bg-gradient-to-br from-{{ category_info.color }}-50 to-transparent dark:from-{{ category_info.color }}-900/20 dark:to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                        
+
                         <div class="relative">
                             <!-- Icon and Badge -->
                             <div class="flex items-center justify-between mb-4">
@@ -158,17 +158,17 @@
                                     {{ tool_data.uses }}
                                 </span>
                             </div>
-                            
+
                             <!-- Title -->
                             <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-2 group-hover:text-{{ category_info.color }}-600 dark:group-hover:text-{{ category_info.color }}-400 transition-colors duration-300">
                                 {{ tool_data.name.replace('-', ' ').title() }}
                             </h3>
-                            
+
                             <!-- Category -->
                             <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">
                                 {{ category_info.name }}
                             </p>
-                            
+
                             <!-- Rating -->
                             <div class="flex items-center space-x-1 mb-4">
                                 {% for i in range(5) %}
@@ -176,7 +176,7 @@
                                 {% endfor %}
                                 <span class="text-xs text-gray-500 dark:text-gray-400 ml-1">4.9 ({{ tool_data.uses }})</span>
                             </div>
-                            
+
                             <!-- Button -->
                             <a href="{{ url_for('tools.tool_page', tool_name=tool_data.name) }}" 
                                class="w-full btn bg-{{ category_info.color }}-600 hover:bg-{{ category_info.color }}-700 text-white border-none transform group-hover:scale-105 transition-all duration-300">
@@ -188,7 +188,7 @@
                 </div>
             {% endfor %}
         </div>
-        
+
         <!-- View All Tools Button -->
         <div class="text-center mt-12 animate__animated animate__fadeInUp animate__delay-2s">
             <a href="{{ url_for('tools.index') }}" class="btn btn-outline btn-lg px-8 py-3">
@@ -199,7 +199,7 @@
                 Top tools used by thousands of professionals daily
             </p>
         </div>
-        
+
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <!-- Static popular tools for demo -->
             <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-200 dark:border-gray-700">
@@ -212,22 +212,22 @@
                             Popular
                         </span>
                     </div>
-                    
+
                     <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">
                         PDF Merge
                     </h3>
-                    
+
                     <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">
                         Combine multiple PDF files into one document
                     </p>
-                    
+
                     <a href="{{ url_for('tools.pdf_merge') }}" 
                        class="btn btn-primary btn-sm w-full">
                         Use Tool
                     </a>
                 </div>
             </div>
-            
+
             <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-200 dark:border-gray-700">
                 <div class="p-6">
                     <div class="flex items-center justify-between mb-4">
@@ -238,22 +238,22 @@
                             Trending
                         </span>
                     </div>
-                    
+
                     <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">
                         Image Compress
                     </h3>
-                    
+
                     <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">
                         Reduce image file size without quality loss
                     </p>
-                    
+
                     <a href="{{ url_for('tools.image_compress') }}" 
                        class="btn btn-primary btn-sm w-full">
                         Use Tool
                     </a>
                 </div>
             </div>
-            
+
             <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-200 dark:border-gray-700">
                 <div class="p-6">
                     <div class="flex items-center justify-between mb-4">
@@ -264,22 +264,22 @@
                             New
                         </span>
                     </div>
-                    
+
                     <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">
                         Video Trimmer
                     </h3>
-                    
+
                     <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">
                         Cut and trim video clips with precision
                     </p>
-                    
+
                     <a href="{{ url_for('tools.video_trim') }}" 
                        class="btn btn-primary btn-sm w-full">
                         Use Tool
                     </a>
                 </div>
             </div>
-            
+
             <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-200 dark:border-gray-700">
                 <div class="p-6">
                     <div class="flex items-center justify-between mb-4">
@@ -290,15 +290,15 @@
                             AI
                         </span>
                     </div>
-                    
+
                     <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">
                         Resume Generator
                     </h3>
-                    
+
                     <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">
                         Create professional resumes with AI
                     </p>
-                    
+
                     <a href="{{ url_for('tools.tool_page', tool_name='resume-generator') }}" 
                        class="btn btn-primary btn-sm w-full">
                         Use Tool
@@ -320,7 +320,7 @@
                 Built for professionals, creators, and businesses who value quality and efficiency.
             </p>
         </div>
-        
+
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div class="text-center">
                 <div class="w-16 h-16 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center mx-auto mb-4">
@@ -329,7 +329,7 @@
                 <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-2">100% Secure</h3>
                 <p class="text-gray-600 dark:text-gray-300">All files are processed locally and deleted after use. Your privacy is our priority.</p>
             </div>
-            
+
             <div class="text-center">
                 <div class="w-16 h-16 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center mx-auto mb-4">
                     <i data-lucide="zap" class="w-8 h-8 text-green-600 dark:text-green-400"></i>
@@ -337,7 +337,7 @@
                 <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-2">Lightning Fast</h3>
                 <p class="text-gray-600 dark:text-gray-300">Optimized algorithms ensure quick processing without compromising quality.</p>
             </div>
-            
+
             <div class="text-center">
                 <div class="w-16 h-16 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center mx-auto mb-4">
                     <i data-lucide="smartphone" class="w-8 h-8 text-purple-600 dark:text-purple-400"></i>
@@ -371,12 +371,40 @@
     </div>
 </section>
 
+<!-- Ads Banner -->
+<section class="py-4 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 border-y border-amber-100 dark:border-amber-800">
+    <div class="container mx-auto px-4">
+        <div class="text-center">
+            <div class="inline-flex items-center space-x-3 bg-white dark:bg-gray-800 rounded-lg px-6 py-3 shadow-sm border border-amber-200 dark:border-amber-700">
+                <i data-lucide="star" class="w-5 h-5 text-amber-600 dark:text-amber-400"></i>
+                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Get Premium:</span>
+                <span class="text-sm text-amber-600 dark:text-amber-400 font-semibold">Unlimited Tools • No Ads • Priority Support</span>
+                <i data-lucide="crown" class="w-4 h-4 text-amber-600 dark:text-amber-400"></i>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Advanced Features Banner -->
+<section class="py-8 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 border-y border-blue-100 dark:border-blue-800">
+    <div class="container mx-auto px-4">
+        <div class="text-center">
+            <div class="inline-flex items-center space-x-3 bg-white dark:bg-gray-800 rounded-full px-6 py-3 shadow-md border border-blue-200 dark:border-blue-700">
+                <i data-lucide="zap" class="w-5 h-5 text-blue-600 dark:text-blue-400"></i>
+                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Advanced Features:</span>
+                <span class="text-sm text-blue-600 dark:text-blue-400 font-semibold">AI-Powered • Batch Processing • Cloud Storage</span>
+                <i data-lucide="arrow-right" class="w-4 h-4 text-blue-600 dark:text-blue-400"></i>
+            </div>
+        </div>
+    </div>
+</section>
+
 <script>
 // Search functionality
 function searchTools() {
     const query = document.querySelector('[x-model="searchQuery"]').value;
     if (query.length < 2) return;
-    
+
     fetch(`/search?q=${encodeURIComponent(query)}`)
         .then(response => response.json())
         .then(data => {
