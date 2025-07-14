@@ -552,31 +552,79 @@ function addInstantPageTransitions() {
     });
 }
 
-// Optimize back navigation
+// Optimize back navigation - Fixed
 function optimizeBackNavigation() {
+    // Immediate background fix
+    document.documentElement.style.backgroundColor = getComputedStyle(document.documentElement).backgroundColor;
+    document.body.style.backgroundColor = 'inherit';
+    
     // Handle browser back/forward buttons
     window.addEventListener('popstate', function(event) {
-        document.body.classList.add('back-navigation-smooth');
+        // Prevent sidebar auto-open
+        closeSidebarAndMenus();
+        
+        // Instant show without transition
         document.body.style.opacity = '1';
+        document.body.style.visibility = 'visible';
+        document.body.classList.add('back-navigation-fix');
+        
+        // Remove any loading states
+        document.body.classList.remove('page-transition', 'loading');
         
         setTimeout(() => {
-            document.body.classList.remove('back-navigation-smooth');
-        }, 200);
+            document.body.classList.remove('back-navigation-fix');
+        }, 100);
     });
 
     // Prevent white flash on page show
     window.addEventListener('pageshow', function(event) {
-        if (event.persisted) {
-            document.body.style.opacity = '1';
-            document.body.classList.remove('page-transition', 'loading');
-            document.documentElement.style.display = 'block';
-        }
+        closeSidebarAndMenus();
+        document.body.style.opacity = '1';
+        document.body.style.visibility = 'visible';
+        document.body.classList.remove('page-transition', 'loading');
+        document.documentElement.style.display = 'block';
     });
 
     // Fast page visibility change handling
     document.addEventListener('visibilitychange', function() {
         if (!document.hidden) {
+            closeSidebarAndMenus();
             document.body.style.opacity = '1';
+        }
+    });
+
+    // Prevent any auto-opening on page load
+    window.addEventListener('load', function() {
+        closeSidebarAndMenus();
+    });
+}
+
+// Close all sidebars and menus
+function closeSidebarAndMenus() {
+    // Close mobile menu
+    if (window.Alpine && window.Alpine.store('navigation')) {
+        window.Alpine.store('navigation').mobileMenuOpen = false;
+    }
+    
+    // Close chat widget
+    const chatWidget = document.getElementById('chat-widget');
+    if (chatWidget && chatWidget.__x) {
+        chatWidget.__x.$data.isOpen = false;
+    }
+    
+    // Close any open dropdowns
+    const userMenus = document.querySelectorAll('[x-data*="userMenuOpen"]');
+    userMenus.forEach(menu => {
+        if (menu.__x && menu.__x.$data.userMenuOpen) {
+            menu.__x.$data.userMenuOpen = false;
+        }
+    });
+    
+    // Force close any visible modals or overlays
+    const modals = document.querySelectorAll('[x-show], .modal, .dropdown');
+    modals.forEach(modal => {
+        if (modal.style.display !== 'none') {
+            modal.style.display = 'none';
         }
     });
 }

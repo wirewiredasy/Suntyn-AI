@@ -97,19 +97,34 @@
     <style>
         /* Critical styles to prevent any flash */
         html { 
-            background-color: #f9fafb;
+            background-color: #f9fafb !important;
             min-height: 100vh;
+            transition: none !important;
         }
         html.dark { 
-            background-color: #111827; 
+            background-color: #111827 !important; 
         }
 
         body { 
             opacity: 1 !important;
-            background-color: inherit;
+            background-color: inherit !important;
             min-height: 100vh;
             margin: 0;
+            padding: 0;
             transition: none !important;
+            visibility: visible !important;
+        }
+
+        /* Prevent sidebar flash */
+        nav, .fixed {
+            transition: none !important;
+        }
+
+        /* Back navigation stability */
+        .back-nav-stable {
+            position: static !important;
+            transform: none !important;
+            animation: none !important;
         }
 
         /* Prevent any white flash during navigation */
@@ -278,7 +293,12 @@
     </nav>
 
     <!-- Mobile Menu -->
-    <div x-show="$store.navigation.mobileMenuOpen" @click.away="$store.navigation.mobileMenuOpen = false" class="md:hidden fixed inset-0 z-40 bg-black bg-opacity-50" x-transition>
+    <div x-show="$store.navigation.mobileMenuOpen" 
+         @click.away="$store.navigation.mobileMenuOpen = false" 
+         x-init="$store.navigation.mobileMenuOpen = false"
+         class="md:hidden fixed inset-0 z-40 bg-black bg-opacity-50" 
+         x-transition
+         style="display: none;">
         <div class="fixed inset-y-0 left-0 w-64 bg-white dark:bg-gray-800 shadow-lg">
             <div class="p-4">
                 <div class="flex items-center justify-between mb-8">
@@ -452,9 +472,12 @@
 
     <!-- Fast initialization script -->
     <script>
-        // Immediate initialization
+        // Immediate initialization and back navigation fix
         (function() {
-            // Show content immediately
+            // Immediate stability
+            document.documentElement.style.backgroundColor = document.documentElement.classList.contains('dark') ? '#111827' : '#f9fafb';
+            document.body.style.opacity = '1';
+            document.body.style.visibility = 'visible';
             document.body.classList.add('loaded');
 
             // Fast initialization when DOM is ready
@@ -474,7 +497,23 @@
                         }
                     }, 200);
                 }
+
+                // Force close all menus on load
+                setTimeout(() => {
+                    if (window.Alpine && window.Alpine.store('navigation')) {
+                        window.Alpine.store('navigation').mobileMenuOpen = false;
+                    }
+                }, 100);
             };
+
+            // Back navigation immediate fix
+            window.addEventListener('pageshow', function(event) {
+                document.body.style.opacity = '1';
+                document.body.style.visibility = 'visible';
+                if (window.Alpine && window.Alpine.store('navigation')) {
+                    window.Alpine.store('navigation').mobileMenuOpen = false;
+                }
+            });
 
             // Initialize as soon as possible
             if (document.readyState === 'loading') {
@@ -486,7 +525,7 @@
     </script>
 
     <!-- Live Chat Widget -->
-    <div id="chat-widget" x-data="chatWidget()" x-init="init()" class="fixed bottom-4 right-4 z-50">
+    <div id="chat-widget" x-data="chatWidget()" x-init="init(); isOpen = false;" class="fixed bottom-4 right-4 z-50">
         <!-- Chat Button -->
         <button @click="toggleChat()" 
                 class="w-14 h-14 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg flex items-center justify-center transition-all duration-300"
@@ -564,6 +603,7 @@
             newMessage: '',
 
             init() {
+                // Force closed state
                 this.isOpen = false;
                 this.messages = [
                     {
@@ -573,6 +613,15 @@
                         time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
                     }
                 ];
+                
+                // Prevent auto-opening on navigation
+                window.addEventListener('popstate', () => {
+                    this.isOpen = false;
+                });
+                
+                window.addEventListener('pageshow', () => {
+                    this.isOpen = false;
+                });
             },
 
             toggleChat() {
