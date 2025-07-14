@@ -1,34 +1,30 @@
-// Main application JavaScript
-document.addEventListener('DOMContentLoaded', function() {
-    // Fast initialization to prevent flash
-    document.body.style.opacity = '1';
+// Ultra-fast application initialization
+(function() {
+    // Instant initialization
+    function initializeApp() {
+        // Initialize Lucide icons immediately
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
 
-    // Initialize Lucide icons
-    if (typeof lucide !== 'undefined') {
-        lucide.createIcons();
+        // Initialize core features
+        initializeTooltips();
+        initializeFileHandlers();
+        initializeSearch();
+        initializeNotifications();
+        initializeAnalytics();
+        preventChatAutoOpen();
+        addInstantPageTransitions();
+        optimizeBackNavigation();
     }
 
-    // Initialize tooltips
-    initializeTooltips();
-
-    // Initialize file handlers
-    initializeFileHandlers();
-
-    // Initialize search functionality
-    initializeSearch();
-
-    // Initialize notification system
-    initializeNotifications();
-
-    // Initialize analytics
-    initializeAnalytics();
-
-    // Ensure chat widget never auto-opens
-    preventChatAutoOpen();
-
-    // Add smooth page transitions
-    addPageTransitions();
-});
+    // Execute immediately if possible
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initializeApp);
+    } else {
+        initializeApp();
+    }
+})();
 
 // Tooltip initialization
 function initializeTooltips() {
@@ -526,9 +522,9 @@ document.addEventListener('click', function(event) {
     }
 });
 
-// Add smooth page transitions
-function addPageTransitions() {
-    // Smooth transitions for all links
+// Add instant page transitions
+function addInstantPageTransitions() {
+    // Lightning-fast transitions for all links
     const links = document.querySelectorAll('a[href^="/"], a[href^="' + window.location.origin + '"]');
     links.forEach(link => {
         link.addEventListener('click', function(e) {
@@ -537,22 +533,51 @@ function addPageTransitions() {
                 return;
             }
 
-            // Add transition class
+            // Instant transition
             document.body.classList.add('page-transition', 'loading');
-
-            // Small delay to show transition
+            
+            // Navigate immediately
             setTimeout(() => {
                 window.location = this.href;
-            }, 100);
+            }, 20);
         });
     });
 
-    // Handle form submissions smoothly
+    // Handle form submissions instantly
     const forms = document.querySelectorAll('form');
     forms.forEach(form => {
         form.addEventListener('submit', function() {
             document.body.classList.add('page-transition', 'loading');
         });
+    });
+}
+
+// Optimize back navigation
+function optimizeBackNavigation() {
+    // Handle browser back/forward buttons
+    window.addEventListener('popstate', function(event) {
+        document.body.classList.add('back-navigation-smooth');
+        document.body.style.opacity = '1';
+        
+        setTimeout(() => {
+            document.body.classList.remove('back-navigation-smooth');
+        }, 200);
+    });
+
+    // Prevent white flash on page show
+    window.addEventListener('pageshow', function(event) {
+        if (event.persisted) {
+            document.body.style.opacity = '1';
+            document.body.classList.remove('page-transition', 'loading');
+            document.documentElement.style.display = 'block';
+        }
+    });
+
+    // Fast page visibility change handling
+    document.addEventListener('visibilitychange', function() {
+        if (!document.hidden) {
+            document.body.style.opacity = '1';
+        }
     });
 }
 

@@ -1,8 +1,9 @@
 /* Main CSS for Toolora AI */
 
-/* Prevent white flash and FOUC */
+/* Ultra-fast loading without flash */
 html {
   background-color: #f9fafb;
+  min-height: 100vh;
 }
 
 html.dark {
@@ -11,41 +12,61 @@ html.dark {
 
 body {
   background-color: inherit;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  min-height: 100vh;
+  margin: 0;
+  opacity: 1 !important;
 }
 
-/* Prevent flash of unstyled content */
+/* Prevent any flash */
 [x-cloak] {
   display: none !important;
 }
 
-/* Prevent loading flash */
-.loading-overlay {
+/* Instant page container */
+.page-container {
+  min-height: 100vh;
   background-color: inherit;
-  transition: opacity 0.2s ease;
 }
 
-/* Animation improvements to prevent flash issues */
+/* Back navigation optimization */
+html.animations-ready * {
+  transition: background-color 0.15s ease, color 0.15s ease, transform 0.15s ease;
+}
+
+/* Fast cache optimization */
+.bfcache-optimize {
+  will-change: auto;
+  contain: layout style paint;
+}
+
+/* Ultra-fast animations */
 .animate__animated {
-  animation-duration: 0.3s;
+  animation-duration: 0.15s;
   animation-fill-mode: both;
 }
 
 .animate__fadeIn {
-  animation-duration: 0.2s;
+  animation-duration: 0.1s;
 }
 
 .animate__fadeInUp {
-  animation-duration: 0.3s;
+  animation-duration: 0.15s;
 }
 
 .animate__fadeInDown {
-  animation-duration: 0.2s;
+  animation-duration: 0.1s;
 }
 
-/* Smooth transitions for all elements */
-* {
-  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, opacity 0.2s ease;
+/* Optimized transitions only when ready */
+html.animations-ready * {
+  transition: background-color 0.1s ease, border-color 0.1s ease, color 0.1s ease, opacity 0.1s ease;
+}
+
+/* Performance optimization */
+.performance-optimize {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
 }
 
 /* Prevent button flash on click */
@@ -64,14 +85,40 @@ a {
   transition: color 0.15s ease;
 }
 
-/* Page transition improvements */
+/* Lightning-fast page transitions */
 .page-transition {
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  transition: opacity 0.1s ease, transform 0.1s ease;
 }
 
 .page-transition.loading {
-  opacity: 0.8;
-  transform: scale(0.99);
+  opacity: 0.95;
+  transform: scale(0.995);
+}
+
+/* Smooth back navigation */
+.back-navigation-smooth {
+  animation: smoothBackIn 0.2s ease-out;
+}
+
+@keyframes smoothBackIn {
+  0% { 
+    opacity: 0.9; 
+    transform: translateX(-10px);
+  }
+  100% { 
+    opacity: 1; 
+    transform: translateX(0);
+  }
+}
+
+/* Instant hover effects */
+.instant-hover {
+  transition: transform 0.05s ease, box-shadow 0.05s ease;
+}
+
+.instant-hover:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 /* Tool card hover effects */

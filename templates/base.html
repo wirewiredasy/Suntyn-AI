@@ -27,11 +27,11 @@
     <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/animated-favicon.svg') }}">
     <!-- Fallback Favicon for older browsers -->
     <link rel="icon" type="image/jpeg" href="{{ url_for('static', filename='images/toolora-icon.jpg') }}">
-    
+
     <!-- App Icons for Mobile -->
     <link rel="apple-touch-icon" href="{{ url_for('static', filename='images/toolora-icon.jpg') }}">
     <meta name="theme-color" content="#3b82f6">
-    
+
     <!-- PWA Manifest -->
     <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
 
@@ -44,7 +44,7 @@
 
     <!-- Alpine.js -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    
+
     <!-- Alpine.js Store Initialization -->
     <script>
         document.addEventListener('alpine:init', () => {
@@ -63,20 +63,32 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 
-    <!-- Preload CSS to prevent flash -->
+    <!-- Critical CSS for instant loading -->
     <style>
-        /* Prevent flash of unstyled content */
-        html { background-color: #f9fafb; }
-        html.dark { background-color: #111827; }
-        
+        /* Critical styles to prevent any flash */
+        html { 
+            background-color: #f9fafb;
+            min-height: 100vh;
+        }
+        html.dark { 
+            background-color: #111827; 
+        }
+
         body { 
-            opacity: 0; 
-            transition: opacity 0.2s ease; 
+            opacity: 1 !important;
+            background-color: inherit;
+            min-height: 100vh;
+            margin: 0;
+            transition: none !important;
+        }
+
+        /* Prevent any white flash during navigation */
+        .page-container {
+            min-height: 100vh;
             background-color: inherit;
         }
-        body.loaded { opacity: 1; }
-        
-        /* Loading overlay - inherit background to prevent flash */
+
+        /* Fast loading overlay */
         .loading-overlay {
             position: fixed;
             top: 0;
@@ -84,42 +96,53 @@
             width: 100%;
             height: 100%;
             background-color: inherit;
-            display: flex;
+            display: none;
             align-items: center;
             justify-content: center;
             z-index: 9999;
-            transition: opacity 0.2s ease;
         }
-        
-        .loading-overlay.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-        
-        .spinner {
-            width: 40px;
-            height: 40px;
-            background-image: url('{{ url_for('static', filename='images/animated-favicon.svg') }}');
-            background-size: cover;
-            background-position: center;
+
+        .toolora-spinner {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(45deg, #3b82f6, #8b5cf6);
             border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            border: 2px solid rgba(59, 130, 246, 0.3);
+            animation: fastSpin 0.6s linear infinite;
+            position: relative;
         }
-        
-        .dark .spinner {
-            border-color: rgba(96, 165, 250, 0.3);
+
+        .toolora-spinner::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
         }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+
+        @keyframes fastSpin {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.1); }
+            100% { transform: rotate(360deg) scale(1); }
         }
-        
-        /* Prevent button flash */
+
+        /* Instant transitions */
+        * {
+            transition: background-color 0.1s ease, color 0.1s ease, transform 0.1s ease !important;
+        }
+
+        /* Fast button interactions */
         button, a, [role="button"] {
             -webkit-tap-highlight-color: transparent;
-            transition: all 0.15s ease;
+            transition: all 0.1s ease !important;
+        }
+
+        /* Prevent layout shift */
+        nav, main, footer {
+            will-change: auto;
         }
     </style>
 
@@ -400,14 +423,14 @@
         (function() {
             // Show content immediately
             document.body.classList.add('loaded');
-            
+
             // Fast initialization when DOM is ready
             const initializeApp = function() {
                 // Initialize Lucide Icons
                 if (typeof lucide !== 'undefined') {
                     lucide.createIcons();
                 }
-                
+
                 // Hide loading overlay
                 const loadingOverlay = document.getElementById('loading-overlay');
                 if (loadingOverlay) {
@@ -419,7 +442,7 @@
                     }, 200);
                 }
             };
-            
+
             // Initialize as soon as possible
             if (document.readyState === 'loading') {
                 document.addEventListener('DOMContentLoaded', initializeApp);
@@ -448,7 +471,7 @@
              x-transition:leave-start="opacity-100 transform scale-100"
              x-transition:leave-end="opacity-0 transform scale-95"
              class="absolute bottom-16 right-0 w-80 h-96 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 flex flex-col">
-            
+
             <!-- Chat Header -->
             <div class="bg-blue-600 text-white p-4 rounded-t-lg">
                 <h3 class="font-semibold">Live Support</h3>
@@ -471,7 +494,7 @@
                             </div>
                         </div>
                     </template>
-                    
+
                     <!-- Show empty state when no messages -->
                     <div x-show="messages.length === 0" class="text-center py-8">
                         <div class="w-12 h-12 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-3">
@@ -506,7 +529,7 @@
             isOpen: false,
             messages: [],
             newMessage: '',
-            
+
             // Ensure chat never auto-opens
             init() {
                 this.isOpen = false;
@@ -515,14 +538,14 @@
                     this.isOpen = false;
                 }, 100);
             },
-            
+
             toggleChat() {
                 // Only allow manual toggle
                 if (event && event.isTrusted) {
                     this.isOpen = !this.isOpen;
                 }
             },
-            
+
             sendMessage() {
                 if (this.newMessage.trim()) {
                     // Add welcome message only when user sends first message
@@ -534,17 +557,17 @@
                             time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
                         });
                     }
-                    
+
                     const message = {
                         id: Date.now(),
                         text: this.newMessage,
                         sender: 'user',
                         time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
                     };
-                    
+
                     this.messages.push(message);
                     this.newMessage = '';
-                    
+
                     // Auto-scroll to bottom
                     setTimeout(() => {
                         const chatMessages = document.getElementById('chat-messages');
@@ -552,7 +575,7 @@
                             chatMessages.scrollTop = chatMessages.scrollHeight;
                         }
                     }, 100);
-                    
+
                     // Simulate support response
                     setTimeout(() => {
                         this.messages.push({
@@ -561,7 +584,7 @@
                             sender: 'support',
                             time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
                         });
-                        
+
                         // Auto-scroll again after response
                         setTimeout(() => {
                             const chatMessages = document.getElementById('chat-messages');
@@ -574,7 +597,7 @@
             }
         }
     }
-    
+
     // Prevent any automatic chat opening on page load
     document.addEventListener('DOMContentLoaded', function() {
         // Force chat to stay closed
@@ -607,7 +630,7 @@
     document.addEventListener('DOMContentLoaded', function() {
         // Add error handling for all tool icons
         const toolIcons = document.querySelectorAll('.tool-card img, .category-icon img');
-        
+
         toolIcons.forEach(img => {
             img.onerror = function() {
                 // Replace with Toolora branded fallback
@@ -616,7 +639,7 @@
                 this.style.filter = 'brightness(0.8)';
             };
         });
-        
+
         // Add Toolora branding to loading states
         const observer = new MutationObserver(function(mutations) {
             mutations.forEach(function(mutation) {
@@ -627,7 +650,7 @@
                 });
             });
         });
-        
+
         observer.observe(document.body, { childList: true, subtree: true });
     });
     </script>

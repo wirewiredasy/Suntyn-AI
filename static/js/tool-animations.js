@@ -30,9 +30,9 @@ class ToolAnimationManager {
         const style = document.createElement('style');
         style.textContent = `
             .animate-fade-in-up {
-                animation: fadeInUp 0.6s ease-out forwards;
+                animation: fadeInUp 0.2s ease-out forwards;
                 opacity: 0;
-                transform: translateY(20px);
+                transform: translateY(10px);
             }
             
             @keyframes fadeInUp {
@@ -43,21 +43,32 @@ class ToolAnimationManager {
             }
             
             .tool-card {
-                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+                transform: translateZ(0);
             }
             
             .tool-card:hover {
-                transform: translateY(-8px) scale(1.02);
-                box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+                transform: translateY(-4px) scale(1.01) translateZ(0);
+                box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.1), 0 5px 8px -3px rgba(0, 0, 0, 0.04);
             }
             
             .processing-animation {
-                animation: pulse 2s infinite;
+                animation: instantPulse 1s infinite;
             }
             
-            @keyframes pulse {
-                0%, 100% { opacity: 1; }
-                50% { opacity: 0.7; }
+            @keyframes instantPulse {
+                0%, 100% { opacity: 1; transform: scale(1); }
+                50% { opacity: 0.8; transform: scale(1.02); }
+            }
+            
+            .instant-feedback {
+                animation: quickBounce 0.3s ease-out;
+            }
+            
+            @keyframes quickBounce {
+                0% { transform: scale(1); }
+                50% { transform: scale(1.05); }
+                100% { transform: scale(1); }
             }
             
             .progress-bar {
