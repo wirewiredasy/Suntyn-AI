@@ -554,3 +554,51 @@ def get_user_files():
         'created_at': f.created_at.isoformat(),
         'download_url': f'/api/download/{f.saved_filename}'
     } for f in files])
+
+@api_bp.route('/feedback', methods=['POST'])
+def submit_feedback():
+    """Submit user feedback"""
+    try:
+        data = request.get_json()
+        
+        # Log feedback to console (in production, save to database)
+        print(f"FEEDBACK: Type={data.get('type')}, Message={data.get('message')}, URL={data.get('url')}")
+        
+        # Here you would save to database
+        # feedback = Feedback(
+        #     type=data.get('type'),
+        #     message=data.get('message'),
+        #     url=data.get('url'),
+        #     user_agent=data.get('userAgent'),
+        #     timestamp=datetime.utcnow()
+        # )
+        # db.session.add(feedback)
+        # db.session.commit()
+        
+        return jsonify({
+            'success': True,
+            'message': 'Feedback submitted successfully'
+        })
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+@api_bp.route('/analytics', methods=['POST'])
+def track_analytics():
+    """Track user analytics"""
+    try:
+        data = request.get_json()
+        
+        # Log analytics (in production, save to database)
+        print(f"ANALYTICS: Action={data.get('action')}, Tool={data.get('tool')}, Category={data.get('category')}")
+        
+        return jsonify({
+            'success': True
+        })
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500

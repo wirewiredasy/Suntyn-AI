@@ -7,6 +7,9 @@ Toolora AI is a comprehensive web-based platform offering 85+ professional tools
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
+Branding focus: Hindi-English mix, casual yet informative tone
+Animation style: Smooth, subtle, not cartoonish
+Voice: Trustworthy, fun, yet professional (like a friend explaining)
 
 ## System Architecture
 

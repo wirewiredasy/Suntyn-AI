@@ -1,0 +1,191 @@
+/* Toolora AI Brand Colors and Hover Effects */
+:root {
+    --toolora-purple: #8B5CF6;
+    --toolora-cyan: #06B6D4;
+    --toolora-emerald: #10B981;
+    --toolora-gradient: linear-gradient(135deg, var(--toolora-purple) 0%, var(--toolora-cyan) 50%, var(--toolora-emerald) 100%);
+}
+
+/* Enhanced hover effects for tool cards */
+.tool-card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid transparent;
+    background: linear-gradient(white, white) padding-box, var(--toolora-gradient) border-box;
+}
+
+.tool-card:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(139, 92, 246, 0.1), 0 8px 16px rgba(6, 182, 212, 0.1);
+    border: 1px solid transparent;
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(6, 182, 212, 0.05) 50%, rgba(16, 185, 129, 0.05) 100%) padding-box, var(--toolora-gradient) border-box;
+}
+
+.tool-card .icon-container {
+    background: var(--toolora-gradient);
+    transition: all 0.3s ease;
+}
+
+.tool-card:hover .icon-container {
+    transform: scale(1.1);
+    box-shadow: 0 8px 20px rgba(139, 92, 246, 0.3);
+}
+
+/* Header with logo colors */
+.header-gradient {
+    background: var(--toolora-gradient);
+}
+
+.header-logo {
+    background: var(--toolora-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 800;
+    font-size: 1.5rem;
+}
+
+/* Button hover effects */
+.btn-primary {
+    background: var(--toolora-gradient);
+    transition: all 0.3s ease;
+    border: none;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4);
+}
+
+.btn-primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.btn-primary:hover::before {
+    left: 100%;
+}
+
+/* Category cards with brand colors */
+.category-card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.category-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--toolora-gradient);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.category-card:hover::before {
+    opacity: 0.1;
+}
+
+.category-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 25px 50px rgba(139, 92, 246, 0.15);
+}
+
+/* Search bar enhancements */
+.search-bar {
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.search-bar:focus-within {
+    transform: scale(1.02);
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+}
+
+.search-bar input:focus {
+    border-color: var(--toolora-purple);
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+}
+
+/* Floating elements */
+.floating-feedback {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: var(--toolora-gradient);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 50px;
+    box-shadow: 0 4px 20px rgba(139, 92, 246, 0.3);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    z-index: 1000;
+}
+
+.floating-feedback:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(139, 92, 246, 0.4);
+}
+
+/* Gradient text utilities */
+.gradient-text {
+    background: var(--toolora-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Smooth animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in-up {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+/* Staggered animations */
+.animate-stagger-1 { animation-delay: 0.1s; }
+.animate-stagger-2 { animation-delay: 0.2s; }
+.animate-stagger-3 { animation-delay: 0.3s; }
+.animate-stagger-4 { animation-delay: 0.4s; }
+
+/* Loading states */
+.loading-shimmer {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .tool-card {
+        background: linear-gradient(rgba(30, 30, 30, 1), rgba(30, 30, 30, 1)) padding-box, var(--toolora-gradient) border-box;
+    }
+    
+    .tool-card:hover {
+        background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(6, 182, 212, 0.1) 50%, rgba(16, 185, 129, 0.1) 100%) padding-box, var(--toolora-gradient) border-box;
+    }
+}
