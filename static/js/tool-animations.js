@@ -10,10 +10,10 @@ class ToolAnimationManager {
     initializeAnimations() {
         // Add stagger animation to tool cards
         this.staggerToolCards();
-        
+
         // Add smooth transitions
         this.addSmoothTransitions();
-        
+
         // Initialize progress animations
         this.initializeProgressAnimations();
     }
@@ -34,90 +34,90 @@ class ToolAnimationManager {
                 opacity: 0;
                 transform: translateY(10px);
             }
-            
+
             @keyframes fadeInUp {
                 to {
                     opacity: 1;
                     transform: translateY(0);
                 }
             }
-            
+
             .tool-card {
                 transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
                 transform: translateZ(0);
             }
-            
+
             .tool-card:hover {
                 transform: translateY(-4px) scale(1.01) translateZ(0);
                 box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.1), 0 5px 8px -3px rgba(0, 0, 0, 0.04);
             }
-            
+
             .processing-animation {
                 animation: instantPulse 1s infinite;
             }
-            
+
             @keyframes instantPulse {
                 0%, 100% { opacity: 1; transform: scale(1); }
                 50% { opacity: 0.8; transform: scale(1.02); }
             }
-            
+
             .instant-feedback {
                 animation: quickBounce 0.3s ease-out;
             }
-            
+
             @keyframes quickBounce {
                 0% { transform: scale(1); }
                 50% { transform: scale(1.05); }
                 100% { transform: scale(1); }
             }
-            
+
             .progress-bar {
                 transition: width 0.5s ease-out;
             }
-            
+
             .bounce-in {
                 animation: bounceIn 0.6s ease-out;
             }
-            
+
             @keyframes bounceIn {
                 0% { transform: scale(0.3); opacity: 0; }
                 50% { transform: scale(1.05); }
                 70% { transform: scale(0.9); }
                 100% { transform: scale(1); opacity: 1; }
             }
-            
+
             .slide-in-right {
                 animation: slideInRight 0.5s ease-out;
             }
-            
+
             @keyframes slideInRight {
                 from { transform: translateX(100%); opacity: 0; }
                 to { transform: translateX(0); opacity: 1; }
             }
-            
+
             .rotate-in {
                 animation: rotateIn 0.5s ease-out;
             }
-            
+
             @keyframes rotateIn {
                 from { transform: rotate(-180deg) scale(0); opacity: 0; }
                 to { transform: rotate(0deg) scale(1); opacity: 1; }
             }
-            
+
             .shake {
                 animation: shake 0.5s ease-in-out;
             }
-            
+
             @keyframes shake {
                 0%, 100% { transform: translateX(0); }
                 25% { transform: translateX(-5px); }
                 75% { transform: translateX(5px); }
             }
-            
+
             .glow {
                 animation: glow 2s ease-in-out infinite alternate;
             }
-            
+
             @keyframes glow {
                 from { box-shadow: 0 0 10px rgba(59, 130, 246, 0.3); }
                 to { box-shadow: 0 0 20px rgba(59, 130, 246, 0.6); }
@@ -152,7 +152,7 @@ class ToolAnimationManager {
                 button.addEventListener('mouseenter', () => {
                     button.style.transform = 'translateY(-2px)';
                 });
-                
+
                 button.addEventListener('mouseleave', () => {
                     button.style.transform = 'translateY(0)';
                 });
@@ -172,7 +172,7 @@ class ToolAnimationManager {
                 const size = Math.max(rect.width, rect.height);
                 const x = e.clientX - rect.left - size / 2;
                 const y = e.clientY - rect.top - size / 2;
-                
+
                 ripple.style.cssText = `
                     position: absolute;
                     width: ${size}px;
@@ -185,11 +185,11 @@ class ToolAnimationManager {
                     animation: ripple 0.6s ease-out;
                     pointer-events: none;
                 `;
-                
+
                 button.style.position = 'relative';
                 button.style.overflow = 'hidden';
                 button.appendChild(ripple);
-                
+
                 setTimeout(() => {
                     ripple.remove();
                 }, 600);
@@ -221,11 +221,11 @@ class ToolAnimationManager {
         window.createProgressBar = (progress = 0, color = 'blue') => {
             const container = document.createElement('div');
             container.className = `w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2`;
-            
+
             const bar = document.createElement('div');
             bar.className = `bg-${color}-600 h-2 rounded-full progress-bar`;
             bar.style.width = `${progress}%`;
-            
+
             container.appendChild(bar);
             return container;
         };
@@ -244,7 +244,7 @@ class ToolAnimationManager {
         window.trackUploadProgress = (file, progressCallback) => {
             const reader = new FileReader();
             let progress = 0;
-            
+
             const interval = setInterval(() => {
                 progress += Math.random() * 20;
                 if (progress >= 100) {
@@ -253,7 +253,7 @@ class ToolAnimationManager {
                 }
                 progressCallback(progress);
             }, 100);
-            
+
             return interval;
         };
     }
@@ -262,7 +262,7 @@ class ToolAnimationManager {
     fadeIn(element, duration = 300) {
         element.style.opacity = '0';
         element.style.display = 'block';
-        
+
         const fadeEffect = setInterval(() => {
             if (!element.style.opacity) {
                 element.style.opacity = '0';
@@ -293,7 +293,7 @@ class ToolAnimationManager {
         element.style.maxHeight = '0';
         element.style.overflow = 'hidden';
         element.style.transition = `max-height ${duration}ms ease-out`;
-        
+
         setTimeout(() => {
             element.style.maxHeight = element.scrollHeight + 'px';
         }, 10);
@@ -303,7 +303,7 @@ class ToolAnimationManager {
         element.style.maxHeight = element.scrollHeight + 'px';
         element.style.overflow = 'hidden';
         element.style.transition = `max-height ${duration}ms ease-out`;
-        
+
         setTimeout(() => {
             element.style.maxHeight = '0';
         }, 10);
@@ -314,9 +314,9 @@ class ToolAnimationManager {
         const notification = document.createElement('div');
         notification.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 bounce-in';
         notification.textContent = message;
-        
+
         document.body.appendChild(notification);
-        
+
         setTimeout(() => {
             notification.classList.add('slide-in-right');
             setTimeout(() => {
@@ -329,9 +329,9 @@ class ToolAnimationManager {
         const notification = document.createElement('div');
         notification.className = 'fixed top-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 shake';
         notification.textContent = message;
-        
+
         document.body.appendChild(notification);
-        
+
         setTimeout(() => {
             notification.classList.add('slide-in-right');
             setTimeout(() => {
@@ -343,7 +343,7 @@ class ToolAnimationManager {
     // File upload animations
     animateFileUpload(dropZone) {
         dropZone.classList.add('glow');
-        
+
         setTimeout(() => {
             dropZone.classList.remove('glow');
         }, 2000);
@@ -351,7 +351,7 @@ class ToolAnimationManager {
 
     animateFileProcessing(element) {
         element.classList.add('processing-animation');
-        
+
         return () => {
             element.classList.remove('processing-animation');
         };
@@ -363,3 +363,4 @@ const toolAnimationManager = new ToolAnimationManager();
 
 // Export for global use
 window.toolAnimationManager = toolAnimationManager;
+        window.addInstantPageTransitions = this.addInstantPageTransitions.bind(this);
