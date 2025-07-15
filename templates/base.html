@@ -373,53 +373,49 @@
             <!-- How did you hear about us? -->
             <div class="bg-white dark:bg-gray-800 rounded-xl p-6 mb-12 max-w-md mx-auto">
                 <h3 class="text-sm font-semibold text-gray-900 dark:text-white mb-4">How did you hear about us?</h3>
-                <div class="grid grid-cols-2 gap-2 text-sm">
+                <form id="referralForm" class="grid grid-cols-2 gap-2 text-sm">
                     <label class="flex items-center space-x-2">
-                        <input type="radio" name="source" class="text-orange-500">
-                        <span class="text-gray-700 dark:text-gray-300">Podcast</span>
+                        <input type="radio" name="source" value="pdf-merge" class="text-orange-500">
+                        <span class="text-gray-700 dark:text-gray-300">PDF Merge</span>
                     </label>
                     <label class="flex items-center space-x-2">
-                        <input type="radio" name="source" class="text-orange-500">
-                        <span class="text-gray-700 dark:text-gray-300">Facebook/Meta/Instagram</span>
+                        <input type="radio" name="source" value="image-compress" class="text-orange-500">
+                        <span class="text-gray-700 dark:text-gray-300">Image Compress</span>
                     </label>
                     <label class="flex items-center space-x-2">
-                        <input type="radio" name="source" class="text-orange-500">
-                        <span class="text-gray-700 dark:text-gray-300">Word of mouth</span>
+                        <input type="radio" name="source" value="video-trim" class="text-orange-500">
+                        <span class="text-gray-700 dark:text-gray-300">Video Trim</span>
                     </label>
                     <label class="flex items-center space-x-2">
-                        <input type="radio" name="source" class="text-orange-500">
-                        <span class="text-gray-700 dark:text-gray-300">TikTok</span>
+                        <input type="radio" name="source" value="qr-generator" class="text-orange-500">
+                        <span class="text-gray-700 dark:text-gray-300">QR Generator</span>
                     </label>
                     <label class="flex items-center space-x-2">
-                        <input type="radio" name="source" class="text-orange-500">
-                        <span class="text-gray-700 dark:text-gray-300">YouTube</span>
+                        <input type="radio" name="source" value="resume-generator" class="text-orange-500">
+                        <span class="text-gray-700 dark:text-gray-300">Resume Generator</span>
                     </label>
                     <label class="flex items-center space-x-2">
-                        <input type="radio" name="source" class="text-orange-500">
-                        <span class="text-gray-700 dark:text-gray-300">LinkedIn</span>
+                        <input type="radio" name="source" value="image-resize" class="text-orange-500">
+                        <span class="text-gray-700 dark:text-gray-300">Image Resize</span>
                     </label>
                     <label class="flex items-center space-x-2">
-                        <input type="radio" name="source" class="text-orange-500">
-                        <span class="text-gray-700 dark:text-gray-300">Search engine</span>
+                        <input type="radio" name="source" value="pdf-split" class="text-orange-500">
+                        <span class="text-gray-700 dark:text-gray-300">PDF Split</span>
                     </label>
                     <label class="flex items-center space-x-2">
-                        <input type="radio" name="source" class="text-orange-500">
-                        <span class="text-gray-700 dark:text-gray-300">AI tools (e.g., ChatGPT)</span>
+                        <input type="radio" name="source" value="audio-extractor" class="text-orange-500">
+                        <span class="text-gray-700 dark:text-gray-300">Audio Extractor</span>
                     </label>
                     <label class="flex items-center space-x-2">
-                        <input type="radio" name="source" class="text-orange-500">
-                        <span class="text-gray-700 dark:text-gray-300">Billboard</span>
+                        <input type="radio" name="source" value="business-name-generator" class="text-orange-500">
+                        <span class="text-gray-700 dark:text-gray-300">Business Name Generator</span>
                     </label>
                     <label class="flex items-center space-x-2">
-                        <input type="radio" name="source" class="text-orange-500">
-                        <span class="text-gray-700 dark:text-gray-300">Website Referrals</span>
+                        <input type="radio" name="source" value="others" class="text-orange-500">
+                        <span class="text-gray-700 dark:text-gray-300">Others</span>
                     </label>
-                    <label class="flex items-center space-x-2">
-                        <input type="radio" name="source" class="text-orange-500">
-                        <span class="text-gray-700 dark:text-gray-300">Other</span>
-                    </label>
-                </div>
-                <button class="mt-4 w-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 py-2 px-4 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
+                </form>
+                <button id="submitReferral" class="mt-4 w-full bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 rounded-lg transition-colors font-medium">
                     Submit
                 </button>
             </div>
@@ -580,6 +576,49 @@
                 document.documentElement.classList.add('dark');
             } else {
                 document.documentElement.classList.remove('dark');
+            }
+
+            // Referral form submission
+            const submitButton = document.getElementById('submitReferral');
+            if (submitButton) {
+                submitButton.addEventListener('click', function() {
+                    const selectedSource = document.querySelector('input[name="source"]:checked');
+                    
+                    if (!selectedSource) {
+                        alert('कृपया एक विकल्प चुनें / Please select an option');
+                        return;
+                    }
+
+                    // Store the feedback
+                    localStorage.setItem('referralSource', selectedSource.value);
+                    
+                    // Show success message
+                    const button = this;
+                    const originalText = button.textContent;
+                    button.textContent = '✓ धन्यवाद / Thank you!';
+                    button.className = 'mt-4 w-full bg-green-500 text-white py-2 px-4 rounded-lg font-medium';
+                    
+                    // Reset after 3 seconds
+                    setTimeout(() => {
+                        button.textContent = originalText;
+                        button.className = 'mt-4 w-full bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 rounded-lg transition-colors font-medium';
+                        // Clear selection
+                        if (selectedSource) selectedSource.checked = false;
+                    }, 3000);
+
+                    // Send to analytics (optional)
+                    fetch('/api/track-analytics', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            action: 'referral_source_selected',
+                            source: selectedSource.value,
+                            timestamp: new Date().toISOString()
+                        })
+                    }).catch(err => console.log('Analytics tracking failed:', err));
+                });
             }
         });
 
