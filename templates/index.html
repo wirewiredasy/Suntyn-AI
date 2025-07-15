@@ -114,6 +114,38 @@
     </div>
 </section>
 
+<!-- Automatic Tools Carousel Section -->
+<section class="py-20 relative overflow-hidden bg-gradient-to-b from-slate-900 via-gray-900 to-slate-900">
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_25%_25%,_rgba(59,130,246,0.15)_0%,_transparent_50%)] opacity-50"></div>
+
+    <div class="container mx-auto px-4 relative z-10">
+        <div class="text-center mb-12">
+            <div class="inline-flex items-center space-x-2 bg-cyan-500/10 border border-cyan-400/30 rounded-full px-4 py-2 mb-6">
+                <div class="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
+                <span class="text-sm font-semibold text-cyan-300">DISCOVER LATEST TOOLS</span>
+            </div>
+            <h2 class="text-4xl md:text-5xl font-bold text-white mb-4">
+                Recently Added Tools ✨
+            </h2>
+            <p class="text-xl text-gray-300 max-w-2xl mx-auto">
+                Explore our newest professional tools for any use in seconds
+            </p>
+        </div>
+
+        <!-- Auto-Scrolling Carousel -->
+        <div class="carousel-container relative overflow-hidden rounded-2xl" id="toolsCarousel">
+            <div class="carousel-track flex transition-transform duration-500 ease-in-out" id="carouselTrack">
+                <!-- Tool Cards will be inserted here by JavaScript -->
+            </div>
+            
+            <!-- Carousel Indicators -->
+            <div class="flex justify-center space-x-2 mt-8" id="carouselIndicators">
+                <!-- Indicators will be inserted here by JavaScript -->
+            </div>
+        </div>
+    </div>
+</section>
+
 <!-- Enhanced Tool Categories -->
 <section class="py-20 relative overflow-hidden">
     <div class="absolute inset-0 bg-gradient-to-b from-gray-50 via-white to-gray-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900"></div>

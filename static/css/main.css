@@ -949,6 +949,37 @@ body {
     }
 }
 
+/* Auto-Scrolling Carousel Styles */
+.carousel-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.carousel-track {
+    display: flex;
+    will-change: transform;
+}
+
+.carousel-slide {
+    display: flex;
+    align-items: stretch;
+}
+
+/* Line clamp utilities for text truncation */
+.line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
 /* Professional Zapier-Inspired Design */
 .tool-card {
     background: rgba(255, 255, 255, 0.8);
@@ -966,6 +997,17 @@ body {
 .tool-card:hover {
     transform: translateY(-4px);
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* Carousel responsive design */
+@media (max-width: 768px) {
+    .carousel-slide {
+        padding: 0 8px;
+    }
+    
+    .carousel-track {
+        gap: 8px;
+    }
 }
 
 /* Enhanced Button Animations */
