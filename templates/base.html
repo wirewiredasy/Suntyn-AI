@@ -40,6 +40,7 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/performance.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/enhanced-design.css') }}">
     
     <!-- Fixed Search Script -->
     <script src="{{ url_for('static', filename='js/search-fixed.js') }}"></script>
@@ -52,6 +53,52 @@
                 extend: {
                     fontFamily: {
                         'inter': ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            200: '#bfdbfe',
+                            300: '#93c5fd',
+                            400: '#60a5fa',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a',
+                        },
+                        accent: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        }
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'gradient': 'gradient 3s ease infinite',
+                        'pulse-slow': 'pulse 3s infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        gradient: {
+                            '0%, 100%': { backgroundPosition: '0% 50%' },
+                            '50%': { backgroundPosition: '100% 50%' },
+                        }
+                    },
+                    backgroundImage: {
+                        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+                        'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+                        'mesh-gradient': 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
                     }
                 }
             }
@@ -69,40 +116,40 @@
         });
     </script>
 </head>
-<body class="font-inter bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+<body class="font-inter bg-gradient-to-br from-gray-50 via-white to-primary-50/30 dark:from-gray-900 dark:via-gray-800 dark:to-primary-900/20 min-h-screen transition-all duration-500">
     <!-- Navigation -->
-    <nav class="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
+    <nav class="bg-white/90 dark:bg-gray-900/90 backdrop-blur-lg shadow-lg border-b border-gray-200/20 dark:border-gray-700/20 sticky top-0 z-50">
         <div class="container mx-auto px-4">
             <div class="flex justify-between items-center h-16">
                 <!-- Logo -->
                 <div class="flex items-center space-x-3">
-                    <a href="{{ url_for('main.index') }}" class="flex items-center space-x-3">
-                        <div class="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+                    <a href="{{ url_for('main.index') }}" class="flex items-center space-x-3 group">
+                        <div class="w-10 h-10 bg-gradient-to-br from-primary-600 via-accent-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl group-hover:scale-105 transition-all duration-300">
                             <span class="text-white font-bold text-lg">T</span>
                         </div>
-                        <span class="text-xl font-bold text-gray-800 dark:text-white">Toolora AI</span>
+                        <span class="text-xl font-bold bg-gradient-to-r from-primary-600 to-accent-600 bg-clip-text text-transparent">Toolora AI</span>
                     </a>
                 </div>
 
                 <!-- Desktop Navigation -->
-                <div class="hidden md:flex items-center space-x-8">
-                    <a href="{{ url_for('main.index') }}" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Home</a>
-                    <a href="{{ url_for('tools.index') }}" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Tools</a>
-                    <a href="{{ url_for('main.about') }}" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">About</a>
-                    <a href="{{ url_for('main.contact') }}" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Contact</a>
+                <div class="hidden md:flex items-center space-x-1">
+                    <a href="{{ url_for('main.index') }}" class="px-4 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-all duration-200 font-medium">Home</a>
+                    <a href="{{ url_for('tools.index') }}" class="px-4 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-all duration-200 font-medium">Tools</a>
+                    <a href="{{ url_for('main.about') }}" class="px-4 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-all duration-200 font-medium">About</a>
+                    <a href="{{ url_for('main.contact') }}" class="px-4 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-all duration-200 font-medium">Contact</a>
                 </div>
 
                 <!-- Right Side -->
                 <div class="flex items-center space-x-4">
                     <!-- Dark Mode Toggle -->
-                    <button @click="darkMode = !darkMode" class="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
-                        <i data-lucide="sun" class="w-5 h-5 text-gray-700 dark:text-gray-300" x-show="darkMode"></i>
-                        <i data-lucide="moon" class="w-5 h-5 text-gray-700 dark:text-gray-300" x-show="!darkMode"></i>
+                    <button @click="darkMode = !darkMode" class="p-2.5 rounded-xl bg-gradient-to-r from-primary-100 to-accent-100 dark:from-primary-800 dark:to-accent-800 hover:from-primary-200 hover:to-accent-200 dark:hover:from-primary-700 dark:hover:to-accent-700 transition-all duration-300 shadow-sm hover:shadow-md">
+                        <i data-lucide="sun" class="w-5 h-5 text-primary-700 dark:text-primary-300" x-show="darkMode"></i>
+                        <i data-lucide="moon" class="w-5 h-5 text-primary-700 dark:text-primary-300" x-show="!darkMode"></i>
                     </button>
 
                     <!-- Mobile Menu Toggle -->
-                    <button @click="$store.navigation.mobileMenuOpen = !$store.navigation.mobileMenuOpen" class="md:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                        <i data-lucide="menu" class="w-6 h-6 text-gray-700 dark:text-gray-300"></i>
+                    <button @click="$store.navigation.mobileMenuOpen = !$store.navigation.mobileMenuOpen" class="md:hidden p-2.5 rounded-xl bg-gradient-to-r from-primary-100 to-accent-100 dark:from-primary-800 dark:to-accent-800 hover:from-primary-200 hover:to-accent-200 dark:hover:from-primary-700 dark:hover:to-accent-700 transition-all duration-300 shadow-sm">
+                        <i data-lucide="menu" class="w-6 h-6 text-primary-700 dark:text-primary-300"></i>
                     </button>
                 </div>
             </div>
@@ -139,11 +186,39 @@
         {% block content %}{% endblock %}
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 py-8">
-        <div class="container mx-auto px-4">
+    <!-- Enhanced Footer -->
+    <footer class="relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-br from-gray-900 via-primary-900 to-accent-900"></div>
+        <div class="absolute inset-0 bg-black/50"></div>
+        
+        <div class="container mx-auto px-4 py-12 relative z-10">
             <div class="text-center">
-                <p class="text-gray-600 dark:text-gray-400">© 2024 Toolora AI. All rights reserved.</p>
+                <!-- Logo -->
+                <div class="flex items-center justify-center space-x-3 mb-6">
+                    <div class="w-12 h-12 bg-gradient-to-br from-white via-primary-200 to-accent-200 rounded-2xl flex items-center justify-center shadow-lg">
+                        <span class="text-primary-800 font-bold text-xl">T</span>
+                    </div>
+                    <span class="text-2xl font-bold text-white">Toolora AI</span>
+                </div>
+                
+                <!-- Description -->
+                <p class="text-lg text-gray-300 mb-8 max-w-2xl mx-auto">
+                    Your ultimate destination for professional online tools. Free, fast, and secure.
+                </p>
+                
+                <!-- Links -->
+                <div class="flex flex-wrap justify-center gap-6 mb-8">
+                    <a href="{{ url_for('tools.index') }}" class="text-gray-300 hover:text-white transition-colors font-medium">All Tools</a>
+                    <a href="{{ url_for('main.about') }}" class="text-gray-300 hover:text-white transition-colors font-medium">About</a>
+                    <a href="{{ url_for('main.privacy') }}" class="text-gray-300 hover:text-white transition-colors font-medium">Privacy</a>
+                    <a href="{{ url_for('main.terms') }}" class="text-gray-300 hover:text-white transition-colors font-medium">Terms</a>
+                    <a href="{{ url_for('main.contact') }}" class="text-gray-300 hover:text-white transition-colors font-medium">Contact</a>
+                </div>
+                
+                <!-- Copyright -->
+                <div class="border-t border-gray-700 pt-6">
+                    <p class="text-gray-400">© 2024 Toolora AI. All rights reserved. Made with ❤️ for creators worldwide.</p>
+                </div>
             </div>
         </div>
     </footer>
