@@ -6,7 +6,7 @@
     --toolora-purple: #8b5cf6;
     --toolora-emerald: #34d399;
     --toolora-gradient: linear-gradient(135deg, var(--toolora-cyan) 0%, var(--toolora-blue) 30%, var(--toolora-indigo) 70%, var(--toolora-purple) 100%);
-    --toolora-glow: 0 0 30px rgba(139, 92, 246, 0.4);
+    --toolora-shadow: 0 8px 25px rgba(139, 92, 246, 0.15);
 }
 
 /* Enhanced logo text with better visibility */
@@ -237,7 +237,7 @@
 
 .tool-card:hover .icon-container {
     transform: scale(1.1) rotate(5deg);
-    box-shadow: var(--toolora-glow);
+    box-shadow: var(--toolora-shadow);
 }
 
 .tool-card .icon-container::after {
@@ -303,7 +303,7 @@
 
 .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: var(--toolora-glow);
+    box-shadow: var(--toolora-shadow);
 }
 
 .btn-primary::before {

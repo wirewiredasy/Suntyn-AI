@@ -1070,12 +1070,12 @@ body {
 }
 
 .rating-star {
-    animation: starShine 2s ease-in-out infinite;
+    transition: all 0.2s ease;
 }
 
-@keyframes starShine {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.1); filter: brightness(1.2); }
+.popular-tool-card:hover .rating-star {
+    transform: scale(1.05);
+    filter: brightness(1.1);
 }
 
 .popular-tool-button {
@@ -1352,8 +1352,8 @@ body {
     background-clip: text;
 }
 
-.shadow-glow {
-    box-shadow: 0 0 20px rgba(102, 126, 234, 0.4);
+.shadow-elegant {
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
 }
 
 .border-gradient {
@@ -1758,14 +1758,14 @@ html {
     50% { transform: scale(1.2) rotate(180deg); opacity: 0.8; }
 }
 
-/* Logo pulse effect */
-.logo-pulse {
-    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+/* Logo enhanced effect */
+.logo-enhanced {
+    transition: all 0.3s ease;
 }
 
-@keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.7; }
+.logo-enhanced:hover {
+    transform: scale(1.05);
+    filter: brightness(1.1);
 }
 
 /* Enhanced logo image styling */
