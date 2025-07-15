@@ -899,7 +899,9 @@ body {
 }
 
 .number-counter {
-    animation: numberPulse 2s ease-in-out 1.5s both;
+    animation: none;
+    font-weight: 700;
+    color: #facc15;
 }
 
 @keyframes numberPulse {
@@ -947,32 +949,41 @@ body {
     }
 }
 
+/* Professional Zapier-Inspired Design */
+.tool-card {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dark .tool-card {
+    background: rgba(31, 41, 55, 0.8);
+    border-color: rgba(75, 85, 99, 0.3);
+}
+
+.tool-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
 /* Enhanced Button Animations */
 .btn-enhanced-hero {
     position: relative;
     overflow: hidden;
     transition: all 0.3s ease;
-    transform-style: preserve-3d;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    box-shadow: 0 4px 14px rgba(102, 126, 234, 0.25);
 }
 
 .btn-enhanced-hero:hover {
-    transform: translateY(-2px) scale(1.05);
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
 }
 
-.button-glow {
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-    transition: left 0.5s;
-}
-
-.btn-enhanced-hero:hover .button-glow {
-    left: 100%;
-}
+/* Removed button glow effect */
 
 .magnetic-hover {
     transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -1702,42 +1713,15 @@ html {
     color: #60a5fa;
 }
 
-/* Logo breathing animation */
-@keyframes logoBreathe {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-}
-
+/* Logo subtle hover effect */
 .logo-container:hover {
-    animation: logoBreathe 2s ease-in-out infinite;
+    transform: translateY(-2px);
+    transition: transform 0.3s ease;
 }
 
-/* Floating particles for logo */
-.logo-container::after {
-    content: '';
-    position: absolute;
-    top: -10px;
-    left: -10px;
-    right: -10px;
-    bottom: -10px;
-    background: radial-gradient(circle at 20% 20%, rgba(16, 185, 129, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(6, 182, 212, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.1) 0%, transparent 50%);
-    border-radius: 50%;
-    animation: logoAura 3s ease-in-out infinite;
-    opacity: 0;
-    pointer-events: none;
-    z-index: -1;
-}
+/* Clean logo design without floating particles */
 
-.logo-container:hover::after {
-    opacity: 1;
-}
-
-@keyframes logoAura {
-    0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.5; }
-    50% { transform: scale(1.2) rotate(180deg); opacity: 0.8; }
-}
+/* Removed logo aura animation */
 
 /* Logo enhanced effect */
 .logo-enhanced {
