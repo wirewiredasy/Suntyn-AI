@@ -384,6 +384,32 @@ window.ToolaraApp = {
         document.querySelectorAll('[class*="animate-"]').forEach(el => {
             observer.observe(el);
         });
+
+        // Initialize popular tools animations
+        this.initPopularToolsAnimations();
+    },
+
+    initPopularToolsAnimations: function() {
+        const popularToolCards = document.querySelectorAll('.popular-tool-card');
+        
+        // Add stagger animation on page load
+        popularToolCards.forEach((card, index) => {
+            setTimeout(() => {
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0) scale(1)';
+            }, index * 100);
+        });
+
+        // Add hover effects
+        popularToolCards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-8px) scale(1.03)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
     },
 
     setupFormHandlers: function() {

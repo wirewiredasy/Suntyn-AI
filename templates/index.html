@@ -8,7 +8,7 @@
     <!-- Dynamic Background with Particle Effect -->
     <div class="absolute inset-0 gradient-mesh animated-mesh"></div>
     <div class="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent"></div>
-    
+
     <!-- Enhanced Floating Elements with Different Animations -->
     <div class="absolute inset-0 overflow-hidden pointer-events-none">
         <div class="absolute top-20 left-10 w-40 h-40 rounded-full spiral-animation"></div>
@@ -17,25 +17,25 @@
         <div class="absolute top-60 left-1/2 w-24 h-24 rounded-full simple-yellow"></div>
         <div class="absolute bottom-40 right-1/4 w-48 h-48 bg-purple-400/15 rounded-full blur-2xl rotate-slow"></div>
     </div>
-    
+
     <!-- Animated Geometric Shapes -->
     <div class="absolute inset-0 overflow-hidden pointer-events-none">
         <div class="absolute top-32 right-10 triangle-shape slide-diagonal"></div>
         <div class="absolute bottom-32 left-20 square-shape flip-animation"></div>
         <div class="absolute top-1/2 left-10 hexagon-shape morph-animation"></div>
     </div>
-    
+
     <div class="container mx-auto px-4 relative z-10">
         <div class="text-center max-w-5xl mx-auto">
             <h1 class="text-6xl md:text-7xl lg:text-8xl font-bold text-white mb-8 typewriter-effect">
                 <span class="block mb-2 slide-in-left">One Place.</span>
                 <span class="block text-gradient-accent glitch-effect">All Tools.</span>
             </h1>
-            
+
             <p class="text-xl md:text-2xl lg:text-3xl text-white/90 mb-8 fade-in-stagger leading-relaxed font-light">
                 Professional toolkit with <span class="font-bold text-yellow-300 number-counter">85+ tools</span> for PDF, Image, Video, AI and more.
             </p>
-            
+
             <p class="text-lg md:text-xl text-white/80 mb-12 slide-up-delayed max-w-2xl mx-auto">
                 <span class="font-semibold">Free, fast, and secure.</span> No signup required. Process files locally.
             </p>
@@ -67,7 +67,7 @@
             <p class="text-lg text-gray-600 dark:text-gray-300 mb-8">
                 Search through our comprehensive collection of professional tools
             </p>
-            
+
             <div class="relative" x-data="{ searchOpen: false, searchQuery: '', searchResults: [], searchTools() { this.searchResults = this.searchQuery.length > 1 ? window.performSearch(this.searchQuery) : []; } }">
                 <div class="relative">
                     <div class="absolute left-6 top-1/2 transform -translate-y-1/2">
@@ -118,7 +118,7 @@
 <!-- Enhanced Tool Categories -->
 <section class="py-20 relative overflow-hidden">
     <div class="absolute inset-0 bg-gradient-to-b from-gray-50 via-white to-gray-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900"></div>
-    
+
     <div class="container mx-auto px-4 relative z-10">
         <div class="text-center mb-16">
             <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold text-gradient-primary mb-6">
@@ -208,7 +208,7 @@
                         <div class="relative">
                             <!-- Icon and Badge -->
                             <div class="flex items-center justify-between mb-4">
-                                <div class="w-12 h-12 rounded-2xl bg-{{ category_info.color }}-100 dark:bg-{{ category_info.color }}-900 flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300">
+                                <div class="w-12 h-12 rounded-2xl bg-{{ category_info.color }}-100 dark:bg-{{ category_info.color }}-900 flex items-center justify-center popular-tool-icon">
                                     <i data-lucide="{{ category_info.icon }}" class="w-6 h-6 text-{{ category_info.color }}-600 dark:text-{{ category_info.color }}-400"></i>
                                 </div>
                                 <span class="bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-400 text-xs px-2 py-1 rounded-full font-medium">

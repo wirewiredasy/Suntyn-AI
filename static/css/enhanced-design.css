@@ -711,3 +711,37 @@ input:checked + .toggle-slider:before {
 .elegant-float:hover::after {
     opacity: 1;
 }
+.popular-tool-card {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateZ(0);
+}
+
+.popular-tool-card:hover {
+    transform: translateY(-8px) scale(1.03) translateZ(0);
+    box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.15),
+        0 0 0 1px rgba(59, 130, 246, 0.1);
+}
+
+.popular-tool-icon {
+    transition: all 0.3s ease;
+}
+
+.popular-tool-card:hover .popular-tool-icon {
+    transform: scale(1.15) rotate(5deg);
+}
+
+@keyframes popularToolFadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(30px) scale(0.9);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.popular-tool-animate {
+    animation: popularToolFadeIn 0.6s ease-out forwards;
+}

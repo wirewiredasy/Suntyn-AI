@@ -53,12 +53,12 @@ class ToolAnimationManager {
             }
 
             .processing-animation {
-                animation: instantPulse 1s infinite;
+                animation: simpleRotate 1s linear infinite;
             }
 
-            @keyframes instantPulse {
-                0%, 100% { opacity: 1; transform: scale(1); }
-                50% { opacity: 0.8; transform: scale(1.02); }
+            @keyframes simpleRotate {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
             }
 
             .instant-feedback {
