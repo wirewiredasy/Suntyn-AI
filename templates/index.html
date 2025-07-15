@@ -3,42 +3,52 @@
 {% block title %}Toolora AI - Professional Online Tools | 85+ Free Tools{% endblock %}
 
 {% block content %}
-<!-- Hero Section -->
-<section class="relative py-20 lg:py-28 overflow-hidden">
-    <!-- Dynamic Background -->
-    <div class="absolute inset-0 gradient-mesh"></div>
+<!-- Hero Section with Advanced Animations -->
+<section class="relative py-20 lg:py-28 overflow-hidden hero-section">
+    <!-- Dynamic Background with Particle Effect -->
+    <div class="absolute inset-0 gradient-mesh animated-mesh"></div>
     <div class="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent"></div>
     
-    <!-- Floating Elements -->
+    <!-- Enhanced Floating Elements with Different Animations -->
     <div class="absolute inset-0 overflow-hidden pointer-events-none">
-        <div class="absolute top-20 left-10 w-40 h-40 bg-white/10 rounded-full blur-xl float-animation"></div>
-        <div class="absolute top-40 right-20 w-60 h-60 bg-primary-200/20 rounded-full blur-2xl float-animation"></div>
-        <div class="absolute bottom-20 left-1/3 w-32 h-32 bg-accent-300/20 rounded-full blur-xl float-animation"></div>
+        <div class="absolute top-20 left-10 w-40 h-40 bg-white/10 rounded-full blur-xl spiral-animation"></div>
+        <div class="absolute top-40 right-20 w-60 h-60 bg-primary-200/20 rounded-full blur-2xl pulse-glow"></div>
+        <div class="absolute bottom-20 left-1/3 w-32 h-32 bg-accent-300/20 rounded-full blur-xl wave-animation"></div>
+        <div class="absolute top-60 left-1/2 w-24 h-24 bg-yellow-400/20 rounded-full blur-lg bounce-glow"></div>
+        <div class="absolute bottom-40 right-1/4 w-48 h-48 bg-purple-400/15 rounded-full blur-2xl rotate-slow"></div>
+    </div>
+    
+    <!-- Animated Geometric Shapes -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute top-32 right-10 triangle-shape slide-diagonal"></div>
+        <div class="absolute bottom-32 left-20 square-shape flip-animation"></div>
+        <div class="absolute top-1/2 left-10 hexagon-shape morph-animation"></div>
     </div>
     
     <div class="container mx-auto px-4 relative z-10">
         <div class="text-center max-w-5xl mx-auto">
-            <h1 class="text-6xl md:text-7xl lg:text-8xl font-bold text-white mb-8 animate__animated animate__fadeInUp">
-                <span class="block mb-2">One Place.</span>
-                <span class="block text-gradient-accent">All Tools.</span>
+            <h1 class="text-6xl md:text-7xl lg:text-8xl font-bold text-white mb-8 typewriter-effect">
+                <span class="block mb-2 slide-in-left">One Place.</span>
+                <span class="block text-gradient-accent glitch-effect">All Tools.</span>
             </h1>
             
-            <p class="text-xl md:text-2xl lg:text-3xl text-white/90 mb-8 animate__animated animate__fadeInUp animate__delay-1s leading-relaxed font-light">
-                Professional toolkit with <span class="font-bold text-yellow-300">85+ tools</span> for PDF, Image, Video, AI and more.
+            <p class="text-xl md:text-2xl lg:text-3xl text-white/90 mb-8 fade-in-stagger leading-relaxed font-light">
+                Professional toolkit with <span class="font-bold text-yellow-300 number-counter">85+ tools</span> for PDF, Image, Video, AI and more.
             </p>
             
-            <p class="text-lg md:text-xl text-white/80 mb-12 animate__animated animate__fadeInUp animate__delay-2s max-w-2xl mx-auto">
+            <p class="text-lg md:text-xl text-white/80 mb-12 slide-up-delayed max-w-2xl mx-auto">
                 <span class="font-semibold">Free, fast, and secure.</span> No signup required. Process files locally.
             </p>
 
-            <!-- Enhanced CTA Buttons -->
-            <div class="flex flex-col sm:flex-row gap-6 justify-center animate__animated animate__fadeInUp animate__delay-3s">
-                <a href="{{ url_for('tools.index') }}" class="btn-enhanced text-lg px-10 py-4 rounded-2xl shadow-2xl hover:shadow-3xl">
-                    <i data-lucide="play-circle" class="w-6 h-6 mr-3"></i>
-                    Explore All Tools
+            <!-- Enhanced CTA Buttons with Hover Effects -->
+            <div class="flex flex-col sm:flex-row gap-6 justify-center scale-in-animation">
+                <a href="{{ url_for('tools.index') }}" class="btn-enhanced-hero text-lg px-10 py-4 rounded-2xl shadow-2xl hover:shadow-3xl magnetic-hover">
+                    <i data-lucide="play-circle" class="w-6 h-6 mr-3 rotate-on-hover"></i>
+                    <span>Explore All Tools</span>
+                    <div class="button-glow"></div>
                 </a>
-                <a href="#popular-tools" class="glass text-white border-white/30 hover:bg-white/20 text-lg px-10 py-4 rounded-2xl transition-all duration-300">
-                    <i data-lucide="trending-up" class="w-6 h-6 mr-3"></i>
+                <a href="#popular-tools" class="glass-advanced text-white border-white/30 hover:bg-white/20 text-lg px-10 py-4 rounded-2xl transition-all duration-300 tilt-hover">
+                    <i data-lucide="trending-up" class="w-6 h-6 mr-3 pulse-icon"></i>
                     Popular Tools
                 </a>
             </div>
