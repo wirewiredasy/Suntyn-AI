@@ -3,57 +3,73 @@
 {% block title %}Toolora AI - Professional Online Tools | 85+ Free Tools{% endblock %}
 
 {% block content %}
-<!-- Hero Section with Advanced Animations -->
-<section class="relative py-20 lg:py-28 overflow-hidden hero-section">
-    <!-- Dynamic Background with Particle Effect -->
-    <div class="absolute inset-0 gradient-mesh animated-mesh"></div>
-    <div class="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent"></div>
+<!-- Professional Hero Section -->
+        <section class="relative bg-white dark:bg-gray-900 py-20 overflow-hidden">
+            <!-- Subtle Background Pattern -->
+            <div class="absolute inset-0 bg-gradient-to-br from-blue-50/50 via-white to-purple-50/30 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900"></div>
 
-    <!-- Enhanced Floating Elements with Different Animations -->
-    <div class="absolute inset-0 overflow-hidden pointer-events-none">
-        <div class="absolute top-20 left-10 w-40 h-40 rounded-full spiral-animation"></div>
-        <div class="absolute top-40 right-20 w-60 h-60 rounded-full simple-glass"></div>
-        <div class="absolute bottom-20 left-1/3 w-32 h-32 rounded-full wave-animation"></div>
-        <div class="absolute top-60 left-1/2 w-24 h-24 rounded-full simple-yellow"></div>
-        <div class="absolute bottom-40 right-1/4 w-48 h-48 bg-purple-400/15 rounded-full blur-2xl rotate-slow"></div>
-    </div>
+            <!-- Content Container -->
+            <div class="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <!-- Main Heading -->
+                    <h1 class="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6 tracking-tight">
+                        One Place.
+                        <span class="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                            All Tools.
+                        </span>
+                    </h1>
 
-    <!-- Animated Geometric Shapes -->
-    <div class="absolute inset-0 overflow-hidden pointer-events-none">
-        <div class="absolute top-32 right-10 triangle-shape slide-diagonal"></div>
-        <div class="absolute bottom-32 left-20 square-shape flip-animation"></div>
-        <div class="absolute top-1/2 left-10 hexagon-shape morph-animation"></div>
-    </div>
+                    <!-- Subtitle -->
+                    <p class="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
+                        Professional toolkit with <span class="font-semibold text-blue-600 dark:text-blue-400">85+ tools</span> for PDF, Image, Video, AI and more.
+                    </p>
 
-    <div class="container mx-auto px-4 relative z-10">
-        <div class="text-center max-w-5xl mx-auto">
-            <h1 class="text-6xl md:text-7xl lg:text-8xl font-bold text-white mb-8 typewriter-effect">
-                <span class="block mb-2 slide-in-left">One Place.</span>
-                <span class="block text-gradient-accent glitch-effect">All Tools.</span>
-            </h1>
+                    <!-- Feature Points -->
+                    <div class="flex flex-wrap justify-center items-center gap-6 mb-10 text-sm text-gray-500 dark:text-gray-400">
+                        <div class="flex items-center">
+                            <i data-lucide="check-circle" class="w-4 h-4 text-green-500 mr-2"></i>
+                            100% Free
+                        </div>
+                        <div class="flex items-center">
+                            <i data-lucide="shield-check" class="w-4 h-4 text-green-500 mr-2"></i>
+                            Secure & Private
+                        </div>
+                        <div class="flex items-center">
+                            <i data-lucide="zap" class="w-4 h-4 text-green-500 mr-2"></i>
+                            No Signup Required
+                        </div>
+                    </div>
 
-            <p class="text-xl md:text-2xl lg:text-3xl text-white/90 mb-8 fade-in-stagger leading-relaxed font-light">
-                Professional toolkit with <span class="font-bold text-yellow-300 number-counter">85+ tools</span> for PDF, Image, Video, AI and more.
-            </p>
+                    <!-- CTA Buttons -->
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                        <a href="#tools" class="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-all duration-200 hover:scale-105 shadow-lg hover:shadow-xl">
+                            <i data-lucide="play-circle" class="w-5 h-5 mr-2"></i>
+                            Explore All Tools
+                        </a>
+                        <a href="#popular-tools" class="inline-flex items-center px-6 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 font-medium rounded-lg transition-all duration-200 hover:scale-105 hover:border-blue-300 dark:hover:border-blue-600">
+                            <i data-lucide="trending-up" class="w-5 h-5 mr-2"></i>
+                            Featured Tools
+                        </a>
+                    </div>
+                </div>
 
-            <p class="text-lg md:text-xl text-white/80 mb-12 slide-up-delayed max-w-2xl mx-auto">
-                <span class="font-semibold">Free, fast, and secure.</span> No signup required. Process files locally.
-            </p>
-
-            <!-- Professional CTA Buttons -->
-            <div class="flex flex-col sm:flex-row gap-6 justify-center scale-in-animation">
-                <a href="{{ url_for('tools.index') }}" class="btn-enhanced-hero text-lg px-10 py-4 rounded-2xl shadow-lg hover:shadow-xl magnetic-hover text-white font-semibold">
-                    <i data-lucide="play-circle" class="w-6 h-6 mr-3"></i>
-                    <span>Explore All Tools</span>
-                </a>
-                <a href="#popular-tools" class="bg-white/10 backdrop-blur-sm text-white border border-white/30 hover:bg-white/20 text-lg px-10 py-4 rounded-2xl transition-all duration-300 font-semibold">
-                    <i data-lucide="trending-up" class="w-6 h-6 mr-3"></i>
-                    Featured Tools
-                </a>
+                <!-- Stats Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+                    <div class="text-center bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-xl p-6 border border-gray-100 dark:border-gray-700">
+                        <div class="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-2">85+</div>
+                        <div class="text-gray-600 dark:text-gray-400 text-sm">Professional Tools</div>
+                    </div>
+                    <div class="text-center bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-xl p-6 border border-gray-100 dark:border-gray-700">
+                        <div class="text-2xl font-bold text-green-600 dark:text-green-400 mb-2">100%</div>
+                        <div class="text-gray-600 dark:text-gray-400 text-sm">Free & Secure</div>
+                    </div>
+                    <div class="text-center bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-xl p-6 border border-gray-100 dark:border-gray-700">
+                        <div class="text-2xl font-bold text-purple-600 dark:text-purple-400 mb-2">0s</div>
+                        <div class="text-gray-600 dark:text-gray-400 text-sm">Setup Time</div>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-</section>
+        </section>
 
 <!-- Enhanced Search Section -->
 <section class="py-16 relative">
@@ -204,7 +220,7 @@
     <div class="absolute inset-0 opacity-5 dark:opacity-10">
         <div class="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,_#6366f1_1px,_transparent_0)] bg-[size:20px_20px]"></div>
     </div>
-    
+
     <div class="container mx-auto px-4 relative z-10">
         <div class="text-center mb-16">
             <!-- Premium Badge -->
@@ -212,7 +228,7 @@
                 <div class="w-2 h-2 bg-indigo-500 rounded-full"></div>
                 <span class="text-sm font-semibold text-indigo-700 dark:text-indigo-300">FEATURED COLLECTION</span>
             </div>
-            
+
             <h2 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6 leading-tight">
                 Professional Tools
                 <span class="block text-indigo-600 dark:text-indigo-400">Trusted by Creators</span>
