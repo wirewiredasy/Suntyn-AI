@@ -25,28 +25,40 @@ def verify_token():
     """Verify Firebase ID token and create/update user session"""
     try:
         data = request.get_json()
-        if not data or 'idToken' not in data:
-            return jsonify({'error': 'ID token required'}), 400
+        if not data:
+            return jsonify({'error': 'No data provided'}), 400
         
-        # In a real app, you would verify the ID token with Firebase Admin SDK
-        # For this demo, we'll extract user info from the token payload
+        # Get user info from request
         user_info = data.get('userInfo', {})
+        
+        if not user_info.get('uid') or not user_info.get('email'):
+            return jsonify({'error': 'Missing required user information'}), 400
         
         # Create or update user in database
         user = User.query.filter_by(firebase_uid=user_info.get('uid')).first()
         
         if not user:
-            user = User(
-                firebase_uid=user_info.get('uid'),
-                email=user_info.get('email'),
-                display_name=user_info.get('displayName'),
-                photo_url=user_info.get('photoURL')
-            )
-            db.session.add(user)
+            # Check if email already exists
+            existing_user = User.query.filter_by(email=user_info.get('email')).first()
+            if existing_user:
+                # Link Firebase UID to existing user
+                existing_user.firebase_uid = user_info.get('uid')
+                existing_user.display_name = user_info.get('displayName') or existing_user.display_name
+                existing_user.photo_url = user_info.get('photoURL') or existing_user.photo_url
+                user = existing_user
+            else:
+                # Create new user
+                user = User(
+                    firebase_uid=user_info.get('uid'),
+                    email=user_info.get('email'),
+                    display_name=user_info.get('displayName') or user_info.get('email').split('@')[0],
+                    photo_url=user_info.get('photoURL')
+                )
+                db.session.add(user)
         else:
             # Update existing user info
-            user.display_name = user_info.get('displayName')
-            user.photo_url = user_info.get('photoURL')
+            user.display_name = user_info.get('displayName') or user.display_name
+            user.photo_url = user_info.get('photoURL') or user.photo_url
         
         db.session.commit()
         
@@ -62,7 +74,8 @@ def verify_token():
         }})
     
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        print(f"Token verification error: {str(e)}")
+        return jsonify({'error': 'Authentication failed'}), 500
 
 @auth_bp.route('/logout', methods=['POST'])
 def logout():
