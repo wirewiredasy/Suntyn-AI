@@ -295,7 +295,7 @@
             } else if (error.code === 'auth/popup-blocked') {
                 errorMessage = 'Please allow popups for this site.';
             } else if (error.code === 'auth/unauthorized-domain') {
-                errorMessage = 'This domain is not authorized for Google sign-in. Please use email/password login or contact support.';
+                errorMessage = 'Domain not authorized. Please check FIREBASE_DOMAIN_FIX.md for instructions to add your domain to Firebase Console.';
             }
             
             showError(errorMessage);

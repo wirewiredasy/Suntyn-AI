@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, jsonify, session, redirect, url_for
 from models import User
 from app import db
+from firebase_config import verify_firebase_token
 import os
 import json
 
@@ -28,10 +29,26 @@ def verify_token():
         if not data:
             return jsonify({'error': 'No data provided'}), 400
         
-        # Get user info from request
+        id_token = data.get('idToken')
         user_info = data.get('userInfo', {})
         
-        if not user_info.get('uid') or not user_info.get('email'):
+        # Try to verify token with Firebase Admin SDK first
+        if id_token:
+            verified_user = verify_firebase_token(id_token)
+            if verified_user:
+                # Use verified user info from Firebase
+                user_info = {
+                    'uid': verified_user['uid'],
+                    'email': verified_user['email'],
+                    'displayName': verified_user.get('name'),
+                    'photoURL': verified_user.get('picture'),
+                    'emailVerified': verified_user.get('email_verified', False)
+                }
+            else:
+                # If verification fails, still check if we have basic user info
+                if not user_info.get('uid') or not user_info.get('email'):
+                    return jsonify({'error': 'Token verification failed and no user info provided'}), 400
+        elif not user_info.get('uid') or not user_info.get('email'):
             return jsonify({'error': 'Missing required user information'}), 400
         
         # Create or update user in database
