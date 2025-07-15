@@ -687,37 +687,18 @@ body {
     100% { transform: translate(0, 0) rotate(360deg) scale(1); }
 }
 
-.pulse-glow {
+.simple-glass {
     backdrop-filter: blur(8px);
     background: rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.2);
-    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    position: relative;
-    overflow: hidden;
+    transition: all 0.3s ease;
 }
 
-.pulse-glow::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-    transform: translateX(-100%) translateY(-100%) rotate(45deg);
-    transition: transform 0.6s ease;
-}
-
-.pulse-glow:hover {
-    transform: translateY(-8px) scale(1.03);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15), 
-                0 8px 16px rgba(255, 255, 255, 0.1);
+.simple-glass:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
     backdrop-filter: blur(12px);
     background: rgba(255, 255, 255, 0.15);
-}
-
-.pulse-glow:hover::before {
-    transform: translateX(100%) translateY(100%) rotate(45deg);
 }
 
 .wave-animation {
@@ -754,34 +735,18 @@ body {
     opacity: 1;
 }
 
-.bounce-glow {
+.simple-yellow {
     backdrop-filter: blur(6px);
     background: rgba(255, 235, 59, 0.08);
     border: 1px solid rgba(255, 235, 59, 0.15);
     transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
 }
 
-.bounce-glow::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
-    opacity: 0;
-    transition: opacity 0.4s ease;
-}
-
-.bounce-glow:hover {
-    transform: translateY(-6px) scale(1.02);
-    box-shadow: 0 12px 25px rgba(255, 235, 59, 0.15),
-                0 4px 12px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(10px);
+.simple-yellow:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(255, 235, 59, 0.1);
+    backdrop-filter: blur(8px);
     background: rgba(255, 235, 59, 0.12);
-}
-
-.bounce-glow:hover::after {
-    opacity: 1;
 }
 
 .rotate-slow {

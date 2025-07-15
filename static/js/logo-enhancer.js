@@ -147,15 +147,13 @@ class LogoEnhancer {
                 50% { opacity: 1; transform: scale(1.2) rotate(180deg); }
             }
             
-            /* Logo pulse for important states */
-            .logo-pulse-success {
-                animation: pulseSuccess 1s ease-in-out;
+            /* Logo success indicator */
+            .logo-success {
+                transition: transform 0.3s ease;
             }
             
-            @keyframes pulseSuccess {
-                0% { transform: scale(1); }
-                50% { transform: scale(1.1); box-shadow: 0 0 20px rgba(16, 185, 129, 0.5); }
-                100% { transform: scale(1); }
+            .logo-success:hover {
+                transform: scale(1.05);
             }
             
             /* Mobile touch feedback */
