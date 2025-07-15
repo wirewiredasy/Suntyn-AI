@@ -5,6 +5,7 @@ import uuid
 import tempfile
 from models import User, ToolHistory, SavedFile
 from app import db
+import logging
 
 api_bp = Blueprint('api', __name__)
 
@@ -19,21 +20,21 @@ def upload_file():
     """Handle file upload"""
     if 'file' not in request.files:
         return jsonify({'error': 'No file provided'}), 400
-    
+
     file = request.files['file']
     if file.filename == '':
         return jsonify({'error': 'No file selected'}), 400
-    
+
     if file:
         # Generate unique filename
         filename = str(uuid.uuid4()) + '_' + secure_filename(file.filename)
         file_path = os.path.join('uploads', filename)
-        
+
         # Ensure uploads directory exists
         os.makedirs('uploads', exist_ok=True)
-        
+
         file.save(file_path)
-        
+
         return jsonify({
             'success': True,
             'filename': filename,
@@ -57,9 +58,9 @@ def merge_pdf_files():
         files = request.files.getlist('files')
         if len(files) < 2:
             return jsonify({'error': 'At least 2 PDF files required'}), 400
-        
+
         from utils.pdf_tools import PDFProcessor
-        
+
         # Save uploaded files temporarily
         temp_files = []
         for file in files:
@@ -67,10 +68,10 @@ def merge_pdf_files():
             temp_path = os.path.join('uploads', temp_filename)
             file.save(temp_path)
             temp_files.append(temp_path)
-        
+
         # Merge PDFs
         output_path = PDFProcessor.merge_pdfs(temp_files)
-        
+
         if output_path:
             return jsonify({
                 'success': True,
@@ -79,7 +80,7 @@ def merge_pdf_files():
             })
         else:
             return jsonify({'error': 'Failed to merge PDFs'}), 500
-            
+
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -89,17 +90,17 @@ def split_pdf_files():
     try:
         file = request.files['file']
         pages_per_file = int(request.form.get('pages_per_file', 1))
-        
+
         from utils.pdf_tools import PDFProcessor
-        
+
         # Save uploaded file
         temp_filename = str(uuid.uuid4()) + '_' + secure_filename(file.filename)
         temp_path = os.path.join('uploads', temp_filename)
         file.save(temp_path)
-        
+
         # Split PDF
         output_files = PDFProcessor.split_pdf(temp_path, pages_per_file)
-        
+
         if output_files:
             return jsonify({
                 'success': True,
@@ -107,7 +108,7 @@ def split_pdf_files():
             })
         else:
             return jsonify({'error': 'Failed to split PDF'}), 500
-            
+
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -117,17 +118,17 @@ def compress_pdf_files():
     try:
         file = request.files['file']
         quality = float(request.form.get('quality', 0.7))
-        
+
         from utils.pdf_tools import PDFProcessor
-        
+
         # Save uploaded file
         temp_filename = str(uuid.uuid4()) + '_' + secure_filename(file.filename)
         temp_path = os.path.join('uploads', temp_filename)
         file.save(temp_path)
-        
+
         # Compress PDF
         output_path = PDFProcessor.compress_pdf(temp_path, quality)
-        
+
         if output_path:
             return jsonify({
                 'success': True,
@@ -136,7 +137,7 @@ def compress_pdf_files():
             })
         else:
             return jsonify({'error': 'Failed to compress PDF'}), 500
-            
+
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -147,17 +148,17 @@ def compress_image_files():
     try:
         file = request.files['file']
         quality = int(request.form.get('quality', 85))
-        
+
         from utils.image_tools import ImageProcessor
-        
+
         # Save uploaded file
         temp_filename = str(uuid.uuid4()) + '_' + secure_filename(file.filename)
         temp_path = os.path.join('uploads', temp_filename)
         file.save(temp_path)
-        
+
         # Compress image
         output_path = ImageProcessor.compress_image(temp_path, quality)
-        
+
         if output_path:
             return jsonify({
                 'success': True,
@@ -166,7 +167,7 @@ def compress_image_files():
             })
         else:
             return jsonify({'error': 'Failed to compress image'}), 500
-            
+
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -177,23 +178,23 @@ def resize_image_files():
         file = request.files['file']
         width = request.form.get('width')
         height = request.form.get('height')
-        
+
         if not width and not height:
             return jsonify({'error': 'Width or height required'}), 400
-        
+
         width = int(width) if width else None
         height = int(height) if height else None
-        
+
         from utils.image_tools import ImageProcessor
-        
+
         # Save uploaded file
         temp_filename = str(uuid.uuid4()) + '_' + secure_filename(file.filename)
         temp_path = os.path.join('uploads', temp_filename)
         file.save(temp_path)
-        
+
         # Resize image
         output_path = ImageProcessor.resize_image(temp_path, width, height)
-        
+
         if output_path:
             return jsonify({
                 'success': True,
@@ -202,7 +203,7 @@ def resize_image_files():
             })
         else:
             return jsonify({'error': 'Failed to resize image'}), 500
-            
+
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -212,17 +213,17 @@ def convert_image_files():
     try:
         file = request.files['file']
         output_format = request.form.get('format', 'PNG')
-        
+
         from utils.image_tools import ImageProcessor
-        
+
         # Save uploaded file
         temp_filename = str(uuid.uuid4()) + '_' + secure_filename(file.filename)
         temp_path = os.path.join('uploads', temp_filename)
         file.save(temp_path)
-        
+
         # Convert image
         output_path = ImageProcessor.convert_image(temp_path, output_format)
-        
+
         if output_path:
             return jsonify({
                 'success': True,
@@ -231,7 +232,7 @@ def convert_image_files():
             })
         else:
             return jsonify({'error': 'Failed to convert image'}), 500
-            
+
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -242,20 +243,20 @@ def extract_audio_files():
     try:
         file = request.files['file']
         audio_format = request.form.get('format', 'mp3')
-        
+
         from utils.video_tools import extract_audio
-        
+
         # Save uploaded file
         temp_filename = str(uuid.uuid4()) + '_' + secure_filename(file.filename)
         temp_path = os.path.join('uploads', temp_filename)
         file.save(temp_path)
-        
+
         # Extract audio
         output_filename = f"audio_{uuid.uuid4()}.{audio_format}"
         output_path = os.path.join('uploads', output_filename)
-        
+
         success = extract_audio(temp_path, output_path, audio_format)
-        
+
         if success:
             return jsonify({
                 'success': True,
@@ -264,7 +265,7 @@ def extract_audio_files():
             })
         else:
             return jsonify({'error': 'Failed to extract audio'}), 500
-            
+
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -275,20 +276,20 @@ def trim_video_files():
         file = request.files['file']
         start_time = request.form.get('start_time', '00:00:00')
         end_time = request.form.get('end_time', '00:01:00')
-        
+
         from utils.video_tools import trim_video
-        
+
         # Save uploaded file
         temp_filename = str(uuid.uuid4()) + '_' + secure_filename(file.filename)
         temp_path = os.path.join('uploads', temp_filename)
         file.save(temp_path)
-        
+
         # Trim video
         output_filename = f"trimmed_{uuid.uuid4()}.mp4"
         output_path = os.path.join('uploads', output_filename)
-        
+
         success = trim_video(temp_path, output_path, start_time, end_time)
-        
+
         if success:
             return jsonify({
                 'success': True,
@@ -297,7 +298,7 @@ def trim_video_files():
             })
         else:
             return jsonify({'error': 'Failed to trim video'}), 500
-            
+
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -308,13 +309,13 @@ def generate_qr_code():
     try:
         content = request.form.get('content', '')
         size = int(request.form.get('size', 300))
-        
+
         if not content:
             return jsonify({'error': 'Content is required'}), 400
-        
+
         # Generate QR code
         import qrcode
-        
+
         qr = qrcode.QRCode(
             version=1,
             error_correction=qrcode.constants.ERROR_CORRECT_L,
@@ -323,22 +324,22 @@ def generate_qr_code():
         )
         qr.add_data(content)
         qr.make(fit=True)
-        
+
         img = qr.make_image(fill_color="black", back_color="white")
-        
+
         # Save QR code
         output_filename = f"qr_{uuid.uuid4()}.png"
         output_path = os.path.join('uploads', output_filename)
-        
+
         os.makedirs('uploads', exist_ok=True)
         img.save(output_path, 'PNG')
-        
+
         return jsonify({
             'success': True,
             'download_url': f'/api/download/{output_filename}',
             'filename': output_filename
         })
-        
+
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -348,7 +349,7 @@ def generate_resume():
     """Generate resume using AI"""
     try:
         from utils.ai_tools import AIProcessor
-        
+
         # Get form data
         data = {
             'name': request.form.get('name', ''),
@@ -359,10 +360,10 @@ def generate_resume():
             'experience': [],
             'education': []
         }
-        
+
         # Generate resume
         output_path = AIProcessor.generate_resume(data)
-        
+
         if output_path:
             return jsonify({
                 'success': True,
@@ -371,7 +372,7 @@ def generate_resume():
             })
         else:
             return jsonify({'error': 'Failed to generate resume'}), 500
-            
+
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -380,19 +381,19 @@ def generate_business_names():
     """Generate business name suggestions"""
     try:
         from utils.ai_tools import AIProcessor
-        
+
         industry = request.form.get('industry', '')
         keywords = request.form.get('keywords', '').split(',')
         count = int(request.form.get('count', 10))
-        
+
         # Generate business names
         business_names = AIProcessor.generate_business_names(industry, keywords, count)
-        
+
         return jsonify({
             'success': True,
             'business_names': business_names
         })
-        
+
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -401,19 +402,19 @@ def generate_blog_titles():
     """Generate blog title suggestions"""
     try:
         from utils.ai_tools import AIProcessor
-        
+
         topic = request.form.get('topic', '')
         keywords = request.form.get('keywords', '').split(',')
         count = int(request.form.get('count', 10))
-        
+
         # Generate blog titles
         blog_titles = AIProcessor.generate_blog_titles(topic, keywords, count)
-        
+
         return jsonify({
             'success': True,
             'blog_titles': blog_titles
         })
-        
+
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -422,22 +423,22 @@ def generate_product_description():
     """Generate product description"""
     try:
         from utils.ai_tools import AIProcessor
-        
+
         product_name = request.form.get('product_name', '')
         features = request.form.get('features', '').split(',')
         benefits = request.form.get('benefits', '').split(',')
         target_audience = request.form.get('target_audience', '')
-        
+
         # Generate product description
         description = AIProcessor.generate_product_description(
             product_name, features, benefits, target_audience
         )
-        
+
         return jsonify({
             'success': True,
             'description': description
         })
-        
+
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -446,20 +447,20 @@ def generate_ad_copy():
     """Generate advertisement copy"""
     try:
         from utils.ai_tools import AIProcessor
-        
+
         product = request.form.get('product', '')
         target_audience = request.form.get('target_audience', '')
         tone = request.form.get('tone', 'professional')
         length = request.form.get('length', 'short')
-        
+
         # Generate ad copy
         ad_copy = AIProcessor.generate_ad_copy(product, target_audience, tone, length)
-        
+
         return jsonify({
             'success': True,
             'ad_copy': ad_copy
         })
-        
+
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -468,18 +469,18 @@ def generate_faq():
     """Generate FAQ"""
     try:
         from utils.ai_tools import AIProcessor
-        
+
         topic = request.form.get('topic', '')
         questions_count = int(request.form.get('questions_count', 10))
-        
+
         # Generate FAQ
         faq_list = AIProcessor.generate_faq(topic, questions_count)
-        
+
         return jsonify({
             'success': True,
             'faq': faq_list
         })
-        
+
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -490,7 +491,7 @@ def process_generic_tool(category, tool_name):
     try:
         # Handle file uploads
         files = request.files.getlist('files')
-        
+
         # Log tool usage
         user = get_current_user()
         if user:
@@ -502,7 +503,7 @@ def process_generic_tool(category, tool_name):
             )
             db.session.add(history)
             db.session.commit()
-        
+
         # For now, return a success message with demo processing
         return jsonify({
             'success': True,
@@ -511,7 +512,7 @@ def process_generic_tool(category, tool_name):
             'category': category,
             'files_processed': len(files)
         })
-        
+
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -522,11 +523,11 @@ def get_user_history():
     user = get_current_user()
     if not user:
         return jsonify({'error': 'Not authenticated'}), 401
-    
+
     history = ToolHistory.query.filter_by(user_id=user.id)\
         .order_by(ToolHistory.used_at.desc())\
         .limit(50).all()
-    
+
     return jsonify([{
         'tool_name': h.tool_name,
         'tool_category': h.tool_category,
@@ -540,11 +541,11 @@ def get_user_files():
     user = get_current_user()
     if not user:
         return jsonify({'error': 'Not authenticated'}), 401
-    
+
     files = SavedFile.query.filter_by(user_id=user.id)\
         .order_by(SavedFile.created_at.desc())\
         .limit(50).all()
-    
+
     return jsonify([{
         'id': f.id,
         'original_filename': f.original_filename,
@@ -560,10 +561,10 @@ def submit_feedback():
     """Submit user feedback"""
     try:
         data = request.get_json()
-        
+
         # Log feedback to console (in production, save to database)
         print(f"FEEDBACK: Type={data.get('type')}, Message={data.get('message')}, URL={data.get('url')}")
-        
+
         # Here you would save to database
         # feedback = Feedback(
         #     type=data.get('type'),
@@ -574,7 +575,7 @@ def submit_feedback():
         # )
         # db.session.add(feedback)
         # db.session.commit()
-        
+
         return jsonify({
             'success': True,
             'message': 'Feedback submitted successfully'
@@ -590,10 +591,10 @@ def track_analytics():
     """Track user analytics"""
     try:
         data = request.get_json()
-        
+
         # Log analytics (in production, save to database)
         print(f"ANALYTICS: Action={data.get('action')}, Tool={data.get('tool')}, Category={data.get('category')}")
-        
+
         return jsonify({
             'success': True
         })
@@ -608,11 +609,11 @@ def submit_tool_feedback():
     """Submit tool-specific feedback"""
     try:
         data = request.get_json()
-        
+
         # Log tool feedback to console (in production, save to database)
         print(f"TOOL FEEDBACK: Tool={data.get('tool_name')}, Category={data.get('tool_category')}, Rating={data.get('rating')}")
         print(f"Type={data.get('type')}, Message={data.get('message')}")
-        
+
         # Here you would save to database
         # tool_feedback = ToolFeedback(
         #     tool_name=data.get('tool_name'),
@@ -625,7 +626,7 @@ def submit_tool_feedback():
         # )
         # db.session.add(tool_feedback)
         # db.session.commit()
-        
+
         return jsonify({
             'success': True,
             'message': 'Tool feedback submitted successfully'
@@ -635,3 +636,42 @@ def submit_tool_feedback():
             'success': False,
             'error': str(e)
         }), 500
+
+@api_bp.route('/health')
+def health_check():
+    return jsonify({'status': 'healthy', 'message': 'API is running'})
+
+@api_bp.route('/contact', methods=['POST'])
+def contact_form():
+    try:
+        data = request.get_json()
+
+        # Validate required fields
+        required_fields = ['firstName', 'lastName', 'email', 'subject', 'message']
+        for field in required_fields:
+            if not data.get(field):
+                return jsonify({'error': f'{field} is required'}), 400
+
+        # Log the contact form submission
+        logging.info(f"Contact form submission from {data['email']} - Subject: {data['subject']}")
+
+        # Here you would typically send an email or save to database
+        # For now, we'll just log the submission
+        contact_info = {
+            'name': f"{data['firstName']} {data['lastName']}",
+            'email': data['email'],
+            'subject': data['subject'],
+            'message': data['message'],
+            'newsletter': data.get('newsletter', False)
+        }
+
+        print(f"New contact form submission: {contact_info}")
+
+        return jsonify({
+            'status': 'success', 
+            'message': 'Thank you for your message! We will get back to you soon.'
+        }), 200
+
+    except Exception as e:
+        logging.error(f"Contact form error: {str(e)}")
+        return jsonify({'error': 'Internal server error'}), 500

@@ -66,6 +66,14 @@
                                 required>
                             <option value="">Select a subject</option>
                             <option value="general">General Inquiry</option>
+                            <option value="pdf-tools">PDF Tools</option>
+                            <option value="image-tools">Image Tools</option>
+                            <option value="ai-tools">AI Tools</option>
+                            <option value="converter-tools">Converter Tools</option>
+                            <option value="text-tools">Text Tools</option>
+                            <option value="generator-tools">Generator Tools</option>
+                            <option value="calculator-tools">Calculator Tools</option>
+                            <option value="utility-tools">Utility Tools</option>
                             <option value="support">Technical Support</option>
                             <option value="feature">Feature Request</option>
                             <option value="bug">Bug Report</option>
@@ -251,28 +259,57 @@ function contactForm() {
         submitted: false,
         
         async submitForm() {
+            // Validate form first
+            if (!this.form.firstName || !this.form.lastName || !this.form.email || !this.form.subject || !this.form.message) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            // Validate email format
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(this.form.email)) {
+                alert('Please enter a valid email address');
+                return;
+            }
+
             this.submitting = true;
             
-            // Simulate form submission
-            setTimeout(() => {
+            try {
+                // Send form data to backend
+                const response = await fetch('/api/contact', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(this.form)
+                });
+
+                if (response.ok) {
+                    this.submitting = false;
+                    this.submitted = true;
+                    
+                    // Reset form
+                    this.form = {
+                        firstName: '',
+                        lastName: '',
+                        email: '',
+                        subject: '',
+                        message: '',
+                        newsletter: false
+                    };
+                    
+                    // Hide success message after 5 seconds
+                    setTimeout(() => {
+                        this.submitted = false;
+                    }, 5000);
+                } else {
+                    throw new Error('Failed to send message');
+                }
+            } catch (error) {
                 this.submitting = false;
-                this.submitted = true;
-                
-                // Reset form
-                this.form = {
-                    firstName: '',
-                    lastName: '',
-                    email: '',
-                    subject: '',
-                    message: '',
-                    newsletter: false
-                };
-                
-                // Hide success message after 5 seconds
-                setTimeout(() => {
-                    this.submitted = false;
-                }, 5000);
-            }, 1000);
+                alert('There was an error sending your message. Please try again.');
+                console.error('Contact form error:', error);
+            }
         }
     }
 }
