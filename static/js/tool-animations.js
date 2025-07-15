@@ -361,6 +361,155 @@ class ToolAnimationManager {
 // Initialize animation manager
 const toolAnimationManager = new ToolAnimationManager();
 
+// Advanced button interaction effects
+    setupAdvancedButtonEffects() {
+        document.addEventListener('DOMContentLoaded', () => {
+            // Enhanced CTA button effects
+            const exploreBtn = document.querySelector('.explore-tools-btn');
+            const featuredBtn = document.querySelector('.featured-tools-btn');
+
+            if (exploreBtn) {
+                this.addMagneticEffect(exploreBtn);
+                this.addParticleTrail(exploreBtn);
+            }
+
+            if (featuredBtn) {
+                this.addMagneticEffect(featuredBtn);
+                this.addSparkleEffect(featuredBtn);
+            }
+        });
+    }
+
+    addMagneticEffect(element) {
+        element.addEventListener('mousemove', (e) => {
+            const rect = element.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+
+            element.style.transform = `translateY(-8px) scale(1.05) rotateX(${y * 0.1}deg) rotateY(${x * 0.1}deg)`;
+        });
+
+        element.addEventListener('mouseleave', () => {
+            element.style.transform = 'translateY(0) scale(1) rotateX(0) rotateY(0)';
+        });
+    }
+
+    addParticleTrail(element) {
+        element.addEventListener('mouseenter', () => {
+            for (let i = 0; i < 8; i++) {
+                setTimeout(() => {
+                    this.createFloatingParticle(element);
+                }, i * 100);
+            }
+        });
+    }
+
+    createFloatingParticle(container) {
+        const particle = document.createElement('div');
+        particle.className = 'floating-particle';
+        particle.style.cssText = `
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: radial-gradient(circle, #fbbf24, #f59e0b);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1000;
+            animation: floatUp 2s ease-out forwards;
+        `;
+
+        const rect = container.getBoundingClientRect();
+        particle.style.left = Math.random() * rect.width + 'px';
+        particle.style.top = rect.height + 'px';
+
+        container.appendChild(particle);
+
+        setTimeout(() => {
+            particle.remove();
+        }, 2000);
+    }
+
+    addSparkleEffect(element) {
+        element.addEventListener('mouseenter', () => {
+            for (let i = 0; i < 12; i++) {
+                setTimeout(() => {
+                    this.createSparkle(element);
+                }, i * 80);
+            }
+        });
+    }
+
+    createSparkle(container) {
+        const sparkle = document.createElement('div');
+        sparkle.innerHTML = '✨';
+        sparkle.style.cssText = `
+            position: absolute;
+            font-size: 12px;
+            pointer-events: none;
+            z-index: 1000;
+            animation: sparkleFloat 1.5s ease-out forwards;
+        `;
+
+        const rect = container.getBoundingClientRect();
+        sparkle.style.left = Math.random() * rect.width + 'px';
+        sparkle.style.top = Math.random() * rect.height + 'px';
+
+        container.appendChild(sparkle);
+
+        setTimeout(() => {
+            sparkle.remove();
+        }, 1500);
+    }
+
+    // Add CSS animations
+    addAdvancedAnimations() {
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes floatUp {
+                0% {
+                    opacity: 1;
+                    transform: translateY(0) scale(1);
+                }
+                100% {
+                    opacity: 0;
+                    transform: translateY(-50px) scale(0.5);
+                }
+            }
+
+            @keyframes sparkleFloat {
+                0% {
+                    opacity: 0;
+                    transform: translateY(0) scale(0) rotate(0deg);
+                }
+                50% {
+                    opacity: 1;
+                    transform: translateY(-20px) scale(1) rotate(180deg);
+                }
+                100% {
+                    opacity: 0;
+                    transform: translateY(-40px) scale(0) rotate(360deg);
+                }
+            }
+
+            .explore-tools-btn:hover,
+            .featured-tools-btn:hover {
+                cursor: pointer;
+                transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            }
+
+            .floating-particle {
+                animation: floatUp 2s ease-out forwards;
+            }
+        `;
+        document.head.appendChild(style);
+    }
+}
+
+// Initialize enhanced effects
+const advancedAnimationManager = new ToolAnimationManager();
+advancedAnimationManager.setupAdvancedButtonEffects();
+advancedAnimationManager.addAdvancedAnimations();
+
 // Export for global use
 window.toolAnimationManager = toolAnimationManager;
         window.addInstantPageTransitions = this.addInstantPageTransitions.bind(this);
