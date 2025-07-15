@@ -1,12 +1,12 @@
 /* Toolora AI Brand Colors and Enhanced Animations */
 :root {
-    --toolora-emerald: #10B981;
-    --toolora-cyan: #22D3EE;
-    --toolora-blue: #3B82F6;
-    --toolora-indigo: #6366F1;
-    --toolora-purple: #8B5CF6;
-    --toolora-gradient: linear-gradient(135deg, var(--toolora-emerald) 0%, var(--toolora-cyan) 25%, var(--toolora-blue) 50%, var(--toolora-indigo) 75%, var(--toolora-purple) 100%);
-    --toolora-glow: 0 0 30px rgba(139, 92, 246, 0.3);
+    --toolora-cyan: #00d4ff;
+    --toolora-blue: #0099ff;
+    --toolora-indigo: #6366f1;
+    --toolora-purple: #8b5cf6;
+    --toolora-emerald: #34d399;
+    --toolora-gradient: linear-gradient(135deg, var(--toolora-cyan) 0%, var(--toolora-blue) 30%, var(--toolora-indigo) 70%, var(--toolora-purple) 100%);
+    --toolora-glow: 0 0 30px rgba(139, 92, 246, 0.4);
 }
 
 /* Enhanced logo text with better visibility */

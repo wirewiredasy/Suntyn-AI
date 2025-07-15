@@ -569,7 +569,8 @@
                 window.firebaseApp = app;
                 window.firebaseAuth = auth;
                 window.firebaseStorage = storage;
-                console.log('Firebase initialized successfully');
+                ```python
+console.log('Firebase initialized successfully');
             } catch (error) {
                 console.warn('Firebase initialization failed:', error.message);
                 // Create mock auth for development
@@ -589,7 +590,7 @@
             // Dark background first, then detect and adjust
             const isDark = localStorage.getItem('darkMode') === 'true' || 
                           (!localStorage.getItem('darkMode') && window.matchMedia('(prefers-color-scheme: dark)').matches);
-            
+
             if (isDark) {
                 document.documentElement.classList.add('dark');
                 document.body.style.backgroundColor = '#111827';
@@ -597,13 +598,13 @@
                 document.documentElement.classList.remove('dark');
                 document.body.style.backgroundColor = '#f9fafb';
             }
-            
+
             // Set opacity to 1 after load
             document.addEventListener('DOMContentLoaded', function() {
                 document.body.style.opacity = '1';
                 document.body.classList.add('loaded');
             });
-            
+
             // Immediate visibility for fast connections
             if (document.readyState === 'complete') {
                 document.body.style.opacity = '1';
@@ -662,11 +663,11 @@
                 document.body.style.opacity = '1';
                 document.body.style.visibility = 'visible';
                 document.body.classList.remove('spa-transition', 'loading');
-                
+
                 if (window.Alpine && window.Alpine.store('navigation')) {
                     window.Alpine.store('navigation').mobileMenuOpen = false;
                 }
-                
+
                 // Re-initialize icons if needed
                 if (typeof lucide !== 'undefined') {
                     lucide.createIcons();
@@ -803,9 +804,9 @@
                 if (!this.initialized) {
                     this.initializeMessages();
                 }
-                
+
                 this.isOpen = !this.isOpen;
-                
+
                 if (this.isOpen) {
                     // Focus input with slight delay
                     setTimeout(() => {
