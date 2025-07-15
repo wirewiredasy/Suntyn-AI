@@ -949,35 +949,23 @@ body {
     }
 }
 
-/* Auto-Scrolling Carousel Styles */
-.carousel-container {
-    max-width: 1200px;
-    margin: 0 auto;
+/* Compact Professional Tools Slider */
+.tools-slider-container {
+    position: relative;
 }
 
-.carousel-track {
+.tools-slider-track {
     display: flex;
     will-change: transform;
+    transition: transform 0.5s ease-out;
 }
 
-.carousel-slide {
-    display: flex;
-    align-items: stretch;
+.compact-tool-card {
+    transition: all 0.3s ease;
 }
 
-/* Line clamp utilities for text truncation */
-.line-clamp-2 {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
-
-.line-clamp-3 {
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+.compact-tool-card:hover {
+    transform: translateY(-2px);
 }
 
 /* Professional Zapier-Inspired Design */
@@ -999,14 +987,22 @@ body {
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
 }
 
-/* Carousel responsive design */
-@media (max-width: 768px) {
-    .carousel-slide {
-        padding: 0 8px;
+/* Responsive design for compact slider */
+@media (max-width: 1024px) {
+    .compact-tool-card {
+        margin-right: 0.75rem;
     }
-    
-    .carousel-track {
-        gap: 8px;
+}
+
+@media (max-width: 768px) {
+    .compact-tool-card {
+        margin-right: 0.5rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .tools-slider-track {
+        gap: 0.5rem;
     }
 }
 
