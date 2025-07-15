@@ -21,19 +21,28 @@ app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 # Configure the database
 database_url = os.environ.get("DATABASE_URL", "sqlite:///toolora.db")
 
-# Fix PostgreSQL SSL issues
+# Fix PostgreSQL SSL issues for Render deployment
 if database_url.startswith("postgres://"):
     database_url = database_url.replace("postgres://", "postgresql://", 1)
 
 app.config["SQLALCHEMY_DATABASE_URI"] = database_url
-app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
-    "pool_recycle": 300,
-    "pool_pre_ping": True,
-    "connect_args": {
-        "sslmode": "require",
-        "connect_timeout": 30,
-    } if database_url.startswith("postgresql://") else {}
-}
+
+# Render deployment database configuration
+if "render" in database_url or "postgresql" in database_url:
+    app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
+        "pool_recycle": 300,
+        "pool_pre_ping": True,
+        "connect_args": {
+            "sslmode": "require",
+            "connect_timeout": 30,
+        }
+    }
+else:
+    # Local development configuration
+    app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
+        "pool_recycle": 300,
+        "pool_pre_ping": True,
+    }
 
 # Configure upload folder
 app.config['UPLOAD_FOLDER'] = 'uploads'
