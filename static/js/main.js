@@ -217,8 +217,30 @@ window.ToolaraApp = {
                 mobileMenuOpen: false,
                 toggleMobileMenu() {
                     this.mobileMenuOpen = !this.mobileMenuOpen;
+                },
+                closeMobileMenu() {
+                    this.mobileMenuOpen = false;
                 }
             });
+        });
+
+        // Add mobile menu event handlers
+        document.addEventListener('click', (e) => {
+            const mobileToggle = e.target.closest('[data-mobile-toggle]');
+            if (mobileToggle) {
+                e.preventDefault();
+                window.dispatchEvent(new CustomEvent('toggle-mobile-menu'));
+            }
+        });
+
+        // Close mobile menu on navigation
+        document.addEventListener('click', (e) => {
+            const navLink = e.target.closest('a[href]');
+            if (navLink && navLink.closest('.mobile-menu')) {
+                setTimeout(() => {
+                    window.dispatchEvent(new CustomEvent('close-mobile-menu'));
+                }, 100);
+            }
         });
     },
 
