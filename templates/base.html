@@ -154,10 +154,10 @@
                 <!-- Right Side -->
                 <div class="flex items-center space-x-3">
                     <!-- Auth Button -->
-                    <button class="hidden md:flex items-center px-4 py-2 rounded-xl bg-gradient-to-r from-primary-600 to-accent-600 text-white hover:from-primary-700 hover:to-accent-700 transition-all duration-300 shadow-lg hover:shadow-xl font-medium">
+                    <a href="{{ url_for('main.login') }}" class="hidden md:flex items-center px-4 py-2 rounded-xl bg-gradient-to-r from-primary-600 to-accent-600 text-white hover:from-primary-700 hover:to-accent-700 transition-all duration-300 shadow-lg hover:shadow-xl font-medium">
                         <i data-lucide="user" class="w-4 h-4 mr-2"></i>
                         Login
-                    </button>
+                    </a>
                     
                     <!-- Dark Mode Toggle -->
                     <button @click="darkMode = !darkMode" class="p-2.5 rounded-xl bg-gradient-to-r from-primary-100 to-accent-100 dark:from-primary-800 dark:to-accent-800 hover:from-primary-200 hover:to-accent-200 dark:hover:from-primary-700 dark:hover:to-accent-700 transition-all duration-300 shadow-sm hover:shadow-md">
@@ -209,10 +209,10 @@
                     
                     <!-- Mobile Auth -->
                     <div class="border-t border-gray-200 dark:border-gray-700 pt-4 mt-6">
-                        <button class="flex items-center w-full py-3 px-4 bg-gradient-to-r from-primary-600 to-accent-600 text-white rounded-lg hover:from-primary-700 hover:to-accent-700 transition-all font-medium">
+                        <a href="{{ url_for('main.login') }}" class="flex items-center w-full py-3 px-4 bg-gradient-to-r from-primary-600 to-accent-600 text-white rounded-lg hover:from-primary-700 hover:to-accent-700 transition-all font-medium">
                             <i data-lucide="user" class="w-5 h-5 mr-3"></i>
                             Login / Register
-                        </button>
+                        </a>
                     </div>
                 </nav>
             </div>

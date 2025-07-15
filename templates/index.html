@@ -58,7 +58,7 @@
                 Search through our comprehensive collection of professional tools
             </p>
             
-            <div class="relative" x-data="searchComponent">
+            <div class="relative" x-data="{ searchOpen: false, searchQuery: '', searchResults: [], searchTools() { this.searchResults = this.searchQuery.length > 1 ? window.performSearch(this.searchQuery) : []; } }">
                 <div class="relative">
                     <div class="absolute left-6 top-1/2 transform -translate-y-1/2">
                         <i data-lucide="search" class="w-6 h-6 text-primary-500"></i>

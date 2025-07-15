@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Toolora AI{% endblock %}
+
+{% block content %}
+<section class="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="mb-8">
+            <h1 class="text-4xl font-bold text-gray-800 dark:text-white mb-2">Dashboard</h1>
+            <p class="text-lg text-gray-600 dark:text-gray-300">Welcome back! Here's your activity overview.</p>
+        </div>
+        
+        <!-- Stats Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="enhanced-card dark:enhanced-card-dark p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Tools Used</p>
+                        <p class="text-3xl font-bold text-gray-800 dark:text-white">24</p>
+                    </div>
+                    <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
+                        <i data-lucide="activity" class="w-6 h-6 text-white"></i>
+                    </div>
+                </div>
+                <div class="mt-4 flex items-center">
+                    <span class="text-sm font-medium text-green-600">+12%</span>
+                    <span class="text-sm text-gray-500 dark:text-gray-400 ml-2">from last month</span>
+                </div>
+            </div>
+            
+            <div class="enhanced-card dark:enhanced-card-dark p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Files Processed</p>
+                        <p class="text-3xl font-bold text-gray-800 dark:text-white">156</p>
+                    </div>
+                    <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center">
+                        <i data-lucide="file" class="w-6 h-6 text-white"></i>
+                    </div>
+                </div>
+                <div class="mt-4 flex items-center">
+                    <span class="text-sm font-medium text-green-600">+8%</span>
+                    <span class="text-sm text-gray-500 dark:text-gray-400 ml-2">from last month</span>
+                </div>
+            </div>
+            
+            <div class="enhanced-card dark:enhanced-card-dark p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Time Saved</p>
+                        <p class="text-3xl font-bold text-gray-800 dark:text-white">8.5h</p>
+                    </div>
+                    <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center">
+                        <i data-lucide="clock" class="w-6 h-6 text-white"></i>
+                    </div>
+                </div>
+                <div class="mt-4 flex items-center">
+                    <span class="text-sm font-medium text-green-600">+15%</span>
+                    <span class="text-sm text-gray-500 dark:text-gray-400 ml-2">from last month</span>
+                </div>
+            </div>
+            
+            <div class="enhanced-card dark:enhanced-card-dark p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Favorite Tools</p>
+                        <p class="text-3xl font-bold text-gray-800 dark:text-white">7</p>
+                    </div>
+                    <div class="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center">
+                        <i data-lucide="heart" class="w-6 h-6 text-white"></i>
+                    </div>
+                </div>
+                <div class="mt-4 flex items-center">
+                    <span class="text-sm font-medium text-green-600">+2</span>
+                    <span class="text-sm text-gray-500 dark:text-gray-400 ml-2">new favorites</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Recent Activity -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="enhanced-card dark:enhanced-card-dark p-6">
+                <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-6">Recent Activity</h3>
+                <div class="space-y-4">
+                    <div class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                        <div class="w-10 h-10 bg-red-100 dark:bg-red-900/30 rounded-lg flex items-center justify-center">
+                            <i data-lucide="file-text" class="w-5 h-5 text-red-600 dark:text-red-400"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="font-medium text-gray-800 dark:text-white">PDF Merge</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">2 hours ago</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                        <div class="w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center">
+                            <i data-lucide="image" class="w-5 h-5 text-green-600 dark:text-green-400"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="font-medium text-gray-800 dark:text-white">Image Compress</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">5 hours ago</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                        <div class="w-10 h-10 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center">
+                            <i data-lucide="video" class="w-5 h-5 text-purple-600 dark:text-purple-400"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="font-medium text-gray-800 dark:text-white">Video Trim</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">1 day ago</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quick Access -->
+            <div class="enhanced-card dark:enhanced-card-dark p-6">
+                <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-6">Quick Access</h3>
+                <div class="grid grid-cols-2 gap-4">
+                    <a href="/tools/pdf-merge" class="group flex flex-col items-center p-4 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-primary-300 dark:hover:border-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-all">
+                        <div class="w-12 h-12 bg-red-100 dark:bg-red-900/30 rounded-xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                            <i data-lucide="layers" class="w-6 h-6 text-red-600 dark:text-red-400"></i>
+                        </div>
+                        <span class="font-medium text-gray-800 dark:text-white text-center">PDF Merge</span>
+                    </a>
+                    
+                    <a href="/tools/image-compress" class="group flex flex-col items-center p-4 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-primary-300 dark:hover:border-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-all">
+                        <div class="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                            <i data-lucide="minimize-2" class="w-6 h-6 text-green-600 dark:text-green-400"></i>
+                        </div>
+                        <span class="font-medium text-gray-800 dark:text-white text-center">Image Compress</span>
+                    </a>
+                    
+                    <a href="/tools/video-trimmer" class="group flex flex-col items-center p-4 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-primary-300 dark:hover:border-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-all">
+                        <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                            <i data-lucide="scissors" class="w-6 h-6 text-purple-600 dark:text-purple-400"></i>
+                        </div>
+                        <span class="font-medium text-gray-800 dark:text-white text-center">Video Trim</span>
+                    </a>
+                    
+                    <a href="/tools/resume-generator" class="group flex flex-col items-center p-4 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-primary-300 dark:hover:border-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-all">
+                        <div class="w-12 h-12 bg-violet-100 dark:bg-violet-900/30 rounded-xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                            <i data-lucide="briefcase" class="w-6 h-6 text-violet-600 dark:text-violet-400"></i>
+                        </div>
+                        <span class="font-medium text-gray-800 dark:text-white text-center">Resume Gen</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
