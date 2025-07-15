@@ -51,10 +51,68 @@
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5) !important;
 }
 
+/* Comprehensive dark mode text visibility */
 .dark .tool-visibility-fix p {
     color: #d1d5db !important;
     -webkit-text-fill-color: #d1d5db !important;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+    text-shadow: none !important;
+}
+
+/* Global dark mode text fixes */
+.dark {
+    color-scheme: dark;
+}
+
+.dark *, .dark *::before, .dark *::after {
+    border-color: #374151;
+}
+
+.dark body, .dark main, .dark section, .dark article {
+    background-color: #111827 !important;
+    color: #e5e7eb !important;
+}
+
+.dark .text-white {
+    color: #ffffff !important;
+}
+
+.dark .text-gray-900 {
+    color: #f9fafb !important;
+}
+
+.dark .text-gray-800 {
+    color: #f3f4f6 !important;
+}
+
+.dark .text-gray-700 {
+    color: #e5e7eb !important;
+}
+
+.dark .text-gray-600 {
+    color: #d1d5db !important;
+}
+
+.dark .text-gray-500 {
+    color: #9ca3af !important;
+}
+
+.dark .text-gray-400 {
+    color: #6b7280 !important;
+}
+
+/* Search dropdown dark mode */
+.dark .search-dropdown {
+    background-color: #1f2937 !important;
+    border-color: #374151 !important;
+    color: #e5e7eb !important;
+}
+
+.dark .search-dropdown a {
+    color: #e5e7eb !important;
+}
+
+.dark .search-dropdown a:hover {
+    background-color: #374151 !important;
 }
 
 /* Accessibility improvements */

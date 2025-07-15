@@ -22,21 +22,29 @@ nav input[type="text"] {
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
     font-weight: 500;
+    border: 2px solid #d1d5db;
+}
+
+.dark nav input[type="text"] {
+    border: 2px solid #4b5563;
+    background-color: #1f2937 !important;
+    color: #f9fafb !important;
 }
 
 nav input[type="text"]:focus {
     transform: translateY(-1px);
     box-shadow: 0 4px 20px rgba(59, 130, 246, 0.25);
     outline: none;
+    border-color: #3b82f6 !important;
 }
 
 nav input[type="text"]::placeholder {
-    color: #2563eb;
+    color: #6b7280 !important;
     font-weight: 500;
 }
 
 .dark nav input[type="text"]::placeholder {
-    color: #93c5fd;
+    color: #9ca3af !important;
 }
 
 /* Navigation Links Enhancement */
@@ -308,16 +316,37 @@ body {
 .dark .tool-card .tool-title {
     color: #ffffff !important;
     -webkit-text-fill-color: #ffffff !important;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5) !important;
+    text-shadow: none !important;
     font-weight: 700 !important;
+    background: none !important;
+    background-clip: border-box !important;
 }
 
 .dark .tool-card p,
 .dark .tool-card .tool-description {
-    color: #d1d5db !important;
-    -webkit-text-fill-color: #d1d5db !important;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+    color: #e5e7eb !important;
+    -webkit-text-fill-color: #e5e7eb !important;
+    text-shadow: none !important;
     font-weight: 500 !important;
+    background: none !important;
+    background-clip: border-box !important;
+}
+
+/* Fix all dark mode text elements */
+.dark * {
+    color-scheme: dark;
+}
+
+.dark body {
+    color: #e5e7eb !important;
+}
+
+.dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 {
+    color: #ffffff !important;
+}
+
+.dark p, .dark span, .dark div {
+    color: #d1d5db !important;
 }
 
 .dark .tool-card .category-badge,

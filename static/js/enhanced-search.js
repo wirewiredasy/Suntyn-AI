@@ -3,6 +3,249 @@
  * Provides real-time search across all 85+ tools with fuzzy matching and categories
  */
 
+class EnhancedToolSearch {
+    constructor() {
+        this.tools = [];
+        this.searchIndex = new Map();
+        this.minSearchLength = 2;
+        this.maxResults = 8;
+        this.init();
+    }
+
+    init() {
+        this.loadTools();
+        this.buildSearchIndex();
+        this.setupSearchHandlers();
+        console.log('Enhanced search functionality initialized');
+    }
+
+    loadTools() {
+        // Complete tools database
+        this.tools = [
+            // PDF Tools
+            { id: 'pdf-merge', name: 'PDF Merge', category: 'PDF', description: 'Merge multiple PDF files into one document', keywords: ['combine', 'join', 'merge', 'pdf'] },
+            { id: 'pdf-split', name: 'PDF Split', category: 'PDF', description: 'Split PDF into multiple files or pages', keywords: ['split', 'divide', 'separate', 'pdf'] },
+            { id: 'pdf-compress', name: 'PDF Compress', category: 'PDF', description: 'Reduce PDF file size without quality loss', keywords: ['compress', 'reduce', 'optimize', 'pdf'] },
+            { id: 'pdf-to-word', name: 'PDF to Word', category: 'PDF', description: 'Convert PDF to Word document', keywords: ['convert', 'pdf', 'word', 'doc'] },
+            { id: 'pdf-to-jpg', name: 'PDF to JPG', category: 'PDF', description: 'Convert PDF pages to JPG images', keywords: ['convert', 'pdf', 'jpg', 'image'] },
+            { id: 'word-to-pdf', name: 'Word to PDF', category: 'PDF', description: 'Convert Word document to PDF', keywords: ['convert', 'word', 'pdf', 'doc'] },
+            { id: 'jpg-to-pdf', name: 'JPG to PDF', category: 'PDF', description: 'Convert JPG images to PDF', keywords: ['convert', 'jpg', 'pdf', 'image'] },
+            
+            // Image Tools
+            { id: 'image-compress', name: 'Image Compress', category: 'Image', description: 'Reduce image file size while maintaining quality', keywords: ['compress', 'optimize', 'reduce', 'image'] },
+            { id: 'image-resize', name: 'Image Resize', category: 'Image', description: 'Resize images to specific dimensions', keywords: ['resize', 'scale', 'dimensions', 'image'] },
+            { id: 'image-convert', name: 'Image Convert', category: 'Image', description: 'Convert images between different formats', keywords: ['convert', 'format', 'jpg', 'png', 'webp'] },
+            { id: 'background-remover', name: 'Background Remover', category: 'Image', description: 'Remove background from images', keywords: ['background', 'remove', 'transparent', 'cut'] },
+            { id: 'image-crop', name: 'Image Crop', category: 'Image', description: 'Crop images to desired size', keywords: ['crop', 'cut', 'trim', 'image'] },
+            
+            // Video Tools
+            { id: 'video-to-mp3', name: 'Video to MP3', category: 'Video', description: 'Extract audio from video files', keywords: ['extract', 'audio', 'mp3', 'video'] },
+            { id: 'video-trimmer', name: 'Video Trimmer', category: 'Video', description: 'Trim video clips with precision', keywords: ['trim', 'cut', 'clip', 'video'] },
+            { id: 'video-compress', name: 'Video Compress', category: 'Video', description: 'Compress video files', keywords: ['compress', 'reduce', 'optimize', 'video'] },
+            
+            // AI Tools
+            { id: 'resume-generator', name: 'Resume Generator', category: 'AI', description: 'Generate professional resumes with AI', keywords: ['resume', 'cv', 'generate', 'ai'] },
+            { id: 'business-name-generator', name: 'Business Name Generator', category: 'AI', description: 'Generate creative business names', keywords: ['business', 'name', 'generate', 'company'] },
+            { id: 'blog-title-generator', name: 'Blog Title Generator', category: 'AI', description: 'Generate catchy blog titles', keywords: ['blog', 'title', 'generate', 'content'] }
+        ];
+    }
+
+    buildSearchIndex() {
+        this.tools.forEach(tool => {
+            const searchTerms = [
+                tool.name.toLowerCase(),
+                tool.category.toLowerCase(),
+                tool.description.toLowerCase(),
+                ...tool.keywords
+            ];
+
+            searchTerms.forEach(term => {
+                const words = term.split(/\s+/);
+                words.forEach(word => {
+                    if (word.length >= 2) {
+                        if (!this.searchIndex.has(word)) {
+                            this.searchIndex.set(word, new Set());
+                        }
+                        this.searchIndex.get(word).add(tool);
+                    }
+                });
+            });
+        });
+    }
+
+    fuzzySearch(query) {
+        const normalizedQuery = query.toLowerCase().trim();
+        if (normalizedQuery.length < this.minSearchLength) return [];
+
+        const results = new Map();
+        const queryWords = normalizedQuery.split(/\s+/);
+
+        queryWords.forEach(queryWord => {
+            // Exact matches
+            if (this.searchIndex.has(queryWord)) {
+                this.searchIndex.get(queryWord).forEach(tool => {
+                    if (!results.has(tool.id)) {
+                        results.set(tool.id, { tool, score: 0 });
+                    }
+                    results.get(tool.id).score += 10;
+                });
+            }
+
+            // Partial matches
+            this.searchIndex.forEach((tools, indexWord) => {
+                if (indexWord.includes(queryWord) || queryWord.includes(indexWord)) {
+                    tools.forEach(tool => {
+                        if (!results.has(tool.id)) {
+                            results.set(tool.id, { tool, score: 0 });
+                        }
+                        results.get(tool.id).score += 5;
+                    });
+                }
+            });
+
+            // Fuzzy matches (edit distance)
+            this.searchIndex.forEach((tools, indexWord) => {
+                const distance = this.levenshteinDistance(queryWord, indexWord);
+                if (distance <= 2 && distance > 0) {
+                    tools.forEach(tool => {
+                        if (!results.has(tool.id)) {
+                            results.set(tool.id, { tool, score: 0 });
+                        }
+                        results.get(tool.id).score += Math.max(1, 3 - distance);
+                    });
+                }
+            });
+        });
+
+        return Array.from(results.values())
+            .sort((a, b) => b.score - a.score)
+            .slice(0, this.maxResults)
+            .map(result => result.tool);
+    }
+
+    levenshteinDistance(str1, str2) {
+        const matrix = [];
+        
+        for (let i = 0; i <= str2.length; i++) {
+            matrix[i] = [i];
+        }
+        
+        for (let j = 0; j <= str1.length; j++) {
+            matrix[0][j] = j;
+        }
+        
+        for (let i = 1; i <= str2.length; i++) {
+            for (let j = 1; j <= str1.length; j++) {
+                if (str2.charAt(i-1) === str1.charAt(j-1)) {
+                    matrix[i][j] = matrix[i-1][j-1];
+                } else {
+                    matrix[i][j] = Math.min(
+                        matrix[i-1][j-1] + 1,
+                        matrix[i][j-1] + 1,
+                        matrix[i-1][j] + 1
+                    );
+                }
+            }
+        }
+        
+        return matrix[str2.length][str1.length];
+    }
+
+    setupSearchHandlers() {
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchInputs = document.querySelectorAll('input[placeholder*="Search"]');
+            
+            searchInputs.forEach(input => {
+                this.attachSearchToInput(input);
+            });
+        });
+
+        // Global search function
+        window.enhancedSearch = (query) => {
+            return this.fuzzySearch(query);
+        };
+    }
+
+    attachSearchToInput(input) {
+        let debounceTimer;
+        
+        input.addEventListener('input', (e) => {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+                const query = e.target.value;
+                const results = this.fuzzySearch(query);
+                this.displayResults(results, input);
+            }, 300);
+        });
+
+        input.addEventListener('focus', () => {
+            if (input.value.length >= this.minSearchLength) {
+                const results = this.fuzzySearch(input.value);
+                this.displayResults(results, input);
+            }
+        });
+    }
+
+    displayResults(results, input) {
+        // Remove existing dropdown
+        const existingDropdown = document.querySelector('.search-dropdown');
+        if (existingDropdown) {
+            existingDropdown.remove();
+        }
+
+        if (results.length === 0) return;
+
+        // Create dropdown
+        const dropdown = document.createElement('div');
+        dropdown.className = 'search-dropdown absolute top-full left-0 right-0 mt-2 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 z-50 max-h-96 overflow-y-auto';
+
+        results.forEach((tool, index) => {
+            const item = document.createElement('a');
+            item.href = `/tools/${tool.id}`;
+            item.className = 'flex items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 border-b border-gray-100 dark:border-gray-700 last:border-b-0 transition-colors';
+
+            item.innerHTML = `
+                <div class="w-10 h-10 rounded-lg bg-blue-100 dark:bg-blue-900 flex items-center justify-center mr-3">
+                    <span class="text-blue-600 dark:text-blue-400 font-bold text-sm">${tool.category[0]}</span>
+                </div>
+                <div class="flex-1">
+                    <div class="font-medium text-gray-900 dark:text-white">
+                        ${tool.name}
+                    </div>
+                    <div class="text-sm text-gray-500 dark:text-gray-400">
+                        ${tool.category} • ${tool.description}
+                    </div>
+                </div>
+            `;
+
+            dropdown.appendChild(item);
+        });
+
+        // Position dropdown
+        const container = input.closest('.relative') || input.parentElement;
+        if (!container.style.position) {
+            container.style.position = 'relative';
+        }
+        container.appendChild(dropdown);
+
+        // Close on click outside
+        const closeHandler = (e) => {
+            if (!container.contains(e.target)) {
+                dropdown.remove();
+                document.removeEventListener('click', closeHandler);
+            }
+        };
+
+        setTimeout(() => {
+            document.addEventListener('click', closeHandler);
+        }, 100);
+    }
+}
+
+// Initialize enhanced search
+const enhancedToolSearch = new EnhancedToolSearch();
+window.enhancedToolSearch = enhancedToolSearch;
+
 class EnhancedSearch {
     constructor() {
         this.tools = [];
