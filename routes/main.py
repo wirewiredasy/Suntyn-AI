@@ -43,15 +43,7 @@ def search():
 @main_bp.route('/dashboard')
 def dashboard():
     # This will be protected by Firebase auth on frontend
-    return render_template('auth/dashboard.html',
-                         firebase_api_key=os.environ.get("FIREBASE_API_KEY", ""),
-                         firebase_project_id=os.environ.get("FIREBASE_PROJECT_ID", ""),
-                         firebase_app_id=os.environ.get("FIREBASE_APP_ID", ""))
-
-@main_bp.route('/login')
-def login():
-    """Login page"""
-    return render_template('auth/login.html',
+    return render_template('dashboard.html',
                          firebase_api_key=os.environ.get("FIREBASE_API_KEY", ""),
                          firebase_project_id=os.environ.get("FIREBASE_PROJECT_ID", ""),
                          firebase_app_id=os.environ.get("FIREBASE_APP_ID", ""))

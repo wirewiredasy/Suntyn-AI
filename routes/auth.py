@@ -13,6 +13,13 @@ def login():
                          firebase_project_id=os.environ.get("FIREBASE_PROJECT_ID", ""),
                          firebase_app_id=os.environ.get("FIREBASE_APP_ID", ""))
 
+@auth_bp.route('/register')
+def register():
+    return render_template('auth/register.html',
+                         firebase_api_key=os.environ.get("FIREBASE_API_KEY", ""),
+                         firebase_project_id=os.environ.get("FIREBASE_PROJECT_ID", ""),
+                         firebase_app_id=os.environ.get("FIREBASE_APP_ID", ""))
+
 @auth_bp.route('/verify-token', methods=['POST'])
 def verify_token():
     """Verify Firebase ID token and create/update user session"""
