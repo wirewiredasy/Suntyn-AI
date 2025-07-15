@@ -75,6 +75,16 @@
     // Make it globally available
     window.searchTools = enhancedSearchTools;
     
+    // Add to Alpine.js data
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('searchComponent', () => ({
+            searchOpen: false,
+            searchQuery: '',
+            searchResults: [],
+            searchTools: enhancedSearchTools
+        }));
+    });
+    
     // Initialize when DOM is ready
     document.addEventListener('DOMContentLoaded', function() {
         console.log('Enhanced search functionality loaded');

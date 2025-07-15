@@ -58,7 +58,7 @@
                 Search through our comprehensive collection of professional tools
             </p>
             
-            <div class="relative" x-data="{ searchOpen: false, searchQuery: '', searchResults: [] }">
+            <div class="relative" x-data="searchComponent">
                 <div class="relative">
                     <div class="absolute left-6 top-1/2 transform -translate-y-1/2">
                         <i data-lucide="search" class="w-6 h-6 text-primary-500"></i>
@@ -66,7 +66,7 @@
                     <input 
                         type="text" 
                         x-model="searchQuery"
-                        @input="if(window.searchTools) window.searchTools.call(this)"
+                        @input="searchTools()"
                         @focus="searchOpen = true"
                         placeholder="Search from 85+ tools... (e.g., PDF merge, image compress, video trim)" 
                         class="search-enhanced w-full pl-16 pr-6 py-6 text-lg font-medium placeholder-gray-500 dark:placeholder-gray-400"
