@@ -230,6 +230,7 @@
 
                 <!-- Desktop Navigation -->
                 <div class="hidden md:flex items-center space-x-1">
+                    <a href="{{ url_for('main.index') }}" class="zapier-nav-link">Home</a>
                     <div class="relative group">
                         <a href="{{ url_for('tools.index') }}" class="zapier-nav-link">
                             Tools
@@ -257,9 +258,7 @@
                             </div>
                         </div>
                     </div>
-                    <a href="{{ url_for('main.about') }}" class="zapier-nav-link">Solutions</a>
-                    <a href="{{ url_for('main.contact') }}" class="zapier-nav-link">Enterprise</a>
-                    <a href="{{ url_for('main.about') }}" class="zapier-nav-link">Pricing</a>
+                    <a href="{{ url_for('main.about') }}" class="zapier-nav-link">About</a>
                 </div>
 
                 <!-- Right Side Actions -->
@@ -356,18 +355,18 @@
             <!-- Newsletter Section -->
             <div class="text-center mb-12">
                 <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-                    Ready to transform how your enterprise uses AI?
+                    Ready to transform how your work uses Toolora AI?
                 </h2>
                 <p class="text-gray-600 dark:text-gray-400 mb-8 max-w-2xl mx-auto">
-                    Join forward-thinking enterprises that trust Toolora for mission-critical workflows
+                    Join thousands of professionals who trust Toolora for their daily productivity needs
                 </p>
                 <div class="grid grid-cols-1 md:grid-cols-2 max-w-lg mx-auto gap-0 rounded-xl overflow-hidden">
-                    <button class="bg-orange-500 hover:bg-orange-600 text-white font-medium py-4 px-6 transition-colors">
-                        Start free with email →
-                    </button>
-                    <button class="bg-orange-600 hover:bg-orange-700 text-white font-medium py-4 px-6 transition-colors">
-                        Contact Sales →
-                    </button>
+                    <a href="{{ url_for('tools.index') }}" class="bg-orange-500 hover:bg-orange-600 text-white font-medium py-4 px-6 transition-colors">
+                        Start Using Tools →
+                    </a>
+                    <a href="{{ url_for('main.contact') }}" class="bg-orange-600 hover:bg-orange-700 text-white font-medium py-4 px-6 transition-colors">
+                        Get Support →
+                    </a>
                 </div>
             </div>
 
@@ -463,59 +462,59 @@
                 <div>
                     <h4 class="text-sm font-semibold text-gray-900 dark:text-white mb-4">Top searches</h4>
                     <ul class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
-                        <li><a href="{{ url_for('tools.index') }}" class="hover:text-gray-900 dark:hover:text-white">Slack integrations</a></li>
-                        <li><a href="{{ url_for('tools.index') }}" class="hover:text-gray-900 dark:hover:text-white">Salesforce integrations</a></li>
-                        <li><a href="{{ url_for('tools.index') }}" class="hover:text-gray-900 dark:hover:text-white">HubSpot CRM integrations</a></li>
-                        <li><a href="{{ url_for('tools.index') }}" class="hover:text-gray-900 dark:hover:text-white">PayPal integrations</a></li>
-                        <li><a href="{{ url_for('tools.index') }}" class="hover:text-gray-900 dark:hover:text-white">Asana integrations</a></li>
+                        <li><a href="{{ url_for('tools.tool_page', tool_name='pdf-merge') }}" class="hover:text-gray-900 dark:hover:text-white">PDF Merge</a></li>
+                        <li><a href="{{ url_for('tools.tool_page', tool_name='image-compress') }}" class="hover:text-gray-900 dark:hover:text-white">Image Compress</a></li>
+                        <li><a href="{{ url_for('tools.tool_page', tool_name='background-remover') }}" class="hover:text-gray-900 dark:hover:text-white">Background Remover</a></li>
+                        <li><a href="{{ url_for('tools.tool_page', tool_name='resume-generator') }}" class="hover:text-gray-900 dark:hover:text-white">Resume Generator</a></li>
+                        <li><a href="{{ url_for('tools.tool_page', tool_name='qr-generator') }}" class="hover:text-gray-900 dark:hover:text-white">QR Generator</a></li>
                         <li><a href="{{ url_for('tools.index') }}" class="hover:text-gray-900 dark:hover:text-white text-orange-500">Show more</a></li>
                     </ul>
                 </div>
                 
                 <div>
-                    <h4 class="text-sm font-semibold text-gray-900 dark:text-white mb-4">Popular apps</h4>
+                    <h4 class="text-sm font-semibold text-gray-900 dark:text-white mb-4">Popular tools</h4>
                     <ul class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
-                        <li><a href="{{ url_for('tools.index') }}" class="hover:text-gray-900 dark:hover:text-white">Dropbox</a></li>
-                        <li><a href="{{ url_for('tools.index') }}" class="hover:text-gray-900 dark:hover:text-white">Google Sheets</a></li>
-                        <li><a href="{{ url_for('tools.index') }}" class="hover:text-gray-900 dark:hover:text-white">DocuSign</a></li>
-                        <li><a href="{{ url_for('tools.index') }}" class="hover:text-gray-900 dark:hover:text-white">WordPress</a></li>
-                        <li><a href="{{ url_for('tools.index') }}" class="hover:text-gray-900 dark:hover:text-white">Office 365</a></li>
+                        <li><a href="{{ url_for('tools.tool_page', tool_name='video-trimmer') }}" class="hover:text-gray-900 dark:hover:text-white">Video Trimmer</a></li>
+                        <li><a href="{{ url_for('tools.tool_page', tool_name='image-resize') }}" class="hover:text-gray-900 dark:hover:text-white">Image Resize</a></li>
+                        <li><a href="{{ url_for('tools.tool_page', tool_name='pdf-compress') }}" class="hover:text-gray-900 dark:hover:text-white">PDF Compress</a></li>
+                        <li><a href="{{ url_for('tools.tool_page', tool_name='password-generator') }}" class="hover:text-gray-900 dark:hover:text-white">Password Generator</a></li>
+                        <li><a href="{{ url_for('tools.tool_page', tool_name='color-picker') }}" class="hover:text-gray-900 dark:hover:text-white">Color Picker</a></li>
                         <li><a href="{{ url_for('tools.index') }}" class="hover:text-gray-900 dark:hover:text-white text-orange-500">Show more</a></li>
                     </ul>
                 </div>
                 
                 <div>
-                    <h4 class="text-sm font-semibold text-gray-900 dark:text-white mb-4">Trending apps</h4>
+                    <h4 class="text-sm font-semibold text-gray-900 dark:text-white mb-4">Trending tools</h4>
                     <ul class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
-                        <li><a href="{{ url_for('tools.index') }}" class="hover:text-gray-900 dark:hover:text-white">Twitch</a></li>
-                        <li><a href="{{ url_for('tools.index') }}" class="hover:text-gray-900 dark:hover:text-white">Canva</a></li>
-                        <li><a href="{{ url_for('tools.index') }}" class="hover:text-gray-900 dark:hover:text-white">Microsoft To-Do</a></li>
-                        <li><a href="{{ url_for('tools.index') }}" class="hover:text-gray-900 dark:hover:text-white">Microsoft Outlook</a></li>
-                        <li><a href="{{ url_for('tools.index') }}" class="hover:text-gray-900 dark:hover:text-white">Medium</a></li>
+                        <li><a href="{{ url_for('tools.tool_page', tool_name='business-name-generator') }}" class="hover:text-gray-900 dark:hover:text-white">Business Name Generator</a></li>
+                        <li><a href="{{ url_for('tools.tool_page', tool_name='meme-generator') }}" class="hover:text-gray-900 dark:hover:text-white">Meme Generator</a></li>
+                        <li><a href="{{ url_for('tools.tool_page', tool_name='mindmap-creator') }}" class="hover:text-gray-900 dark:hover:text-white">Mindmap Creator</a></li>
+                        <li><a href="{{ url_for('tools.tool_page', tool_name='handwriting-to-text') }}" class="hover:text-gray-900 dark:hover:text-white">Handwriting to Text</a></li>
+                        <li><a href="{{ url_for('tools.tool_page', tool_name='subtitle-generator') }}" class="hover:text-gray-900 dark:hover:text-white">Subtitle Generator</a></li>
                         <li><a href="{{ url_for('tools.index') }}" class="hover:text-gray-900 dark:hover:text-white text-orange-500">Show more</a></li>
                     </ul>
                 </div>
                 
                 <div>
-                    <h4 class="text-sm font-semibold text-gray-900 dark:text-white mb-4">Top apps by category</h4>
+                    <h4 class="text-sm font-semibold text-gray-900 dark:text-white mb-4">Tools by category</h4>
                     <ul class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
-                        <li><a href="{{ url_for('tools.index') }}" class="hover:text-gray-900 dark:hover:text-white">Project management</a></li>
-                        <li><a href="{{ url_for('tools.index') }}" class="hover:text-gray-900 dark:hover:text-white">Calendar</a></li>
-                        <li><a href="{{ url_for('tools.index') }}" class="hover:text-gray-900 dark:hover:text-white">Email</a></li>
-                        <li><a href="{{ url_for('tools.index') }}" class="hover:text-gray-900 dark:hover:text-white">CRM</a></li>
-                        <li><a href="{{ url_for('tools.index') }}" class="hover:text-gray-900 dark:hover:text-white">Marketing</a></li>
+                        <li><a href="{{ url_for('tools.index', category='pdf') }}" class="hover:text-gray-900 dark:hover:text-white">PDF Tools</a></li>
+                        <li><a href="{{ url_for('tools.index', category='image') }}" class="hover:text-gray-900 dark:hover:text-white">Image Tools</a></li>
+                        <li><a href="{{ url_for('tools.index', category='video') }}" class="hover:text-gray-900 dark:hover:text-white">Video Tools</a></li>
+                        <li><a href="{{ url_for('tools.index', category='ai') }}" class="hover:text-gray-900 dark:hover:text-white">AI Tools</a></li>
+                        <li><a href="{{ url_for('tools.index', category='govt') }}" class="hover:text-gray-900 dark:hover:text-white">Govt Tools</a></li>
                         <li><a href="{{ url_for('tools.index') }}" class="hover:text-gray-900 dark:hover:text-white text-orange-500">Show more</a></li>
                     </ul>
                 </div>
                 
                 <div>
-                    <h4 class="text-sm font-semibold text-gray-900 dark:text-white mb-4">Our best content</h4>
+                    <h4 class="text-sm font-semibold text-gray-900 dark:text-white mb-4">Best content</h4>
                     <ul class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
-                        <li><a href="{{ url_for('main.about') }}" class="hover:text-gray-900 dark:hover:text-white">Best Video Conferencing Apps</a></li>
-                        <li><a href="{{ url_for('main.about') }}" class="hover:text-gray-900 dark:hover:text-white">Best Email Apps</a></li>
-                        <li><a href="{{ url_for('main.about') }}" class="hover:text-gray-900 dark:hover:text-white">Best CRM Apps</a></li>
-                        <li><a href="{{ url_for('main.about') }}" class="hover:text-gray-900 dark:hover:text-white">Best Note Taking Apps</a></li>
-                        <li><a href="{{ url_for('main.about') }}" class="hover:text-gray-900 dark:hover:text-white">Best Calendar Apps</a></li>
+                        <li><a href="{{ url_for('main.about') }}" class="hover:text-gray-900 dark:hover:text-white">Best PDF Tools</a></li>
+                        <li><a href="{{ url_for('main.about') }}" class="hover:text-gray-900 dark:hover:text-white">Best Image Tools</a></li>
+                        <li><a href="{{ url_for('main.about') }}" class="hover:text-gray-900 dark:hover:text-white">Best AI Tools</a></li>
+                        <li><a href="{{ url_for('main.about') }}" class="hover:text-gray-900 dark:hover:text-white">Best Video Tools</a></li>
+                        <li><a href="{{ url_for('main.about') }}" class="hover:text-gray-900 dark:hover:text-white">Best Student Tools</a></li>
                         <li><a href="{{ url_for('main.about') }}" class="hover:text-gray-900 dark:hover:text-white text-orange-500">Show more</a></li>
                     </ul>
                 </div>
@@ -542,15 +541,14 @@
 
             <!-- Bottom Links -->
             <div class="flex flex-wrap justify-center gap-6 text-sm text-gray-600 dark:text-gray-400 mb-8">
-                <a href="{{ url_for('main.about') }}" class="hover:text-gray-900 dark:hover:text-white">Pricing</a>
-                <a href="{{ url_for('main.contact') }}" class="hover:text-gray-900 dark:hover:text-white">Help</a>
-                <a href="{{ url_for('main.about') }}" class="hover:text-gray-900 dark:hover:text-white">Developer Platform</a>
+                <a href="{{ url_for('main.about') }}" class="hover:text-gray-900 dark:hover:text-white">About</a>
+                <a href="{{ url_for('main.contact') }}" class="hover:text-gray-900 dark:hover:text-white">Contact</a>
+                <a href="{{ url_for('main.faq') }}" class="hover:text-gray-900 dark:hover:text-white">FAQ</a>
                 <a href="{{ url_for('main.privacy') }}" class="hover:text-gray-900 dark:hover:text-white">Privacy</a>
-                <a href="{{ url_for('main.contact') }}" class="hover:text-gray-900 dark:hover:text-white">Jobs</a>
-                <a href="{{ url_for('main.about') }}" class="hover:text-gray-900 dark:hover:text-white">Enterprise</a>
-                <a href="{{ url_for('main.terms') }}" class="hover:text-gray-900 dark:hover:text-white">Templates</a>
-                <a href="{{ url_for('main.about') }}" class="hover:text-gray-900 dark:hover:text-white">App Integrations</a>
-                <a href="{{ url_for('main.about') }}" class="hover:text-gray-900 dark:hover:text-white">Partners Program</a>
+                <a href="{{ url_for('main.terms') }}" class="hover:text-gray-900 dark:hover:text-white">Terms</a>
+                <a href="{{ url_for('main.blog') }}" class="hover:text-gray-900 dark:hover:text-white">Blog</a>
+                <a href="{{ url_for('tools.index') }}" class="hover:text-gray-900 dark:hover:text-white">All Tools</a>
+                <a href="{{ url_for('main.cookies') }}" class="hover:text-gray-900 dark:hover:text-white">Cookies</a>
             </div>
 
             <!-- Copyright -->
