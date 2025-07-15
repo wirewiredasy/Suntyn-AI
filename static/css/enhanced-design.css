@@ -1,6 +1,15 @@
 /* Enhanced Design System for Toolora AI */
 
-/* Navigation enhancements */
+/* Zapier-inspired Navigation */
+.zapier-nav-link {
+    @apply px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors flex items-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800;
+}
+
+.zapier-dropdown-link {
+    @apply flex items-center space-x-3 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors;
+}
+
+/* Original Navigation for fallback */
 .nav-link {
     @apply px-6 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-300 font-semibold flex items-center relative overflow-hidden;
     background: linear-gradient(135deg, transparent 0%, rgba(59, 130, 246, 0.05) 50%, transparent 100%);
