@@ -67,6 +67,8 @@ def index():
 
 @tools_bp.route('/<tool_name>')
 def tool_page(tool_name):
+    from flask import abort
+    
     # Find which category this tool belongs to
     tool_category = None
     tool_info = None
@@ -83,7 +85,8 @@ def tool_page(tool_name):
             break
 
     if not tool_category:
-        return redirect(url_for('tools.index'))
+        # Return 404 instead of redirect for better UX
+        abort(404)
 
     # Try to render specific template for tool, fallback to generic
     try:
