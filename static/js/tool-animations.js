@@ -361,6 +361,66 @@ class ToolAnimationManager {
 // Initialize animation manager
 const toolAnimationManager = new ToolAnimationManager();
 
+// Initialize visualization animations
+class VisualizationManager {
+    constructor() {
+        this.initParticleSystem();
+        this.initMorphingShapes();
+        this.initNeuralNetwork();
+    }
+
+    initParticleSystem() {
+        setInterval(() => {
+            const particles = document.querySelectorAll('.particle-system');
+            particles.forEach(system => {
+                if (Math.random() > 0.7) {
+                    const particle = document.createElement('div');
+                    particle.className = 'particle';
+                    particle.style.left = Math.random() * 100 + '%';
+                    particle.style.animationDelay = '0s';
+                    system.appendChild(particle);
+                    
+                    setTimeout(() => {
+                        if (particle.parentNode) {
+                            particle.remove();
+                        }
+                    }, 10000);
+                }
+            });
+        }, 2000);
+    }
+
+    initMorphingShapes() {
+        const shapes = document.querySelectorAll('.morphing-shape');
+        shapes.forEach((shape, index) => {
+            shape.style.animationDelay = (index * 2) + 's';
+            
+            setInterval(() => {
+                const hue = Math.random() * 360;
+                shape.style.background = `linear-gradient(45deg, 
+                    hsl(${hue}, 70%, 60%), 
+                    hsl(${(hue + 60) % 360}, 70%, 60%), 
+                    hsl(${(hue + 120) % 360}, 70%, 60%))`;
+            }, 4000);
+        });
+    }
+
+    initNeuralNetwork() {
+        const networks = document.querySelectorAll('.neural-network');
+        networks.forEach(network => {
+            setInterval(() => {
+                const connections = network.querySelectorAll('.neural-connection');
+                connections.forEach(conn => {
+                    conn.style.animationDelay = Math.random() * 2 + 's';
+                });
+            }, 3000);
+        });
+    }
+}
+
+// Initialize visualization manager
+const visualizationManager = new VisualizationManager();
+
 // Advanced button interaction effects
     setupAdvancedButtonEffects() {
         document.addEventListener('DOMContentLoaded', () => {

@@ -1,5 +1,224 @@
 /* Enhanced Design System for Toolora AI */
 
+/* Unique Visualization Animations */
+.morphing-container {
+    position: relative;
+    overflow: hidden;
+}
+
+.morphing-shape {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1);
+    border-radius: 50%;
+    animation: morphingBlob 8s ease-in-out infinite;
+    opacity: 0.1;
+}
+
+@keyframes morphingBlob {
+    0%, 100% {
+        border-radius: 50% 40% 30% 70%;
+        transform: rotate(0deg) scale(1);
+    }
+    25% {
+        border-radius: 30% 60% 70% 40%;
+        transform: rotate(90deg) scale(1.2);
+    }
+    50% {
+        border-radius: 70% 30% 50% 60%;
+        transform: rotate(180deg) scale(0.8);
+    }
+    75% {
+        border-radius: 40% 70% 30% 50%;
+        transform: rotate(270deg) scale(1.1);
+    }
+}
+
+.liquid-animation {
+    background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+    background-size: 400% 400%;
+    animation: liquidFlow 15s ease infinite;
+}
+
+@keyframes liquidFlow {
+    0% {
+        background-position: 0% 50%;
+        border-radius: 60% 40% 30% 70%;
+    }
+    25% {
+        background-position: 100% 50%;
+        border-radius: 30% 60% 70% 40%;
+    }
+    50% {
+        background-position: 100% 100%;
+        border-radius: 70% 30% 60% 40%;
+    }
+    75% {
+        background-position: 0% 100%;
+        border-radius: 40% 70% 30% 60%;
+    }
+    100% {
+        background-position: 0% 50%;
+        border-radius: 60% 40% 30% 70%;
+    }
+}
+
+.geometric-dance {
+    position: relative;
+}
+
+.geometric-dance::before,
+.geometric-dance::after {
+    content: '';
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    animation: geometricSpin 6s linear infinite;
+}
+
+.geometric-dance::before {
+    top: -25px;
+    left: -25px;
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+}
+
+.geometric-dance::after {
+    bottom: -25px;
+    right: -25px;
+    clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+    animation-delay: -3s;
+}
+
+@keyframes geometricSpin {
+    0% { transform: rotate(0deg) scale(1); }
+    25% { transform: rotate(90deg) scale(1.2); }
+    50% { transform: rotate(180deg) scale(0.8); }
+    75% { transform: rotate(270deg) scale(1.1); }
+    100% { transform: rotate(360deg) scale(1); }
+}
+
+.particle-system {
+    position: relative;
+    overflow: hidden;
+}
+
+.particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: radial-gradient(circle, #ffd700, #ff6b6b);
+    border-radius: 50%;
+    animation: particleFlow 10s linear infinite;
+}
+
+@keyframes particleFlow {
+    0% {
+        transform: translateY(100vh) translateX(0) rotate(0deg);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-100px) translateX(200px) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+.wave-animation {
+    position: relative;
+    background: linear-gradient(45deg, #12c2e9, #c471ed, #f64f59);
+    background-size: 400% 400%;
+    animation: waveFlow 8s ease-in-out infinite;
+}
+
+@keyframes waveFlow {
+    0%, 100% {
+        background-position: 0% 50%;
+        clip-path: ellipse(150% 100% at 50% 0%);
+    }
+    25% {
+        background-position: 100% 0%;
+        clip-path: ellipse(100% 150% at 0% 50%);
+    }
+    50% {
+        background-position: 100% 100%;
+        clip-path: ellipse(150% 100% at 50% 100%);
+    }
+    75% {
+        background-position: 0% 100%;
+        clip-path: ellipse(100% 150% at 100% 50%);
+    }
+}
+
+.crystal-effect {
+    position: relative;
+    background: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255,0.3));
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255,255,255,0.2);
+    animation: crystalGlow 4s ease-in-out infinite alternate;
+}
+
+@keyframes crystalGlow {
+    0% {
+        box-shadow: 
+            0 0 20px rgba(139, 92, 246, 0.3),
+            inset 0 0 20px rgba(255, 255, 255, 0.1);
+        transform: rotateY(0deg);
+    }
+    100% {
+        box-shadow: 
+            0 0 40px rgba(236, 72, 153, 0.5),
+            inset 0 0 30px rgba(255, 255, 255, 0.2);
+        transform: rotateY(5deg);
+    }
+}
+
+.neural-network {
+    position: relative;
+    overflow: hidden;
+}
+
+.neural-node {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: radial-gradient(circle, #00d4ff, #0099ff);
+    border-radius: 50%;
+    animation: neuralPulse 3s ease-in-out infinite;
+}
+
+@keyframes neuralPulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 0.6;
+        box-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+    }
+    50% {
+        transform: scale(1.5);
+        opacity: 1;
+        box-shadow: 0 0 20px rgba(0, 212, 255, 0.8);
+    }
+}
+
+.neural-connection {
+    position: absolute;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #00d4ff, transparent);
+    animation: connectionFlow 2s linear infinite;
+}
+
+@keyframes connectionFlow {
+    0% { opacity: 0; transform: scaleX(0); }
+    50% { opacity: 1; transform: scaleX(1); }
+    100% { opacity: 0; transform: scaleX(0); }
+}
+
 /* Zapier-inspired Navigation */
 .zapier-nav-link {
     @apply px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors flex items-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800;
