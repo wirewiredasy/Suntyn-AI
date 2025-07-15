@@ -120,7 +120,7 @@ class ToolAnimationManager {
 
             @keyframes glow {
                 from { box-shadow: 0 0 10px rgba(59, 130, 246, 0.3); }
-                to { box-shadow: 0 0 20px rgba(59, 130, 246, 0.6); }
+                to { box-shadow: 0 0 10px rgba(59, 130, 246, 0.3); }
             }
         `;
         document.head.appendChild(style);

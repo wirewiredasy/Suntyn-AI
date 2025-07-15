@@ -176,10 +176,13 @@
 <section id="popular-tools" class="py-16 bg-white dark:bg-gray-800">
     <div class="container mx-auto px-4">
         <div class="text-center mb-12">
-            <h2 class="text-3xl md:text-4xl font-bold text-gray-800 dark:text-white mb-4 animate__animated animate__fadeInUp">
+            <div class="inline-block bg-gradient-to-r from-blue-500 to-purple-500 text-white px-6 py-2 rounded-full text-sm font-semibold mb-4">
+                🔥 FEATURED TOOLS
+            </div>
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-800 dark:text-white mb-4">
                 Most Popular Tools
             </h2>
-            <p class="text-lg text-gray-600 dark:text-gray-300 animate__animated animate__fadeInUp animate__delay-1s">
+            <p class="text-lg text-gray-600 dark:text-gray-300">
                 The tools our users love most. Try them now!
             </p>
         </div>
@@ -199,8 +202,7 @@
 
             {% for tool_data in popular_tool_list %}
                 {% set category_info = categories[tool_data.category] %}
-                <div class="popular-tool-card group bg-white dark:bg-gray-800 rounded-3xl shadow-xl border border-gray-100 dark:border-gray-700 overflow-hidden popular-tool-stagger"
-                     style="animation-delay: {{ loop.index0 * 0.1 }}s">
+                <div class="popular-tool-card group bg-white dark:bg-gray-800 rounded-3xl shadow-xl border border-gray-100 dark:border-gray-700 overflow-hidden transform hover:scale-105 transition-all duration-300">
                     <div class="p-6 relative">
                         <!-- Gradient Background Overlay -->
                         <div class="absolute inset-0 bg-gradient-to-br from-{{ category_info.color }}-50/50 via-transparent to-{{ category_info.color }}-100/30 dark:from-{{ category_info.color }}-900/20 dark:to-{{ category_info.color }}-800/10 opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
@@ -236,7 +238,7 @@
                             <div class="flex items-center justify-between mb-6">
                                 <div class="flex items-center space-x-1">
                                     {% for i in range(5) %}
-                                    <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-current rating-star" style="animation-delay: {{ i * 0.1 }}s"></i>
+                                    <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-current"></i>
                                     {% endfor %}
                                 </div>
                                 <span class="text-sm text-gray-500 dark:text-gray-400 font-medium">4.9 Rating</span>
