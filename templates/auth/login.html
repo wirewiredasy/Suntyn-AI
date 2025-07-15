@@ -7,8 +7,12 @@
     <div class="max-w-md w-full space-y-8">
         <div class="text-center">
             <div class="flex justify-center mb-6">
-                <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-                    <i data-lucide="brain" class="w-8 h-8 text-white"></i>
+                <div class="w-16 h-16 bg-gradient-to-br from-cyan-400 via-blue-500 to-purple-600 rounded-2xl p-0.5 transition-all duration-500 hover:scale-110 hover:shadow-2xl hover:shadow-purple-500/25 relative">
+                    <div class="w-full h-full bg-white dark:bg-gray-800 rounded-xl p-2 flex items-center justify-center">
+                        <img src="{{ url_for('static', filename='images/toolora-new-logo.svg') }}" 
+                             alt="Toolora AI" 
+                             class="w-10 h-10 object-contain">
+                    </div>
                 </div>
             </div>
             <h2 class="text-3xl font-bold text-gray-900 dark:text-white">

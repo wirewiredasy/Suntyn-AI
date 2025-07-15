@@ -6,7 +6,7 @@
 // Enhanced Global app object with SPA features
 window.ToolaraApp = {
     isNavigating: false,
-    
+
     init: function() {
         this.setupSPANavigation();
         this.setupInstantPageLoad();
@@ -24,21 +24,21 @@ window.ToolaraApp = {
             const link = e.target.closest('a');
             if (link && link.href && link.href.startsWith(window.location.origin) && !link.target) {
                 const href = link.href;
-                
+
                 // Skip if same page
                 if (href === window.location.href) return;
-                
+
                 // Skip external links
                 if (link.hostname !== window.location.hostname) return;
-                
+
                 // Skip if already navigating
                 if (this.isNavigating) return;
-                
+
                 e.preventDefault();
                 this.navigateToPage(href);
             }
         });
-        
+
         // Prefetch critical pages on hover
         document.addEventListener('mouseover', (e) => {
             const link = e.target.closest('a[href^="/"]');
@@ -51,26 +51,26 @@ window.ToolaraApp = {
 
     navigateToPage: function(url) {
         if (this.isNavigating) return;
-        
+
         this.isNavigating = true;
-        
+
         // Create smooth navigation overlay
         this.createNavOverlay();
-        
+
         // Enhanced transition with dark background preservation
         document.body.style.opacity = '0.95';
         document.body.style.transform = 'translateY(-2px)';
         document.body.classList.add('page-transition', 'loading');
-        
+
         // Preserve background color during transition
         const currentBg = getComputedStyle(document.body).backgroundColor;
         document.body.style.backgroundColor = currentBg;
-        
+
         // Navigate with minimal delay for smooth transition
         setTimeout(() => {
             window.location.href = url;
         }, 50);
-        
+
         // Reset state
         setTimeout(() => {
             this.isNavigating = false;
@@ -84,7 +84,7 @@ window.ToolaraApp = {
         link.rel = 'prefetch';
         link.href = url;
         document.head.appendChild(link);
-        
+
         // Also prefetch as DNS lookup
         const dns = document.createElement('link');
         dns.rel = 'dns-prefetch';
@@ -119,11 +119,11 @@ window.ToolaraApp = {
             document.body.style.opacity = '1';
             document.body.style.visibility = 'visible';
             document.body.classList.add('loaded');
-            
+
             // Preload critical pages
             this.preloadCriticalPages();
         });
-        
+
         // Enhanced back navigation with smooth animation
         window.addEventListener('pageshow', (e) => {
             // Immediate visibility with proper background
@@ -134,17 +134,17 @@ window.ToolaraApp = {
             document.body.style.transform = 'none';
             document.body.classList.remove('page-transition', 'loading');
             document.body.classList.add('loaded', 'back-nav-smooth');
-            
+
             // Force close any open menus
             if (window.Alpine && window.Alpine.store('navigation')) {
                 window.Alpine.store('navigation').mobileMenuOpen = false;
             }
-            
+
             // Re-initialize icons
             if (typeof lucide !== 'undefined') {
                 requestAnimationFrame(() => lucide.createIcons());
             }
-            
+
             // Remove animation class after animation
             setTimeout(() => {
                 document.body.classList.remove('back-nav-smooth');
@@ -163,7 +163,7 @@ window.ToolaraApp = {
     addRippleEffect: function(element, event) {
         // Add ripple effect to clicked element
         element.classList.add('clicked');
-        
+
         // Remove the class after animation
         setTimeout(() => {
             element.classList.remove('clicked');
@@ -189,7 +189,7 @@ window.ToolaraApp = {
                 // Handle resize
             }, 100);
         });
-        
+
         // Optimize scroll events
         let scrollTimeout;
         window.addEventListener('scroll', () => {
@@ -201,14 +201,25 @@ window.ToolaraApp = {
     },
 
     setupDarkMode: function() {
-        // Dark mode is already handled by Alpine.js
-        // This is just for additional features
-        const darkModeToggle = document.querySelector('[data-toggle="dark-mode"]');
+        // Dark mode toggle functionality
+        const darkModeToggle = document.querySelector('[x-on\\:click="darkMode = !darkMode"]');
         if (darkModeToggle) {
             darkModeToggle.addEventListener('click', function() {
                 document.documentElement.classList.toggle('dark');
             });
         }
+    },
+
+    setupMobileMenu: function() {
+        // Fix mobile menu functionality
+        document.addEventListener('alpine:init', () => {
+            Alpine.store('navigation', {
+                mobileMenuOpen: false,
+                toggleMobileMenu() {
+                    this.mobileMenuOpen = !this.mobileMenuOpen;
+                }
+            });
+        });
     },
 
     setupChatWidget: function() {
@@ -219,7 +230,7 @@ window.ToolaraApp = {
                 messages: [],
                 newMessage: '',
                 initialized: false,
-                
+
                 init() {
                     if (!this.initialized) {
                         this.messages = [
@@ -233,15 +244,15 @@ window.ToolaraApp = {
                         this.initialized = true;
                     }
                 },
-                
+
                 toggleChat() {
                     this.isOpen = !this.isOpen;
-                    
+
                     // Initialize on first open
                     if (this.isOpen && !this.initialized) {
                         this.init();
                     }
-                    
+
                     if (this.isOpen) {
                         this.$nextTick(() => {
                             const input = this.$refs.messageInput;
@@ -249,7 +260,7 @@ window.ToolaraApp = {
                         });
                     }
                 },
-                
+
                 sendMessage() {
                     if (this.newMessage.trim()) {
                         this.messages.push({
@@ -258,10 +269,10 @@ window.ToolaraApp = {
                             text: this.newMessage,
                             time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
                         });
-                        
+
                         const userMessage = this.newMessage;
                         this.newMessage = '';
-                        
+
                         // Auto-reply with slight delay
                         setTimeout(() => {
                             this.messages.push({
@@ -270,7 +281,7 @@ window.ToolaraApp = {
                                 text: 'Thank you for your message! Our team will get back to you soon.',
                                 time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
                             });
-                            
+
                             // Auto-scroll to bottom
                             this.$nextTick(() => {
                                 const chatMessages = document.getElementById('chat-messages');
@@ -292,7 +303,7 @@ window.ToolaraApp = {
             if (toolCard) {
                 const toolName = toolCard.dataset.tool;
                 const toolCategory = toolCard.dataset.category;
-                
+
                 // Analytics tracking
                 if (typeof gtag !== 'undefined') {
                     gtag('event', 'tool_click', {
@@ -300,16 +311,16 @@ window.ToolaraApp = {
                         tool_category: toolCategory
                     });
                 }
-                
+
                 // Console log for debugging
                 console.log('Tool used:', toolName);
-                
+
                 // Enhanced click animation with ripple
                 ToolaraApp.addRippleEffect(toolCard, e);
-                
+
                 // Smooth scale animation
                 toolCard.style.transform = 'translateY(-2px) scale(0.98) translateZ(0)';
-                
+
                 setTimeout(() => {
                     toolCard.style.transform = '';
                 }, 200);
@@ -322,10 +333,10 @@ window.ToolaraApp = {
             if (useToolBtn) {
                 e.preventDefault();
                 const toolName = useToolBtn.dataset.tool;
-                
+
                 // Add loading state
                 useToolBtn.innerHTML = '<i data-lucide="loader" class="w-4 h-4 animate-spin mr-2"></i>Loading...';
-                
+
                 // Navigate to tool
                 setTimeout(() => {
                     window.location.href = `/tools/${toolName}`;
@@ -359,14 +370,14 @@ window.ToolaraApp = {
             const form = e.target;
             if (form.classList.contains('tool-form')) {
                 e.preventDefault();
-                
+
                 // Add loading state
                 const submitBtn = form.querySelector('button[type="submit"]');
                 if (submitBtn) {
                     submitBtn.innerHTML = '<i data-lucide="loader" class="w-4 h-4 animate-spin mr-2"></i>Processing...';
                     submitBtn.disabled = true;
                 }
-                
+
                 // Process form (this would be replaced with actual form handling)
                 setTimeout(() => {
                     if (submitBtn) {
@@ -405,7 +416,7 @@ window.addPageTransitions = function() {
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
     ToolaraApp.init();
-    
+
     // Initialize Lucide icons
     if (typeof lucide !== 'undefined') {
         lucide.createIcons();
