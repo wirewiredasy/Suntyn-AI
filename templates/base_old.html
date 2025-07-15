@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="en" x-data="darkModeHandler()" x-init="init()" :class="{ 'dark': darkMode }">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Toolora AI - One Place. All Tools.{% endblock %}</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="{% block description %}Professional toolkit with 85+ tools for PDF, Image, Video, AI and more. Free, fast, and secure online tools.{% endblock %}">
+    <meta name="keywords" content="{% block keywords %}PDF tools, image editor, video converter, AI tools, online tools, free tools{% endblock %}">
+    <meta name="author" content="Toolora AI">
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="{% block og_title %}Toolora AI - Professional Online Tools{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}85+ professional tools for PDF, Image, Video, AI processing and more. Free, fast, and secure.{% endblock %}">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ request.url }}">
+    <meta property="og:image" content="{{ url_for('static', filename='images/og/default-og.png') }}">
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% block twitter_title %}Toolora AI - Professional Online Tools{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}85+ professional tools for PDF, Image, Video, AI processing and more.{% endblock %}">
+    <meta name="twitter:image" content="{{ url_for('static', filename='images/og/default-og.png') }}">
+
+    <!-- Additional SEO Meta Tags -->
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English">
+    <meta name="revisit-after" content="3 days">
+    <meta name="distribution" content="global">
+    <meta name="rating" content="general">
+
+    <!-- Structured Data for SEO -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Toolora AI",
+        "description": "Professional online tools for PDF, Image, Video, and AI processing",
+        "url": "{{ request.url_root }}",
+        "applicationCategory": "ProductivityApplication",
+        "operatingSystem": "Web Browser",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.8",
+            "ratingCount": "1250"
+        }
+    }
+    </script>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon.svg') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+
+    <!-- App Icons for Mobile -->
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='images/toolora-icon.jpg') }}">
+    <meta name="theme-color" content="#3b82f6">
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- TailwindCSS & DaisyUI -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.20/dist/full.min.css" rel="stylesheet" type="text/css" />
+
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <!-- Alpine.js Store Initialization -->
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.store('navigation', {
+                mobileMenuOpen: false,
+                toggleMobileMenu() {
+                    this.mobileMenuOpen = !this.mobileMenuOpen;
+                },
+                closeMobileMenu() {
+                    this.mobileMenuOpen = false;
+                }
+            });
+            
+            // Initialize dark mode properly
+            Alpine.data('darkModeHandler', () => ({
+                darkMode: localStorage.getItem('darkMode') === 'true' || 
+                         (!localStorage.getItem('darkMode') && window.matchMedia('(prefers-color-scheme: dark)').matches),
+                mobileMenuOpen: false,
+                
+                init() {
+                    this.applyTheme();
+                    this.$watch('darkMode', (value) => {
+                        localStorage.setItem('darkMode', value);
+                        this.applyTheme();
+                    });
+                },
+                
+                applyTheme() {
+                    if (this.darkMode) {
+                        document.documentElement.classList.add('dark');
+                        document.body.style.backgroundColor = '#111827';
+                    } else {
+                        document.documentElement.classList.remove('dark');
+                        document.body.style.backgroundColor = '#f9fafb';
+                    }
+                },
+                
+                toggleDarkMode() {
+                    this.darkMode = !this.darkMode;
+                },
+                
+                toggleMobileMenu() {
+                    this.mobileMenuOpen = !this.mobileMenuOpen;
+                }
+            }));
+
+            // Global mobile menu controller
+            Alpine.data('mobileMenuController', () => ({
+                mobileMenuOpen: false,
+                
+                toggleMenu() {
+                    this.mobileMenuOpen = !this.mobileMenuOpen;
+                },
+                
+                closeMenu() {
+                    this.mobileMenuOpen = false;
+                }
+            }));
+        });
+    </script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/brand-colors.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/text-visibility.css') }}">
+
+    <!-- Critical CSS for instant loading and anti-flash -->
+    <style>
+        /* Ultimate Anti-Flash System with dark background fallback */
+        html { 
+            background-color: #f9fafb !important;
+            min-height: 100vh;
+            transition: background-color 0.2s ease !important;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+        html.dark { 
+            background-color: #111827 !important; 
+        }
+
+        /* Dark background first approach */
+        body { 
+            opacity: 0 !important;
+            background-color: #111827 !important;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            transition: opacity 0.15s ease, background-color 0.2s ease, color 0.2s ease !important;
+            visibility: visible !important;
+            font-display: swap;
+            -webkit-font-smoothing: antialiased;
+            transform: translateZ(0);
+            backface-visibility: hidden;
+        }
+
+        /* Light mode override */
+        html:not(.dark) body {
+            background-color: #f9fafb !important;
+        }
+
+        /* Loaded state */
+        body.loaded {
+            opacity: 1 !important;
+        }
+
+        /* Instant load indicators */
+        .page-loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            transform: scaleX(0);
+            transform-origin: left;
+            z-index: 10000;
+        }
+
+        .page-loader.active {
+            animation: pageLoad 0.5s ease-out;
+        }
+
+        @keyframes pageLoad {
+            0% { transform: scaleX(0); }
+            50% { transform: scaleX(0.7); }
+            100% { transform: scaleX(1); opacity: 0; }
+        }
+
+        /* Instant loading indicators */
+        .loading-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #3b82f6, transparent);
+            z-index: 9999;
+            display: none;
+        }
+
+        .loading-indicator.active {
+            display: block;
+            animation: loadingSlide 1s ease-in-out infinite;
+        }
+
+        @keyframes loadingSlide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* Prevent sidebar flash */
+        nav, .fixed {
+            transition: none !important;
+        }
+
+        /* Back navigation stability */
+        .back-nav-stable {
+            position: static !important;
+            transform: none !important;
+            animation: none !important;
+        }
+
+        /* Prevent any white flash during navigation */
+        .page-container {
+            min-height: 100vh;
+            background-color: inherit;
+        }
+
+        /* Fast loading overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: inherit;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .toolora-spinner {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(45deg, #3b82f6, #8b5cf6);
+            border-radius: 50%;
+            animation: fastSpin 0.6s linear infinite;
+            position: relative;
+        }
+
+        .toolora-spinner::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        @keyframes fastSpin {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.1); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+
+        /* Instant transitions */
+        * {
+            transition: background-color 0.1s ease, color 0.1s ease, transform 0.1s ease !important;
+        }
+
+        /* Fast button interactions */
+        button, a, [role="button"] {
+            -webkit-tap-highlight-color: transparent;
+            transition: all 0.1s ease !important;
+        }
+
+        /* Prevent layout shift */
+        nav, main, footer {
+            will-change: auto;
+        }
+    </style>
+
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#eff6ff',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Tools Configuration for JavaScript -->
+    <script>
+        {% if categories %}
+        window.toolsConfig = {{ categories | tojson }};
+        {% else %}
+        window.toolsConfig = {};
+        {% endif %}
+    </script>
+
+    <!-- Main JavaScript -->
+    <script src="{{ url_for('static', filename='js/tool-icons.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/icon-loader.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/feedback.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/logo-enhancer.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/ultra-smooth.js') }}"></script>
+
+    <!-- Enhanced Search -->
+    <script src="{{ url_for('static', filename='js/enhanced-search.js') }}"></script>
+</head>
+<body class="font-inter bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+    <!-- Ultra-fast loading indicator -->
+    <div id="loading-indicator" class="loading-indicator"></div>
+
+    <!-- Loading overlay -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Top AdSense Banner -->
+    <div class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 py-2">
+        <div class="container mx-auto px-4">
+            <div class="text-center">
+                <!-- AdSense/Adsterra Top Banner Ad Space -->
+                <div id="header-ad-banner" class="min-h-[50px] flex items-center justify-center bg-gray-50 dark:bg-gray-700 rounded border border-gray-200 dark:border-gray-600">
+                    <div class="text-center">
+                        <p class="text-xs text-gray-500 dark:text-gray-400">Advertisement</p>
+                        <!-- Replace this with your AdSense/Adsterra code -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Navigation -->
+    <nav class="bg-white dark:bg-gray-800 shadow-sm fixed w-full top-0 z-50 transition-colors duration-300">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3">
+                    <a href="{{ url_for('main.index') }}" class="flex items-center space-x-3 group logo-container">
+                        <div class="w-10 h-10 transition-all duration-300 group-hover:scale-110 relative">
+                            <img src="{{ url_for('static', filename='images/toolora-final-logo.svg') }}" 
+                                 alt="Toolora AI" 
+                                 class="w-full h-full object-contain transition-all duration-500 group-hover:rotate-6 group-hover:scale-110"
+                                 onerror="this.src='{{ url_for('static', filename='favicon.svg') }}';">
+                        </div>
+                        <span class="text-2xl font-bold text-gray-800 dark:text-white transition-all duration-300 group-hover:scale-105 professional-logo">
+                            Toolora AI
+                        </span>
+                    </a>
+                </div>
+
+                <!-- Search Bar (Desktop) -->
+                <div class="hidden md:flex flex-1 max-w-lg mx-8">
+                    <div class="relative w-full">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i data-lucide="search" class="w-5 h-5 text-blue-600 dark:text-blue-400"></i>
+                        </div>
+                        <input type="text" 
+                               placeholder="Search tools..." 
+                               class="w-full pl-10 pr-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 font-medium shadow-sm">
+                    </div>
+                </div>
+
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="{{ url_for('main.index') }}" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium">Home</a>
+                    <a href="{{ url_for('tools.index') }}" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium">Tools</a>
+                    <a href="{{ url_for('main.about') }}" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium">About</a>
+                    <a href="{{ url_for('main.contact') }}" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium">Contact</a>
+                </div>
+
+                <!-- Right Side -->
+                <div class="flex items-center space-x-3">
+                    <!-- Dark Mode Toggle -->
+                    <button @click="toggleDarkMode()" 
+                            class="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-all duration-200 border border-transparent hover:border-gray-300 dark:hover:border-gray-600">
+                        <!-- Sun Icon (Show in Dark Mode) -->
+                        <svg x-show="darkMode" 
+                             x-transition:enter="transition ease-out duration-200"
+                             x-transition:enter-start="opacity-0 rotate-90 scale-75"
+                             x-transition:enter-end="opacity-100 rotate-0 scale-100"
+                             class="w-5 h-5 text-yellow-500" 
+                             fill="currentColor" 
+                             viewBox="0 0 24 24">
+                            <path d="M12 4V2m0 20v-2m8-8h2M2 12h2m15.364-6.364L18.95 4.05M5.05 18.95l1.414-1.414M19.95 19.95l-1.414-1.414M5.05 5.05l1.414 1.414M12 8a4 4 0 100 8 4 4 0 000-8z"/>
+                        </svg>
+                        <!-- Moon Icon (Show in Light Mode) -->
+                        <svg x-show="!darkMode" 
+                             x-transition:enter="transition ease-out duration-200"
+                             x-transition:enter-start="opacity-0 -rotate-90 scale-75"
+                             x-transition:enter-end="opacity-100 rotate-0 scale-100"
+                             class="w-5 h-5 text-gray-700 dark:text-gray-300" 
+                             fill="currentColor" 
+                             viewBox="0 0 24 24">
+                            <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+                        </svg>
+                    </button>
+
+                    <!-- User Menu -->
+                    <div x-data="{ userMenuOpen: false }" class="relative">
+                        <button @click="userMenuOpen = !userMenuOpen" 
+                                class="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors border border-transparent hover:border-gray-300 dark:hover:border-gray-600">
+                            <i data-lucide="user" class="w-5 h-5 text-gray-700 dark:text-gray-300"></i>
+                        </button>
+
+                        <div x-show="userMenuOpen" 
+                             @click.away="userMenuOpen = false" 
+                             x-transition:enter="transition ease-out duration-200"
+                             x-transition:enter-start="opacity-0 scale-95 transform -translate-y-2"
+                             x-transition:enter-end="opacity-100 scale-100 transform translate-y-0"
+                             x-transition:leave="transition ease-in duration-150"
+                             x-transition:leave-start="opacity-100 scale-100 transform translate-y-0"
+                             x-transition:leave-end="opacity-0 scale-95 transform -translate-y-2"
+                             class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-50">
+                            <div class="py-2">
+                                <a href="{{ url_for('main.dashboard') }}" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                                    <i data-lucide="layout-dashboard" class="w-4 h-4 inline mr-2"></i>
+                                    Dashboard
+                                </a>
+                                <a href="{{ url_for('auth.login') }}" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                                    <i data-lucide="log-in" class="w-4 h-4 inline mr-2"></i>
+                                    Login
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mobile Menu Toggle -->
+                    <button @click="toggleMobileMenu()" 
+                            class="md:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors border border-transparent hover:border-gray-300 dark:hover:border-gray-600">
+                        <i data-lucide="menu" class="w-6 h-6 text-gray-700 dark:text-gray-300"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div x-show="mobileMenuOpen" 
+         @click.away="mobileMenuOpen = false"
+         class="md:hidden fixed inset-0 z-40 bg-black bg-opacity-50" 
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100"
+         x-transition:leave="transition ease-in duration-200"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0"
+         style="display: none;">
+        <div class="fixed inset-y-0 left-0 w-64 bg-white dark:bg-gray-800 shadow-lg transform transition-transform duration-300"
+             x-show="mobileMenuOpen"
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="transform -translate-x-full"
+             x-transition:enter-end="transform translate-x-0"
+             x-transition:leave="transition ease-in duration-200"
+             x-transition:leave-start="transform translate-x-0"
+             x-transition:leave-end="transform -translate-x-full">
+            <div class="p-4">
+                <div class="flex items-center justify-between mb-8">
+                    <span class="text-lg font-bold text-gray-800 dark:text-white">Menu</span>
+                    <button @click="mobileMenuOpen = false" 
+                            class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <i data-lucide="x" class="w-5 h-5 text-gray-700 dark:text-gray-300"></i>
+                    </button>
+                </div>
+
+                <!-- Mobile Search -->
+                <div class="mb-6">
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i data-lucide="search" class="w-4 h-4 text-blue-600 dark:text-blue-400"></i>
+                        </div>
+                        <input type="text" 
+                               placeholder="Search tools..." 
+                               class="w-full pl-10 pr-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 text-sm font-medium shadow-sm">
+                    </div>
+                </div>
+
+                <nav class="space-y-1">
+                    <a href="{{ url_for('main.index') }}" 
+                       @click="mobileMenuOpen = false"
+                       class="block px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <i data-lucide="home" class="w-4 h-4 inline mr-3"></i>
+                        Home
+                    </a>
+                    <a href="{{ url_for('tools.index') }}" 
+                       @click="mobileMenuOpen = false"
+                       class="block px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <i data-lucide="wrench" class="w-4 h-4 inline mr-3"></i>
+                        Tools
+                    </a>
+                    <a href="{{ url_for('main.about') }}" 
+                       @click="mobileMenuOpen = false"
+                       class="block px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <i data-lucide="info" class="w-4 h-4 inline mr-3"></i>
+                        About
+                    </a>
+                    <a href="{{ url_for('main.contact') }}" 
+                       @click="mobileMenuOpen = false"
+                       class="block px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <i data-lucide="mail" class="w-4 h-4 inline mr-3"></i>
+                        Contact
+                    </a>
+                    
+                    <hr class="my-4 border-gray-200 dark:border-gray-700">
+                    
+                    <a href="{{ url_for('main.dashboard') }}" 
+                       @click="mobileMenuOpen = false"
+                       class="block px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <i data-lucide="layout-dashboard" class="w-4 h-4 inline mr-3"></i>
+                        Dashboard
+                    </a>
+                    <a href="{{ url_for('auth.login') }}" 
+                       @click="mobileMenuOpen = false"
+                       class="block px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <i data-lucide="log-in" class="w-4 h-4 inline mr-3"></i>
+                        Login
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="pt-16 min-h-screen">
+        <!-- Breadcrumb Navigation -->
+        {% if request.endpoint != 'main.index' %}
+        <nav class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+            <div class="container mx-auto px-4 py-3">
+                <div class="flex items-center space-x-2 text-sm">
+                    <a href="{{ url_for('main.index') }}" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                        Home
+                    </a>
+                    <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i>
+
+                    {% if request.endpoint.startswith('tools.') %}
+                        <a href="{{ url_for('tools.index') }}" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                            Tools
+                        </a>
+                        {% if request.endpoint == 'tools.tool_view' %}
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i>
+                            <span class="text-gray-700 dark:text-gray-300 font-medium">
+                                {{ request.view_args.tool_name.replace('-', ' ').title() }}
+                            </span>
+                        {% endif %}
+                    {% elif request.endpoint == 'main.about' %}
+                        <span class="text-gray-700 dark:text-gray-300 font-medium">About</span>
+                    {% elif request.endpoint == 'main.contact' %}
+                        <span class="text-gray-700 dark:text-gray-300 font-medium">Contact</span>
+                    {% elif request.endpoint == 'main.privacy' %}
+                        <span class="text-gray-700 dark:text-gray-300 font-medium">Privacy Policy</span>
+                    {% elif request.endpoint == 'main.terms' %}
+                        <span class="text-gray-700 dark:text-gray-300 font-medium">Terms of Service</span>
+                    {% elif request.endpoint == 'main.cookies' %}
+                        <span class="text-gray-700 dark:text-gray-300 font-medium">Cookie Policy</span>
+                    {% elif request.endpoint == 'main.faq' %}
+                        <span class="text-gray-700 dark:text-gray-300 font-medium">FAQ</span>
+                    {% elif request.endpoint == 'main.dashboard' %}
+                        <span class="text-gray-700 dark:text-gray-300 font-medium">Dashboard</span>
+                    {% endif %}
+                </div>
+            </div>
+        </nav>
+        {% endif %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 dark:bg-gray-900 text-white py-12 mt-16">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-8">
+                <!-- Company -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Company</h3>
+                    <ul class="space-y-2">
+                        <li><a href="{{ url_for('main.about') }}" class="text-gray-400 hover:text-white transition-colors">About Us</a></li>
+                        <li><a href="{{ url_for('main.contact') }}" class="text-gray-400 hover:text-white transition-colors">Contact</a></li>
+                        <li><a href="{{ url_for('main.faq') }}" class="text-gray-400 hover:text-white transition-colors">FAQ</a></li>
+                        <li><a href="{{ url_for('main.blog') }}" class="text-gray-400 hover:text-white transition-colors">Blog</a></li>
+                    </ul>
+                </div>
+
+                <!-- Tools -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Popular Tools</h3>
+                    <ul class="space-y-2">
+                        <li><a href="{{ url_for('tools.tool_page', tool_name='pdf-merge') }}" class="text-gray-400 hover:text-white transition-colors">PDF Merger</a></li>
+                        <li><a href="{{ url_for('tools.tool_page', tool_name='image-compress') }}" class="text-gray-400 hover:text-white transition-colors">Image Compressor</a></li>
+                        <li><a href="{{ url_for('tools.tool_page', tool_name='video-trim') }}" class="text-gray-400 hover:text-white transition-colors">Video Trimmer</a></li>
+                        <li><a href="{{ url_for('tools.tool_page', tool_name='resume-generator') }}" class="text-gray-400 hover:text-white transition-colors">Resume Generator</a></li>
+                    </ul>
+                </div>
+
+                <!-- Categories -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Categories</h3>
+                    <ul class="space-y-2">
+                        <li><a href="{{ url_for('tools.index', category='pdf') }}" class="text-gray-400 hover:text-white transition-colors">PDF Tools</a></li>
+                        <li><a href="{{ url_for('tools.index', category='image') }}" class="text-gray-400 hover:text-white transition-colors">Image Tools</a></li>
+                        <li><a href="{{ url_for('tools.index', category='video') }}" class="text-gray-400 hover:text-white transition-colors">Video Tools</a></li>
+                        <li><a href="{{ url_for('tools.index', category='ai') }}" class="text-gray-400 hover:text-white transition-colors">AI Tools</a></li>
+                    </ul>
+                </div>
+
+                <!-- Support -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Support</h3>
+                    <ul class="space-y-2">
+                        <li><a href="{{ url_for('main.faq') }}" class="text-gray-400 hover:text-white transition-colors">Help Center</a></li>
+                        <li><a href="{{ url_for('main.contact') }}" class="text-gray-400 hover:text-white transition-colors">Contact Support</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Feature Requests</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Status Page</a></li>
+                    </ul>
+                </div>
+
+                <!-- Legal -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Legal</h3>
+                    <ul class="space-y-2">
+                        <li><a href="{{ url_for('main.privacy') }}" class="text-gray-400 hover:text-white transition-colors">Privacy Policy</a></li>
+                        <li><a href="{{ url_for('main.terms') }}" class="text-gray-400 hover:text-white transition-colors">Terms of Service</a></li>
+                        <li><a href="{{ url_for('main.cookies') }}" class="text-gray-400 hover:text-white transition-colors">Cookie Policy</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">GDPR</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <div class="flex items-center justify-center space-x-4 mb-6">
+                    <div class="relative group">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 via-cyan-400 via-blue-500 to-purple-600 p-0.5 transition-all duration-500 group-hover:scale-110 group-hover:shadow-lg group-hover:shadow-purple-500/25">
+                            <div class="w-full h-full bg-gray-800 rounded-lg p-1.5">
+                                <img src="{{ url_for('static', filename='images/toolora-final-logo.svg') }}" 
+                                     alt="Toolora AI" 
+                                     class="w-full h-full object-contain opacity-90 hover:opacity-100 transition-all duration-500 group-hover:rotate-12 group-hover:scale-110">
+                            </div>
+                        </div>
+                        <!-- Subtle glow effect -->
+                        <div class="absolute inset-0 rounded-xl bg-gradient-to-br from-emerald-500 via-cyan-500 via-blue-500 to-purple-600 opacity-0 group-hover:opacity-20 blur-sm transition-opacity duration-500"></div>
+                    </div>
+                    <div class="text-center">
+                        <span class="text-xl font-bold bg-gradient-to-r from-emerald-400 via-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent block">
+                            Toolora AI
+                        </span>
+                        <span class="text-xs text-gray-500 block mt-1">Professional Tools Platform</span>
+                    </div>
+                </div>
+                <p>&copy; 2024 Toolora AI. All rights reserved. Made with ❤️ for productivity.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
+        import { getAuth } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
+        import { getStorage } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-storage.js';
+
+        const firebaseConfig = {
+            apiKey: "{{ firebase_api_key or '' }}",
+            authDomain: "{{ firebase_project_id or '' }}.firebaseapp.com",
+            projectId: "{{ firebase_project_id or '' }}",
+            storageBucket: "{{ firebase_project_id or '' }}.firebasestorage.app",
+            appId: "{{ firebase_app_id or '' }}",
+        };
+
+        // Only initialize Firebase if we have valid config
+        if (firebaseConfig.apiKey && firebaseConfig.apiKey.length > 10) {
+            try {
+                // Initialize Firebase
+                const app = initializeApp(firebaseConfig);
+                const auth = getAuth(app);
+                const storage = getStorage(app);
+
+                // Make available globally
+                window.firebaseApp = app;
+                window.firebaseAuth = auth;
+                window.firebaseStorage = storage;
+                ```python
+console.log('Firebase initialized successfully');
+            } catch (error) {
+                console.warn('Firebase initialization failed:', error.message);
+                // Create mock auth for development
+                window.firebaseAuth = null;
+            }
+        } else {
+            console.log('Firebase not configured - using demo mode');
+            // Create mock auth for development
+            window.firebaseAuth = null;
+        }
+    </script>
+
+    <!-- Ultra-fast initialization script -->
+    <script>
+        // Immediate initialization and anti-flash system
+        (function() {
+            // Dark background first, then detect and adjust
+            const isDark = localStorage.getItem('darkMode') === 'true' || 
+                          (!localStorage.getItem('darkMode') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+
+            // Apply theme immediately
+            if (isDark) {
+                document.documentElement.classList.add('dark');
+                document.body.style.backgroundColor = '#111827';
+            } else {
+                document.documentElement.classList.remove('dark');
+                document.body.style.backgroundColor = '#f9fafb';
+            }
+            
+            // Store initial state for Alpine.js
+            window.initialDarkMode = isDark;
+
+            // Set opacity to 1 after load
+            document.addEventListener('DOMContentLoaded', function() {
+                document.body.style.opacity = '1';
+                document.body.classList.add('loaded');
+            });
+
+            // Immediate visibility for fast connections
+            if (document.readyState === 'complete') {
+                document.body.style.opacity = '1';
+                document.body.classList.add('loaded');
+            }
+
+            // Show loading indicator for navigation
+            function showLoadingIndicator() {
+                const indicator = document.getElementById('loading-indicator');
+                if (indicator) {
+                    indicator.classList.add('active');
+                    setTimeout(() => {
+                        indicator.classList.remove('active');
+                    }, 500);
+                }
+            }
+
+            // Fast initialization when DOM is ready
+            const initializeApp = function() {
+                // Initialize Lucide Icons with performance optimization
+                if (typeof lucide !== 'undefined') {
+                    requestAnimationFrame(() => {
+                        lucide.createIcons();
+                    });
+                }
+
+                // Hide loading overlay instantly
+                const loadingOverlay = document.getElementById('loading-overlay');
+                if (loadingOverlay) {
+                    loadingOverlay.style.display = 'none';
+                }
+
+                // Force close all menus on load
+                if (window.Alpine && window.Alpine.store('navigation')) {
+                    window.Alpine.store('navigation').mobileMenuOpen = false;
+                }
+
+                // Optimize images loading
+                const images = document.querySelectorAll('img[loading="lazy"]');
+                if ('IntersectionObserver' in window) {
+                    const imageObserver = new IntersectionObserver((entries) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                                const img = entry.target;
+                                img.src = img.dataset.src || img.src;
+                                imageObserver.unobserve(img);
+                            }
+                        });
+                    });
+                    images.forEach(img => imageObserver.observe(img));
+                }
+            };
+
+            // Enhanced back navigation fix
+            window.addEventListener('pageshow', function(event) {
+                document.body.style.opacity = '1';
+                document.body.style.visibility = 'visible';
+                document.body.classList.remove('spa-transition', 'loading');
+
+                if (window.Alpine && window.Alpine.store('navigation')) {
+                    window.Alpine.store('navigation').mobileMenuOpen = false;
+                }
+
+                // Re-initialize icons if needed
+                if (typeof lucide !== 'undefined') {
+                    lucide.createIcons();
+                }
+            });
+
+            // Performance optimized initialization
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initializeApp);
+            } else {
+                requestAnimationFrame(initializeApp);
+            }
+
+            // Global navigation optimization
+            window.addEventListener('beforeunload', showLoadingIndicator);
+        })();
+    </script>
+
+    <!-- Live Chat Widget -->
+    <div id="chat-widget" x-data="chatWidget()" x-init="init(); isOpen = false;" class="fixed bottom-4 right-4 z-50">
+        <!-- Chat Button -->
+        <button @click="toggleChat()" 
+                class="w-14 h-14 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg flex items-center justify-center transition-all duration-300"
+                :class="{ 'scale-110': isOpen }">
+            <i data-lucide="message-circle" class="w-6 h-6" x-show="!isOpen"></i>
+            <i data-lucide="x" class="w-6 h-6" x-show="isOpen"></i>
+        </button>
+
+        <!-- Chat Window -->
+        <div x-show="isOpen" 
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0 transform scale-95"
+             x-transition:enter-end="opacity-100 transform scale-100"
+             x-transition:leave="transition ease-in duration-200"
+             x-transition:leave-start="opacity-100 transform scale-100"
+             x-transition:leave-end="opacity-0 transform scale-95"
+             class="absolute bottom-16 right-0 w-80 h-96 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 flex flex-col">
+
+            <!-- Chat Header -->
+            <div class="bg-blue-600 text-white p-4 rounded-t-lg">
+                <h3 class="font-semibold">Live Support</h3>
+                <p class="text-sm opacity-90">We're here to help!</p>
+            </div>
+
+            <!-- Chat Messages -->
+            <div class="flex-1 p-4 overflow-y-auto" id="chat-messages">
+                <div class="space-y-3">
+                    <template x-for="message in messages" :key="message.id">
+                        <div class="flex items-start space-x-2" :class="message.sender === 'user' ? 'flex-row-reverse space-x-reverse' : ''">
+                            <div class="w-8 h-8 rounded-full flex items-center justify-center"
+                                 :class="message.sender === 'user' ? 'bg-green-600' : 'bg-blue-600'">
+                                <i data-lucide="user" class="w-4 h-4 text-white"></i>
+                            </div>
+                            <div class="rounded-lg p-2 max-w-xs"
+                                 :class="message.sender === 'user' ? 'bg-green-100 dark:bg-green-800' : 'bg-gray-100 dark:bg-gray-700'">
+                                <p class="text-sm" x-text="message.text"></p>
+                                <span class="text-xs opacity-70" x-text="message.time"></span>
+                            </div>
+                        </div>
+                    </template>
+
+                    <!-- Show empty state when no messages -->
+                    <div x-show="messages.length === 0" class="text-center py-8">
+                        <div class="w-12 h-12 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <i data-lucide="message-circle" class="w-6 h-6 text-gray-400"></i>
+                        </div>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Start a conversation</p>
+                        <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">We're here to help!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Input -->
+            <div class="p-4 border-t border-gray-200 dark:border-gray-700">
+                <div class="flex space-x-2">
+                    <input x-model="newMessage" 
+                           @keyup.enter="sendMessage()"
+                           type="text" 
+                           placeholder="Type your message..."
+                           class="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
+                    <button @click="sendMessage()" 
+                            class="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                        <i data-lucide="send" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    function chatWidget() {
+        return {
+            isOpen: false,
+            messages: [],
+            newMessage: '',
+            initialized: false,
+
+            init() {
+                // Force closed state and lazy initialize
+                this.isOpen = false;
+                this.initialized = false;
+
+                // Prevent auto-opening on navigation
+                window.addEventListener('popstate', () => {
+                    this.isOpen = false;
+                });
+
+                window.addEventListener('pageshow', () => {
+                    this.isOpen = false;
+                });
+
+                // Prevent any flash on back navigation
+                window.addEventListener('beforeunload', () => {
+                    document.body.style.opacity = '0.95';
+                });
+            },
+
+            initializeMessages() {
+                if (!this.initialized) {
+                    this.messages = [
+                        {
+                            id: 1,
+                            sender: 'bot',
+                            text: 'Hello! How can I help you with our tools today?',
+                            time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+                        }
+                    ];
+                    this.initialized = true;
+                }
+            },
+
+            toggleChat() {
+                // Initialize on first open
+                if (!this.initialized) {
+                    this.initializeMessages();
+                }
+
+                this.isOpen = !this.isOpen;
+
+                if (this.isOpen) {
+                    // Focus input with slight delay
+                    setTimeout(() => {
+                        const input = document.querySelector('#chat-widget input');
+                        if (input) input.focus();
+                    }, 100);
+                }
+            },
+
+            sendMessage() {
+                if (this.newMessage.trim()) {
+                    // Add welcome message only when user sends first message
+                    if (this.messages.length === 0) {
+                        this.messages.push({
+                            id: Date.now() - 1,
+                            text: 'Hello! How can I help you today?',
+                            sender: 'support',
+                            time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+                        });
+                    }
+
+                    const message = {
+                        id: Date.now(),
+                        text: this.newMessage,
+                        sender: 'user',
+                        time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+                    };
+
+                    this.messages.push(message);
+                    this.newMessage = '';
+
+                    // Auto-scroll to bottom
+                    setTimeout(() => {
+                        const chatMessages = document.getElementById('chat-messages');
+                        if (chatMessages) {
+                            chatMessages.scrollTop = chatMessages.scrollHeight;
+                        }
+                    }, 100);
+
+                    // Simulate support response
+                    setTimeout(() => {
+                        this.messages.push({
+                            id: Date.now(),
+                            text: 'Thank you for your message! Our team will respond shortly.',
+                            sender: 'support',
+                            time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+                        });
+
+                        // Auto-scroll again after response
+                        setTimeout(() => {
+                            const chatMessages = document.getElementById('chat-messages');
+                            if (chatMessages) {
+                                chatMessages.scrollTop = chatMessages.scrollHeight;
+                            }
+                        }, 100);
+                    }, 1000);
+                }
+            }
+        }
+    }
+
+    // Prevent any automatic chat opening on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        // Force chat to stay closed
+        setTimeout(() => {
+            const chatWidget = document.getElementById('chat-widget');
+            if (chatWidget && chatWidget.__x) {
+                chatWidget.__x.$data.isOpen = false;
+            }
+        }, 500);
+    });
+    </script>
+
+    <!-- Analytics and Tracking -->
+    <script>
+        // Global app functions - Fixed initialization
+        window.addPageTransitions = function() {
+            // Fast page transitions without white flash
+            const links = document.querySelectorAll('a[href^="/"]');
+            links.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    if (this.target === '_blank') return;
+
+                    e.preventDefault();
+
+                    // Add instant loading effect
+                    document.body.style.opacity = '0.95';
+                    document.body.style.transition = 'opacity 0.1s ease';
+
+                    // Navigate after minimal delay
+                    setTimeout(() => {
+                        window.location.href = this.href;
+                    }, 50);
+                });
+            });
+        };
+
+        // Track page views
+        window.trackPageView = function(page) {
+            console.log('Page view:', page);
+        };
+
+        // Track events
+        window.trackEvent = function(eventName, data) {
+            console.log('Event:', eventName, data);
+        };
+
+        // Firebase authentication status
+        window.checkAuth = function() {
+            return window.firebaseAuth || null;
+        };
+
+        // Domain helper
+        window.getCurrentDomain = function() {
+            return window.location.hostname;
+        };
+
+        // Page initialization - Fixed
+        document.addEventListener('DOMContentLoaded', function() {
+            // Track page view
+            trackPageView(window.location.pathname);
+
+            // Domain detection
+            const domain = getCurrentDomain();
+            console.log('Current domain:', domain);
+
+            if (domain.includes('replit.dev')) {
+                console.log('Replit domain detected:', domain);
+            }
+
+            // Initialize page transitions - Fixed
+            setTimeout(() => {
+                addPageTransitions();
+            }, 100);
+        });
+    </script>
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>
+
+
+    <!-- Custom Error Handler -->
+    <script>
+    // Handle image loading errors with Toolora branding
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add error handling for all tool icons
+        const toolIcons = document.querySelectorAll('.tool-card img, .category-icon img');
+
+        toolIcons.forEach(img => {
+            img.onerror = function() {
+                // Replace with Toolora branded fallback
+                this.src = '{{ url_for('static', filename='images/toolora-icon.jpg') }}';
+                this.classList.add('toolora-pulse');
+                this.style.filter = 'brightness(0.8)';
+            };
+        });
+
+        // Add Toolora branding to loading states
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                mutation.addedNodes.forEach(function(node) {
+                    if (node.nodeType === 1 && node.classList && node.classList.contains('spinner')) {
+                        node.classList.add('toolora-spinner');
+                    }
+                });
+            });
+        });
+
+        observer.observe(document.body, { childList: true, subtree: true });
+    });
+    </script>
