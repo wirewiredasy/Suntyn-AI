@@ -1,5 +1,10 @@
 /* Enhanced Design System for Toolora AI */
 
+/* Navigation enhancements */
+.nav-link {
+    @apply px-4 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-all duration-200 font-medium flex items-center;
+}
+
 /* Custom gradients and animations */
 .gradient-mesh {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%);
@@ -244,6 +249,11 @@
 @keyframes shimmer {
     0% { background-position: -200% 0; }
     100% { background-position: 200% 0; }
+}
+
+/* Footer enhancements */
+.footer-link {
+    @apply flex items-center text-gray-300 hover:text-white hover:translate-x-1 transition-all duration-200 font-medium;
 }
 
 /* Dark mode specific enhancements */
