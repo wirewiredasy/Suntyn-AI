@@ -342,11 +342,11 @@ class ToolAnimationManager {
 
     // File upload animations
     animateFileUpload(dropZone) {
-        dropZone.classList.add('glow');
+        dropZone.classList.add('professional-highlight');
 
         setTimeout(() => {
-            dropZone.classList.remove('glow');
-        }, 2000);
+            dropZone.classList.remove('professional-highlight');
+        }, 1000);
     }
 
     animateFileProcessing(element) {

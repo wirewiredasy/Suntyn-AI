@@ -281,7 +281,7 @@ body {
     .page-transition {
         transition: opacity 0.1s ease, background-color 0.15s ease;
     }
-    
+
     .page-transition.loading {
         opacity: 0.98 !important;
         transform: none !important;
@@ -1293,7 +1293,7 @@ body {
         margin: 15px 0;
         padding: 10px;
     }
-    
+
     .ad-placeholder {
         min-height: 50px;
     }
@@ -1777,11 +1777,11 @@ footer img[alt="Toolora AI"]:hover {
     .logo-container {
         transform: scale(0.9);
     }
-    
+
     .logo-container::after {
         display: none;
     }
-    
+
     .header-logo {
         font-size: 1.25rem;
     }
@@ -1792,7 +1792,7 @@ footer img[alt="Toolora AI"]:hover {
     .logo-container {
         border: 2px solid currentColor;
     }
-    
+
     .header-logo {
         color: currentColor;
         background: none;
@@ -1843,3 +1843,14 @@ footer img[alt="Toolora AI"]:hover {
     0%, 100% { opacity: 1; }
     50% { opacity: 1; }
 }
+
+ /* Replace glow with professional highlight */
+            .professional-highlight {
+                box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+                transition: all 0.3s ease;
+            }
+
+            .professional-highlight:hover {
+                box-shadow: 0 6px 16px rgba(59, 130, 246, 0.25);
+                transform: translateY(-1px);
+            }
