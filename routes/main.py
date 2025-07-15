@@ -179,7 +179,4 @@ Sitemap: https://toolora-ai.replit.app/sitemap.xml
     
     return Response(robots_txt, mimetype='text/plain')
 
-@main_bp.errorhandler(404)
-def page_not_found(error):
-    """Handle 404 errors"""
-    return render_template('404.html'), 404
+# Remove this local 404 handler since we have a global one

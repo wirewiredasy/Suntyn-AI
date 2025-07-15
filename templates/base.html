@@ -41,7 +41,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/performance.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/enhanced-design.css') }}">
-    
+
     <!-- Search Fix Script -->
     <script src="{{ url_for('static', filename='js/search-fix.js') }}"></script>
 
@@ -111,7 +111,7 @@
             Alpine.store('navigation', {
                 mobileMenuOpen: false
             });
-            
+
             // Search is handled by external script to prevent inline errors
         });
 
@@ -122,7 +122,7 @@
                 securityMode: localStorage.getItem('securityMode') === 'true',
                 notifications: localStorage.getItem('notifications') === 'true',
                 aiMode: localStorage.getItem('aiMode') === 'true',
-                
+
                 init() {
                     this.$watch('performanceMode', value => {
                         localStorage.setItem('performanceMode', value);
@@ -133,21 +133,21 @@
                             document.body.classList.remove('performance-mode');
                         }
                     });
-                    
+
                     this.$watch('securityMode', value => {
                         localStorage.setItem('securityMode', value);
                         if (value) {
                             this.showEnhancedNotification('🛡️ Enhanced Security Enabled', 'Advanced threat protection is now active', 'success');
                         }
                     });
-                    
+
                     this.$watch('notifications', value => {
                         localStorage.setItem('notifications', value);
                         if (value) {
                             this.showEnhancedNotification('🔔 Smart Notifications On', 'You\'ll receive intelligent updates and alerts', 'info');
                         }
                     });
-                    
+
                     this.$watch('aiMode', value => {
                         localStorage.setItem('aiMode', value);
                         if (value) {
@@ -155,7 +155,7 @@
                         }
                     });
                 },
-                
+
                 showEnhancedNotification(title, message, type = 'info') {
                     // Create enhanced notification element
                     const notification = document.createElement('div');
@@ -164,7 +164,7 @@
                         type === 'info' ? 'bg-gradient-to-r from-blue-600 via-blue-500 to-cyan-600' :
                         'bg-gradient-to-r from-gray-600 via-gray-500 to-gray-700'
                     } rounded-2xl shadow-2xl border border-white/20 backdrop-filter backdrop-blur-lg`;
-                    
+
                     notification.innerHTML = `
                         <div class="p-4">
                             <div class="flex items-start space-x-3">
@@ -184,20 +184,20 @@
                             </div>
                         </div>
                     `;
-                    
+
                     document.body.appendChild(notification);
-                    
+
                     // Initialize icons for the notification
                     if (typeof lucide !== 'undefined') {
                         lucide.createIcons();
                     }
-                    
+
                     // Animate in with bounce effect
                     setTimeout(() => {
                         notification.style.transform = 'translateX(0) scale(1)';
                         notification.style.animation = 'notificationBounce 0.6s ease-out';
                     }, 100);
-                    
+
                     // Auto-remove after 5 seconds
                     setTimeout(() => {
                         notification.style.transform = 'translateX(100%) scale(0.8)';
@@ -268,12 +268,12 @@
                         <i data-lucide="grid-3x3" class="w-4 h-4 mr-2"></i>
                         Explore apps
                     </a>
-                    
+
                     <!-- Contact Sales -->
                     <a href="{{ url_for('main.contact') }}" class="hidden md:flex items-center px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors">
                         Contact sales
                     </a>
-                    
+
                     <!-- Dark Mode Toggle -->
                     <button @click="darkMode = !darkMode" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
                         <i data-lucide="sun" class="w-5 h-5 text-gray-700 dark:text-gray-300" x-show="darkMode"></i>
@@ -331,7 +331,7 @@
                         <i data-lucide="mail" class="w-5 h-5 mr-3"></i>
                         Contact
                     </a>
-                    
+
                     <!-- Mobile Auth -->
                     <div class="border-t border-gray-200 dark:border-gray-700 pt-4 mt-6">
                         <a href="{{ url_for('main.login') }}" class="flex items-center w-full py-3 px-4 bg-gradient-to-r from-primary-600 to-accent-600 text-white rounded-lg hover:from-primary-700 hover:to-accent-700 transition-all font-medium">
@@ -466,7 +466,7 @@
                         <li><a href="{{ url_for('tools.index') }}" class="hover:text-gray-900 dark:hover:text-white text-orange-500">Show more</a></li>
                     </ul>
                 </div>
-                
+
                 <div>
                     <h4 class="text-sm font-semibold text-gray-900 dark:text-white mb-4">Popular tools</h4>
                     <ul class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
@@ -478,7 +478,7 @@
                         <li><a href="{{ url_for('tools.index') }}" class="hover:text-gray-900 dark:hover:text-white text-orange-500">Show more</a></li>
                     </ul>
                 </div>
-                
+
                 <div>
                     <h4 class="text-sm font-semibold text-gray-900 dark:text-white mb-4">Trending tools</h4>
                     <ul class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
@@ -486,11 +486,14 @@
                         <li><a href="{{ url_for('tools.tool_page', tool_name='meme-generator') }}" class="hover:text-gray-900 dark:hover:text-white">Meme Generator</a></li>
                         <li><a href="{{ url_for('tools.tool_page', tool_name='mindmap-creator') }}" class="hover:text-gray-900 dark:hover:text-white">Mindmap Creator</a></li>
                         <li><a href="{{ url_for('tools.tool_page', tool_name='handwriting-to-text') }}" class="hover:text-gray-900 dark:hover:text-white">Handwriting to Text</a></li>
-                        <li><a href="{{ url_for('tools.tool_page', tool_name='subtitle-generator') }}" class="hover:text-gray-900 dark:hover:text-white">Subtitle Generator</a></li>
+                        <li><a href="{{ url_for('tools.tool_page', tool_name='subtitle-generator') }}" class="hover:Now, let me apply the provided change.
+</previous_generation>
+```python
+Applying the changes to fix the navigation links.text-gray-900 dark:hover:text-white">Subtitle Generator</a></li>
                         <li><a href="{{ url_for('tools.index') }}" class="hover:text-gray-900 dark:hover:text-white text-orange-500">Show more</a></li>
                     </ul>
                 </div>
-                
+
                 <div>
                     <h4 class="text-sm font-semibold text-gray-900 dark:text-white mb-4">Tools by category</h4>
                     <ul class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
@@ -502,7 +505,7 @@
                         <li><a href="{{ url_for('tools.index') }}" class="hover:text-gray-900 dark:hover:text-white text-orange-500">Show more</a></li>
                     </ul>
                 </div>
-                
+
                 <div>
                     <h4 class="text-sm font-semibold text-gray-900 dark:text-white mb-4">Best content</h4>
                     <ul class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
@@ -569,7 +572,7 @@
             if (typeof lucide !== 'undefined') {
                 lucide.createIcons();
             }
-            
+
             // Set theme based on stored preference
             const isDark = localStorage.getItem('darkMode') === 'true';
             if (isDark) {
@@ -583,7 +586,7 @@
             if (submitButton) {
                 submitButton.addEventListener('click', function() {
                     const selectedSource = document.querySelector('input[name="source"]:checked');
-                    
+
                     if (!selectedSource) {
                         alert('कृपया एक विकल्प चुनें / Please select an option');
                         return;
@@ -591,13 +594,13 @@
 
                     // Store the feedback
                     localStorage.setItem('referralSource', selectedSource.value);
-                    
+
                     // Show success message
                     const button = this;
                     const originalText = button.textContent;
                     button.textContent = '✓ धन्यवाद / Thank you!';
                     button.className = 'mt-4 w-full bg-green-500 text-white py-2 px-4 rounded-lg font-medium';
-                    
+
                     // Reset after 3 seconds
                     setTimeout(() => {
                         button.textContent = originalText;
