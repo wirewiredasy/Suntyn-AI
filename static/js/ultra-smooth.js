@@ -1,4 +1,3 @@
-
 /**
  * Ultra-Smooth Navigation System for Toolora AI
  * Eliminates white flash and provides buttery smooth animations
@@ -18,22 +17,39 @@ class UltraSmoothNavigation {
     }
 
     setupInstantLoading() {
-        // Immediate anti-flash system
+        // Detect slow connection
+        const isSlowConnection = navigator.connection && 
+                               (navigator.connection.effectiveType === 'slow-2g' || 
+                                navigator.connection.effectiveType === '2g' ||
+                                navigator.connection.downlink < 1);
+
+        // Mobile and slow connection optimizations
+        const isMobile = window.innerWidth <= 768 || /Mobi|Android/i.test(navigator.userAgent);
+
+        const transitionDuration = isSlowConnection ? '0.05s' : (isMobile ? '0.1s' : '0.15s');
+
+        // Immediate anti-flash system with adaptive timing
         const style = document.createElement('style');
         style.textContent = `
             html, body {
                 background-color: ${document.documentElement.classList.contains('dark') ? '#111827' : '#f9fafb'} !important;
-                opacity: 1 !important;
                 visibility: visible !important;
-                transition: none !important;
+                transition: opacity ${transitionDuration} ease, background-color ${transitionDuration} ease !important;
+            }
+            body {
+                opacity: 0 !important;
+            }
+            body.loaded {
+                opacity: 1 !important;
             }
         `;
         document.head.appendChild(style);
 
-        // Force body visibility
-        document.body.style.opacity = '1';
-        document.body.style.visibility = 'visible';
-        document.body.classList.add('loaded');
+        // Force body visibility after minimal delay
+        requestAnimationFrame(() => {
+            document.body.style.visibility = 'visible';
+            document.body.classList.add('loaded');
+        });
     }
 
     setupSmoothNavigation() {
@@ -43,10 +59,10 @@ class UltraSmoothNavigation {
             if (!link) return;
 
             const href = link.getAttribute('href');
-            
+
             // Skip external links and hash links
             if (!href.startsWith('/') || href.startsWith('#')) return;
-            
+
             // Skip if already transitioning
             if (this.isTransitioning) return;
 
@@ -104,10 +120,10 @@ class UltraSmoothNavigation {
             document.body.style.visibility = 'visible';
             document.body.style.transform = 'none';
             document.body.style.transition = 'none';
-            
+
             // Close any open menus
             this.closeAllMenus();
-            
+
             // Add smooth back animation
             if (event.persisted) {
                 document.body.classList.add('back-nav-smooth');
@@ -154,16 +170,16 @@ class UltraSmoothNavigation {
                 0% { width: 0%; }
                 100% { width: 100%; opacity: 0; }
             }
-            
+
             .back-nav-smooth {
                 animation: smoothBackNav 0.2s ease-out;
             }
-            
+
             @keyframes smoothBackNav {
                 from { opacity: 0.95; transform: translateY(-2px); }
                 to { opacity: 1; transform: translateY(0); }
             }
-            
+
             /* Prevent any flash during transitions */
             body.transitioning {
                 pointer-events: none;

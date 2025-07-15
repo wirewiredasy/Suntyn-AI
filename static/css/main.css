@@ -158,9 +158,34 @@ body {
     transform: translateY(0);
 }
 
-/* Page transitions */
+/* Enhanced page transitions */
 .page-transition {
-    transition: opacity 0.3s ease-in-out;
+    transition: opacity 0.15s ease, transform 0.15s ease, background-color 0.2s ease;
+}
+
+.page-transition.loading {
+    opacity: 0.95 !important;
+    transform: translateY(-1px) !important;
+}
+
+/* Mobile optimization for slower connections */
+@media (max-width: 768px) {
+    .page-transition {
+        transition: opacity 0.1s ease, background-color 0.15s ease;
+    }
+    
+    .page-transition.loading {
+        opacity: 0.98 !important;
+        transform: none !important;
+    }
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+    .page-transition, .page-transition.loading {
+        transition: none !important;
+        transform: none !important;
+    }
 }
 
 /* Dark mode styles */

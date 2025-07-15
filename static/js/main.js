@@ -19,7 +19,7 @@ window.ToolaraApp = {
     },
 
     setupSPANavigation: function() {
-        // Prevent white flash with SPA-style navigation
+        // Enhanced SPA navigation with better loading states
         document.addEventListener('click', (e) => {
             const link = e.target.closest('a');
             if (link && link.href && link.href.startsWith(window.location.origin) && !link.target) {
@@ -38,6 +38,15 @@ window.ToolaraApp = {
                 this.navigateToPage(href);
             }
         });
+        
+        // Prefetch critical pages on hover
+        document.addEventListener('mouseover', (e) => {
+            const link = e.target.closest('a[href^="/"]');
+            if (link && !link.dataset.prefetched) {
+                this.prefetchPage(link.href);
+                link.dataset.prefetched = 'true';
+            }
+        });
     },
 
     navigateToPage: function(url) {
@@ -48,19 +57,39 @@ window.ToolaraApp = {
         // Create smooth navigation overlay
         this.createNavOverlay();
         
-        // Add smooth transition
+        // Enhanced transition with dark background preservation
+        document.body.style.opacity = '0.95';
+        document.body.style.transform = 'translateY(-2px)';
         document.body.classList.add('page-transition', 'loading');
         
-        // Instant navigation with visual feedback
-        requestAnimationFrame(() => {
+        // Preserve background color during transition
+        const currentBg = getComputedStyle(document.body).backgroundColor;
+        document.body.style.backgroundColor = currentBg;
+        
+        // Navigate with minimal delay for smooth transition
+        setTimeout(() => {
             window.location.href = url;
-        });
+        }, 50);
         
         // Reset state
         setTimeout(() => {
             this.isNavigating = false;
             document.body.classList.remove('page-transition', 'loading');
         }, 100);
+    },
+
+    prefetchPage: function(url) {
+        // Prefetch pages for faster navigation
+        const link = document.createElement('link');
+        link.rel = 'prefetch';
+        link.href = url;
+        document.head.appendChild(link);
+        
+        // Also prefetch as DNS lookup
+        const dns = document.createElement('link');
+        dns.rel = 'dns-prefetch';
+        dns.href = url;
+        document.head.appendChild(dns);
     },
 
     createNavOverlay: function() {
@@ -97,11 +126,24 @@ window.ToolaraApp = {
         
         // Enhanced back navigation with smooth animation
         window.addEventListener('pageshow', (e) => {
-            // Force immediate visibility
+            // Immediate visibility with proper background
+            const isDark = document.documentElement.classList.contains('dark');
+            document.body.style.backgroundColor = isDark ? '#111827' : '#f9fafb';
             document.body.style.opacity = '1';
             document.body.style.visibility = 'visible';
+            document.body.style.transform = 'none';
             document.body.classList.remove('page-transition', 'loading');
             document.body.classList.add('loaded', 'back-nav-smooth');
+            
+            // Force close any open menus
+            if (window.Alpine && window.Alpine.store('navigation')) {
+                window.Alpine.store('navigation').mobileMenuOpen = false;
+            }
+            
+            // Re-initialize icons
+            if (typeof lucide !== 'undefined') {
+                requestAnimationFrame(() => lucide.createIcons());
+            }
             
             // Remove animation class after animation
             setTimeout(() => {
