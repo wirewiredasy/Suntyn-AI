@@ -2,11 +2,11 @@
 class IconManager {
     constructor() {
         this.iconVariants = {
-            'toolora-16': '/static/images/toolora-icon-variants.svg#toolora-16',
-            'toolora-24': '/static/images/toolora-icon-variants.svg#toolora-24',
-            'toolora-32': '/static/images/toolora-icon-variants.svg#toolora-32',
-            'toolora-48': '/static/images/toolora-icon-variants.svg#toolora-48',
-            'toolora-64': '/static/images/toolora-icon-variants.svg#toolora-64',
+            'toolora-16': '/static/images/toolora-search-variants.svg#toolora-search-16',
+            'toolora-24': '/static/images/toolora-search-variants.svg#toolora-search-24',
+            'toolora-32': '/static/images/toolora-search-variants.svg#toolora-search-32',
+            'toolora-48': '/static/images/toolora-search-variants.svg#toolora-search-48',
+            'toolora-64': '/static/images/toolora-search-variants.svg#toolora-search-square',
             'toolora-mono-minimal': '/static/images/toolora-monogram.svg#toolora-mono-minimal',
             'toolora-square-badge': '/static/images/toolora-monogram.svg#toolora-square-badge',
             'toolora-circle-badge': '/static/images/toolora-monogram.svg#toolora-circle-badge',

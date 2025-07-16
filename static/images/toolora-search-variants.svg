@@ -1,0 +1,81 @@
+
+<svg width="0" height="0" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="searchGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4285f4"/>
+      <stop offset="25%" style="stop-color:#34a853"/>
+      <stop offset="50%" style="stop-color:#ea4335"/>
+      <stop offset="75%" style="stop-color:#fbbc05"/>
+      <stop offset="100%" style="stop-color:#4285f4"/>
+    </linearGradient>
+    
+    <linearGradient id="blueGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4285f4"/>
+      <stop offset="100%" style="stop-color:#1a73e8"/>
+    </linearGradient>
+    
+    <filter id="searchGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+</svg>
+
+<!-- 16x16 Search Icon -->
+<svg id="toolora-search-16" width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="6" cy="6" r="4" fill="none" stroke="url(#searchGradient)" stroke-width="1.5"/>
+  <line x1="9" y1="9" x2="13" y2="13" stroke="url(#searchGradient)" stroke-width="1.5" stroke-linecap="round"/>
+  <circle cx="6" cy="6" r="1" fill="url(#searchGradient)"/>
+</svg>
+
+<!-- 24x24 Search Icon -->
+<svg id="toolora-search-24" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="10" cy="10" r="6" fill="none" stroke="url(#searchGradient)" stroke-width="2"/>
+  <line x1="14" y1="14" x2="20" y2="20" stroke="url(#searchGradient)" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="10" cy="10" r="2" fill="url(#searchGradient)" opacity="0.8"/>
+  <circle cx="7" cy="8" r="0.8" fill="#4285f4"/>
+  <circle cx="13" cy="9" r="0.8" fill="#34a853"/>
+  <circle cx="8" cy="13" r="0.8" fill="#ea4335"/>
+</svg>
+
+<!-- 32x32 Search Icon -->
+<svg id="toolora-search-32" width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="13" cy="13" r="8" fill="none" stroke="url(#searchGradient)" stroke-width="2.5" filter="url(#searchGlow)"/>
+  <line x1="19" y1="19" x2="26" y2="26" stroke="url(#searchGradient)" stroke-width="2.5" stroke-linecap="round" filter="url(#searchGlow)"/>
+  <circle cx="13" cy="13" r="2.5" fill="url(#searchGradient)"/>
+  <circle cx="9" cy="10" r="1" fill="#4285f4" opacity="0.8"/>
+  <circle cx="17" cy="11" r="1" fill="#34a853" opacity="0.8"/>
+  <circle cx="11" cy="17" r="1" fill="#ea4335" opacity="0.8"/>
+  <circle cx="16" cy="16" r="1" fill="#fbbc05" opacity="0.8"/>
+</svg>
+
+<!-- 48x48 App Icon -->
+<svg id="toolora-search-48" width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="24" cy="24" r="20" fill="url(#searchGradient)" opacity="0.1"/>
+  <circle cx="19" cy="19" r="12" fill="none" stroke="url(#searchGradient)" stroke-width="3" filter="url(#searchGlow)"/>
+  <line x1="28" y1="28" x2="38" y2="38" stroke="url(#searchGradient)" stroke-width="3" stroke-linecap="round" filter="url(#searchGlow)"/>
+  <circle cx="19" cy="19" r="3" fill="url(#searchGradient)"/>
+  <circle cx="13" cy="15" r="1.5" fill="#4285f4"/>
+  <circle cx="25" cy="16" r="1.5" fill="#34a853"/>
+  <circle cx="16" cy="25" r="1.5" fill="#ea4335"/>
+  <circle cx="23" cy="23" r="1.5" fill="#fbbc05"/>
+  <line x1="13" y1="15" x2="19" y2="19" stroke="url(#blueGradient)" stroke-width="0.5" opacity="0.6"/>
+  <line x1="25" y1="16" x2="19" y2="19" stroke="url(#blueGradient)" stroke-width="0.5" opacity="0.6"/>
+  <line x1="16" y1="25" x2="19" y2="19" stroke="url(#blueGradient)" stroke-width="0.5" opacity="0.6"/>
+  <line x1="23" y1="23" x2="19" y2="19" stroke="url(#blueGradient)" stroke-width="0.5" opacity="0.6"/>
+</svg>
+
+<!-- Square Badge Version -->
+<svg id="toolora-search-square" width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <rect x="4" y="4" width="56" height="56" rx="12" fill="url(#searchGradient)" opacity="0.15"/>
+  <circle cx="25" cy="25" r="15" fill="none" stroke="url(#searchGradient)" stroke-width="4" filter="url(#searchGlow)"/>
+  <line x1="36" y1="36" x2="48" y2="48" stroke="url(#searchGradient)" stroke-width="4" stroke-linecap="round" filter="url(#searchGlow)"/>
+  <circle cx="25" cy="25" r="4" fill="url(#searchGradient)"/>
+  <circle cx="18" cy="20" r="2" fill="#4285f4"/>
+  <circle cx="32" cy="22" r="2" fill="#34a853"/>
+  <circle cx="21" cy="32" r="2" fill="#ea4335"/>
+  <circle cx="30" cy="30" r="2" fill="#fbbc05"/>
+</svg>

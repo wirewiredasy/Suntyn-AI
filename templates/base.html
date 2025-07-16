@@ -221,10 +221,12 @@
                 <!-- Logo Section -->
                 <div class="flex items-center">
                     <a href="{{ url_for('main.index') }}" class="flex items-center space-x-3 group">
-                        <div class="w-8 h-8 bg-gradient-to-br from-orange-500 to-red-500 rounded-lg flex items-center justify-center shadow-md group-hover:shadow-lg transition-all duration-300">
-                            <span class="text-white font-bold text-sm">T</span>
-                        </div>
-                        <span class="text-xl font-bold text-gray-900 dark:text-white">toolora</span>
+                        <img src="{{ url_for('static', filename='images/toolora-main-logo.svg') }}" 
+                         alt="Toolora AI" 
+                         class="h-8 w-auto sm:h-10 toolora-icon toolora-icon--interactive">
+                    <span class="ml-2 text-lg sm:text-xl font-bold text-gray-900 dark:text-white header-logo">
+                        Toolora AI
+                    </span>
                     </a>
                 </div>
 
@@ -486,8 +488,7 @@
                         <li><a href="{{ url_for('tools.tool_page', tool_name='meme-generator') }}" class="hover:text-gray-900 dark:hover:text-white">Meme Generator</a></li>
                         <li><a href="{{ url_for('tools.tool_page', tool_name='mindmap-creator') }}" class="hover:text-gray-900 dark:hover:text-white">Mindmap Creator</a></li>
                         <li><a href="{{ url_for('tools.tool_page', tool_name='handwriting-to-text') }}" class="hover:text-gray-900 dark:hover:text-white">Handwriting to Text</a></li>
-                        <li><a href="{{ url_for('tools.tool_page', tool_name='subtitle-generator') }}" class="hover:text```python
--gray-900 dark:hover:text-white">Subtitle Generator</a></li>
+                        <li><a href="{{ url_for('tools.tool_page', tool_name='subtitle-generator') }}" class="hover:text-gray-900 dark:hover:text-white">Subtitle Generator</a></li>
                         <li><a href="{{ url_for('tools.index') }}" class="hover:text-gray-900 dark:hover:text-white text-orange-500">Show more</a></li>
                     </ul>
                 </div>
