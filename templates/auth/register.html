@@ -3,28 +3,6 @@
 {% block title %}Sign Up - Toolora AI{% endblock %}
 
 {% block content %}
-<!-- Navigation -->
-<nav class="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
-            <div class="flex items-center">
-                <a href="{{ url_for('main.index') }}" class="flex items-center space-x-3">
-                    <div class="flex items-center space-x-2">
-                        <div class="w-8 h-8 bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600 rounded-lg flex items-center justify-center shadow-lg">
-                            <span class="text-white font-bold text-lg">T</span>
-                        </div>
-                        <span class="text-xl font-bold text-gray-900 dark:text-white">Toolora AI</span>
-                    </div>
-                </a>
-            </div>
-
-            <div class="flex items-center space-x-4">
-                <a href="{{ url_for('auth.login') }}" class="text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">Login</a>
-                <a href="{{ url_for('auth.register') }}" class="text-white bg-orange-600 hover:bg-orange-700 dark:bg-orange-500 dark:hover:bg-orange-600 px-3 py-2 rounded-md text-sm font-medium">Sign Up</a>
-            </div>
-        </div>
-    </div>
-</nav>
 
 <section class="min-h-screen flex items-center justify-center relative overflow-hidden">
     <!-- Dynamic Background -->
@@ -70,7 +48,7 @@
                 </div>
 
                 <!-- Register Form -->
-                <form id="register-form" class="space-y-6">
+                <form id="register-form" class="auth-form space-y-6">
                     <div>
                         <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Full Name</label>
                         <div class="relative">

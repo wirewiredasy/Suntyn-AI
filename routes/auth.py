@@ -10,17 +10,11 @@ auth_bp = Blueprint('auth', __name__)
 
 @auth_bp.route('/login')
 def login():
-    return render_template('auth/login.html',
-                         firebase_api_key=os.environ.get("FIREBASE_API_KEY", ""),
-                         firebase_project_id=os.environ.get("FIREBASE_PROJECT_ID", ""),
-                         firebase_app_id=os.environ.get("FIREBASE_APP_ID", ""))
+    return render_template('auth/login.html')
 
 @auth_bp.route('/register')
 def register():
-    return render_template('auth/register.html',
-                         firebase_api_key=os.environ.get("FIREBASE_API_KEY", ""),
-                         firebase_project_id=os.environ.get("FIREBASE_PROJECT_ID", ""),
-                         firebase_app_id=os.environ.get("FIREBASE_APP_ID", ""))
+    return render_template('auth/register.html')
 
 @auth_bp.route('/verify-token', methods=['POST'])
 def verify_token():

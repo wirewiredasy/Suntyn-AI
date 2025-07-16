@@ -78,6 +78,15 @@ with app.app_context():
     import models
     db.create_all()
 
+# Add Firebase config to all templates
+@app.context_processor
+def inject_firebase_config():
+    return {
+        'firebase_api_key': os.environ.get("FIREBASE_API_KEY", ""),
+        'firebase_project_id': os.environ.get("FIREBASE_PROJECT_ID", ""),
+        'firebase_app_id': os.environ.get("FIREBASE_APP_ID", "")
+    }
+
 # Error handlers
 @app.errorhandler(404)
 def not_found_error(error):

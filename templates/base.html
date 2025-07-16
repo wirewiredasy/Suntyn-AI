@@ -43,12 +43,31 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/icon-system.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/orange-3d-theme.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/tabs-enhancement.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/header-fix.css') }}">
 
-    <!-- Search Fix Script -->
-    <script src="{{ url_for('static', filename='js/search-fix.js') }}"></script>
+    <!-- Fixed Search Script -->
+    <script src="{{ url_for('static', filename='js/fixed-search.js') }}"></script>
     
     <!-- Icon Manager Script -->
     <script src="{{ url_for('static', filename='js/icon-manager.js') }}"></script>
+    
+    <!-- Header Scroll Fix -->
+    <script src="{{ url_for('static', filename='js/header-scroll-fix.js') }}"></script>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    
+    <!-- Firebase Meta Tags -->
+    <meta name="firebase-api-key" content="{{ firebase_api_key }}">
+    <meta name="firebase-project-id" content="{{ firebase_project_id }}">
+    <meta name="firebase-app-id" content="{{ firebase_app_id }}">
+    
+    <!-- Authentication Fix -->
+    <script src="{{ url_for('static', filename='js/auth-fix.js') }}"></script>
+    
+    <!-- Authentication Form Handlers -->
+    <script src="{{ url_for('static', filename='js/auth-handlers.js') }}"></script>
 
     <!-- Tailwind Config -->
     <script>
@@ -219,8 +238,8 @@
     </script>
 </head>
 <body class="font-inter bg-gradient-to-br from-gray-50 via-white to-primary-50/30 dark:from-gray-900 dark:via-gray-800 dark:to-primary-900/20 min-h-screen transition-all duration-500">
-    <!-- Zapier-Inspired Professional Navigation -->
-    <nav class="professional-header">
+    <!-- Fixed Professional Navigation -->
+    <nav class="sticky-header">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <!-- Logo Section -->
