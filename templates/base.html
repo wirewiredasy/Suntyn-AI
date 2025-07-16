@@ -361,7 +361,9 @@
 
     <!-- Main Content -->
     <main class="min-h-screen">
-        {% block content %}{% endblock %}
+        {% block content %}
+
+        {% endblock %}
     </main>
 
     <!-- Zapier-Inspired Professional Footer -->
@@ -652,6 +654,46 @@
     <script src="{{ url_for('static', filename='js/theme.js') }}"></script>
     <script src="{{ url_for('static', filename='js/icon-manager.js') }}"></script>
 
-    {% block scripts %}{% endblock %}
+    {% block scripts %}
+
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('profileCard', () => ({
+                user: null,
+                init() {
+                    // Simulate fetching user data (replace with your actual fetch)
+                    setTimeout(() => {
+                        this.user = {
+                            displayName: 'John Doe',
+                            email: 'john.doe@example.com'
+                        };
+                    }, 500); // Simulate loading delay
+                }
+            }));
+        });
+    </script>
+
+    <div x-data="profileCard()" class="container mx-auto mt-8">
+        <div class="bg-white dark:bg-gray-800 shadow-lg rounded-2xl overflow-hidden">
+            <div class="relative">
+                <img src="https://source.unsplash.com/random/800x400" alt="Profile Banner" class="w-full h-48 object-cover">
+                <div class="absolute bottom-0 left-0 p-6 text-white">
+                    
+                    <div>
+                                    <p class="font-medium text-gray-800 dark:text-white" x-text="(user && user.displayName) || 'User'"></p>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400" x-text="(user && user.email) || 'user@example.com'"></p>
+                                </div>
+                </div>
+            </div>
+            <div class="p-6">
+                <h2 class="text-2xl font-semibold text-gray-800 dark:text-white">About Me</h2>
+                <p class="text-gray-600 dark:text-gray-300 mt-2">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    {% endblock %}
 </body>
 </html>

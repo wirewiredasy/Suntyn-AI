@@ -232,7 +232,11 @@ class IconManager {
 
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    window.iconManager = new IconManager();
+    // Initialize Icon Manager
+    if (!window.iconManager) {
+        window.iconManager = new window.IconManager();
+        window.iconManager.init();
+    }
 });
 
 // Export for global use

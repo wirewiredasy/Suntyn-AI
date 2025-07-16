@@ -58,14 +58,23 @@ class FirebaseAuthHandler {
     }
 
     onAuthStateChanged(user) {
-        // Update UI based on auth state
-        this.updateUserInterface(user);
+        try {
+            // Update UI based on auth state
+            this.updateUserInterface(user);
 
-        // Update navigation
-        this.updateNavigation(user);
+            // Update navigation
+            this.updateNavigation(user);
 
-        // Handle protected routes
-        this.handleProtectedRoutes(user);
+            // Handle protected routes
+            this.handleProtectedRoutes(user);
+
+            // Update Alpine.js data if available
+            if (window.Alpine && window.Alpine.store) {
+                window.Alpine.store('auth', { user: user });
+            }
+        } catch (error) {
+            console.warn('Auth state change error:', error);
+        }
     }
 
     updateUserInterface(user) {
