@@ -309,38 +309,55 @@ window.ToolaraApp = {
                 toggleMobileMenu() {
                     this.mobileMenuOpen = !this.mobileMenuOpen;
                     
-                    // Prevent all scrolling when sidebar is open
+                    // Complete scroll lock when sidebar is open
                     if (this.mobileMenuOpen) {
                         // Store current scroll position
                         const scrollY = window.scrollY;
                         
-                        // Prevent body scrolling
+                        // Lock everything completely
                         document.body.style.position = 'fixed';
                         document.body.style.top = `-${scrollY}px`;
+                        document.body.style.left = '0';
                         document.body.style.width = '100%';
+                        document.body.style.height = '100%';
                         document.body.style.overflow = 'hidden';
-                        document.documentElement.style.overflow = 'hidden';
+                        document.body.style.touchAction = 'none';
                         
-                        // Add class to prevent any potential scrolling
-                        document.body.classList.add('mobile-sidebar-open');
-                        document.documentElement.classList.add('mobile-sidebar-open');
+                        document.documentElement.style.position = 'fixed';
+                        document.documentElement.style.overflow = 'hidden';
+                        document.documentElement.style.height = '100%';
+                        document.documentElement.style.touchAction = 'none';
+                        
+                        // Add complete lock classes
+                        document.body.classList.add('mobile-sidebar-open', 'sidebar-open');
+                        document.documentElement.classList.add('mobile-sidebar-open', 'sidebar-open');
+                        
+                        // Store scroll position
+                        document.body.dataset.scrollY = scrollY;
                     } else {
-                        // Restore normal scrolling
-                        const scrollY = document.body.style.top;
+                        // Restore everything
+                        const scrollY = document.body.dataset.scrollY || '0';
+                        
                         document.body.style.position = '';
                         document.body.style.top = '';
+                        document.body.style.left = '';
                         document.body.style.width = '';
+                        document.body.style.height = '';
                         document.body.style.overflow = '';
-                        document.documentElement.style.overflow = '';
+                        document.body.style.touchAction = '';
                         
-                        // Remove prevention classes
-                        document.body.classList.remove('mobile-sidebar-open');
-                        document.documentElement.classList.remove('mobile-sidebar-open');
+                        document.documentElement.style.position = '';
+                        document.documentElement.style.overflow = '';
+                        document.documentElement.style.height = '';
+                        document.documentElement.style.touchAction = '';
+                        
+                        // Remove all lock classes
+                        document.body.classList.remove('mobile-sidebar-open', 'sidebar-open');
+                        document.documentElement.classList.remove('mobile-sidebar-open', 'sidebar-open');
                         
                         // Restore scroll position
-                        if (scrollY) {
-                            window.scrollTo(0, parseInt(scrollY || '0') * -1);
-                        }
+                        window.scrollTo(0, parseInt(scrollY));
+                        delete document.body.dataset.scrollY;
                     }
                 },
                 
