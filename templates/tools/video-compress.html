@@ -1,46 +1,238 @@
-{% extends "base.html" %}
+{%% extends "base.html" %%}
 
-{% block title %}Video Compress - Toolora AI{% endblock %}
+{%% block title %%}Video Compress - Toolora AI{%% endblock %%}
 
-{% block content %}
-<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 pt-20">
+{%% block head %%}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/tool-specific-styles.css') }}">
+<script src="{{ url_for('static', filename='js/tool-specific-handlers.js') }}"></script>
+{%% endblock %%}
+
+{%% block content %%}
+<div class="min-h-screen video-gradient dark:from-gray-900 dark:to-gray-800 pt-20">
     <div class="container mx-auto px-4 py-8">
-        <!-- Tool Header -->
-        <div class="text-center mb-12 animate__animated animate__fadeInUp">
-            <div class="inline-flex items-center justify-center w-24 h-24 rounded-3xl bg-gradient-to-br from-purple-100 to-purple-200 dark:from-purple-900 dark:to-purple-800 mb-6 shadow-lg floating">
-                <i data-lucide="video" class="w-12 h-12 text-purple-600 dark:text-purple-400"></i>
-            </div>
-            <h1 class="text-5xl md:text-6xl font-bold text-gray-800 dark:text-white mb-4">
-                Video Compress
-            </h1>
-            <p class="text-xl md:text-2xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-8">
-                Professional video compress tool for your creative needs
-            </p>
-        </div>
-
-        <!-- Tool Interface -->
-        <div class="max-w-5xl mx-auto">
-            <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl border border-gray-200 dark:border-gray-700 animate__animated animate__fadeInUp animate__delay-1s">
-                <div class="p-8 md:p-12">
-                    <!-- File Upload -->
-                    <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-2xl p-12 text-center hover:border-purple-400 dark:hover:border-purple-500 transition-all duration-300">
-                        <div class="w-20 h-20 mx-auto bg-gradient-to-br from-purple-100 to-purple-200 dark:from-purple-900 dark:to-purple-800 rounded-2xl flex items-center justify-center mb-6">
-                            <i data-lucide="upload-cloud" class="w-10 h-10 text-purple-600 dark:text-purple-400"></i>
+        <div class="max-w-4xl mx-auto">
+            <!-- Enhanced Breadcrumb -->
+            <nav class="flex mb-8 animate-fade-in" aria-label="Breadcrumb">
+                <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                    <li class="inline-flex items-center">
+                        <a href="{{ url_for('main.index') }}" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-purple-600 dark:text-gray-400 dark:hover:text-white transition-colors">
+                            <i data-lucide="home" class="w-4 h-4 mr-2"></i>
+                            Home
+                        </a>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i>
+                            <a href="{{ url_for('tools.index') }}" class="ml-1 text-sm font-medium text-gray-700 hover:text-purple-600 md:ml-2 dark:text-gray-400 dark:hover:text-white transition-colors">Tools</a>
                         </div>
-                        <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-3">
-                            Upload Your Files
-                        </h3>
-                        <p class="text-gray-500 dark:text-gray-400 text-lg mb-6">
-                            Select files to process with our video compress tool
-                        </p>
-                        <button class="btn btn-primary btn-lg px-10 py-4 text-lg font-semibold rounded-2xl shadow-lg">
-                            <i data-lucide="folder-open" class="w-6 h-6 mr-3"></i>
-                            Select Files
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i>
+                            <a href="{{ url_for('tools.index', category='video') }}" class="ml-1 text-sm font-medium text-gray-700 hover:text-purple-600 md:ml-2 dark:text-gray-400 dark:hover:text-white transition-colors">
+                                Video & Audio
+                            </a>
+                        </div>
+                    </li>
+                    <li aria-current="page">
+                        <div class="flex items-center">
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i>
+                            <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400">Video Compress</span>
+                        </div>
+                    </li>
+                </ol>
+            </nav>
+
+            <!-- Enhanced Tool Header -->
+            <div class="text-center mb-12 animate-fade-in">
+                <div class="w-24 h-24 mx-auto mb-6 rounded-3xl bg-purple-100 dark:bg-purple-900 flex items-center justify-center shadow-lg">
+                    <i data-lucide="video" class="w-12 h-12 text-purple-600 dark:text-purple-400"></i>
+                </div>
+                <h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">Video Compress</h1>
+                <p class="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">Professional video compress tool</p>
+                <div class="mt-6 flex flex-wrap justify-center gap-2">
+                    <span class="px-4 py-2 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-sm font-medium">Free</span>
+                    <span class="px-4 py-2 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm font-medium">No Registration</span>
+                    <span class="px-4 py-2 bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 rounded-full text-sm font-medium">Secure</span>
+                    <span class="px-4 py-2 bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-200 rounded-full text-sm font-medium">Fast Processing</span>
+                </div>
+            </div>
+
+            <!-- Enhanced Tool Interface -->
+            <div class="video-card rounded-3xl shadow-2xl p-8 mb-8 animate-slide-in">
+                <div x-data="genericToolHandler("video-compress")" class="space-y-8">
+                    <!-- Instructions -->
+                    <div class="bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-700 rounded-2xl p-6">
+                        <div class="flex items-start space-x-3">
+                            <i data-lucide="info" class="w-6 h-6 text-purple-600 dark:text-purple-400 mt-1 flex-shrink-0"></i>
+                            <div>
+                                <h3 class="text-lg font-semibold text-purple-900 dark:text-purple-100 mb-2">How to Use</h3>
+                                <p class="text-purple-800 dark:text-purple-200">Upload your files and process them with our professional tool.</p>
+                                <p class="text-sm text-purple-600 dark:text-purple-400 mt-2">Supported formats: .*</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Enhanced Upload Area -->
+                    <div class="video-upload-zone border-2 border-dashed rounded-2xl p-8 text-center transition-all duration-300"
+                         @dragover.prevent="dragover = true"
+                         @dragleave.prevent="dragover = false"
+                         @drop.prevent="handleDrop && handleDrop($event)"
+                         :class="{ 'border-purple-400 bg-purple-50 dark:bg-purple-900/20': dragover }">
+                        
+                        <div class="space-y-6">
+                            <div class="w-20 h-20 mx-auto rounded-full bg-purple-100 dark:bg-purple-700 flex items-center justify-center">
+                                <i data-lucide="upload" class="w-10 h-10 text-purple-600 dark:text-purple-400"></i>
+                            </div>
+                            
+                            <div>
+                                <h3 class="text-2xl font-semibold text-gray-900 dark:text-white mb-3">Upload Files</h3>
+                                <p class="text-gray-600 dark:text-gray-300 mb-6">
+                                    Drag and drop your files here, or click to browse
+                                </p>
+                                
+                                <input type="file" id="file-input" multiple class="hidden" 
+                                       @change="handleFiles && handleFiles($event.target.files)"
+                                       accept=".*">
+                                <button @click="$refs.fileInput.click()" class="btn-video inline-flex items-center px-8 py-4 text-lg font-medium rounded-xl transition-all duration-300 transform hover:scale-105">
+                                    <i data-lucide="folder" class="w-5 h-5 mr-3"></i>
+                                    Choose Files
+                                </button>
+                                <input type="file" x-ref="fileInput" multiple class="hidden" 
+                                       @change="handleFiles && handleFiles($event.target.files)"
+                                       accept=".*">
+                            </div>
+                            
+                            <p class="text-sm text-gray-500 dark:text-gray-400">
+                                Maximum file size: 16MB per file
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- File List -->
+                    <div x-show="files && files.length > 0" class="space-y-4">
+                        <h4 class="text-lg font-semibold text-gray-900 dark:text-white">Selected Files</h4>
+                        <div class="space-y-2">
+                            <template x-for="(file, index) in files" :key="index">
+                                <div class="file-preview">
+                                    <div class="file-preview-icon">
+                                        <i data-lucide="file" class="w-5 h-5 text-purple-600"></i>
+                                    </div>
+                                    <div class="file-preview-info">
+                                        <div class="file-preview-name" x-text="file.name || (file.file && file.file.name)"></div>
+                                        <div class="file-preview-size" x-text="formatFileSize && formatFileSize(file.size || (file.file && file.file.size))"></div>
+                                    </div>
+                                    <button @click="removeFile && removeFile(index)" class="file-preview-remove">
+                                        <i data-lucide="x" class="w-4 h-4"></i>
+                                    </button>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- Processing Button -->
+                    <div class="text-center">
+                        <button @click="processFiles && processFiles()" 
+                                :disabled="processing || (files && files.length === 0)"
+                                class="btn-video px-12 py-4 text-lg font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
+                            <span x-show="!processing" class="flex items-center">
+                                <i data-lucide="play" class="w-5 h-5 mr-3"></i>
+                                Process Files
+                            </span>
+                            <span x-show="processing" class="flex items-center">
+                                <i data-lucide="loader" class="w-5 h-5 mr-3 animate-spin"></i>
+                                Processing...
+                            </span>
                         </button>
+                    </div>
+
+                    <!-- Progress Bar -->
+                    <div x-show="processing" class="space-y-4">
+                        <div class="progress-bar video" :style="`--progress-width: ${progress}%`"></div>
+                        <p class="text-center text-sm text-gray-600 dark:text-gray-400" x-text="`Processing: ${progress}%`"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Enhanced Features Section -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div class="space-y-4">
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Key Features</h3>
+                    <div class="space-y-3">
+                        
+            <div class="flex items-center space-x-3 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+                <div class="w-2 h-2 bg-purple-500 rounded-full"></div>
+                <span class="text-gray-700 dark:text-gray-300">Easy to use</span>
+            </div>
+            <div class="flex items-center space-x-3 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+                <div class="w-2 h-2 bg-purple-500 rounded-full"></div>
+                <span class="text-gray-700 dark:text-gray-300">Fast processing</span>
+            </div>
+            <div class="flex items-center space-x-3 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+                <div class="w-2 h-2 bg-purple-500 rounded-full"></div>
+                <span class="text-gray-700 dark:text-gray-300">Secure</span>
+            </div>
+            <div class="flex items-center space-x-3 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+                <div class="w-2 h-2 bg-purple-500 rounded-full"></div>
+                <span class="text-gray-700 dark:text-gray-300">No registration required</span>
+            </div>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Why Choose Our Tool?</h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center space-x-3 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+                            <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                            <span class="text-gray-700 dark:text-gray-300">100% Privacy & Security</span>
+                        </div>
+                        <div class="flex items-center space-x-3 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+                            <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
+                            <span class="text-gray-700 dark:text-gray-300">No Registration Required</span>
+                        </div>
+                        <div class="flex items-center space-x-3 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+                            <div class="w-2 h-2 bg-purple-500 rounded-full"></div>
+                            <span class="text-gray-700 dark:text-gray-300">Lightning Fast Processing</span>
+                        </div>
+                        <div class="flex items-center space-x-3 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+                            <div class="w-2 h-2 bg-orange-500 rounded-full"></div>
+                            <span class="text-gray-700 dark:text-gray-300">Mobile Responsive</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-{% endblock %}
+
+<!-- Tool-specific scripts -->
+<script>
+    // Initialize Lucide icons
+    lucide.createIcons();
+    
+    // Initialize tool-specific enhancements
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // Add enhanced animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-fade-in');
+                }
+            });
+        });
+        
+        document.querySelectorAll('.animate-on-scroll').forEach(el => {
+            observer.observe(el);
+        });
+    });
+</script>
+{%% endblock %%}

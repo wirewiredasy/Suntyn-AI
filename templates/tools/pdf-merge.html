@@ -1,78 +1,128 @@
+{%% extends "base.html" %%}
 
-{% extends "base.html" %}
+{%% block title %%}PDF Merge - Toolora AI{%% endblock %%}
 
-{% block title %}PDF Merge - Combine Multiple PDFs - Toolora AI{% endblock %}
+{%% block head %%}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/tool-specific-styles.css') }}">
+<script src="{{ url_for('static', filename='js/tool-specific-handlers.js') }}"></script>
+{%% endblock %%}
 
-{% block content %}
-<div class="min-h-screen bg-gradient-to-br from-red-50 via-white to-red-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 pt-20">
+{%% block content %%}
+<div class="min-h-screen pdf-gradient dark:from-gray-900 dark:to-gray-800 pt-20">
     <div class="container mx-auto px-4 py-8">
         <div class="max-w-4xl mx-auto">
-            <!-- PDF Merge Header -->
-            <div class="text-center mb-8">
-                <div class="w-20 h-20 mx-auto mb-4 rounded-3xl bg-red-100 dark:bg-red-900 flex items-center justify-center">
-                    <i data-lucide="layers" class="w-10 h-10 text-red-600 dark:text-red-400"></i>
+            <!-- Enhanced Breadcrumb -->
+            <nav class="flex mb-8 animate-fade-in" aria-label="Breadcrumb">
+                <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                    <li class="inline-flex items-center">
+                        <a href="{{ url_for('main.index') }}" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-red-600 dark:text-gray-400 dark:hover:text-white transition-colors">
+                            <i data-lucide="home" class="w-4 h-4 mr-2"></i>
+                            Home
+                        </a>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i>
+                            <a href="{{ url_for('tools.index') }}" class="ml-1 text-sm font-medium text-gray-700 hover:text-red-600 md:ml-2 dark:text-gray-400 dark:hover:text-white transition-colors">Tools</a>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i>
+                            <a href="{{ url_for('tools.index', category='pdf') }}" class="ml-1 text-sm font-medium text-gray-700 hover:text-red-600 md:ml-2 dark:text-gray-400 dark:hover:text-white transition-colors">
+                                PDF Toolkit
+                            </a>
+                        </div>
+                    </li>
+                    <li aria-current="page">
+                        <div class="flex items-center">
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i>
+                            <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400">PDF Merge</span>
+                        </div>
+                    </li>
+                </ol>
+            </nav>
+
+            <!-- Enhanced Tool Header -->
+            <div class="text-center mb-12 animate-fade-in">
+                <div class="w-24 h-24 mx-auto mb-6 rounded-3xl bg-red-100 dark:bg-red-900 flex items-center justify-center shadow-lg">
+                    <i data-lucide="file-text" class="w-12 h-12 text-red-600 dark:text-red-400"></i>
                 </div>
-                <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">PDF Merge Tool</h1>
-                <p class="text-xl text-gray-600 dark:text-gray-300">Combine multiple PDF files into one document</p>
+                <h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">PDF Merge</h1>
+                <p class="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">Combine multiple PDF files into one seamless document</p>
+                <div class="mt-6 flex flex-wrap justify-center gap-2">
+                    <span class="px-4 py-2 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-sm font-medium">Free</span>
+                    <span class="px-4 py-2 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm font-medium">No Registration</span>
+                    <span class="px-4 py-2 bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 rounded-full text-sm font-medium">Secure</span>
+                    <span class="px-4 py-2 bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-200 rounded-full text-sm font-medium">Fast Processing</span>
+                </div>
             </div>
 
-            <!-- PDF Merge Interface -->
-            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 mb-8">
-                <div x-data="pdfMerger()" class="space-y-6">
-                    <!-- Upload Zone -->
-                    <div class="border-2 border-dashed border-red-300 dark:border-red-600 rounded-2xl p-8 text-center hover:border-red-400 dark:hover:border-red-500 transition-colors"
-                         @dragover.prevent="dragover = true"
-                         @dragleave.prevent="dragover = false"
-                         @drop.prevent="handleDrop($event)"
-                         :class="{ 'border-red-400 bg-red-50 dark:bg-red-900/20': dragover }">
-                        
-                        <div class="space-y-4">
-                            <div class="w-16 h-16 mx-auto rounded-full bg-red-100 dark:bg-red-700 flex items-center justify-center">
-                                <i data-lucide="file-plus" class="w-8 h-8 text-red-600 dark:text-red-400"></i>
-                            </div>
-                            
+            <!-- Enhanced Tool Interface -->
+            <div class="pdf-card rounded-3xl shadow-2xl p-8 mb-8 animate-slide-in">
+                <div x-data="pdfMerger()" class="space-y-8">
+                    <!-- Instructions -->
+                    <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-2xl p-6">
+                        <div class="flex items-start space-x-3">
+                            <i data-lucide="info" class="w-6 h-6 text-red-600 dark:text-red-400 mt-1 flex-shrink-0"></i>
                             <div>
-                                <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Upload PDF Files</h3>
-                                <p class="text-gray-600 dark:text-gray-300 mb-4">
-                                    Drop PDF files here or click to select (minimum 2 files)
-                                </p>
-                                
-                                <input type="file" id="pdf-files" multiple accept=".pdf" class="hidden" @change="handleFiles($event.target.files)">
-                                <button @click="$refs.fileInput.click()" class="btn btn-primary bg-red-600 hover:bg-red-700">
-                                    <i data-lucide="folder" class="w-4 h-4 mr-2"></i>
-                                    Select PDF Files
-                                </button>
-                                <input type="file" x-ref="fileInput" multiple accept=".pdf" class="hidden" @change="handleFiles($event.target.files)">
+                                <h3 class="text-lg font-semibold text-red-900 dark:text-red-100 mb-2">How to Use</h3>
+                                <p class="text-red-800 dark:text-red-200">Upload multiple PDF files and arrange them in your desired order. Click merge to create a single PDF.</p>
+                                <p class="text-sm text-red-600 dark:text-red-400 mt-2">Supported formats: .pdf</p>
                             </div>
                         </div>
                     </div>
 
-                    <!-- File List with Sorting -->
-                    <div x-show="files.length > 0" class="space-y-4">
-                        <div class="flex items-center justify-between">
-                            <h4 class="font-semibold text-gray-900 dark:text-white">Selected PDF Files</h4>
-                            <span class="text-sm text-gray-500 dark:text-gray-400" x-text="`${files.length} files selected`"></span>
-                        </div>
+                    <!-- Enhanced Upload Area -->
+                    <div class="pdf-upload-zone border-2 border-dashed rounded-2xl p-8 text-center transition-all duration-300"
+                         @dragover.prevent="dragover = true"
+                         @dragleave.prevent="dragover = false"
+                         @drop.prevent="handleDrop && handleDrop($event)"
+                         :class="{ 'border-red-400 bg-red-50 dark:bg-red-900/20': dragover }">
                         
-                        <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg p-4">
-                            <div class="flex items-center">
-                                <i data-lucide="info" class="w-5 h-5 text-blue-600 dark:text-blue-400 mr-3"></i>
-                                <p class="text-blue-800 dark:text-blue-200">Drag and drop to reorder files. The order will be maintained in the merged PDF.</p>
+                        <div class="space-y-6">
+                            <div class="w-20 h-20 mx-auto rounded-full bg-red-100 dark:bg-red-700 flex items-center justify-center">
+                                <i data-lucide="upload" class="w-10 h-10 text-red-600 dark:text-red-400"></i>
                             </div>
+                            
+                            <div>
+                                <h3 class="text-2xl font-semibold text-gray-900 dark:text-white mb-3">Upload Files</h3>
+                                <p class="text-gray-600 dark:text-gray-300 mb-6">
+                                    Drag and drop your files here, or click to browse
+                                </p>
+                                
+                                <input type="file" id="file-input" multiple class="hidden" 
+                                       @change="handleFiles && handleFiles($event.target.files)"
+                                       accept=".pdf">
+                                <button @click="$refs.fileInput.click()" class="btn-pdf inline-flex items-center px-8 py-4 text-lg font-medium rounded-xl transition-all duration-300 transform hover:scale-105">
+                                    <i data-lucide="folder" class="w-5 h-5 mr-3"></i>
+                                    Choose Files
+                                </button>
+                                <input type="file" x-ref="fileInput" multiple class="hidden" 
+                                       @change="handleFiles && handleFiles($event.target.files)"
+                                       accept=".pdf">
+                            </div>
+                            
+                            <p class="text-sm text-gray-500 dark:text-gray-400">
+                                Maximum file size: 16MB per file
+                            </p>
                         </div>
-                        
-                        <div class="space-y-2" x-sortable="files">
+                    </div>
+
+                    <!-- File List -->
+                    <div x-show="files && files.length > 0" class="space-y-4">
+                        <h4 class="text-lg font-semibold text-gray-900 dark:text-white">Selected Files</h4>
+                        <div class="space-y-2">
                             <template x-for="(file, index) in files" :key="index">
-                                <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 cursor-move">
-                                    <div class="flex items-center space-x-3">
-                                        <i data-lucide="grip-vertical" class="w-5 h-5 text-gray-400"></i>
-                                        <i data-lucide="file-text" class="w-5 h-5 text-red-500"></i>
-                                        <div>
-                                            <span class="text-gray-900 dark:text-white font-medium" x-text="file.name"></span>
-                                            <span class="text-sm text-gray-500 dark:text-gray-400 ml-2" x-text="formatFileSize(file.size)"></span>
-                                        </div>
+                                <div class="file-preview">
+                                    <div class="file-preview-icon">
+                                        <i data-lucide="file" class="w-5 h-5 text-red-600"></i>
                                     </div>
-                                    <button @click="removeFile(index)" class="text-red-500 hover:text-red-700 p-1">
+                                    <div class="file-preview-info">
+                                        <div class="file-preview-name" x-text="file.name || (file.file && file.file.name)"></div>
+                                        <div class="file-preview-size" x-text="formatFileSize && formatFileSize(file.size || (file.file && file.file.size))"></div>
+                                    </div>
+                                    <button @click="removeFile && removeFile(index)" class="file-preview-remove">
                                         <i data-lucide="x" class="w-4 h-4"></i>
                                     </button>
                                 </div>
@@ -80,175 +130,109 @@
                         </div>
                     </div>
 
-                    <!-- Merge Options -->
-                    <div x-show="files.length > 1" class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
-                        <h5 class="font-semibold text-gray-900 dark:text-white mb-4">Merge Options</h5>
-                        <div class="space-y-4">
-                            <div class="flex items-center">
-                                <input type="checkbox" id="add-bookmarks" x-model="options.addBookmarks" class="mr-3">
-                                <label for="add-bookmarks" class="text-gray-700 dark:text-gray-300">Add bookmarks for each PDF</label>
-                            </div>
-                            <div class="flex items-center">
-                                <input type="checkbox" id="preserve-metadata" x-model="options.preserveMetadata" class="mr-3">
-                                <label for="preserve-metadata" class="text-gray-700 dark:text-gray-300">Preserve original metadata</label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Process Button -->
-                    <div x-show="files.length > 1" class="text-center">
-                        <button @click="mergePDFs()" 
-                                :disabled="processing" 
-                                class="btn btn-primary bg-red-600 hover:bg-red-700 btn-lg"
-                                :class="{ 'loading': processing }">
-                            <i data-lucide="layers" class="w-5 h-5 mr-2" x-show="!processing"></i>
-                            <span x-text="processing ? 'Merging PDFs...' : 'Merge PDFs'"></span>
+                    <!-- Processing Button -->
+                    <div class="text-center">
+                        <button @click="processFiles && processFiles()" 
+                                :disabled="processing || (files && files.length === 0)"
+                                class="btn-pdf px-12 py-4 text-lg font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
+                            <span x-show="!processing" class="flex items-center">
+                                <i data-lucide="play" class="w-5 h-5 mr-3"></i>
+                                Process Files
+                            </span>
+                            <span x-show="processing" class="flex items-center">
+                                <i data-lucide="loader" class="w-5 h-5 mr-3 animate-spin"></i>
+                                Processing...
+                            </span>
                         </button>
                     </div>
 
-                    <!-- Progress -->
+                    <!-- Progress Bar -->
                     <div x-show="processing" class="space-y-4">
-                        <div class="bg-red-200 dark:bg-red-700 rounded-full h-3">
-                            <div class="bg-red-600 h-3 rounded-full transition-all duration-300" :style="`width: ${progress}%`"></div>
-                        </div>
-                        <p class="text-center text-red-600 dark:text-red-300 font-medium" x-text="`Merging PDFs... ${progress}%`"></p>
-                    </div>
-
-                    <!-- Results -->
-                    <div x-show="result" class="space-y-4">
-                        <div class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700 rounded-lg p-6">
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center space-x-3">
-                                    <i data-lucide="check-circle" class="w-6 h-6 text-green-500"></i>
-                                    <div>
-                                        <h4 class="font-semibold text-green-800 dark:text-green-200">PDF Merged Successfully!</h4>
-                                        <p class="text-green-700 dark:text-green-300" x-text="result?.filename"></p>
-                                    </div>
-                                </div>
-                                <a x-bind:href="result?.download_url" class="btn btn-primary bg-green-600 hover:bg-green-700">
-                                    <i data-lucide="download" class="w-4 h-4 mr-2"></i>
-                                    Download
-                                </a>
-                            </div>
-                        </div>
+                        <div class="progress-bar pdf" :style="`--progress-width: ${progress}%`"></div>
+                        <p class="text-center text-sm text-gray-600 dark:text-gray-400" x-text="`Processing: ${progress}%`"></p>
                     </div>
                 </div>
             </div>
 
-            <!-- Features -->
-            <div class="grid md:grid-cols-2 gap-8">
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
-                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-                        <i data-lucide="shield-check" class="w-6 h-6 inline mr-2 text-red-500"></i>
-                        Why Choose Our PDF Merger?
-                    </h3>
-                    <ul class="space-y-3 text-gray-600 dark:text-gray-300">
-                        <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 mr-2 text-green-500"></i> Unlimited file size</li>
-                        <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 mr-2 text-green-500"></i> Preserve original quality</li>
-                        <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 mr-2 text-green-500"></i> Custom page ordering</li>
-                        <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 mr-2 text-green-500"></i> Batch processing</li>
-                    </ul>
+            <!-- Enhanced Features Section -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div class="space-y-4">
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Key Features</h3>
+                    <div class="space-y-3">
+                        
+            <div class="flex items-center space-x-3 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+                <div class="w-2 h-2 bg-red-500 rounded-full"></div>
+                <span class="text-gray-700 dark:text-gray-300">Drag & drop file upload</span>
+            </div>
+            <div class="flex items-center space-x-3 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+                <div class="w-2 h-2 bg-red-500 rounded-full"></div>
+                <span class="text-gray-700 dark:text-gray-300">Reorder files via drag</span>
+            </div>
+            <div class="flex items-center space-x-3 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+                <div class="w-2 h-2 bg-red-500 rounded-full"></div>
+                <span class="text-gray-700 dark:text-gray-300">Progress tracking</span>
+            </div>
+            <div class="flex items-center space-x-3 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+                <div class="w-2 h-2 bg-red-500 rounded-full"></div>
+                <span class="text-gray-700 dark:text-gray-300">Batch processing</span>
+            </div>
+                    </div>
                 </div>
-
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
-                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-                        <i data-lucide="lock" class="w-6 h-6 inline mr-2 text-blue-500"></i>
-                        Security & Privacy
-                    </h3>
-                    <ul class="space-y-3 text-gray-600 dark:text-gray-300">
-                        <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 mr-2 text-green-500"></i> Files auto-deleted after 1 hour</li>
-                        <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 mr-2 text-green-500"></i> SSL encryption</li>
-                        <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 mr-2 text-green-500"></i> No file storage</li>
-                        <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 mr-2 text-green-500"></i> GDPR compliant</li>
-                    </ul>
+                <div class="space-y-4">
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Why Choose Our Tool?</h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center space-x-3 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+                            <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                            <span class="text-gray-700 dark:text-gray-300">100% Privacy & Security</span>
+                        </div>
+                        <div class="flex items-center space-x-3 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+                            <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
+                            <span class="text-gray-700 dark:text-gray-300">No Registration Required</span>
+                        </div>
+                        <div class="flex items-center space-x-3 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+                            <div class="w-2 h-2 bg-purple-500 rounded-full"></div>
+                            <span class="text-gray-700 dark:text-gray-300">Lightning Fast Processing</span>
+                        </div>
+                        <div class="flex items-center space-x-3 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+                            <div class="w-2 h-2 bg-orange-500 rounded-full"></div>
+                            <span class="text-gray-700 dark:text-gray-300">Mobile Responsive</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+<!-- Tool-specific scripts -->
 <script>
-function pdfMerger() {
-    return {
-        files: [],
-        processing: false,
-        progress: 0,
-        result: null,
-        dragover: false,
-        options: {
-            addBookmarks: true,
-            preserveMetadata: true
-        },
-
-        handleDrop(event) {
-            this.dragover = false;
-            const files = Array.from(event.dataTransfer.files).filter(file => file.type === 'application/pdf');
-            this.addFiles(files);
-        },
-
-        handleFiles(fileList) {
-            const files = Array.from(fileList).filter(file => file.type === 'application/pdf');
-            this.addFiles(files);
-        },
-
-        addFiles(files) {
-            this.files = [...this.files, ...files];
-            this.result = null;
-        },
-
-        removeFile(index) {
-            this.files.splice(index, 1);
-        },
-
-        formatFileSize(bytes) {
-            if (bytes === 0) return '0 Bytes';
-            const k = 1024;
-            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-            const i = Math.floor(Math.log(bytes) / Math.log(k));
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-        },
-
-        async mergePDFs() {
-            if (this.files.length < 2) {
-                alert('Please select at least 2 PDF files to merge');
-                return;
-            }
-            
-            this.processing = true;
-            this.progress = 0;
-            this.result = null;
-
-            try {
-                const formData = new FormData();
-                this.files.forEach(file => {
-                    formData.append('files', file);
+    // Initialize Lucide icons
+    lucide.createIcons();
+    
+    // Initialize tool-specific enhancements
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
                 });
-                
-                // Add options
-                formData.append('add_bookmarks', this.options.addBookmarks);
-                formData.append('preserve_metadata', this.options.preserveMetadata);
-
-                const response = await fetch('/api/pdf/merge', {
-                    method: 'POST',
-                    body: formData
-                });
-
-                const result = await response.json();
-                this.progress = 100;
-                
-                if (result.success) {
-                    this.result = result;
-                } else {
-                    throw new Error(result.error || 'Merge failed');
+            });
+        });
+        
+        // Add enhanced animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-fade-in');
                 }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('Error merging PDFs: ' + error.message);
-            } finally {
-                this.processing = false;
-            }
-        }
-    }
-}
+            });
+        });
+        
+        document.querySelectorAll('.animate-on-scroll').forEach(el => {
+            observer.observe(el);
+        });
+    });
 </script>
-{% endblock %}
+{%% endblock %%}

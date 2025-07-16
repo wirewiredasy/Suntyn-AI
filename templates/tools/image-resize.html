@@ -1,232 +1,202 @@
-{% extends "base.html" %}
+{%% extends "base.html" %%}
 
-{% block title %}Image Resize Tool - Resize Images Online | Toolora AI{% endblock %}
+{%% block title %%}Image Resize - Toolora AI{%% endblock %%}
 
-{% block content %}
-<div class="container mx-auto px-4 py-8">
-    <!-- Header -->
-    <div class="text-center mb-12">
-        <div class="w-16 h-16 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center mx-auto mb-4">
-            <i data-lucide="image" class="w-8 h-8 text-green-600 dark:text-green-400"></i>
-        </div>
-        <h1 class="text-4xl md:text-5xl font-bold text-gray-800 dark:text-white mb-4">
-            Image Resize Tool
-        </h1>
-        <p class="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-            Resize images to any dimensions while maintaining quality. Perfect for social media, web, and print.
-        </p>
-    </div>
+{%% block head %%}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/tool-specific-styles.css') }}">
+<script src="{{ url_for('static', filename='js/tool-specific-handlers.js') }}"></script>
+{%% endblock %%}
 
-    <!-- Tool Interface -->
-    <div class="max-w-4xl mx-auto">
-        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-8">
-            <div x-data="imageResizer()" x-init="init()">
-                <!-- Step 1: File Upload -->
-                <div x-show="step === 1" class="space-y-6">
-                    <div class="text-center">
-                        <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">
-                            Upload Image to Resize
-                        </h2>
-                        <p class="text-gray-600 dark:text-gray-300 mb-6">
-                            Upload your image and set the desired dimensions
-                        </p>
-                    </div>
-
-                    <!-- File Drop Area -->
-                    <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-8 text-center cursor-pointer hover:border-green-400 dark:hover:border-green-500 transition-colors"
-                         @dragover.prevent
-                         @drop.prevent="handleDrop($event)"
-                         @click="$refs.fileInput.click()">
-                        
-                        <input type="file" 
-                               x-ref="fileInput" 
-                               accept="image/*" 
-                               @change="handleFileSelect($event)"
-                               class="hidden">
-                        
-                        <div class="space-y-4">
-                            <div class="w-16 h-16 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center mx-auto">
-                                <i data-lucide="upload" class="w-8 h-8 text-green-600 dark:text-green-400"></i>
-                            </div>
-                            <div>
-                                <p class="text-lg font-medium text-gray-800 dark:text-white">
-                                    Drop image here or click to browse
-                                </p>
-                                <p class="text-sm text-gray-500 dark:text-gray-400">
-                                    Supports JPG, PNG, GIF, WebP up to 16MB
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Selected Image Preview -->
-                    <div x-show="selectedFile" class="space-y-4">
-                        <div class="flex items-center justify-center">
-                            <div class="max-w-md">
-                                <img :src="imagePreview" class="rounded-lg shadow-lg max-h-64 object-contain">
-                            </div>
-                        </div>
-                        
-                        <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-                            <div class="flex items-center justify-between mb-4">
-                                <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Original Image</h3>
-                                <button @click="removeFile()" class="text-red-500 hover:text-red-700">
-                                    <i data-lucide="x" class="w-4 h-4"></i>
-                                </button>
-                            </div>
-                            
-                            <div class="grid grid-cols-2 gap-4 text-sm">
-                                <div>
-                                    <span class="text-gray-600 dark:text-gray-300">Filename:</span>
-                                    <span class="font-medium text-gray-800 dark:text-white" x-text="selectedFile?.name"></span>
-                                </div>
-                                <div>
-                                    <span class="text-gray-600 dark:text-gray-300">Size:</span>
-                                    <span class="font-medium text-gray-800 dark:text-white" x-text="formatFileSize(selectedFile?.size)"></span>
-                                </div>
-                                <div>
-                                    <span class="text-gray-600 dark:text-gray-300">Dimensions:</span>
-                                    <span class="font-medium text-gray-800 dark:text-white" x-text="`${originalDimensions.width} × ${originalDimensions.height}px`"></span>
-                                </div>
-                                <div>
-                                    <span class="text-gray-600 dark:text-gray-300">Aspect Ratio:</span>
-                                    <span class="font-medium text-gray-800 dark:text-white" x-text="aspectRatio"></span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Resize Options -->
-                        <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 space-y-4">
-                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Resize Options</h3>
-                            
-                            <!-- Preset Sizes -->
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Quick Presets</label>
-                                <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
-                                    <button @click="applyPreset('instagram-square')" class="btn btn-outline btn-sm">Instagram Square</button>
-                                    <button @click="applyPreset('instagram-story')" class="btn btn-outline btn-sm">Instagram Story</button>
-                                    <button @click="applyPreset('facebook-cover')" class="btn btn-outline btn-sm">Facebook Cover</button>
-                                    <button @click="applyPreset('twitter-header')" class="btn btn-outline btn-sm">Twitter Header</button>
-                                    <button @click="applyPreset('linkedin-banner')" class="btn btn-outline btn-sm">LinkedIn Banner</button>
-                                    <button @click="applyPreset('youtube-thumbnail')" class="btn btn-outline btn-sm">YouTube Thumbnail</button>
-                                    <button @click="applyPreset('web-banner')" class="btn btn-outline btn-sm">Web Banner</button>
-                                    <button @click="applyPreset('profile-pic')" class="btn btn-outline btn-sm">Profile Picture</button>
-                                </div>
-                            </div>
-                            
-                            <!-- Custom Dimensions -->
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Custom Dimensions</label>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <label class="block text-xs text-gray-600 dark:text-gray-400 mb-1">Width (px)</label>
-                                        <input type="number" 
-                                               x-model="newDimensions.width" 
-                                               @input="updateDimensions('width')"
-                                               class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:text-white">
-                                    </div>
-                                    <div>
-                                        <label class="block text-xs text-gray-600 dark:text-gray-400 mb-1">Height (px)</label>
-                                        <input type="number" 
-                                               x-model="newDimensions.height" 
-                                               @input="updateDimensions('height')"
-                                               class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:text-white">
-                                    </div>
-                                </div>
-                                
-                                <div class="flex items-center mt-2">
-                                    <input type="checkbox" 
-                                           x-model="maintainAspectRatio" 
-                                           id="maintain-aspect" 
-                                           class="rounded border-gray-300 dark:border-gray-600 text-green-600 focus:ring-green-500">
-                                    <label for="maintain-aspect" class="ml-2 text-sm text-gray-700 dark:text-gray-300">
-                                        Maintain aspect ratio
-                                    </label>
-                                </div>
-                            </div>
-                            
-                            <!-- Resize Method -->
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Resize Method</label>
-                                <select x-model="resizeMethod" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:text-white">
-                                    <option value="fit">Fit (maintain aspect ratio)</option>
-                                    <option value="fill">Fill (crop to fit)</option>
-                                    <option value="stretch">Stretch (ignore aspect ratio)</option>
-                                </select>
-                            </div>
-                            
-                            <!-- Quality -->
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Quality</label>
-                                <input type="range" 
-                                       x-model="quality" 
-                                       min="10" 
-                                       max="100" 
-                                       class="w-full h-2 bg-gray-200 dark:bg-gray-600 rounded-lg appearance-none cursor-pointer">
-                                <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
-                                    <span>Low</span>
-                                    <span x-text="quality + '%'"></span>
-                                    <span>High</span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="flex justify-center">
-                            <button @click="resizeImage()" 
-                                    :disabled="!selectedFile || processing"
-                                    class="btn btn-primary btn-lg px-8 py-3"
-                                    :class="{ 'loading': processing }">
-                                <span x-show="!processing">
-                                    <i data-lucide="image" class="w-5 h-5 mr-2"></i>
-                                    Resize Image
-                                </span>
-                                <span x-show="processing">Processing...</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Step 2: Processing -->
-                <div x-show="step === 2" class="text-center space-y-6">
-                    <div class="w-16 h-16 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center mx-auto">
-                        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
-                    </div>
-                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white">
-                        Resizing Your Image...
-                    </h2>
-                    <p class="text-gray-600 dark:text-gray-300">
-                        Please wait while we process your image
-                    </p>
-                    <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                        <div class="bg-green-600 h-2 rounded-full transition-all duration-300" 
-                             :style="`width: ${progress}%`"></div>
-                    </div>
-                </div>
-
-                <!-- Step 3: Download -->
-                <div x-show="step === 3" class="text-center space-y-6">
-                    <div class="w-16 h-16 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center mx-auto">
-                        <i data-lucide="check" class="w-8 h-8 text-green-600 dark:text-green-400"></i>
-                    </div>
-                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white">
-                        Image Resized Successfully!
-                    </h2>
-                    <p class="text-gray-600 dark:text-gray-300">
-                        Your image has been resized to the specified dimensions
-                    </p>
-                    
-                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                        <a :href="downloadUrl" 
-                           class="btn btn-primary btn-lg px-8 py-3"
-                           download>
-                            <i data-lucide="download" class="w-5 h-5 mr-2"></i>
-                            Download Resized Image
+{%% block content %%}
+<div class="min-h-screen image-gradient dark:from-gray-900 dark:to-gray-800 pt-20">
+    <div class="container mx-auto px-4 py-8">
+        <div class="max-w-4xl mx-auto">
+            <!-- Enhanced Breadcrumb -->
+            <nav class="flex mb-8 animate-fade-in" aria-label="Breadcrumb">
+                <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                    <li class="inline-flex items-center">
+                        <a href="{{ url_for('main.index') }}" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-green-600 dark:text-gray-400 dark:hover:text-white transition-colors">
+                            <i data-lucide="home" class="w-4 h-4 mr-2"></i>
+                            Home
                         </a>
-                        <button @click="reset()" 
-                                class="btn btn-outline btn-lg px-8 py-3">
-                            <i data-lucide="rotate-ccw" class="w-5 h-5 mr-2"></i>
-                            Resize Another Image
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i>
+                            <a href="{{ url_for('tools.index') }}" class="ml-1 text-sm font-medium text-gray-700 hover:text-green-600 md:ml-2 dark:text-gray-400 dark:hover:text-white transition-colors">Tools</a>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i>
+                            <a href="{{ url_for('tools.index', category='image') }}" class="ml-1 text-sm font-medium text-gray-700 hover:text-green-600 md:ml-2 dark:text-gray-400 dark:hover:text-white transition-colors">
+                                Image Toolkit
+                            </a>
+                        </div>
+                    </li>
+                    <li aria-current="page">
+                        <div class="flex items-center">
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i>
+                            <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400">Image Resize</span>
+                        </div>
+                    </li>
+                </ol>
+            </nav>
+
+            <!-- Enhanced Tool Header -->
+            <div class="text-center mb-12 animate-fade-in">
+                <div class="w-24 h-24 mx-auto mb-6 rounded-3xl bg-green-100 dark:bg-green-900 flex items-center justify-center shadow-lg">
+                    <i data-lucide="image" class="w-12 h-12 text-green-600 dark:text-green-400"></i>
+                </div>
+                <h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">Image Resize</h1>
+                <p class="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">Resize images by dimensions or percentage</p>
+                <div class="mt-6 flex flex-wrap justify-center gap-2">
+                    <span class="px-4 py-2 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-sm font-medium">Free</span>
+                    <span class="px-4 py-2 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm font-medium">No Registration</span>
+                    <span class="px-4 py-2 bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 rounded-full text-sm font-medium">Secure</span>
+                    <span class="px-4 py-2 bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-200 rounded-full text-sm font-medium">Fast Processing</span>
+                </div>
+            </div>
+
+            <!-- Enhanced Tool Interface -->
+            <div class="image-card rounded-3xl shadow-2xl p-8 mb-8 animate-slide-in">
+                <div x-data="genericToolHandler("image-resize")" class="space-y-8">
+                    <!-- Instructions -->
+                    <div class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700 rounded-2xl p-6">
+                        <div class="flex items-start space-x-3">
+                            <i data-lucide="info" class="w-6 h-6 text-green-600 dark:text-green-400 mt-1 flex-shrink-0"></i>
+                            <div>
+                                <h3 class="text-lg font-semibold text-green-900 dark:text-green-100 mb-2">How to Use</h3>
+                                <p class="text-green-800 dark:text-green-200">Upload images and set new dimensions. Choose to maintain aspect ratio or custom sizing.</p>
+                                <p class="text-sm text-green-600 dark:text-green-400 mt-2">Supported formats: .jpg, .jpeg, .png, .webp</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Enhanced Upload Area -->
+                    <div class="image-upload-zone border-2 border-dashed rounded-2xl p-8 text-center transition-all duration-300"
+                         @dragover.prevent="dragover = true"
+                         @dragleave.prevent="dragover = false"
+                         @drop.prevent="handleDrop && handleDrop($event)"
+                         :class="{ 'border-green-400 bg-green-50 dark:bg-green-900/20': dragover }">
+                        
+                        <div class="space-y-6">
+                            <div class="w-20 h-20 mx-auto rounded-full bg-green-100 dark:bg-green-700 flex items-center justify-center">
+                                <i data-lucide="upload" class="w-10 h-10 text-green-600 dark:text-green-400"></i>
+                            </div>
+                            
+                            <div>
+                                <h3 class="text-2xl font-semibold text-gray-900 dark:text-white mb-3">Upload Files</h3>
+                                <p class="text-gray-600 dark:text-gray-300 mb-6">
+                                    Drag and drop your files here, or click to browse
+                                </p>
+                                
+                                <input type="file" id="file-input" multiple class="hidden" 
+                                       @change="handleFiles && handleFiles($event.target.files)"
+                                       accept=".jpg,.jpeg,.png,.webp">
+                                <button @click="$refs.fileInput.click()" class="btn-image inline-flex items-center px-8 py-4 text-lg font-medium rounded-xl transition-all duration-300 transform hover:scale-105">
+                                    <i data-lucide="folder" class="w-5 h-5 mr-3"></i>
+                                    Choose Files
+                                </button>
+                                <input type="file" x-ref="fileInput" multiple class="hidden" 
+                                       @change="handleFiles && handleFiles($event.target.files)"
+                                       accept=".jpg,.jpeg,.png,.webp">
+                            </div>
+                            
+                            <p class="text-sm text-gray-500 dark:text-gray-400">
+                                Maximum file size: 16MB per file
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- File List -->
+                    <div x-show="files && files.length > 0" class="space-y-4">
+                        <h4 class="text-lg font-semibold text-gray-900 dark:text-white">Selected Files</h4>
+                        <div class="space-y-2">
+                            <template x-for="(file, index) in files" :key="index">
+                                <div class="file-preview">
+                                    <div class="file-preview-icon">
+                                        <i data-lucide="file" class="w-5 h-5 text-green-600"></i>
+                                    </div>
+                                    <div class="file-preview-info">
+                                        <div class="file-preview-name" x-text="file.name || (file.file && file.file.name)"></div>
+                                        <div class="file-preview-size" x-text="formatFileSize && formatFileSize(file.size || (file.file && file.file.size))"></div>
+                                    </div>
+                                    <button @click="removeFile && removeFile(index)" class="file-preview-remove">
+                                        <i data-lucide="x" class="w-4 h-4"></i>
+                                    </button>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- Processing Button -->
+                    <div class="text-center">
+                        <button @click="processFiles && processFiles()" 
+                                :disabled="processing || (files && files.length === 0)"
+                                class="btn-image px-12 py-4 text-lg font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
+                            <span x-show="!processing" class="flex items-center">
+                                <i data-lucide="play" class="w-5 h-5 mr-3"></i>
+                                Process Files
+                            </span>
+                            <span x-show="processing" class="flex items-center">
+                                <i data-lucide="loader" class="w-5 h-5 mr-3 animate-spin"></i>
+                                Processing...
+                            </span>
                         </button>
+                    </div>
+
+                    <!-- Progress Bar -->
+                    <div x-show="processing" class="space-y-4">
+                        <div class="progress-bar image" :style="`--progress-width: ${progress}%`"></div>
+                        <p class="text-center text-sm text-gray-600 dark:text-gray-400" x-text="`Processing: ${progress}%`"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Enhanced Features Section -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div class="space-y-4">
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Key Features</h3>
+                    <div class="space-y-3">
+                        
+            <div class="flex items-center space-x-3 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+                <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                <span class="text-gray-700 dark:text-gray-300">Aspect ratio lock</span>
+            </div>
+            <div class="flex items-center space-x-3 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+                <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                <span class="text-gray-700 dark:text-gray-300">Percentage scaling</span>
+            </div>
+            <div class="flex items-center space-x-3 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+                <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                <span class="text-gray-700 dark:text-gray-300">Multiple units</span>
+            </div>
+            <div class="flex items-center space-x-3 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+                <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                <span class="text-gray-700 dark:text-gray-300">Batch processing</span>
+            </div>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Why Choose Our Tool?</h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center space-x-3 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+                            <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                            <span class="text-gray-700 dark:text-gray-300">100% Privacy & Security</span>
+                        </div>
+                        <div class="flex items-center space-x-3 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+                            <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
+                            <span class="text-gray-700 dark:text-gray-300">No Registration Required</span>
+                        </div>
+                        <div class="flex items-center space-x-3 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+                            <div class="w-2 h-2 bg-purple-500 rounded-full"></div>
+                            <span class="text-gray-700 dark:text-gray-300">Lightning Fast Processing</span>
+                        </div>
+                        <div class="flex items-center space-x-3 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+                            <div class="w-2 h-2 bg-orange-500 rounded-full"></div>
+                            <span class="text-gray-700 dark:text-gray-300">Mobile Responsive</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -234,173 +204,35 @@
     </div>
 </div>
 
+<!-- Tool-specific scripts -->
 <script>
-function imageResizer() {
-    return {
-        step: 1,
-        selectedFile: null,
-        imagePreview: '',
-        originalDimensions: { width: 0, height: 0 },
-        newDimensions: { width: 0, height: 0 },
-        aspectRatio: '',
-        maintainAspectRatio: true,
-        resizeMethod: 'fit',
-        quality: 90,
-        processing: false,
-        progress: 0,
-        downloadUrl: '',
-        
-        presets: {
-            'instagram-square': { width: 1080, height: 1080 },
-            'instagram-story': { width: 1080, height: 1920 },
-            'facebook-cover': { width: 1200, height: 630 },
-            'twitter-header': { width: 1500, height: 500 },
-            'linkedin-banner': { width: 1584, height: 396 },
-            'youtube-thumbnail': { width: 1280, height: 720 },
-            'web-banner': { width: 1920, height: 1080 },
-            'profile-pic': { width: 400, height: 400 }
-        },
-        
-        init() {
-            // Initialize component
-        },
-        
-        handleFileSelect(event) {
-            const file = event.target.files[0];
-            if (file) {
-                this.processFile(file);
-            }
-        },
-        
-        handleDrop(event) {
-            const file = event.dataTransfer.files[0];
-            if (file) {
-                this.processFile(file);
-            }
-        },
-        
-        processFile(file) {
-            this.selectedFile = file;
-            
-            // Create preview
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                this.imagePreview = e.target.result;
-                this.getImageDimensions(e.target.result);
-            };
-            reader.readAsDataURL(file);
-        },
-        
-        getImageDimensions(src) {
-            const img = new Image();
-            img.onload = () => {
-                this.originalDimensions = { width: img.width, height: img.height };
-                this.newDimensions = { width: img.width, height: img.height };
-                this.aspectRatio = this.calculateAspectRatio(img.width, img.height);
-            };
-            img.src = src;
-        },
-        
-        calculateAspectRatio(width, height) {
-            const gcd = (a, b) => b === 0 ? a : gcd(b, a % b);
-            const divisor = gcd(width, height);
-            return `${width / divisor}:${height / divisor}`;
-        },
-        
-        applyPreset(presetName) {
-            const preset = this.presets[presetName];
-            if (preset) {
-                this.newDimensions = { ...preset };
-                this.maintainAspectRatio = false;
-            }
-        },
-        
-        updateDimensions(changedField) {
-            if (this.maintainAspectRatio && this.originalDimensions.width > 0) {
-                const ratio = this.originalDimensions.width / this.originalDimensions.height;
-                
-                if (changedField === 'width') {
-                    this.newDimensions.height = Math.round(this.newDimensions.width / ratio);
-                } else {
-                    this.newDimensions.width = Math.round(this.newDimensions.height * ratio);
-                }
-            }
-        },
-        
-        formatFileSize(bytes) {
-            if (bytes === 0) return '0 Bytes';
-            const k = 1024;
-            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-            const i = Math.floor(Math.log(bytes) / Math.log(k));
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-        },
-        
-        removeFile() {
-            this.selectedFile = null;
-            this.imagePreview = '';
-            this.originalDimensions = { width: 0, height: 0 };
-            this.newDimensions = { width: 0, height: 0 };
-            this.aspectRatio = '';
-        },
-        
-        async resizeImage() {
-            this.processing = true;
-            this.step = 2;
-            this.progress = 0;
-            
-            try {
-                const formData = new FormData();
-                formData.append('file', this.selectedFile);
-                formData.append('width', this.newDimensions.width);
-                formData.append('height', this.newDimensions.height);
-                formData.append('quality', this.quality);
-                formData.append('method', this.resizeMethod);
-                
-                // Simulate progress
-                const progressInterval = setInterval(() => {
-                    this.progress = Math.min(this.progress + 10, 90);
-                }, 200);
-                
-                const response = await fetch('/api/image/resize', {
-                    method: 'POST',
-                    body: formData
+    // Initialize Lucide icons
+    lucide.createIcons();
+    
+    // Initialize tool-specific enhancements
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
                 });
-                
-                clearInterval(progressInterval);
-                this.progress = 100;
-                
-                const result = await response.json();
-                
-                if (result.success) {
-                    this.downloadUrl = result.download_url;
-                    this.step = 3;
-                } else {
-                    throw new Error(result.error || 'Failed to resize image');
-                }
-                
-            } catch (error) {
-                alert('Error resizing image: ' + error.message);
-                this.step = 1;
-            } finally {
-                this.processing = false;
-            }
-        },
+            });
+        });
         
-        reset() {
-            this.step = 1;
-            this.selectedFile = null;
-            this.imagePreview = '';
-            this.originalDimensions = { width: 0, height: 0 };
-            this.newDimensions = { width: 0, height: 0 };
-            this.aspectRatio = '';
-            this.maintainAspectRatio = true;
-            this.resizeMethod = 'fit';
-            this.quality = 90;
-            this.processing = false;
-            this.progress = 0;
-            this.downloadUrl = '';
-        }
-    };
-}
+        // Add enhanced animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-fade-in');
+                }
+            });
+        });
+        
+        document.querySelectorAll('.animate-on-scroll').forEach(el => {
+            observer.observe(el);
+        });
+    });
 </script>
-{% endblock %}
+{%% endblock %%}
