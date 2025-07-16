@@ -17,23 +17,28 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function showDomainError(domain) {
         const errorHTML = `
-            <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
+            <div class="bg-orange-50 border border-orange-200 rounded-lg p-4 mb-4">
                 <div class="flex items-start">
-                    <i data-lucide="alert-triangle" class="w-5 h-5 text-yellow-600 mt-0.5 mr-3"></i>
+                    <i data-lucide="alert-triangle" class="w-5 h-5 text-orange-600 mt-0.5 mr-3"></i>
                     <div>
-                        <h3 class="text-yellow-800 font-medium mb-2">Firebase Domain Authorization Required</h3>
-                        <p class="text-yellow-700 text-sm mb-3">
-                            Current domain <code class="bg-yellow-100 px-1 rounded">${domain}</code> needs to be authorized in Firebase.
+                        <h3 class="text-orange-800 font-medium mb-2">🔥 Firebase Domain Authorization Needed</h3>
+                        <p class="text-orange-700 text-sm mb-3">
+                            <strong>Current Domain:</strong> <code class="bg-orange-100 px-1 rounded font-mono text-xs">${domain}</code>
                         </p>
-                        <div class="text-yellow-700 text-sm">
-                            <p class="font-medium mb-1">Quick Fix Steps:</p>
+                        <div class="text-orange-700 text-sm">
+                            <p class="font-medium mb-2">तुरंत Fix करें (5 मिनट में):</p></div>
                             <ol class="list-decimal list-inside space-y-1 text-xs">
-                                <li>Go to <a href="https://console.firebase.google.com" target="_blank" class="underline">Firebase Console</a></li>
-                                <li>Select your project: <strong>tooloraai-eccee</strong></li>
-                                <li>Go to Authentication → Settings → Authorized domains</li>
-                                <li>Click "Add domain" and add: <code class="bg-yellow-100 px-1 rounded">${domain}</code></li>
-                                <li>Save and refresh this page</li>
+                                <li><a href="https://console.firebase.google.com" target="_blank" class="underline text-blue-600">Firebase Console खोलें</a></li>
+                                <li>Project select करें: <strong>tooloraai-eccee</strong></li>
+                                <li><strong>Authentication</strong> → <strong>Settings</strong> → <strong>Authorized domains</strong></li>
+                                <li><strong>"Add domain"</strong> पर click करें</li>
+                                <li>Add करें: <code class="bg-orange-100 px-1 rounded font-mono">${domain}</code></li>
+                                <li><strong>Save</strong> करें और 2-3 मिनट wait करें</li>
+                                <li>Page refresh करें</li>
                             </ol>
+                            <div class="mt-3 p-2 bg-green-50 rounded text-green-700">
+                                <strong>✅ Fix होने के बाद:</strong> Normal login/signup काम करेगा
+                            </div>
                         </div>
                     </div>
                 </div>
