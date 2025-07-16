@@ -47,37 +47,37 @@
 
     <!-- Fixed Search Script -->
     <script src="{{ url_for('static', filename='js/fixed-search.js') }}"></script>
-    
+
     <!-- Icon Manager Script -->
     <script src="{{ url_for('static', filename='js/icon-manager.js') }}"></script>
-    
+
     <!-- Header Scroll Fix -->
     <script src="{{ url_for('static', filename='js/header-scroll-fix.js') }}"></script>
-    
+
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    
+
     <!-- Firebase Meta Tags -->
     <meta name="firebase-api-key" content="{{ firebase_api_key }}">
     <meta name="firebase-project-id" content="{{ firebase_project_id }}">
     <meta name="firebase-app-id" content="{{ firebase_app_id }}">
-    
+
     <!-- Authentication Fix -->
     <script src="{{ url_for('static', filename='js/auth-fix.js') }}"></script>
-    
+
     <!-- Authentication Form Handlers -->
     <script src="{{ url_for('static', filename='js/auth-handlers.js') }}"></script>
-    
+
     <!-- Domain Check for Firebase -->
     <script src="{{ url_for('static', filename='js/domain-check.js') }}"></script>
-    
+
     <!-- Temporary Auth Fallback -->
     <script src="{{ url_for('static', filename='js/temp-auth-fallback.js') }}"></script>
-    
+
     <!-- Tool Endpoints Configuration -->
     <script src="{{ url_for('static', filename='js/tool-endpoints.js') }}"></script>
-    
+
     <!-- Simplified Tool Manager -->
     <script src="{{ url_for('static', filename='js/tool-manager.js') }}"></script>
 
@@ -160,13 +160,13 @@
                 'bg-gray-500 text-white'
             }`;
             notification.textContent = message;
-            
+
             document.body.appendChild(notification);
-            
+
             setTimeout(() => {
                 notification.style.transform = 'translateX(0)';
             }, 100);
-            
+
             setTimeout(() => {
                 notification.style.transform = 'translateX(100%)';
                 setTimeout(() => {
@@ -301,7 +301,7 @@
                         <i data-lucide="home" class="w-4 h-4"></i>
                         Home
                     </a>
-                    
+
                     <div class="relative group">
                         <a href="{{ url_for('tools.index') }}" class="professional-nav-link group">
                             <i data-lucide="wrench" class="w-4 h-4"></i>
@@ -351,7 +351,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <a href="{{ url_for('main.about') }}" class="professional-nav-link">
                         <i data-lucide="info" class="w-4 h-4"></i>
                         About
@@ -416,15 +416,15 @@
          x-transition:leave-start="opacity-100"
          x-transition:leave-end="opacity-0"
          style="display: none;">
-        
+
         <!-- Dark Overlay -->
         <div class="absolute inset-0 bg-black bg-opacity-50 backdrop-blur-sm"
              @click="$store.navigation.closeMobileMenu()"></div>
-        
+
         <!-- Sidebar Panel -->
         <div class="mobile-sidebar-panel dark:bg-gray-900" 
              :class="{ 'active': $store.navigation.mobileMenuOpen }">
-            
+
             <!-- Sidebar Header -->
             <div class="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-orange-500 to-orange-600">
                 <div class="flex items-center space-x-3">

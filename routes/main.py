@@ -13,19 +13,19 @@ def index():
         .group_by(ToolHistory.tool_name, ToolHistory.tool_category)\
         .order_by(db.func.count(ToolHistory.id).desc())\
         .limit(8).all()
-    
+
     return render_template('index.html',
                          categories=Config.TOOL_CATEGORIES,
                          popular_tools=popular_tools,
-                         firebase_api_key=os.environ.get("FIREBASE_API_KEY", ""),
-                         firebase_project_id=os.environ.get("FIREBASE_PROJECT_ID", ""),
-                         firebase_app_id=os.environ.get("FIREBASE_APP_ID", ""))
+                         firebase_api_key=Config.FIREBASE_API_KEY,
+                         firebase_project_id=Config.FIREBASE_PROJECT_ID,
+                         firebase_app_id=Config.FIREBASE_APP_ID)
 
 @main_bp.route('/search')
 def search():
     query = request.args.get('q', '').lower()
     results = []
-    
+
     if query:
         for category_id, category_data in Config.TOOL_CATEGORIES.items():
             for tool in category_data['tools']:
@@ -37,7 +37,7 @@ def search():
                         'icon': category_data['icon'],
                         'color': category_data['color']
                     })
-    
+
     return jsonify(results)
 
 @main_bp.route('/dashboard')
@@ -81,7 +81,7 @@ def sitemap():
     """Generate dynamic sitemap for SEO"""
     from flask import Response
     import datetime
-    
+
     sitemap_xml = '''<?xml version="1.0" encoding="UTF-8"?>
     <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
         <url>
@@ -142,7 +142,7 @@ def sitemap():
         datetime.datetime.now().strftime('%Y-%m-%d'),
         datetime.datetime.now().strftime('%Y-%m-%d')
     )
-    
+
     # Add all tool URLs
     for category_id, category_data in Config.TOOL_CATEGORIES.items():
         for tool in category_data['tools']:
@@ -154,21 +154,21 @@ def sitemap():
             <priority>0.8</priority>
         </url>
             '''.format(tool, datetime.datetime.now().strftime('%Y-%m-%d'))
-    
+
     sitemap_xml += '\n    </urlset>'
-    
+
     return Response(sitemap_xml, mimetype='application/xml')
 
 @main_bp.route('/robots.txt')
 def robots():
     """Generate robots.txt for SEO"""
     from flask import Response
-    
+
     robots_txt = '''User-agent: *
 Allow: /
 Sitemap: https://toolora-ai.replit.app/sitemap.xml
 '''
-    
+
     return Response(robots_txt, mimetype='text/plain')
 
 # Remove this local 404 handler since we have a global one
