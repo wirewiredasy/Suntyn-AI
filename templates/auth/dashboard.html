@@ -55,7 +55,7 @@
                 <!-- Logo Section with Website Link -->
                 <div class="flex items-center">
                     <a href="{{ url_for('main.index') }}" class="flex items-center space-x-3 group">
-                        <img src="{{ url_for('static', filename='images/toolora-professional-logo.svg') }}" 
+                        <img src="{{ url_for('static', filename='images/toolora-original-logo.svg') }}" 
                              alt="Toolora AI" 
                              class="h-8 w-auto sm:h-10 professional-logo transition-transform duration-200 hover:scale-105">
                     </a>
@@ -109,7 +109,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center">
                 <div class="w-20 h-20 bg-white/20 rounded-3xl flex items-center justify-center mx-auto mb-6 backdrop-blur-sm shadow-2xl">
-                    <img src="{{ url_for('static', filename='images/toolora-professional-logo.svg') }}" alt="Toolora AI" class="w-12 h-12">
+                    <img src="{{ url_for('static', filename='images/toolora-original-logo.svg') }}" alt="Toolora AI" class="w-12 h-12">
                 </div>
                 <h1 class="text-4xl md:text-5xl font-bold mb-4">
                     Welcome to <span class="text-orange-200">Toolora AI</span>
@@ -291,89 +291,5 @@
             </div>
         </div>
     </div>
-
-    <!-- Professional Footer -->
-    <footer class="bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <!-- Newsletter Section -->
-            <div class="text-center mb-12">
-                <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-                    Ready to transform how your enterprise uses Toolora AI?
-                </h2>
-                <p class="text-gray-600 dark:text-gray-400 mb-8 max-w-2xl mx-auto">
-                    Join innovative teams and forward-thinking professionals who rely on Toolora AI to supercharge their workflow
-                </p>
-                <div class="grid grid-cols-1 md:grid-cols-3 max-w-lg mx-auto gap-2 rounded-xl">
-                    <a href="{{ url_for('tools.index') }}" class="bg-gradient-to-r from-orange-500 via-orange-600 to-orange-700 hover:from-orange-600 hover:via-orange-700 hover:to-orange-800 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
-                        Start Using Tools →
-                    </a>
-                    <a href="{{ url_for('auth.login') }}" class="bg-gradient-to-r from-orange-600 via-orange-700 to-orange-800 hover:from-orange-700 hover:via-orange-800 hover:to-orange-900 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
-                        Sign In →
-                    </a>
-                    <a href="{{ url_for('auth.register') }}" class="bg-gradient-to-r from-orange-700 via-orange-800 to-orange-900 hover:from-orange-800 hover:via-orange-900 hover:to-red-800 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
-                        Sign Up →
-                    </a>
-                </div>
-            </div>
-
-            <!-- Footer Links Grid -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
-                <div>
-                    <h4 class="text-sm font-semibold text-gray-900 dark:text-white mb-4">Popular Tools</h4>
-                    <ul class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
-                        <li><a href="{{ url_for('tools.tool_page', tool_name='pdf-merge') }}" class="hover:text-gray-900 dark:hover:text-white">PDF Merge</a></li>
-                        <li><a href="{{ url_for('tools.tool_page', tool_name='image-compress') }}" class="hover:text-gray-900 dark:hover:text-white">Image Compress</a></li>
-                        <li><a href="{{ url_for('tools.tool_page', tool_name='background-remover') }}" class="hover:text-gray-900 dark:hover:text-white">Background Remover</a></li>
-                        <li><a href="{{ url_for('tools.tool_page', tool_name='qr-generator') }}" class="hover:text-gray-900 dark:hover:text-white">QR Generator</a></li>
-                    </ul>
-                </div>
-
-                <div>
-                    <h4 class="text-sm font-semibold text-gray-900 dark:text-white mb-4">Categories</h4>
-                    <ul class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
-                        <li><a href="{{ url_for('tools.index', category='pdf') }}" class="hover:text-gray-900 dark:hover:text-white">PDF Tools</a></li>
-                        <li><a href="{{ url_for('tools.index', category='image') }}" class="hover:text-gray-900 dark:hover:text-white">Image Tools</a></li>
-                        <li><a href="{{ url_for('tools.index', category='ai') }}" class="hover:text-gray-900 dark:hover:text-white">AI Tools</a></li>
-                        <li><a href="{{ url_for('tools.index', category='video') }}" class="hover:text-gray-900 dark:hover:text-white">Video Tools</a></li>
-                    </ul>
-                </div>
-
-                <div>
-                    <h4 class="text-sm font-semibold text-gray-900 dark:text-white mb-4">Company</h4>
-                    <ul class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
-                        <li><a href="{{ url_for('main.about') }}" class="hover:text-gray-900 dark:hover:text-white">About</a></li>
-                        <li><a href="{{ url_for('main.contact') }}" class="hover:text-gray-900 dark:hover:text-white">Contact</a></li>
-                        <li><a href="{{ url_for('main.blog') }}" class="hover:text-gray-900 dark:hover:text-white">Blog</a></li>
-                        <li><a href="{{ url_for('main.faq') }}" class="hover:text-gray-900 dark:hover:text-white">FAQ</a></li>
-                    </ul>
-                </div>
-
-                <div>
-                    <h4 class="text-sm font-semibold text-gray-900 dark:text-white mb-4">Account</h4>
-                    <ul class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
-                        <li><a href="{{ url_for('auth.login') }}" class="hover:text-orange-600 dark:hover:text-orange-400">Login</a></li>
-                        <li><a href="{{ url_for('auth.register') }}" class="hover:text-orange-600 dark:hover:text-orange-400">Sign Up</a></li>
-                        <li><a href="/dashboard" class="hover:text-orange-600 dark:hover:text-orange-400">Dashboard</a></li>
-                        <li><a href="{{ url_for('main.privacy') }}" class="hover:text-gray-900 dark:hover:text-white">Privacy</a></li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Copyright -->
-            <div class="flex items-center justify-center space-x-4 text-sm text-gray-600 dark:text-gray-400 border-t border-gray-200 dark:border-gray-700 pt-8">
-                <div class="flex items-center space-x-2">
-                    <a href="{{ url_for('main.index') }}">
-                        <img src="{{ url_for('static', filename='images/toolora-professional-logo.svg') }}" 
-                             alt="Toolora AI" 
-                             class="w-8 h-8 transition-transform duration-200 hover:scale-105">
-                    </a>
-                    <a href="{{ url_for('main.index') }}" class="font-bold text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300">Toolora AI</a>
-                </div>
-                <span>© 2024 Toolora Inc.</span>
-                <a href="{{ url_for('main.terms') }}" class="hover:text-orange-600 dark:hover:text-orange-400 transition-colors">Legal</a>
-                <a href="{{ url_for('main.privacy') }}" class="hover:text-orange-600 dark:hover:text-orange-400 transition-colors">Privacy</a>
-            </div>
-        </div>
-    </footer>
 </div>
 {% endblock %}
