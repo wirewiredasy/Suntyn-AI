@@ -298,7 +298,25 @@ window.ToolaraApp = {
 
                         // Auto-reply with slight delay
                         setTimeout(() => {
-
+                            const botResponses = [
+                                "Thanks for your message! I'll help you with that.",
+                                "I understand. Let me assist you with your tools.",
+                                "Great question! I'll provide you with the information you need.",
+                                "I'm here to help you with Toolora AI tools."
+                            ];
+                            
+                            this.messages.push({
+                                id: Date.now() + 1,
+                                sender: 'bot',
+                                text: botResponses[Math.floor(Math.random() * botResponses.length)],
+                                time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+                            });
+                        }, 1000);
+                    }
+                }
+            });
+        }, 100);
+    },
 
     setupMobileSidebar: function() {
         // Enhanced mobile sidebar with complete scroll prevention

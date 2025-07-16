@@ -361,9 +361,8 @@ class ToolAnimationManager {
 // Initialize animation manager
 const toolAnimationManager = new ToolAnimationManager();
 
-// Simple clean animations only
-
-// Advanced button interaction effects
+// Advanced button interaction effects for tool animations
+class AdvancedButtonEffects {
     setupAdvancedButtonEffects() {
         document.addEventListener('DOMContentLoaded', () => {
             // Enhanced CTA button effects
