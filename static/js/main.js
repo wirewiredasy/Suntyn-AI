@@ -301,7 +301,7 @@ window.ToolaraApp = {
 
 
     setupMobileSidebar: function() {
-        // Full-screen non-scrollable mobile sidebar functionality
+        // Enhanced mobile sidebar with complete scroll prevention
         document.addEventListener('alpine:init', () => {
             Alpine.store('navigation', {
                 mobileMenuOpen: false,
@@ -309,105 +309,63 @@ window.ToolaraApp = {
                 toggleMobileMenu() {
                     this.mobileMenuOpen = !this.mobileMenuOpen;
                     
-                    // Complete scroll lock when sidebar is open
                     if (this.mobileMenuOpen) {
-                        // Store current scroll position
-                        const scrollY = window.scrollY;
-                        
-                        // Lock everything completely - Multiple layers of protection
-                        document.body.style.position = 'fixed';
-                        document.body.style.top = `-${scrollY}px`;
-                        document.body.style.left = '0';
-                        document.body.style.width = '100vw';
-                        document.body.style.height = '100vh';
-                        document.body.style.overflow = 'hidden';
-                        document.body.style.touchAction = 'none';
-                        document.body.style.webkitOverflowScrolling = 'none';
-                        document.body.style.scrollbarWidth = 'none';
-                        document.body.style.msOverflowStyle = 'none';
-                        
-                        document.documentElement.style.position = 'fixed';
-                        document.documentElement.style.overflow = 'hidden';
-                        document.documentElement.style.height = '100vh';
-                        document.documentElement.style.width = '100vw';
-                        document.documentElement.style.touchAction = 'none';
-                        document.documentElement.style.webkitOverflowScrolling = 'none';
-                        document.documentElement.style.scrollbarWidth = 'none';
-                        document.documentElement.style.msOverflowStyle = 'none';
-                        
-                        // Add complete lock classes
-                        document.body.classList.add('mobile-sidebar-open', 'sidebar-open');
-                        document.documentElement.classList.add('mobile-sidebar-open', 'sidebar-open');
-                        
-                        // Prevent scroll on all elements
-                        const allElements = document.querySelectorAll('*');
-                        allElements.forEach(el => {
-                            el.style.overflow = 'hidden';
-                            el.style.touchAction = 'none';
-                        });
-                        
-                        // Store scroll position
-                        document.body.dataset.scrollY = scrollY;
+                        this.lockScroll();
                     } else {
-                        // Restore everything
-                        const scrollY = document.body.dataset.scrollY || '0';
-                        
-                        document.body.style.position = '';
-                        document.body.style.top = '';
-                        document.body.style.left = '';
-                        document.body.style.width = '';
-                        document.body.style.height = '';
-                        document.body.style.overflow = '';
-                        document.body.style.touchAction = '';
-                        document.body.style.webkitOverflowScrolling = '';
-                        document.body.style.scrollbarWidth = '';
-                        document.body.style.msOverflowStyle = '';
-                        
-                        document.documentElement.style.position = '';
-                        document.documentElement.style.overflow = '';
-                        document.documentElement.style.height = '';
-                        document.documentElement.style.width = '';
-                        document.documentElement.style.touchAction = '';
-                        document.documentElement.style.webkitOverflowScrolling = '';
-                        document.documentElement.style.scrollbarWidth = '';
-                        document.documentElement.style.msOverflowStyle = '';
-                        
-                        // Remove all lock classes
-                        document.body.classList.remove('mobile-sidebar-open', 'sidebar-open');
-                        document.documentElement.classList.remove('mobile-sidebar-open', 'sidebar-open');
-                        
-                        // Restore all elements
-                        const allElements = document.querySelectorAll('*');
-                        allElements.forEach(el => {
-                            el.style.overflow = '';
-                            el.style.touchAction = '';
-                        });
-                        
-                        // Restore scroll position
-                        window.scrollTo(0, parseInt(scrollY));
-                        delete document.body.dataset.scrollY;
+                        this.unlockScroll();
                     }
+                },
+                
+                lockScroll() {
+                    // Store current scroll position
+                    const scrollY = window.scrollY;
+                    document.body.dataset.scrollY = scrollY;
+                    
+                    // Apply complete scroll lock
+                    document.body.style.position = 'fixed';
+                    document.body.style.top = `-${scrollY}px`;
+                    document.body.style.width = '100vw';
+                    document.body.style.height = '100vh';
+                    document.body.style.overflow = 'hidden';
+                    document.body.style.touchAction = 'none';
+                    
+                    document.documentElement.style.overflow = 'hidden';
+                    document.documentElement.style.height = '100vh';
+                    document.documentElement.style.touchAction = 'none';
+                    
+                    // Add lock classes
+                    document.body.classList.add('sidebar-open');
+                    document.documentElement.classList.add('sidebar-open');
+                },
+                
+                unlockScroll() {
+                    // Get stored scroll position
+                    const scrollY = document.body.dataset.scrollY || '0';
+                    
+                    // Remove all scroll locks
+                    document.body.style.position = '';
+                    document.body.style.top = '';
+                    document.body.style.width = '';
+                    document.body.style.height = '';
+                    document.body.style.overflow = '';
+                    document.body.style.touchAction = '';
+                    
+                    document.documentElement.style.overflow = '';
+                    document.documentElement.style.height = '';
+                    document.documentElement.style.touchAction = '';
+                    
+                    // Remove lock classes
+                    document.body.classList.remove('sidebar-open');
+                    document.documentElement.classList.remove('sidebar-open');
+                    
+                    // Restore scroll position
+                    window.scrollTo(0, parseInt(scrollY));
+                    delete document.body.dataset.scrollY;
                 },
                 
                 closeMobileMenu() {
                     this.mobileMenuOpen = false;
-                    
-                    // Clean up all overflow styles and classes
-                    const scrollY = document.body.style.top;
-                    document.body.style.position = '';
-                    document.body.style.top = '';
-                    document.body.style.width = '';
-                    document.body.style.overflow = '';
-                    document.documentElement.style.overflow = '';
-                    
-                    // Remove prevention classes
-                    document.body.classList.remove('mobile-sidebar-open');
-                    document.documentElement.classList.remove('mobile-sidebar-open');
-                    
-                    // Restore scroll position
-                    if (scrollY) {
-                        window.scrollTo(0, parseInt(scrollY || '0') * -1);
-                    }
+                    this.unlockScroll();
                 }
             });
         });
