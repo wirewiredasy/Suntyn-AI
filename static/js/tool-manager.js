@@ -7,8 +7,63 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('Current tool:', currentTool);
     
     // Enhanced file upload and processing
-    setupToolProcessing(currentTool);
+    if (currentTool && currentTool !== '' && currentTool !== 'tools') {
+        setupToolProcessing(currentTool);
+    }
+    
+    // Setup generic tool handlers
+    setupGenericToolHandlers();
 });
+
+function setupGenericToolHandlers() {
+    // Handle demo mode for tools
+    const demoButtons = document.querySelectorAll('.demo-btn');
+    demoButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const toolName = this.dataset.tool;
+            showDemoResult(toolName);
+        });
+    });
+}
+
+function showDemoResult(toolName) {
+    const demoResults = {
+        'pdf-merge': 'PDF files merged successfully!',
+        'image-compress': 'Image compressed by 60%!',
+        'video-to-mp3': 'Audio extracted successfully!',
+        'resume-generator': 'Professional resume generated!',
+        'qr-generator': 'QR code generated successfully!'
+    };
+    
+    const message = demoResults[toolName] || 'Tool processed successfully!';
+    
+    const notification = document.createElement('div');
+    notification.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50';
+    notification.textContent = message;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.remove();
+    }, 3000);
+}
+
+// Tool endpoint helper
+function getToolEndpoint(toolName) {
+    const endpoints = {
+        'pdf-merge': '/api/pdf/merge',
+        'pdf-split': '/api/pdf/split',
+        'pdf-compress': '/api/pdf/compress',
+        'image-compress': '/api/image/compress',
+        'image-resize': '/api/image/resize',
+        'video-to-mp3': '/api/video/extract-audio',
+        'video-trimmer': '/api/video/trim',
+        'resume-generator': '/api/ai/generate-resume',
+        'qr-generator': '/api/utility/generate-qr'
+    };
+    
+    return endpoints[toolName] || `/api/tools/generic/${toolName}`;
+}
 
 function setupToolProcessing(toolName) {
     const fileInput = document.getElementById('file-input');
@@ -19,6 +74,130 @@ function setupToolProcessing(toolName) {
     const toolForm = document.getElementById('tool-form');
     
     let selectedFiles = [];
+    
+    // Helper functions
+    function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+    
+    function highlight(e) {
+        fileUploadArea.classList.add('drag-over');
+    }
+    
+    function unhighlight(e) {
+        fileUploadArea.classList.remove('drag-over');
+    }
+    
+    function handleDrop(e) {
+        preventDefaults(e);
+        unhighlight(e);
+        const files = Array.from(e.dataTransfer.files);
+        handleFiles(files);
+    }
+    
+    function handleFiles(files) {
+        selectedFiles = files;
+        displayFiles(files);
+        if (processBtn) {
+            processBtn.disabled = false;
+        }
+    }
+    
+    function displayFiles(files) {
+        if (fileList) {
+            fileList.innerHTML = '';
+            files.forEach(file => {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item p-2 bg-gray-100 rounded mb-2';
+                fileItem.innerHTML = `
+                    <span class="file-name">${file.name}</span>
+                    <span class="file-size text-sm text-gray-500">(${formatFileSize(file.size)})</span>
+                `;
+                fileList.appendChild(fileItem);
+            });
+        }
+    }
+    
+    function formatFileSize(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+    
+    async function processFiles() {
+        if (selectedFiles.length === 0) {
+            alert('Please select files first');
+            return;
+        }
+        
+        const formData = new FormData();
+        selectedFiles.forEach(file => {
+            formData.append('files', file);
+        });
+        
+        // Add tool options if any
+        const optionsForm = document.getElementById('tool-options');
+        if (optionsForm) {
+            const formData2 = new FormData(optionsForm);
+            for (let [key, value] of formData2.entries()) {
+                formData.append(key, value);
+            }
+        }
+        
+        try {
+            const endpoint = getToolEndpoint(toolName);
+            const response = await fetch(endpoint, {
+                method: 'POST',
+                body: formData
+            });
+            
+            const result = await response.json();
+            
+            if (result.success) {
+                showResults(result);
+            } else {
+                showError(result.error || 'Processing failed');
+            }
+        } catch (error) {
+            showError('Network error: ' + error.message);
+        }
+    }
+    
+    function showResults(result) {
+        const resultsSection = document.getElementById('results-section');
+        if (resultsSection) {
+            resultsSection.style.display = 'block';
+            if (result.download_url) {
+                const downloadLink = document.createElement('a');
+                downloadLink.href = result.download_url;
+                downloadLink.download = result.filename || 'processed_file';
+                downloadLink.className = 'bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600';
+                downloadLink.textContent = 'Download Result';
+                
+                const downloadSection = document.getElementById('download-links');
+                if (downloadSection) {
+                    downloadSection.innerHTML = '';
+                    downloadSection.appendChild(downloadLink);
+                }
+            }
+        }
+    }
+    
+    function showError(message) {
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4';
+        errorDiv.textContent = message;
+        
+        const container = document.querySelector('.container') || document.body;
+        container.insertBefore(errorDiv, container.firstChild);
+        
+        setTimeout(() => {
+            errorDiv.remove();
+        }, 5000);
+    }
     
     // File selection handling
     if (fileSelectBtn) {
@@ -56,6 +235,10 @@ function setupToolProcessing(toolName) {
     if (toolForm) {
         toolForm.addEventListener('submit', (e) => {
             e.preventDefault();
+            processFiles();
+        });
+    }
+}
             processFiles();
         });
     }

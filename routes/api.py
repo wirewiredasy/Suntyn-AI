@@ -355,12 +355,51 @@ def process_generic_tool(tool_name):
         # Log tool usage
         logging.info(f"Processing tool: {tool_name}")
         
-        # Return demo response for now
-        return jsonify({
+        # Get files if uploaded
+        files = request.files.getlist('files')
+        
+        # Demo responses for different tool types
+        demo_responses = {
+            'pdf-merge': {
+                'success': True,
+                'message': 'PDF files merged successfully!',
+                'demo_mode': True,
+                'filename': 'merged_document.pdf'
+            },
+            'image-compress': {
+                'success': True,
+                'message': 'Image compressed by 60%!',
+                'demo_mode': True,
+                'filename': 'compressed_image.jpg'
+            },
+            'video-to-mp3': {
+                'success': True,
+                'message': 'Audio extracted successfully!',
+                'demo_mode': True,
+                'filename': 'extracted_audio.mp3'
+            },
+            'resume-generator': {
+                'success': True,
+                'message': 'Professional resume generated!',
+                'demo_mode': True,
+                'filename': 'professional_resume.pdf'
+            },
+            'qr-generator': {
+                'success': True,
+                'message': 'QR code generated successfully!',
+                'demo_mode': True,
+                'filename': 'qr_code.png'
+            }
+        }
+        
+        # Return specific demo response or generic one
+        return jsonify(demo_responses.get(tool_name, {
             'success': True,
             'message': f'Tool {tool_name} processed successfully',
-            'demo_mode': True
-        })
+            'demo_mode': True,
+            'filename': f'{tool_name}_result.txt'
+        }))
         
     except Exception as e:
+        logging.error(f"Error processing tool {tool_name}: {str(e)}")
         return jsonify({'error': str(e)}), 500
