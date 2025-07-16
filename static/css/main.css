@@ -2396,3 +2396,29 @@ footer img[alt="Toolora AI"]:hover {
         0 0 60px rgba(249, 115, 22, 0.1);
 }
 
+/* Zapier-Style Menu Items */
+.zapier-menu-item {
+    @apply block w-full py-4 px-0 text-left hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors cursor-pointer border-b border-gray-100 dark:border-gray-800;
+}
+
+.zapier-menu-item:last-child {
+    @apply border-b-0;
+}
+
+.zapier-menu-item:hover {
+    @apply bg-gray-50 dark:bg-gray-800/50;
+}
+
+/* Clean Zapier-style spacing */
+.zapier-menu-item span {
+    @apply text-base;
+}
+
+.zapier-menu-item i {
+    @apply transition-transform duration-200;
+}
+
+.zapier-menu-item:hover i {
+    @apply transform rotate-180;
+}
+
