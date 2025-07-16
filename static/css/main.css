@@ -1971,7 +1971,14 @@ footer img[alt="Toolora AI"]:hover {
     border-bottom: 1px solid rgba(55, 65, 81, 0.5);
 }
 
-/* Zapier-Style Full-Screen Overlay Sidebar */
+/* Full-Screen Non-Scrollable Mobile Sidebar */
+body.sidebar-open {
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+}
+
 .mobile-sidebar-container {
     position: fixed;
     top: 0;
@@ -1989,51 +1996,17 @@ footer img[alt="Toolora AI"]:hover {
     opacity: 1;
 }
 
-.mobile-sidebar-backdrop {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-    opacity: 0;
-    transition: opacity 0.3s ease;
+/* Prevent scrolling when sidebar is open */
+.mobile-sidebar-open {
+    overflow: hidden !important;
+    position: fixed !important;
+    width: 100% !important;
 }
 
-.mobile-sidebar-backdrop.active {
-    opacity: 1;
-}
-
-/* Full-Screen Sidebar Panel - Zapier Style */
-.mobile-sidebar-panel {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: #ffffff;
-    transform: translateX(-100%);
-    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    display: flex;
-    flex-direction: column;
-}
-
-.dark .mobile-sidebar-panel {
-    background: #111827;
-}
-
-.mobile-sidebar-panel::-webkit-scrollbar {
-    display: none;
-}
-
-.mobile-sidebar-panel.active {
-    transform: translateX(0);
+.mobile-sidebar-open body {
+    overflow: hidden !important;
+    position: fixed !important;
+    width: 100% !important;
 }
 
 /* Zapier-style Header */

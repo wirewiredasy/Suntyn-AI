@@ -301,7 +301,7 @@ window.ToolaraApp = {
 
 
     setupMobileSidebar: function() {
-        // Zapier-style full-screen mobile sidebar functionality
+        // Full-screen non-scrollable mobile sidebar functionality
         document.addEventListener('alpine:init', () => {
             Alpine.store('navigation', {
                 mobileMenuOpen: false,
@@ -309,26 +309,37 @@ window.ToolaraApp = {
                 toggleMobileMenu() {
                     this.mobileMenuOpen = !this.mobileMenuOpen;
                     
-                    // Full-screen overlay behavior
+                    // Prevent all scrolling when sidebar is open
                     if (this.mobileMenuOpen) {
-                        // Prevent body scrolling when sidebar is open
+                        // Store current scroll position
+                        const scrollY = window.scrollY;
+                        
+                        // Prevent body scrolling
+                        document.body.style.position = 'fixed';
+                        document.body.style.top = `-${scrollY}px`;
+                        document.body.style.width = '100%';
                         document.body.style.overflow = 'hidden';
                         document.documentElement.style.overflow = 'hidden';
                         
-                        // Add sidebar container to DOM if it doesn't exist
-                        const sidebarContainer = document.querySelector('.mobile-sidebar-container');
-                        if (sidebarContainer) {
-                            sidebarContainer.classList.add('active');
-                        }
+                        // Add class to prevent any potential scrolling
+                        document.body.classList.add('mobile-sidebar-open');
+                        document.documentElement.classList.add('mobile-sidebar-open');
                     } else {
                         // Restore normal scrolling
+                        const scrollY = document.body.style.top;
+                        document.body.style.position = '';
+                        document.body.style.top = '';
+                        document.body.style.width = '';
                         document.body.style.overflow = '';
                         document.documentElement.style.overflow = '';
                         
-                        // Remove active class from sidebar container
-                        const sidebarContainer = document.querySelector('.mobile-sidebar-container');
-                        if (sidebarContainer) {
-                            sidebarContainer.classList.remove('active');
+                        // Remove prevention classes
+                        document.body.classList.remove('mobile-sidebar-open');
+                        document.documentElement.classList.remove('mobile-sidebar-open');
+                        
+                        // Restore scroll position
+                        if (scrollY) {
+                            window.scrollTo(0, parseInt(scrollY || '0') * -1);
                         }
                     }
                 },
@@ -336,14 +347,21 @@ window.ToolaraApp = {
                 closeMobileMenu() {
                     this.mobileMenuOpen = false;
                     
-                    // Clean up overflow styles
+                    // Clean up all overflow styles and classes
+                    const scrollY = document.body.style.top;
+                    document.body.style.position = '';
+                    document.body.style.top = '';
+                    document.body.style.width = '';
                     document.body.style.overflow = '';
                     document.documentElement.style.overflow = '';
                     
-                    // Remove active class
-                    const sidebarContainer = document.querySelector('.mobile-sidebar-container');
-                    if (sidebarContainer) {
-                        sidebarContainer.classList.remove('active');
+                    // Remove prevention classes
+                    document.body.classList.remove('mobile-sidebar-open');
+                    document.documentElement.classList.remove('mobile-sidebar-open');
+                    
+                    // Restore scroll position
+                    if (scrollY) {
+                        window.scrollTo(0, parseInt(scrollY || '0') * -1);
                     }
                 }
             });
