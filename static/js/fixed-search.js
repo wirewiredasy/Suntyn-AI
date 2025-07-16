@@ -44,5 +44,5 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
     
-    console.log('Search functionality ready');
+    // Search functionality initialized
 });

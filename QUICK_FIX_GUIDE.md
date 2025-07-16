@@ -1,34 +1,42 @@
-# 🚨 QUICK FIX: Firebase Domain Authorization
+# 🚀 Quick Fix Guide - Firebase Domain Authorization
 
-## आपका Domain: `workspace--tooloraai.replit.dev`
+## Current Issue
+आपका Firebase authentication work नहीं कर रहा क्योंकि current domain authorized नहीं है।
 
-### बस 5 मिनट में Fix करें:
+## Current Domain
+**895024bf-f91f-4fe0-92e6-69ee2149a977-00-whrp6xklu1oj.picard.replit.dev**
 
-1. **Firebase Console खोलें**: https://console.firebase.google.com/
-2. **अपना Project Select करें**
-3. **Authentication** पर click करें
-4. **Settings** tab पर जाएं  
-5. **Authorized domains** section में जाएं
-6. **"Add domain"** button पर click करें
-7. **यह domain add करें**: `workspace--tooloraai.replit.dev`
-8. **Save करें**
-9. **2-3 मिनट wait करें**
-10. **Authentication test करें**
+## Fix Steps (5 मिनट में)
 
-### यह भी Add करें (Optional):
-- `*.replit.dev` (अगर available है)
-- `replit.dev`
+### 1. Firebase Console खोलें
+- https://console.firebase.google.com/ पर जाएं
+- Google account से login करें
 
-## ✅ Fix होने के बाद:
-- Email/password login ✅
-- Google sign-in ✅
-- User registration ✅
-- Password reset ✅
+### 2. Project Select करें
+- **tooloraai-eccee** project पर click करें
 
-## 🔧 Technical Status:
-- Firebase Admin SDK: ✅ Installed
-- Token verification: ✅ Working
-- Database integration: ✅ Working
-- Session management: ✅ Working
+### 3. Authentication Settings खोलें
+- Left sidebar में **Authentication** पर click करें
+- **Settings** tab पर जाएं
+- **Authorized domains** section find करें
 
-**केवल domain authorization बाकी है!**
+### 4. Domain Add करें
+- **Add domain** button पर click करें
+- इसे copy-paste करें: `895024bf-f91f-4fe0-92e6-69ee2149a977-00-whrp6xklu1oj.picard.replit.dev`
+- **Add** button दबाएं
+
+### 5. Save करें
+- Changes save हो जाएंगे automatically
+
+## ✅ Result
+Domain add करने के बाद:
+- Sign up/Sign in काम करेगा
+- Google login काम करेगा  
+- All authentication features working होंगे
+
+## 📞 अगर Problem हो तो
+1. Clear browser cache
+2. Refresh page
+3. Try again
+
+**Bas 5 मिनट में सब fix हो जाएगा!** 🎉

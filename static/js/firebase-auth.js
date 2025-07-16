@@ -17,7 +17,7 @@ class FirebaseAuthHandler {
 
             // Check if Firebase is properly configured
             if (!this.auth) {
-                console.log('Firebase Auth not configured - running in demo mode');
+                // Running in demo mode
                 this.initialized = true;
                 return;
             }
@@ -29,7 +29,7 @@ class FirebaseAuthHandler {
             });
 
             this.initialized = true;
-            console.log('Firebase Auth initialized');
+            // Firebase Auth ready
         } catch (error) {
             console.warn('Firebase Auth initialization failed - running in demo mode:', error.message);
             this.initialized = true;

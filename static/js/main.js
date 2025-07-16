@@ -530,7 +530,7 @@ window.ToolaraApp = {
                 }
 
                 // Console log for debugging
-                console.log('Tool used:', toolName);
+                // Tool usage tracked for analytics
 
                 // Enhanced click animation with ripple
                 ToolaraApp.addRippleEffect(toolCard, e);
@@ -635,7 +635,7 @@ window.ToolaraApp = {
 
 // Analytics functions
 window.trackPageView = function(page) {
-    console.log('Page view:', page);
+    // Page view tracked
     if (typeof gtag !== 'undefined') {
         gtag('config', 'GA_MEASUREMENT_ID', {
             page_path: page
@@ -644,7 +644,7 @@ window.trackPageView = function(page) {
 };
 
 window.trackEvent = function(eventName, parameters) {
-    console.log('Event:', eventName, parameters);
+    // Event tracked for analytics
     if (typeof gtag !== 'undefined') {
         gtag('event', eventName, parameters);
     }
@@ -652,7 +652,7 @@ window.trackEvent = function(eventName, parameters) {
 
 // Page transition function (to replace the missing addPageTransitions)
 window.addPageTransitions = function() {
-    console.log('Page transitions initialized');
+    // Page transitions ready
     ToolaraApp.setupPageTransitions();
 };
 

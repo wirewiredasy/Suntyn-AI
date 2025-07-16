@@ -1,51 +1,74 @@
-# Firebase Domain Authorization Fix - डोमेन की समस्या का समाधान
+# 🔥 Firebase Domain Fix - हिंदी में Complete Guide
 
 ## समस्या क्या है?
-आपका Firebase authentication fail हो रहा है क्योंकि आपका current Replit domain Firebase Console में authorized नहीं है।
+आपका Toolora AI का Sign Up/Sign In काम नहीं कर रहा क्योंकि Firebase में आपका current domain authorized नहीं है।
 
-## तुरंत समाधान - Step by Step
+## Current Domain जो Add करना है:
+```
+895024bf-f91f-4fe0-92e6-69ee2149a977-00-whrp6xklu1oj.picard.replit.dev
+```
 
-### 1. अपना Current Domain पता करें
-अपने browser के address bar में देखें। वहाँ कुछ इस तरह दिखेगा:
-- `https://[कुछ-random-id].replit.dev`
-- `https://[your-repl-name]--[username].replit.dev`
+## Step-by-Step Fix (5 मिनट में)
 
-### 2. Firebase Console में Domain Add करें
+### Step 1: Firebase Console खोलें
+1. https://console.firebase.google.com/ पर जाएं
+2. अपने Google account से login करें
 
-**Step 1:** https://console.firebase.google.com/ पर जाएं
-**Step 2:** अपना project select करें
-**Step 3:** **Authentication** → **Settings** → **Authorized domains** पर जाएं
-**Step 4:** **"Add domain"** button पर click करें
-**Step 5:** अपना exact domain add करें (https:// के बिना):
-- Example: `d54d1cce1363.replit.dev`
-- यह भी add करें: `*.replit.dev` (अगर available है)
+### Step 2: अपना Project Select करें
+1. **tooloraai-eccee** project पर click करें
+2. अगर दिखाई न दे तो search में "tooloraai" type करें
 
-### 3. Test करें
-- 2-3 मिनट wait करें changes के लिए
-- Google sign-in फिर से try करें
-- Email/password तुरंत काम करना चाहिए
+### Step 3: Authentication Settings में जाएं
+1. Left sidebar में **Authentication** option पर click करें
+2. Top में **Settings** tab पर click करें  
+3. नीचे scroll करके **Authorized domains** section ढूंढें
 
-## मैंने पहले से ही यह Fix कर दिया है:
-✅ Firebase Admin SDK install किया
-✅ Proper token verification
-✅ Better error messages
-✅ Database user creation
-✅ Session management
+### Step 4: New Domain Add करें
+1. **Add domain** button पर click करें
+2. इस domain को copy-paste करें:
+   ```
+   895024bf-f91f-4fe0-92e6-69ee2149a977-00-whrp6xklu1oj.picard.replit.dev
+   ```
+3. **Add** button दबाएं
 
-## Domain Fix के बाद यह सब काम करेगा:
-- Email/password registration ✅
-- Email/password login ✅  
-- Google sign-in ✅ (domain authorization के बाद)
-- Password reset ✅
-- User session management ✅
+### Step 5: Save करें
+- Changes automatically save हो जाएंगे
+- Green checkmark दिखेगा success के लिए
 
-## अगर फिर भी problem हो तो:
-1. Browser console में exact error check करें
-2. Browser cache clear करें
-3. Firebase project settings verify करें
-4. मुझे exact error message बताएं
+## ✅ Fix के बाद क्या होगा?
 
-## Important Notes:
-- Email/password authentication domain authorization के बिना भी काम करता है
-- Google sign-in के लिए domain authorization जरूरी है
-- यह एक one-time setup है
+### ये सब काम करने लगेगा:
+- ✅ Sign Up with Email
+- ✅ Sign In with Email  
+- ✅ Google Sign In
+- ✅ Password Reset
+- ✅ User Dashboard
+- ✅ All Authentication Features
+
+## 🚀 Test कैसे करें?
+
+1. Browser refresh करें
+2. Sign Up button पर click करें
+3. Email/password से register करके देखें
+4. Google Sign In भी try करें
+
+## 🔧 अगर अभी भी Problem हो तो:
+
+1. **Browser Cache Clear करें:**
+   - Ctrl+Shift+Delete (Windows)
+   - Cmd+Shift+Delete (Mac)
+
+2. **Incognito/Private Mode में try करें**
+
+3. **Different Browser use करें** (Chrome, Firefox, etc.)
+
+## 🎯 Important Note
+
+यह fix सिर्फ **एक बार** करना है। एक बार domain add हो जाए तो हमेशा के लिए काम करेगा।
+
+---
+
+**Total Time: 5 मिनट**  
+**Difficulty: बहुत Easy** 🟢
+
+Firebase Console में domain add करना बस copy-paste का काम है। बाकी सब automatically handle हो जाएगा!
