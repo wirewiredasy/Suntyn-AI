@@ -70,45 +70,56 @@
 
     <!-- Tools Grid -->
     <div id="tools-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {% for tool in tools %}
-        <div class="tool-card bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border border-gray-200 dark:border-gray-700 cursor-pointer" 
-             data-tool="{{ tool.name }}" 
-             data-category="{{ tool.category.name }}"
-             onclick="window.location.href='/tools/{{ tool.name }}'; console.log('Card clicked, navigating to: /tools/{{ tool.name }}')">
-            <div class="p-6">
-                <div class="flex items-center mb-4">
-                    <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
-                        <i data-lucide="{{ tool_icons.get(tool.name, tool.icon) }}" class="w-6 h-6 text-blue-600 dark:text-blue-400"></i>
+        {% if tools %}
+            {% for tool in tools %}
+            <div class="tool-card bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border border-gray-200 dark:border-gray-700 cursor-pointer" 
+                 data-tool="{{ tool.name }}" 
+                 data-category="{{ tool.category.name if tool.category else 'unknown' }}"
+                 onclick="window.location.href='/tools/{{ tool.name }}'; console.log('Card clicked, navigating to: /tools/{{ tool.name }}')">
+                <div class="p-6">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
+                            <i data-lucide="{{ tool_icons.get(tool.name, tool.icon if tool.icon else 'tool') }}" class="w-6 h-6 text-blue-600 dark:text-blue-400"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white">
+                                {{ tool.display_name }}
+                            </h3>
+                            <p class="text-sm text-blue-600 dark:text-blue-400">
+                                {{ tool.category.display_name if tool.category else 'Tool' }}
+                            </p>
+                        </div>
                     </div>
-                    <div class="ml-4">
-                        <h3 class="text-lg font-semibold text-gray-800 dark:text-white">
-                            {{ tool.display_name }}
-                        </h3>
-                        <p class="text-sm text-blue-600 dark:text-blue-400">
-                            {{ tool.category.display_name }}
-                        </p>
-                    </div>
-                </div>
 
-                <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">
-                    {{ tool.description }}
-                </p>
+                    <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">
+                        {{ tool.description[:100] }}{% if tool.description|length > 100 %}...{% endif %}
+                    </p>
 
-                <div class="flex justify-between items-center">
-                    <a href="/tools/{{ tool.name }}" 
-                       onclick="console.log('Navigating to:', this.href); return true;"
-                       class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors shadow-lg hover:shadow-xl">
-                        <i data-lucide="arrow-right" class="w-4 h-4 mr-2"></i>
-                        Use Tool
-                    </a>
-                    <div class="flex items-center text-sm text-gray-500 dark:text-gray-400">
-                        <i data-lucide="star" class="w-4 h-4 mr-1"></i>
-                        {% if tool.is_premium %}Premium{% else %}Free{% endif %}
+                    <div class="flex justify-between items-center">
+                        <a href="/tools/{{ tool.name }}" 
+                           onclick="console.log('Navigating to:', this.href); return true;"
+                           class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors shadow-lg hover:shadow-xl">
+                            <i data-lucide="arrow-right" class="w-4 h-4 mr-2"></i>
+                            Use Tool
+                        </a>
+                        <div class="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                            <i data-lucide="star" class="w-4 h-4 mr-1"></i>
+                            {% if tool.is_premium %}Premium{% else %}Free{% endif %}
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        {% endfor %}
+            {% endfor %}
+        {% else %}
+            <!-- Show message when no tools -->
+            <div class="col-span-full text-center py-12">
+                <div class="w-16 h-16 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center mx-auto mb-4">
+                    <i data-lucide="search" class="w-8 h-8 text-gray-400"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">Loading tools...</h3>
+                <p class="text-gray-600 dark:text-gray-300">Please wait while we load your tools</p>
+            </div>
+        {% endif %}
     </div>
 
     <!-- Empty State -->
