@@ -21,6 +21,14 @@ app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 
 # Configure the database
 database_url = os.environ.get("DATABASE_URL", "sqlite:///toolora.db")
+neon_database_url = os.environ.get("NEON_DATABASE_URL", "")
+
+# Use Neon database if available, otherwise use primary database
+if neon_database_url:
+    database_url = neon_database_url
+    print("🚀 Using Neon Database")
+else:
+    print("🚀 Using Primary Database")
 
 # Fix PostgreSQL connection for proper format
 if database_url.startswith("postgres://"):
@@ -28,8 +36,16 @@ if database_url.startswith("postgres://"):
 
 app.config["SQLALCHEMY_DATABASE_URI"] = database_url
 
-# PostgreSQL database configuration
-if "postgresql" in database_url or "render" in database_url:
+# PostgreSQL database configuration (Render/Neon)
+if "postgresql" in database_url or "render" in database_url or "neon" in database_url:
+    # Check if it's Neon database for connection pooling
+    if "neon" in database_url or neon_database_url:
+        # Use Neon's connection pooler for better performance
+        pooled_url = database_url.replace('.us-east-2', '-pooler.us-east-2')
+        if pooled_url != database_url:
+            app.config["SQLALCHEMY_DATABASE_URI"] = pooled_url
+            print("✅ Using Neon Connection Pooler")
+    
     app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
         "pool_recycle": 300,
         "pool_pre_ping": True,
@@ -37,7 +53,7 @@ if "postgresql" in database_url or "render" in database_url:
         "pool_size": 10,
         "max_overflow": 20,
         "connect_args": {
-            "sslmode": "require",
+            "sslmode": "require" if "render" in database_url else "prefer",
             "connect_timeout": 30,
             "application_name": "Toolora_AI"
         }
