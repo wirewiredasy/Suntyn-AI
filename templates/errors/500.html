@@ -13,15 +13,42 @@
         <div class="text-center max-w-md mx-auto">
             <!-- Orange Logo -->
             <div class="mb-8">
-                <svg class="w-20 h-20 mx-auto" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <svg class="w-20 h-20 mx-auto" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
                     <defs>
-                        <linearGradient id="orangeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" style="stop-color:#ff6b35;stop-opacity:1" />
-                            <stop offset="100%" style="stop-color:#f97316;stop-opacity:1" />
+                        <linearGradient id="orange3DGradient500" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#ff7b00;stop-opacity:1" />
+                            <stop offset="25%" style="stop-color:#ff8f00;stop-opacity:1" />
+                            <stop offset="50%" style="stop-color:#ff6f00;stop-opacity:1" />
+                            <stop offset="75%" style="stop-color:#e65100;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#bf360c;stop-opacity:1" />
                         </linearGradient>
+                        
+                        <linearGradient id="orangeLight500" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#ffab40;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#ff9800;stop-opacity:1" />
+                        </linearGradient>
+                        
+                        <filter id="shadow3D500" x="-50%" y="-50%" width="200%" height="200%">
+                            <feDropShadow dx="2" dy="2" stdDeviation="2" flood-color="#bf360c" flood-opacity="0.4"/>
+                        </filter>
                     </defs>
-                    <circle cx="50" cy="50" r="45" fill="url(#orangeGradient)" class="drop-shadow-lg"/>
-                    <text x="50" y="65" font-family="Arial, sans-serif" font-size="48" font-weight="bold" text-anchor="middle" fill="white">T</text>
+                    
+                    <!-- 3D Base Shadow -->
+                    <g transform="translate(1, 1)" opacity="0.3">
+                        <rect x="10" y="8" width="4" height="16" rx="1" fill="#bf360c"/>
+                        <rect x="8" y="8" width="8" height="4" rx="1" fill="#bf360c"/>
+                    </g>
+                    
+                    <!-- Main 3D Logo Icon -->
+                    <g filter="url(#shadow3D500)">
+                        <!-- T Shape with 3D effect -->
+                        <rect x="10" y="7" width="4" height="16" rx="1" fill="url(#orange3DGradient500)" stroke="url(#orangeLight500)" stroke-width="0.5"/>
+                        <rect x="8" y="7" width="8" height="4" rx="1" fill="url(#orange3DGradient500)" stroke="url(#orangeLight500)" stroke-width="0.5"/>
+                        
+                        <!-- 3D Highlight -->
+                        <rect x="10.5" y="7.5" width="1" height="15" rx="0.5" fill="url(#orangeLight500)" opacity="0.8"/>
+                        <rect x="8.5" y="7.5" width="7" height="1.5" rx="0.5" fill="url(#orangeLight500)" opacity="0.8"/>
+                    </g>
                 </svg>
             </div>
             
