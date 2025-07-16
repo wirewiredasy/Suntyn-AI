@@ -3,7 +3,7 @@
  * Dynamic Icon Loader - Updates tool icons based on tool name
  */
 
-class IconManager {
+class ToolIconLoader {
     constructor() {
         this.initialized = false;
         this.init();
@@ -64,8 +64,8 @@ class IconManager {
 
 // Initialize icon manager when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
-    if (!window.iconManager) {
-        window.iconManager = new IconManager();
+    if (!window.toolIconLoader) {
+        window.toolIconLoader = new ToolIconLoader();
     }
     
     // Initialize Lucide icons

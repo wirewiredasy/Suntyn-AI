@@ -51,7 +51,7 @@ class Config:
             'tools': [
                 'pan-form-filler', 'aadhaar-explainer', 'rent-agreement-reader',
                 'ration-card-checker', 'doc-translator', 'legal-term-explainer',
-                'signature-extractor', 'stamp-paper-splitter', 'aadhaar-masker',
+                'govt-signature-extractor', 'stamp-paper-splitter', 'aadhaar-masker',
                 'govt-format-converter'
             ]
         },

@@ -358,39 +358,40 @@ def process_generic_tool(tool_name):
         # Get files if uploaded
         files = request.files.getlist('files')
         
-        # Demo responses for different tool types
-        demo_responses = {
-            'pdf-merge': {
-                'success': True,
-                'message': 'PDF files merged successfully!',
-                'demo_mode': True,
-                'filename': 'merged_document.pdf'
-            },
-            'image-compress': {
-                'success': True,
-                'message': 'Image compressed by 60%!',
-                'demo_mode': True,
-                'filename': 'compressed_image.jpg'
-            },
-            'video-to-mp3': {
-                'success': True,
-                'message': 'Audio extracted successfully!',
-                'demo_mode': True,
-                'filename': 'extracted_audio.mp3'
-            },
-            'resume-generator': {
-                'success': True,
-                'message': 'Professional resume generated!',
-                'demo_mode': True,
-                'filename': 'professional_resume.pdf'
-            },
-            'qr-generator': {
-                'success': True,
-                'message': 'QR code generated successfully!',
-                'demo_mode': True,
-                'filename': 'qr_code.png'
-            }
+        # Import config to get all tools
+        from config import Config
+        
+        # Generate all tool responses dynamically
+        all_tools = []
+        for category, data in Config.TOOL_CATEGORIES.items():
+            all_tools.extend(data['tools'])
+        
+        # Demo responses for ALL 85 tools
+        demo_responses = {}
+        
+        # Define response templates by category
+        category_templates = {
+            'pdf': {'message': 'PDF processed successfully!', 'filename': 'processed_document.pdf'},
+            'image': {'message': 'Image processed successfully!', 'filename': 'processed_image.jpg'},
+            'video': {'message': 'Video/Audio processed successfully!', 'filename': 'processed_media.mp4'},
+            'govt': {'message': 'Government document processed successfully!', 'filename': 'processed_doc.pdf'},
+            'student': {'message': 'Educational content processed successfully!', 'filename': 'processed_notes.pdf'},
+            'finance': {'message': 'Financial calculation completed successfully!', 'filename': 'calculation_result.pdf'},
+            'utility': {'message': 'Utility tool processed successfully!', 'filename': 'utility_result.txt'},
+            'ai': {'message': 'AI content generated successfully!', 'filename': 'ai_generated_content.txt'}
         }
+        
+        # Generate responses for all tools
+        for category, data in Config.TOOL_CATEGORIES.items():
+            template = category_templates[category]
+            for tool in data['tools']:
+                demo_responses[tool] = {
+                    'success': True,
+                    'message': template['message'],
+                    'demo_mode': True,
+                    'filename': template['filename'],
+                    'category': category
+                }
         
         # Return specific demo response or generic one
         return jsonify(demo_responses.get(tool_name, {

@@ -246,8 +246,8 @@ class IconManager {
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize Icon Manager
     if (!window.iconManager) {
-        window.iconManager = new window.IconManager();
-        window.iconManager.init();
+        window.iconManager = new IconManager();
+        window.iconManager.updateAllIcons();
     }
 });
 
