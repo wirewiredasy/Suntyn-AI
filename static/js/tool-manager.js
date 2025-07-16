@@ -5,6 +5,69 @@ document.addEventListener('DOMContentLoaded', function() {
     // Get current tool name from page
     const currentTool = window.location.pathname.split('/').pop();
     console.log('Current tool:', currentTool);
+
+// Tool-specific configurations
+function getToolConfig(toolName) {
+    const configs = {
+        'pdf-merge': {
+            acceptedTypes: '.pdf',
+            maxFiles: 50,
+            minFiles: 2,
+            supportedFormats: ['application/pdf'],
+            processingMessage: 'Merging PDFs...',
+            successMessage: 'PDFs merged successfully!'
+        },
+        'image-compress': {
+            acceptedTypes: 'image/*',
+            maxFiles: 20,
+            minFiles: 1,
+            supportedFormats: ['image/jpeg', 'image/png', 'image/webp'],
+            processingMessage: 'Compressing images...',
+            successMessage: 'Images compressed successfully!'
+        },
+        'video-to-mp3': {
+            acceptedTypes: 'video/*',
+            maxFiles: 5,
+            minFiles: 1,
+            supportedFormats: ['video/mp4', 'video/avi', 'video/mov'],
+            processingMessage: 'Extracting audio...',
+            successMessage: 'Audio extracted successfully!'
+        },
+        'resume-generator': {
+            acceptedTypes: '',
+            maxFiles: 0,
+            minFiles: 0,
+            supportedFormats: [],
+            processingMessage: 'Generating resume...',
+            successMessage: 'Resume generated successfully!'
+        }
+    };
+    
+    return configs[toolName] || {
+        acceptedTypes: '*',
+        maxFiles: 10,
+        minFiles: 1,
+        supportedFormats: [],
+        processingMessage: 'Processing...',
+        successMessage: 'Process completed successfully!'
+    };
+}
+
+function applyToolConfig(config, fileInput, fileUploadArea) {
+    if (fileInput && config.acceptedTypes) {
+        fileInput.setAttribute('accept', config.acceptedTypes);
+    }
+    
+    if (fileUploadArea) {
+        const existingText = fileUploadArea.querySelector('p');
+        if (existingText && config.supportedFormats.length > 0) {
+            const formatText = config.supportedFormats.map(f => f.split('/')[1].toUpperCase()).join(', ');
+            existingText.textContent = `Drag and drop your files here, or click to browse (${formatText} supported)`;
+        }
+    }
+}
+
+
     
     // Enhanced file upload and processing
     if (currentTool && currentTool !== '' && currentTool !== 'tools') {
@@ -66,12 +129,20 @@ function getToolEndpoint(toolName) {
 }
 
 function setupToolProcessing(toolName) {
+    // Tool-specific initialization
+    const toolConfig = getToolConfig(toolName);
+    
     const fileInput = document.getElementById('file-input');
     const fileSelectBtn = document.getElementById('file-select-btn');
     const processBtn = document.getElementById('process-btn');
     const fileUploadArea = document.getElementById('file-upload-area');
     const fileList = document.getElementById('file-list');
     const toolForm = document.getElementById('tool-form');
+    
+    // Apply tool-specific configurations
+    if (toolConfig) {
+        applyToolConfig(toolConfig, fileInput, fileUploadArea);
+    }
     
     let selectedFiles = [];
     

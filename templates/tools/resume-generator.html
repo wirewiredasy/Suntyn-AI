@@ -1,268 +1,183 @@
 {% extends "base.html" %}
 
-{% block title %}AI Resume Generator - Create Professional Resumes | Toolora AI{% endblock %}
+{% block title %}AI Resume Generator - Create Professional Resume - Toolora AI{% endblock %}
 
 {% block content %}
-<div class="container mx-auto px-4 py-8">
-    <!-- Header -->
-    <div class="text-center mb-12">
-        <div class="w-16 h-16 rounded-full bg-violet-100 dark:bg-violet-900 flex items-center justify-center mx-auto mb-4">
-            <i data-lucide="brain" class="w-8 h-8 text-violet-600 dark:text-violet-400"></i>
-        </div>
-        <h1 class="text-4xl md:text-5xl font-bold text-gray-800 dark:text-white mb-4">
-            AI Resume Generator
-        </h1>
-        <p class="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-            Create professional, ATS-friendly resumes in minutes with our AI-powered generator
-        </p>
-    </div>
-
-    <!-- Resume Builder -->
-    <div class="max-w-4xl mx-auto">
-        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-8">
-            <div x-data="resumeBuilder()" x-init="init()">
-                <!-- Step 1: Personal Information -->
-                <div x-show="step === 1" class="space-y-6">
-                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">Personal Information</h2>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Full Name *</label>
-                            <input type="text" x-model="personalInfo.name" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-violet-500 dark:bg-gray-700 dark:text-white">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email Address *</label>
-                            <input type="email" x-model="personalInfo.email" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-violet-500 dark:bg-gray-700 dark:text-white">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Phone Number *</label>
-                            <input type="tel" x-model="personalInfo.phone" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-violet-500 dark:bg-gray-700 dark:text-white">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Location</label>
-                            <input type="text" x-model="personalInfo.location" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-violet-500 dark:bg-gray-700 dark:text-white">
-                        </div>
-                        <div class="md:col-span-2">
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">LinkedIn Profile</label>
-                            <input type="url" x-model="personalInfo.linkedin" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-violet-500 dark:bg-gray-700 dark:text-white">
-                        </div>
-                    </div>
-                    
-                    <div class="flex justify-end">
-                        <button @click="nextStep()" class="btn btn-primary px-8 py-3">
-                            Next: Professional Summary
-                            <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
-                        </button>
-                    </div>
+<div class="min-h-screen bg-gradient-to-br from-purple-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 pt-20">
+    <div class="container mx-auto px-4 py-8">
+        <div class="max-w-4xl mx-auto">
+            <!-- Resume Generator Header -->
+            <div class="text-center mb-8">
+                <div class="w-20 h-20 mx-auto mb-4 rounded-3xl bg-purple-100 dark:bg-purple-900 flex items-center justify-center">
+                    <i data-lucide="briefcase" class="w-10 h-10 text-purple-600 dark:text-purple-400"></i>
                 </div>
+                <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">AI Resume Generator</h1>
+                <p class="text-xl text-gray-600 dark:text-gray-300">Create a professional resume in minutes with AI assistance</p>
+            </div>
 
-                <!-- Step 2: Professional Summary -->
-                <div x-show="step === 2" class="space-y-6">
-                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">Professional Summary</h2>
-                    
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Job Title/Position</label>
-                        <input type="text" x-model="summary.jobTitle" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-violet-500 dark:bg-gray-700 dark:text-white">
+            <!-- Resume Builder Interface -->
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 mb-8">
+                <div x-data="resumeBuilder()" class="space-y-6">
+                    <!-- Step Indicator -->
+                    <div class="flex items-center justify-between mb-8">
+                        <div class="flex items-center space-x-4">
+                            <div class="flex items-center space-x-2" :class="step >= 1 ? 'text-purple-600' : 'text-gray-400'">
+                                <div class="w-8 h-8 rounded-full flex items-center justify-center" :class="step >= 1 ? 'bg-purple-600 text-white' : 'bg-gray-200 text-gray-500'">1</div>
+                                <span class="font-medium">Personal Info</span>
+                            </div>
+                            <div class="w-8 h-px bg-gray-300"></div>
+                            <div class="flex items-center space-x-2" :class="step >= 2 ? 'text-purple-600' : 'text-gray-400'">
+                                <div class="w-8 h-8 rounded-full flex items-center justify-center" :class="step >= 2 ? 'bg-purple-600 text-white' : 'bg-gray-200 text-gray-500'">2</div>
+                                <span class="font-medium">Experience</span>
+                            </div>
+                            <div class="w-8 h-px bg-gray-300"></div>
+                            <div class="flex items-center space-x-2" :class="step >= 3 ? 'text-purple-600' : 'text-gray-400'">
+                                <div class="w-8 h-8 rounded-full flex items-center justify-center" :class="step >= 3 ? 'bg-purple-600 text-white' : 'bg-gray-200 text-gray-500'">3</div>
+                                <span class="font-medium">Generate</span>
+                            </div>
+                        </div>
                     </div>
-                    
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Years of Experience</label>
-                        <select x-model="summary.experience" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-violet-500 dark:bg-gray-700 dark:text-white">
-                            <option value="0-1">0-1 years</option>
-                            <option value="2-5">2-5 years</option>
-                            <option value="5-10">5-10 years</option>
-                            <option value="10+">10+ years</option>
-                        </select>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Professional Summary</label>
-                        <textarea x-model="summary.description" rows="4" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-violet-500 dark:bg-gray-700 dark:text-white" placeholder="Brief description of your professional background and key achievements"></textarea>
-                    </div>
-                    
-                    <div class="flex justify-between">
-                        <button @click="prevStep()" class="btn btn-outline px-8 py-3">
-                            <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i>
-                            Previous
-                        </button>
-                        <button @click="nextStep()" class="btn btn-primary px-8 py-3">
-                            Next: Work Experience
-                            <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
-                        </button>
-                    </div>
-                </div>
 
-                <!-- Step 3: Work Experience -->
-                <div x-show="step === 3" class="space-y-6">
-                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">Work Experience</h2>
-                    
-                    <template x-for="(job, index) in workExperience" :key="index">
-                        <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 space-y-4">
-                            <div class="flex justify-between items-start">
-                                <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Job <span x-text="index + 1"></span></h3>
-                                <button @click="removeJob(index)" class="text-red-500 hover:text-red-700">
-                                    <i data-lucide="trash-2" class="w-4 h-4"></i>
-                                </button>
-                            </div>
-                            
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Job Title</label>
-                                    <input type="text" x-model="job.title" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-violet-500 dark:bg-gray-700 dark:text-white">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Company</label>
-                                    <input type="text" x-model="job.company" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-violet-500 dark:bg-gray-700 dark:text-white">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Start Date</label>
-                                    <input type="month" x-model="job.startDate" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-violet-500 dark:bg-gray-700 dark:text-white">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">End Date</label>
-                                    <input type="month" x-model="job.endDate" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-violet-500 dark:bg-gray-700 dark:text-white">
-                                </div>
-                            </div>
-                            
+                    <!-- Step 1: Personal Information -->
+                    <div x-show="step === 1" class="space-y-4">
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Personal Information</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Job Description</label>
-                                <textarea x-model="job.description" rows="3" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-violet-500 dark:bg-gray-700 dark:text-white" placeholder="Describe your responsibilities and achievements"></textarea>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Full Name *</label>
+                                <input type="text" x-model="personalInfo.name" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700" placeholder="John Doe">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email *</label>
+                                <input type="email" x-model="personalInfo.email" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700" placeholder="john@example.com">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Phone</label>
+                                <input type="tel" x-model="personalInfo.phone" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700" placeholder="+1 (555) 123-4567">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Location</label>
+                                <input type="text" x-model="personalInfo.location" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700" placeholder="New York, NY">
                             </div>
                         </div>
-                    </template>
-                    
-                    <button @click="addJob()" class="btn btn-outline w-full py-3">
-                        <i data-lucide="plus" class="w-4 h-4 mr-2"></i>
-                        Add Another Job
-                    </button>
-                    
-                    <div class="flex justify-between">
-                        <button @click="prevStep()" class="btn btn-outline px-8 py-3">
-                            <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i>
-                            Previous
-                        </button>
-                        <button @click="nextStep()" class="btn btn-primary px-8 py-3">
-                            Next: Education & Skills
-                            <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
-                        </button>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Professional Summary</label>
+                            <textarea x-model="personalInfo.summary" rows="4" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700" placeholder="Brief overview of your professional background and career goals..."></textarea>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Step 4: Education & Skills -->
-                <div x-show="step === 4" class="space-y-6">
-                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">Education & Skills</h2>
-                    
-                    <!-- Education -->
-                    <div>
-                        <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Education</h3>
-                        <template x-for="(edu, index) in education" :key="index">
-                            <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 space-y-4 mb-4">
-                                <div class="flex justify-between items-start">
-                                    <h4 class="text-md font-medium text-gray-800 dark:text-white">Education <span x-text="index + 1"></span></h4>
-                                    <button @click="removeEducation(index)" class="text-red-500 hover:text-red-700">
-                                        <i data-lucide="trash-2" class="w-4 h-4"></i>
-                                    </button>
-                                </div>
-                                
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Degree</label>
-                                        <input type="text" x-model="edu.degree" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-violet-500 dark:bg-gray-700 dark:text-white">
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Institution</label>
-                                        <input type="text" x-model="edu.institution" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-violet-500 dark:bg-gray-700 dark:text-white">
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Year</label>
-                                        <input type="number" x-model="edu.year" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-violet-500 dark:bg-gray-700 dark:text-white">
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">GPA (optional)</label>
-                                        <input type="text" x-model="edu.gpa" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-violet-500 dark:bg-gray-700 dark:text-white">
-                                    </div>
-                                </div>
-                            </div>
-                        </template>
-                        
-                        <button @click="addEducation()" class="btn btn-outline w-full py-3">
-                            <i data-lucide="plus" class="w-4 h-4 mr-2"></i>
-                            Add Education
-                        </button>
-                    </div>
-                    
-                    <!-- Skills -->
-                    <div>
-                        <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Skills</h3>
+                    <!-- Step 2: Experience -->
+                    <div x-show="step === 2" class="space-y-4">
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Professional Experience</h3>
                         <div class="space-y-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Technical Skills</label>
-                                <input type="text" x-model="skillsInput.technical" @keyup.enter="addSkill('technical')" placeholder="e.g., Python, JavaScript, React (press Enter to add)" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-violet-500 dark:bg-gray-700 dark:text-white">
-                                <div class="flex flex-wrap gap-2 mt-2">
-                                    <template x-for="skill in skills.technical" :key="skill">
-                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200">
-                                            <span x-text="skill"></span>
-                                            <button @click="removeSkill('technical', skill)" class="ml-2 text-blue-600 hover:text-blue-800">
-                                                <i data-lucide="x" class="w-3 h-3"></i>
-                                            </button>
-                                        </span>
-                                    </template>
+                            <template x-for="(job, index) in experience" :key="index">
+                                <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 border border-gray-200 dark:border-gray-600">
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Job Title</label>
+                                            <input type="text" x-model="job.title" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800" placeholder="Software Engineer">
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Company</label>
+                                            <input type="text" x-model="job.company" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800" placeholder="Tech Corp">
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Start Date</label>
+                                            <input type="text" x-model="job.startDate" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800" placeholder="Jan 2020">
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">End Date</label>
+                                            <input type="text" x-model="job.endDate" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800" placeholder="Present">
+                                        </div>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Description</label>
+                                        <textarea x-model="job.description" rows="3" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800" placeholder="Describe your responsibilities and achievements..."></textarea>
+                                    </div>
+                                    <button @click="removeExperience(index)" class="text-red-500 hover:text-red-700 text-sm">Remove</button>
                                 </div>
-                            </div>
-                            
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Soft Skills</label>
-                                <input type="text" x-model="skillsInput.soft" @keyup.enter="addSkill('soft')" placeholder="e.g., Leadership, Communication, Problem-solving" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-violet-500 dark:bg-gray-700 dark:text-white">
-                                <div class="flex flex-wrap gap-2 mt-2">
-                                    <template x-for="skill in skills.soft" :key="skill">
-                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200">
-                                            <span x-text="skill"></span>
-                                            <button @click="removeSkill('soft', skill)" class="ml-2 text-green-600 hover:text-green-800">
-                                                <i data-lucide="x" class="w-3 h-3"></i>
-                                            </button>
-                                        </span>
-                                    </template>
+                            </template>
+                        </div>
+                        <button @click="addExperience()" class="btn btn-outline border-purple-600 text-purple-600 hover:bg-purple-600 hover:text-white">
+                            <i data-lucide="plus" class="w-4 h-4 mr-2"></i>
+                            Add Experience
+                        </button>
+                    </div>
+
+                    <!-- Step 3: Generate Resume -->
+                    <div x-show="step === 3" class="space-y-4">
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Generate Your Resume</h3>
+                        <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Resume Template</label>
+                                    <select x-model="resumeOptions.template" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800">
+                                        <option value="modern">Modern</option>
+                                        <option value="professional">Professional</option>
+                                        <option value="creative">Creative</option>
+                                        <option value="minimal">Minimal</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Color Scheme</label>
+                                    <select x-model="resumeOptions.colorScheme" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800">
+                                        <option value="blue">Blue</option>
+                                        <option value="green">Green</option>
+                                        <option value="purple">Purple</option>
+                                        <option value="black">Black</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    
-                    <div class="flex justify-between">
-                        <button @click="prevStep()" class="btn btn-outline px-8 py-3">
-                            <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i>
+
+                    <!-- Navigation Buttons -->
+                    <div class="flex justify-between pt-6">
+                        <button x-show="step > 1" @click="step--" class="btn btn-outline border-gray-300 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <i data-lucide="chevron-left" class="w-4 h-4 mr-2"></i>
                             Previous
                         </button>
-                        <button @click="generateResume()" class="btn btn-primary px-8 py-3" :disabled="generating">
-                            <span x-show="!generating">
-                                <i data-lucide="brain" class="w-4 h-4 mr-2"></i>
-                                Generate Resume
-                            </span>
-                            <span x-show="generating">Generating...</span>
-                        </button>
+                        <div x-show="step < 3">
+                            <button @click="step++" class="btn btn-primary bg-purple-600 hover:bg-purple-700 ml-auto">
+                                Next
+                                <i data-lucide="chevron-right" class="w-4 h-4 ml-2"></i>
+                            </button>
+                        </div>
+                        <div x-show="step === 3">
+                            <button @click="generateResume()" 
+                                    :disabled="processing" 
+                                    class="btn btn-primary bg-purple-600 hover:bg-purple-700 btn-lg"
+                                    :class="{ 'loading': processing }">
+                                <i data-lucide="briefcase" class="w-5 h-5 mr-2" x-show="!processing"></i>
+                                <span x-text="processing ? 'Generating...' : 'Generate Resume'"></span>
+                            </button>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Step 5: Download -->
-                <div x-show="step === 5" class="text-center space-y-6">
-                    <div class="w-16 h-16 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center mx-auto">
-                        <i data-lucide="check" class="w-8 h-8 text-green-600 dark:text-green-400"></i>
+                    <!-- Progress -->
+                    <div x-show="processing" class="space-y-4">
+                        <div class="bg-purple-200 dark:bg-purple-700 rounded-full h-3">
+                            <div class="bg-purple-600 h-3 rounded-full transition-all duration-300" :style="`width: ${progress}%`"></div>
+                        </div>
+                        <p class="text-center text-purple-600 dark:text-purple-300 font-medium" x-text="`Generating resume... ${progress}%`"></p>
                     </div>
-                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white">
-                        Resume Generated Successfully!
-                    </h2>
-                    <p class="text-gray-600 dark:text-gray-300">
-                        Your professional resume has been created and is ready for download
-                    </p>
-                    
-                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                        <a :href="downloadUrl" class="btn btn-primary btn-lg px-8 py-3" download>
-                            <i data-lucide="download" class="w-5 h-5 mr-2"></i>
-                            Download Resume
-                        </a>
-                        <button @click="reset()" class="btn btn-outline btn-lg px-8 py-3">
-                            <i data-lucide="rotate-ccw" class="w-5 h-5 mr-2"></i>
-                            Create Another Resume
-                        </button>
+
+                    <!-- Result -->
+                    <div x-show="result" class="space-y-4">
+                        <div class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700 rounded-lg p-6">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <i data-lucide="check-circle" class="w-6 h-6 text-green-500"></i>
+                                    <div>
+                                        <h4 class="font-semibold text-green-800 dark:text-green-200">Resume Generated Successfully!</h4>
+                                        <p class="text-green-700 dark:text-green-300">Your professional resume is ready for download</p>
+                                    </div>
+                                </div>
+                                <a x-bind:href="result?.download_url" class="btn btn-primary bg-green-600 hover:bg-green-700">
+                                    <i data-lucide="download" class="w-4 h-4 mr-2"></i>
+                                    Download Resume
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -274,24 +189,17 @@
 function resumeBuilder() {
     return {
         step: 1,
-        generating: false,
-        downloadUrl: '',
-        
+        processing: false,
+        progress: 0,
+        result: null,
         personalInfo: {
             name: '',
             email: '',
             phone: '',
             location: '',
-            linkedin: ''
+            summary: ''
         },
-        
-        summary: {
-            jobTitle: '',
-            experience: '2-5',
-            description: ''
-        },
-        
-        workExperience: [
+        experience: [
             {
                 title: '',
                 company: '',
@@ -300,44 +208,13 @@ function resumeBuilder() {
                 description: ''
             }
         ],
-        
-        education: [
-            {
-                degree: '',
-                institution: '',
-                year: '',
-                gpa: ''
-            }
-        ],
-        
-        skills: {
-            technical: [],
-            soft: []
+        resumeOptions: {
+            template: 'modern',
+            colorScheme: 'blue'
         },
-        
-        skillsInput: {
-            technical: '',
-            soft: ''
-        },
-        
-        init() {
-            // Initialize component
-        },
-        
-        nextStep() {
-            if (this.step < 5) {
-                this.step++;
-            }
-        },
-        
-        prevStep() {
-            if (this.step > 1) {
-                this.step--;
-            }
-        },
-        
-        addJob() {
-            this.workExperience.push({
+
+        addExperience() {
+            this.experience.push({
                 title: '',
                 company: '',
                 startDate: '',
@@ -345,92 +222,47 @@ function resumeBuilder() {
                 description: ''
             });
         },
-        
-        removeJob(index) {
-            this.workExperience.splice(index, 1);
+
+        removeExperience(index) {
+            this.experience.splice(index, 1);
         },
-        
-        addEducation() {
-            this.education.push({
-                degree: '',
-                institution: '',
-                year: '',
-                gpa: ''
-            });
-        },
-        
-        removeEducation(index) {
-            this.education.splice(index, 1);
-        },
-        
-        addSkill(type) {
-            const skill = this.skillsInput[type].trim();
-            if (skill && !this.skills[type].includes(skill)) {
-                this.skills[type].push(skill);
-                this.skillsInput[type] = '';
-            }
-        },
-        
-        removeSkill(type, skill) {
-            const index = this.skills[type].indexOf(skill);
-            if (index > -1) {
-                this.skills[type].splice(index, 1);
-            }
-        },
-        
+
         async generateResume() {
-            this.generating = true;
-            
+            this.processing = true;
+            this.progress = 0;
+            this.result = null;
+
             try {
                 const resumeData = {
-                    name: this.personalInfo.name,
-                    email: this.personalInfo.email,
-                    phone: this.personalInfo.phone,
-                    location: this.personalInfo.location,
-                    linkedin: this.personalInfo.linkedin,
-                    summary: this.summary,
-                    experience: this.workExperience,
-                    education: this.education,
-                    skills: [...this.skills.technical, ...this.skills.soft]
+                    personal_info: this.personalInfo,
+                    experience: this.experience,
+                    options: this.resumeOptions
                 };
-                
-                const response = await fetch('/api/ai/resume', {
+
+                const response = await fetch('/api/ai/generate-resume', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify(resumeData)
                 });
-                
+
                 const result = await response.json();
-                
+                this.progress = 100;
+
                 if (result.success) {
-                    this.downloadUrl = result.download_url;
-                    this.step = 5;
+                    this.result = result;
                 } else {
-                    throw new Error(result.error || 'Failed to generate resume');
+                    throw new Error(result.error || 'Resume generation failed');
                 }
-                
             } catch (error) {
+                console.error('Error:', error);
                 alert('Error generating resume: ' + error.message);
             } finally {
-                this.generating = false;
+                this.processing = false;
             }
-        },
-        
-        reset() {
-            this.step = 1;
-            this.generating = false;
-            this.downloadUrl = '';
-            // Reset all form data
-            this.personalInfo = { name: '', email: '', phone: '', location: '', linkedin: '' };
-            this.summary = { jobTitle: '', experience: '2-5', description: '' };
-            this.workExperience = [{ title: '', company: '', startDate: '', endDate: '', description: '' }];
-            this.education = [{ degree: '', institution: '', year: '', gpa: '' }];
-            this.skills = { technical: [], soft: [] };
-            this.skillsInput = { technical: '', soft: '' };
         }
-    };
+    }
 }
 </script>
 {% endblock %}

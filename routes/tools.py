@@ -129,14 +129,26 @@ def tool_page(tool_name):
             # Return 404 if tool not found anywhere
             abort(404)
 
-    # Always use generic template for consistency and working interface
-    print(f"DEBUG: Loading tool {tool_name} with category {tool_category}")
-    return render_template('tools/generic_tool.html',
-                         tool_name=tool_name,
-                         tool_category=tool_category,
-                         tool_info=tool_info,
-                         firebase_api_key=os.environ.get("FIREBASE_API_KEY", ""),
-                         firebase_project_id=os.environ.get("FIREBASE_PROJECT_ID", ""),
-                         firebase_app_id=os.environ.get("FIREBASE_APP_ID", ""))
+    # Try to use specific template for the tool, fallback to generic
+    try:
+        specific_template = f'tools/{tool_name}.html'
+        print(f"DEBUG: Trying to load specific template: {specific_template}")
+        return render_template(specific_template,
+                             tool_name=tool_name,
+                             tool_category=tool_category,
+                             tool_info=tool_info,
+                             firebase_api_key=os.environ.get("FIREBASE_API_KEY", ""),
+                             firebase_project_id=os.environ.get("FIREBASE_PROJECT_ID", ""),
+                             firebase_app_id=os.environ.get("FIREBASE_APP_ID", ""))
+    except:
+        # Fallback to generic template if specific doesn't exist
+        print(f"DEBUG: Using generic template for {tool_name}")
+        return render_template('tools/generic_tool.html',
+                             tool_name=tool_name,
+                             tool_category=tool_category,
+                             tool_info=tool_info,
+                             firebase_api_key=os.environ.get("FIREBASE_API_KEY", ""),
+                             firebase_project_id=os.environ.get("FIREBASE_PROJECT_ID", ""),
+                             firebase_app_id=os.environ.get("FIREBASE_APP_ID", ""))
 
 # All tools use generic template through main route /<tool_name>
