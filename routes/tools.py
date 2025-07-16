@@ -82,6 +82,7 @@ def index():
     print(f"DEBUG: Found {len(tools)} tools")  # Debug line
     for tool in tools[:3]:
         print(f"DEBUG: Tool {tool.name} - {tool.display_name}")  # Debug line
+        print(f"DEBUG: Tool category: {tool.category.name if tool.category else 'None'}")  # Debug line
     
     return render_template('tools/index.html',
                          categories=Config.TOOL_CATEGORIES,
