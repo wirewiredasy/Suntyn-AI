@@ -87,11 +87,13 @@ from routes.main import main_bp
 from routes.tools import tools_bp
 from routes.auth import auth_bp
 from routes.api import api_bp
+from routes.enhanced_api import api_bp as enhanced_api_bp
 
 app.register_blueprint(main_bp)
 app.register_blueprint(tools_bp, url_prefix='/tools')
 app.register_blueprint(auth_bp, url_prefix='/auth')
 app.register_blueprint(api_bp, url_prefix='/api')
+app.register_blueprint(enhanced_api_bp, url_prefix='/enhanced_api')
 
 with app.app_context():
     # Import models here so their tables are created

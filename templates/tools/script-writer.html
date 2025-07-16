@@ -1,13 +1,13 @@
-{%% extends "base.html" %%}
+{% extends "base.html" }%
 
-{%% block title %%}Script Writer - Toolora AI{%% endblock %%}
+{% block title }%Script Writer - Toolora AI{% endblock }%
 
-{%% block head %%}
+{% block head }%
 <link rel="stylesheet" href="{{ url_for('static', filename='css/tool-specific-styles.css') }}">
 <script src="{{ url_for('static', filename='js/tool-specific-handlers.js') }}"></script>
-{%% endblock %%}
+{% endblock }%
 
-{%% block content %%}
+{% block content }%
 <div class="min-h-screen ai-gradient dark:from-gray-900 dark:to-gray-800 pt-20">
     <div class="container mx-auto px-4 py-8">
         <div class="max-w-4xl mx-auto">
@@ -235,4 +235,4 @@
         });
     });
 </script>
-{%% endblock %%}
+{% endblock }%

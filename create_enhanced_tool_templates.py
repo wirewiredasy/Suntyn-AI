@@ -151,11 +151,11 @@ def create_enhanced_template(tool_name, category_id, category_data):
     if config['file_types']:
         file_types_html = f"Supported formats: {', '.join(config['file_types'])}"
     
-    template_content = f'''{{%% extends "base.html" %%}}
+    template_content = f'''{% extends "base.html" %}
 
-{{%% block title %%}}{config['title']} - Toolora AI{{%% endblock %%}}
+{% block title %}{config['title']} - Toolora AI{% endblock %}
 
-{{%% block head %%}}
+{% block head %}
 <link rel="stylesheet" href="{{{{ url_for('static', filename='css/tool-specific-styles.css') }}}}">
 <script src="{{{{ url_for('static', filename='js/tool-specific-handlers.js') }}}}"></script>
 {{%% endblock %%}}
