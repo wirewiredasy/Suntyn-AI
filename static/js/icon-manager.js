@@ -2,18 +2,18 @@
 class IconManager {
     constructor() {
         this.iconVariants = {
-            'toolora-16': '/static/images/toolora-search-variants.svg#toolora-search-16',
-            'toolora-24': '/static/images/toolora-search-variants.svg#toolora-search-24',
-            'toolora-32': '/static/images/toolora-search-variants.svg#toolora-search-32',
-            'toolora-48': '/static/images/toolora-search-variants.svg#toolora-search-48',
-            'toolora-64': '/static/images/toolora-search-variants.svg#toolora-search-square',
-            'toolora-mono-minimal': '/static/images/toolora-monogram.svg#toolora-mono-minimal',
-            'toolora-square-badge': '/static/images/toolora-monogram.svg#toolora-square-badge',
-            'toolora-circle-badge': '/static/images/toolora-monogram.svg#toolora-circle-badge',
-            'toolora-modern-square': '/static/images/toolora-monogram.svg#toolora-modern-square',
-            'toolora-social-square': '/static/images/toolora-social-icons.svg#toolora-social-square',
-            'toolora-social-rect': '/static/images/toolora-social-icons.svg#toolora-social-rect',
-            'toolora-profile-circle': '/static/images/toolora-social-icons.svg#toolora-profile-circle'
+            'toolora-16': '/static/images/toolora-compact-icon.svg',
+            'toolora-24': '/static/images/toolora-compact-icon.svg',
+            'toolora-32': '/static/images/toolora-compact-icon.svg',
+            'toolora-48': '/static/images/toolora-brand-new-logo.svg',
+            'toolora-64': '/static/images/toolora-brand-new-logo.svg',
+            'toolora-mono-minimal': '/static/images/toolora-compact-icon.svg',
+            'toolora-square-badge': '/static/images/toolora-compact-icon.svg',
+            'toolora-circle-badge': '/static/images/toolora-compact-icon.svg',
+            'toolora-modern-square': '/static/images/toolora-brand-new-logo.svg',
+            'toolora-social-square': '/static/images/toolora-social-logo.svg',
+            'toolora-social-rect': '/static/images/toolora-social-logo.svg',
+            'toolora-profile-circle': '/static/images/toolora-social-logo.svg'
         };
         this.init();
     }
