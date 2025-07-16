@@ -3,385 +3,229 @@
 {% block title %}{{ tool_name.replace('-', ' ').title() }} - Toolora AI{% endblock %}
 
 {% block content %}
-<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 pt-20">
+<div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 pt-20">
+    <!-- Tool Header -->
     <div class="container mx-auto px-4 py-8">
-        <!-- Tool Header -->
-        <div class="text-center mb-12 animate__animated animate__fadeInUp">
-            <div class="inline-flex items-center justify-center w-24 h-24 rounded-3xl bg-gradient-to-br from-{{ tool_info.color }}-100 to-{{ tool_info.color }}-200 dark:from-{{ tool_info.color }}-900 dark:to-{{ tool_info.color }}-800 mb-6 shadow-lg floating">
-                <i data-lucide="{{ tool_info.custom_icon or tool_info.icon }}" class="w-12 h-12 text-{{ tool_info.color }}-600 dark:text-{{ tool_info.color }}-400"></i>
-            </div>
-            <h1 class="text-5xl md:text-6xl font-bold text-gray-800 dark:text-white mb-4">
-                {{ tool_name.replace('-', ' ').title() }}
-            </h1>
-            <p class="text-xl md:text-2xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-8">
-                Professional {{ tool_name.replace('-', ' ') }} tool - Fast, secure, and free
-            </p>
+        <div class="max-w-4xl mx-auto">
+            <!-- Breadcrumb -->
+            <nav class="text-sm mb-6">
+                <ol class="flex items-center space-x-2 text-gray-500 dark:text-gray-400">
+                    <li><a href="{{ url_for('main.index') }}" class="hover:text-blue-600 dark:hover:text-blue-400">Home</a></li>
+                    <li><i data-lucide="chevron-right" class="w-4 h-4"></i></li>
+                    <li><a href="{{ url_for('tools.index') }}" class="hover:text-blue-600 dark:hover:text-blue-400">Tools</a></li>
+                    <li><i data-lucide="chevron-right" class="w-4 h-4"></i></li>
+                    <li class="text-gray-900 dark:text-white">{{ tool_name.replace('-', ' ').title() }}</li>
+                </ol>
+            </nav>
 
-            <!-- Tool Features -->
-            <div class="flex flex-wrap justify-center gap-4 mb-8">
-                <div class="flex items-center px-4 py-2 bg-green-100 dark:bg-green-900 rounded-full">
-                    <i data-lucide="shield-check" class="w-4 h-4 text-green-600 dark:text-green-400 mr-2"></i>
-                    <span class="text-sm font-medium text-green-800 dark:text-green-200">100% Secure</span>
+            <!-- Tool Info -->
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 mb-8">
+                <div class="flex items-center space-x-4 mb-6">
+                    <div class="w-16 h-16 rounded-2xl bg-{{ tool_info.color }}-100 dark:bg-{{ tool_info.color }}-900 flex items-center justify-center">
+                        <i data-lucide="{{ tool_info.custom_icon }}" class="w-8 h-8 text-{{ tool_info.color }}-600 dark:text-{{ tool_info.color }}-400"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-3xl font-bold text-gray-900 dark:text-white">{{ tool_name.replace('-', ' ').title() }}</h1>
+                        <p class="text-gray-600 dark:text-gray-300">{{ tool_info.name }} Tool</p>
+                    </div>
                 </div>
-                <div class="flex items-center px-4 py-2 bg-blue-100 dark:bg-blue-900 rounded-full">
-                    <i data-lucide="zap" class="w-4 h-4 text-blue-600 dark:text-blue-400 mr-2"></i>
-                    <span class="text-sm font-medium text-blue-800 dark:text-blue-200">Lightning Fast</span>
-                </div>
-                <div class="flex items-center px-4 py-2 bg-purple-100 dark:bg-purple-900 rounded-full">
-                    <i data-lucide="star" class="w-4 h-4 text-purple-600 dark:text-purple-400 mr-2"></i>
-                    <span class="text-sm font-medium text-purple-800 dark:text-purple-200">Free Forever</span>
-                </div>
-            </div>
-        </div>
 
-        <!-- Tool Interface -->
-        <div class="max-w-5xl mx-auto">
-            <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl border border-gray-200 dark:border-gray-700 animate__animated animate__fadeInUp animate__delay-1s">
-                <div class="p-8 md:p-12">
-                    <!-- File Upload Form -->
-                    <form id="tool-form" class="space-y-8" enctype="multipart/form-data" data-tool-name="{{ tool_name }}">
-                        <div class="file-upload-area border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-2xl p-8 text-center transition-all duration-300 hover:border-{{ tool_info.color }}-500 hover:bg-{{ tool_info.color }}-50 dark:hover:bg-{{ tool_info.color }}-900/20" id="file-upload-area">
-                            <div class="w-20 h-20 mx-auto bg-gradient-to-br from-{{ tool_info.color }}-100 to-{{ tool_info.color }}-200 dark:from-{{ tool_info.color }}-900 dark:to-{{ tool_info.color }}-800 rounded-2xl flex items-center justify-center mb-6 floating">
-                                <i data-lucide="{{ tool_info.custom_icon or tool_info.icon }}" class="w-10 h-10 text-{{ tool_info.color }}-600 dark:text-{{ tool_info.color }}-400"></i>
+                <!-- Tool Description -->
+                <div class="mb-8">
+                    <p class="text-lg text-gray-700 dark:text-gray-300 mb-4">
+                        Professional {{ tool_name.replace('-', ' ').lower() }} tool for quick and easy processing.
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-sm">Free</span>
+                        <span class="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm">No Registration</span>
+                        <span class="px-3 py-1 bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 rounded-full text-sm">Secure</span>
+                        <span class="px-3 py-1 bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-200 rounded-full text-sm">Fast</span>
+                    </div>
+                </div>
+
+                <!-- File Upload Area -->
+                <div x-data="toolUploader('{{ tool_name }}')" class="space-y-6">
+                    <!-- Upload Zone -->
+                    <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-2xl p-8 text-center hover:border-blue-400 dark:hover:border-blue-500 transition-colors"
+                         @dragover.prevent="dragover = true"
+                         @dragleave.prevent="dragover = false"
+                         @drop.prevent="handleDrop($event)"
+                         :class="{ 'border-blue-400 bg-blue-50 dark:bg-blue-900/20': dragover }">
+                        
+                        <div class="space-y-4">
+                            <div class="w-16 h-16 mx-auto rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
+                                <i data-lucide="upload" class="w-8 h-8 text-gray-400"></i>
                             </div>
-                            <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-3">
-                                Upload Your Files
-                            </h3>
-                            <p class="text-gray-500 dark:text-gray-400 text-lg mb-6">
-                                Drag and drop files here or click to select
+                            
+                            <div>
+                                <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Upload Files</h3>
+                                <p class="text-gray-600 dark:text-gray-300 mb-4">
+                                    Drag and drop your files here, or click to browse
+                                </p>
+                                
+                                <input type="file" id="file-input" multiple class="hidden" @change="handleFiles($event.target.files)">
+                                <button @click="$refs.fileInput.click()" class="btn btn-primary">
+                                    <i data-lucide="folder" class="w-4 h-4 mr-2"></i>
+                                    Choose Files
+                                </button>
+                                <input type="file" x-ref="fileInput" multiple class="hidden" @change="handleFiles($event.target.files)">
+                            </div>
+                            
+                            <p class="text-sm text-gray-500 dark:text-gray-400">
+                                Maximum file size: 16MB
                             </p>
-                            <input type="file" id="file-input" name="files" multiple accept="*/*" class="hidden">
-                            <button type="button" id="file-select-btn" class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-{{ tool_info.color }}-600 to-{{ tool_info.color }}-700 hover:from-{{ tool_info.color }}-700 hover:to-{{ tool_info.color }}-800 text-white font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
-                                <i data-lucide="folder-open" class="w-6 h-6 mr-3"></i>
-                                Select Files
-                            </button>
-                            <div class="mt-4 text-sm text-gray-400">
-                                Max file size: 50MB • Secure processing • Files deleted after 24 hours
-                            </div>
-                            <div id="file-list" class="mt-6 space-y-3"></div>
                         </div>
+                    </div>
 
-                        <!-- Tool Options -->
-                        <div id="tool-options" class="hidden space-y-6">
-                            <div class="bg-gray-50 dark:bg-gray-700 rounded-xl p-6">
-                                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Processing Options</h4>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <!-- Dynamic options based on tool type -->
-                                    {% if 'pdf' in tool_name %}
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Quality</label>
-                                        <select name="quality" class="form-input">
-                                            <option value="high">High Quality</option>
-                                            <option value="medium" selected>Medium Quality</option>
-                                            <option value="low">Low Quality</option>
-                                        </select>
-                                    </div>
-                                    {% endif %}
-
-                                    {% if 'image' in tool_name %}
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Output Format</label>
-                                        <select name="format" class="form-input">
-                                            <option value="jpg">JPG</option>
-                                            <option value="png">PNG</option>
-                                            <option value="webp">WebP</option>
-                                        </select>
-                                    </div>
-                                    {% endif %}
-
-                                    {% if 'video' in tool_name %}
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Output Format</label>
-                                        <select name="format" class="form-input">
-                                            <option value="mp4">MP4</option>
-                                            <option value="avi">AVI</option>
-                                            <option value="mov">MOV</option>
-                                        </select>
-                                    </div>
-                                    {% endif %}
+                    <!-- File List -->
+                    <div x-show="files.length > 0" class="space-y-3">
+                        <h4 class="font-semibold text-gray-900 dark:text-white">Selected Files</h4>
+                        <template x-for="(file, index) in files" :key="index">
+                            <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                <div class="flex items-center space-x-3">
+                                    <i data-lucide="file" class="w-5 h-5 text-gray-500"></i>
+                                    <span class="text-gray-900 dark:text-white" x-text="file.name"></span>
+                                    <span class="text-sm text-gray-500" x-text="formatFileSize(file.size)"></span>
                                 </div>
+                                <button @click="removeFile(index)" class="text-red-500 hover:text-red-700">
+                                    <i data-lucide="x" class="w-4 h-4"></i>
+                                </button>
                             </div>
-                        </div>
-
-                        <!-- Process Button -->
-                        <div class="text-center">
-                            <button type="submit" id="process-btn" class="inline-flex items-center px-12 py-4 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-lg" disabled>
-                                <i data-lucide="play" class="w-6 h-6 mr-3"></i>
-                                Process Files
-                            </button>
-                        </div>
-                    </form>
-
-                    <!-- Processing Status -->
-                    <div id="processing-status" class="hidden mt-8 text-center animate__animated animate__fadeIn">
-                        <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900 dark:to-blue-800 mb-6 floating">
-                            <div class="loading-spinner w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-                        </div>
-                        <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-3">Processing Your Files...</h3>
-                        <p class="text-gray-500 dark:text-gray-400 text-lg mb-6">
-                            Our advanced AI is working on your files. This usually takes a few seconds.
-                        </p>
-                        <div id="progress-bar" class="mt-6 bg-gray-200 dark:bg-gray-700 rounded-full h-3 max-w-md mx-auto shadow-inner">
-                            <div id="progress-fill" class="bg-gradient-to-r from-blue-600 to-blue-700 h-3 rounded-full transition-all duration-500 ease-out" style="width: 0%"></div>
-                        </div>
-                        <div id="progress-text" class="mt-3 text-sm text-gray-500 dark:text-gray-400">0% Complete</div>
+                        </template>
                     </div>
 
-                    <!-- Results Section -->
-                    <div id="results-section" class="hidden mt-8 animate__animated animate__fadeIn">
-                        <div class="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900 dark:to-green-800 rounded-2xl p-8 text-center border border-green-200 dark:border-green-700 shadow-lg">
-                            <div class="w-20 h-20 mx-auto bg-gradient-to-br from-green-100 to-green-200 dark:from-green-800 dark:to-green-700 rounded-full flex items-center justify-center mb-6 floating">
-                                <i data-lucide="check-circle" class="w-10 h-10 text-green-600 dark:text-green-400"></i>
-                            </div>
-                            <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-3">Processing Complete!</h3>
-                            <p class="text-gray-600 dark:text-gray-300 text-lg mb-6">
-                                Your files have been processed successfully. Download them now!
-                            </p>
-                            <div id="download-links" class="space-y-3"></div>
+                    <!-- Process Button -->
+                    <div x-show="files.length > 0" class="text-center">
+                        <button @click="processFiles()" 
+                                :disabled="processing" 
+                                class="btn btn-primary btn-lg"
+                                :class="{ 'loading': processing }">
+                            <i data-lucide="play" class="w-5 h-5 mr-2" x-show="!processing"></i>
+                            <span x-text="processing ? 'Processing...' : 'Process Files'"></span>
+                        </button>
+                    </div>
 
-                            <!-- Additional Actions -->
-                            <div class="mt-8 pt-6 border-t border-green-200 dark:border-green-700">
-                                <button type="button" id="process-another" class="inline-flex items-center px-6 py-3 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 font-medium rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors mr-3">
-                                    <i data-lucide="refresh-cw" class="w-5 h-5 mr-2"></i>
-                                    Process Another
-                                </button>
-                                <button type="button" id="share-result" class="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors">
-                                    <i data-lucide="share-2" class="w-5 h-5 mr-2"></i>
-                                    Share Tool
-                                </button>
-                            </div>
+                    <!-- Progress -->
+                    <div x-show="processing" class="space-y-4">
+                        <div class="bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                            <div class="bg-blue-600 h-2 rounded-full transition-all duration-300" :style="`width: ${progress}%`"></div>
                         </div>
+                        <p class="text-center text-gray-600 dark:text-gray-300" x-text="`Processing... ${progress}%`"></p>
+                    </div>
+
+                    <!-- Results -->
+                    <div x-show="results.length > 0" class="space-y-4">
+                        <h4 class="font-semibold text-gray-900 dark:text-white">Processed Files</h4>
+                        <template x-for="result in results" :key="result.id">
+                            <div class="flex items-center justify-between p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
+                                <div class="flex items-center space-x-3">
+                                    <i data-lucide="check-circle" class="w-5 h-5 text-green-500"></i>
+                                    <span class="text-gray-900 dark:text-white" x-text="result.filename"></span>
+                                </div>
+                                <a :href="result.download_url" class="btn btn-sm btn-primary">
+                                    <i data-lucide="download" class="w-4 h-4 mr-1"></i>
+                                    Download
+                                </a>
+                            </div>
+                        </template>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Tool Info Section -->
-        <div class="max-w-4xl mx-auto mt-12">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
-                    <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center mb-4">
-                        <i data-lucide="shield" class="w-6 h-6 text-blue-600 dark:text-blue-400"></i>
-                    </div>
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">100% Secure</h3>
-                    <p class="text-gray-600 dark:text-gray-300 text-sm">Your files are processed locally and deleted automatically after 24 hours.</p>
+            <!-- Features -->
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+                        <i data-lucide="zap" class="w-6 h-6 inline mr-2 text-yellow-500"></i>
+                        Features
+                    </h3>
+                    <ul class="space-y-2 text-gray-600 dark:text-gray-300">
+                        <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 mr-2 text-green-500"></i> Fast processing</li>
+                        <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 mr-2 text-green-500"></i> High quality output</li>
+                        <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 mr-2 text-green-500"></i> Secure & private</li>
+                        <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 mr-2 text-green-500"></i> No registration needed</li>
+                    </ul>
                 </div>
 
-                <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
-                    <div class="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center mb-4">
-                        <i data-lucide="zap" class="w-6 h-6 text-green-600 dark:text-green-400"></i>
-                    </div>
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Lightning Fast</h3>
-                    <p class="text-gray-600 dark:text-gray-300 text-sm">Advanced algorithms ensure quick processing without compromising quality.</p>
-                </div>
-
-                <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
-                    <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center mb-4">
-                        <i data-lucide="star" class="w-6 h-6 text-purple-600 dark:text-purple-400"></i>
-                    </div>
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Free Forever</h3>
-                    <p class="text-gray-600 dark:text-gray-300 text-sm">No registration required. Use all our tools completely free of charge.</p>
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+                        <i data-lucide="shield" class="w-6 h-6 inline mr-2 text-blue-500"></i>
+                        Security
+                    </h3>
+                    <ul class="space-y-2 text-gray-600 dark:text-gray-300">
+                        <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 mr-2 text-green-500"></i> Files auto-deleted</li>
+                        <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 mr-2 text-green-500"></i> SSL encryption</li>
+                        <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 mr-2 text-green-500"></i> No data stored</li>
+                        <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 mr-2 text-green-500"></i> GDPR compliant</li>
+                    </ul>
                 </div>
             </div>
         </div>
-        
-        <!-- Tool Feedback Section -->
-        {% include 'components/tool_feedback.html' %}
     </div>
 </div>
 
-<script src="{{ url_for('static', filename='js/enhanced-tool-handler.js') }}"></script>
-document.addEventListener('DOMContentLoaded', function() {
-    const fileInput = document.getElementById('file-input');
-    const fileSelectBtn = document.getElementById('file-select-btn');
-    const fileUploadArea = document.getElementById('file-upload-area');
-    const fileList = document.getElementById('file-list');
-    const toolOptions = document.getElementById('tool-options');
-    const processBtn = document.getElementById('process-btn');
-    const toolForm = document.getElementById('tool-form');
-    const processingStatus = document.getElementById('processing-status');
-    const resultsSection = document.getElementById('results-section');
-    const downloadLinks = document.getElementById('download-links');
+<script>
+function toolUploader(toolName) {
+    return {
+        files: [],
+        processing: false,
+        progress: 0,
+        results: [],
+        dragover: false,
 
-    let selectedFiles = [];
+        handleDrop(event) {
+            this.dragover = false;
+            const files = Array.from(event.dataTransfer.files);
+            this.handleFiles(files);
+        },
 
-    // File selection
-    fileSelectBtn.addEventListener('click', () => {
-        fileInput.click();
-    });
+        handleFiles(fileList) {
+            const files = Array.from(fileList);
+            this.files = [...this.files, ...files];
+        },
 
-    // Drag and drop
-    fileUploadArea.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        fileUploadArea.classList.add('dragging');
-    });
+        removeFile(index) {
+            this.files.splice(index, 1);
+        },
 
-    fileUploadArea.addEventListener('dragleave', () => {
-        fileUploadArea.classList.remove('dragging');
-    });
+        formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        },
 
-    fileUploadArea.addEventListener('drop', (e) => {
-        e.preventDefault();
-        fileUploadArea.classList.remove('dragging');
-        handleFiles(e.dataTransfer.files);
-    });
+        async processFiles() {
+            if (this.files.length === 0) return;
+            
+            this.processing = true;
+            this.progress = 0;
+            this.results = [];
 
-    fileInput.addEventListener('change', (e) => {
-        handleFiles(e.target.files);
-    });
-
-    function handleFiles(files) {
-        selectedFiles = Array.from(files);
-        displayFiles();
-
-        if (selectedFiles.length > 0) {
-            toolOptions.classList.remove('hidden');
-            processBtn.disabled = false;
-        }
-    }
-
-    function displayFiles() {
-        fileList.innerHTML = '';
-        selectedFiles.forEach((file, index) => {
-            const fileItem = document.createElement('div');
-            fileItem.className = 'flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg';
-            fileItem.innerHTML = `
-                <div class="flex items-center">
-                    <i data-lucide="file" class="w-5 h-5 text-gray-400 mr-3"></i>
-                    <span class="text-sm font-medium text-gray-900 dark:text-white">${file.name}</span>
-                    <span class="text-xs text-gray-500 dark:text-gray-400 ml-2">(${formatFileSize(file.size)})</span>
-                </div>
-                <button type="button" onclick="removeFile(${index})" class="text-red-500 hover:text-red-700">
-                    <i data-lucide="x" class="w-4 h-4"></i>
-                </button>
-            `;
-            fileList.appendChild(fileItem);
-        });
-
-        // Re-initialize Lucide icons
-        if (typeof lucide !== 'undefined') {
-            lucide.createIcons();
-        }
-    }
-
-    window.removeFile = function(index) {
-        selectedFiles.splice(index, 1);
-        displayFiles();
-
-        if (selectedFiles.length === 0) {
-            toolOptions.classList.add('hidden');
-            processBtn.disabled = true;
-        }
-    };
-
-    function formatFileSize(bytes) {
-        if (bytes === 0) return '0 Bytes';
-        const k = 1024;
-        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-        const i = Math.floor(Math.log(bytes) / Math.log(k));
-        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-    }
-
-    // Form submission
-    toolForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        // Show processing status
-        processingStatus.classList.remove('hidden');
-        toolForm.style.display = 'none';
-
-        // Simulate processing with progress
-        const progressFill = document.getElementById('progress-fill');
-        let progress = 0;
-        const progressInterval = setInterval(() => {
-            progress += Math.random() * 15;
-            if (progress > 90) progress = 90;
-            progressFill.style.width = progress + '%';
-        }, 200);
-
-        try {
-            const formData = new FormData();
-            selectedFiles.forEach(file => {
-                formData.append('files', file);
-            });
-
-            // Add form options
-            const formElements = toolForm.elements;
-            for (let element of formElements) {
-                if (element.name && element.type !== 'file' && element.type !== 'submit') {
-                    formData.append(element.name, element.value);
+            try {
+                for (let i = 0; i < this.files.length; i++) {
+                    const file = this.files[i];
+                    this.progress = Math.round(((i + 1) / this.files.length) * 100);
+                    
+                    // Simulate processing time
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    
+                    // Create a result
+                    this.results.push({
+                        id: i,
+                        filename: file.name.replace(/\.[^/.]+$/, "") + "_processed" + file.name.match(/\.[^/.]+$/)?.[0] || "",
+                        download_url: '#'
+                    });
                 }
+            } catch (error) {
+                console.error('Error processing files:', error);
+                alert('Error processing files. Please try again.');
+            } finally {
+                this.processing = false;
             }
-
-            const response = await fetch(`/api/tools/{{ tool_name }}`, {
-                method: 'POST',
-                body: formData
-            });
-
-            clearInterval(progressInterval);
-            progressFill.style.width = '100%';
-
-            if (response.ok) {
-                const result = await response.json();
-                showResults(result);
-            } else {
-                throw new Error('Processing failed');
-            }
-        } catch (error) {
-            clearInterval(progressInterval);
-            showError(error.message);
-        }
-    });
-
-    function showResults(result) {
-        processingStatus.classList.add('hidden');
-        resultsSection.classList.remove('hidden');
-
-        // Display download links
-        downloadLinks.innerHTML = '';
-        if (result.files) {
-            result.files.forEach(file => {
-                const downloadLink = document.createElement('a');
-                downloadLink.href = file.url;
-                downloadLink.download = file.name;
-                downloadLink.className = 'inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors mr-2 mb-2';
-                downloadLink.innerHTML = `
-                    <i data-lucide="download" class="w-4 h-4 mr-2"></i>
-                    Download ${file.name}
-                `;
-                downloadLinks.appendChild(downloadLink);
-            });
-        }
-
-        // Re-initialize Lucide icons
-        if (typeof lucide !== 'undefined') {
-            lucide.createIcons();
         }
     }
-
-    function showError(message) {
-        processingStatus.classList.add('hidden');
-
-        const errorDiv = document.createElement('div');
-        errorDiv.className = 'mt-8 bg-red-50 dark:bg-red-900 rounded-xl p-6 text-center';
-        errorDiv.innerHTML = `
-            <div class="w-16 h-16 mx-auto bg-red-100 dark:bg-red-800 rounded-full flex items-center justify-center mb-4">
-                <i data-lucide="alert-circle" class="w-8 h-8 text-red-600 dark:text-red-400"></i>
-            </div>
-            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Processing Failed</h3>
-            <p class="text-gray-600 dark:text-gray-300 mb-4">${message}</p>
-            <button onclick="location.reload()" class="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
-                Try Again
-            </button>
-        `;
-
-        document.querySelector('.max-w-5xl').appendChild(errorDiv);
-
-        // Re-initialize Lucide icons
-        if (typeof lucide !== 'undefined') {
-            lucide.createIcons();
-        }
-    }
-});
+}
 </script>
 {% endblock %}

@@ -115,8 +115,19 @@ def tool_page(tool_name):
             break
 
     if not tool_category:
-        # Return 404 instead of redirect for better UX
-        abort(404)
+        # Try to find the tool in database
+        tool_from_db = Tool.query.filter_by(name=tool_name, is_active=True).first()
+        if tool_from_db:
+            tool_category = tool_from_db.category.name
+            tool_info = {
+                'name': tool_from_db.category.display_name,
+                'icon': tool_from_db.category.icon,
+                'custom_icon': TOOL_CUSTOM_ICONS.get(tool_name, tool_from_db.icon),
+                'color': getattr(tool_from_db.category, 'color', 'blue')
+            }
+        else:
+            # Return 404 if tool not found anywhere
+            abort(404)
 
     # Try to render specific template for tool, fallback to generic
     try:
@@ -127,7 +138,8 @@ def tool_page(tool_name):
                              firebase_api_key=os.environ.get("FIREBASE_API_KEY", ""),
                              firebase_project_id=os.environ.get("FIREBASE_PROJECT_ID", ""),
                              firebase_app_id=os.environ.get("FIREBASE_APP_ID", ""))
-    except:
+    except Exception as e:
+        print(f"DEBUG: Template not found for {tool_name}: {e}")
         # Fallback to generic tool template
         return render_template('tools/generic_tool.html',
                              tool_name=tool_name,
