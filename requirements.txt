@@ -51,3 +51,8 @@ flask-sqlalchemy
 gunicorn
 psycopg2-binary
 firebase-admin
+email_validator
+flask
+flask-sqlalchemy
+gunicorn
+psycopg2-binary
