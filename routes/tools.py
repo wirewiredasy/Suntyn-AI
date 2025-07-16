@@ -129,44 +129,14 @@ def tool_page(tool_name):
             # Return 404 if tool not found anywhere
             abort(404)
 
-    # Try to render specific template for tool, fallback to generic
-    try:
-        return render_template(f'tools/{tool_name}.html',
-                             tool_name=tool_name,
-                             tool_category=tool_category,
-                             tool_info=tool_info,
-                             firebase_api_key=os.environ.get("FIREBASE_API_KEY", ""),
-                             firebase_project_id=os.environ.get("FIREBASE_PROJECT_ID", ""),
-                             firebase_app_id=os.environ.get("FIREBASE_APP_ID", ""))
-    except Exception as e:
-        print(f"DEBUG: Template not found for {tool_name}: {e}")
-        # Fallback to generic tool template
-        return render_template('tools/generic_tool.html',
-                             tool_name=tool_name,
-                             tool_category=tool_category,
-                             tool_info=tool_info,
-                             firebase_api_key=os.environ.get("FIREBASE_API_KEY", ""),
-                             firebase_project_id=os.environ.get("FIREBASE_PROJECT_ID", ""),
-                             firebase_app_id=os.environ.get("FIREBASE_APP_ID", ""))
-
-# Individual tool routes for better SEO
-@tools_bp.route('/pdf-merge')
-def pdf_merge():
-    return render_template('tools/pdf_merge.html',
+    # Always use generic template for consistency and working interface
+    print(f"DEBUG: Loading tool {tool_name} with category {tool_category}")
+    return render_template('tools/generic_tool.html',
+                         tool_name=tool_name,
+                         tool_category=tool_category,
+                         tool_info=tool_info,
                          firebase_api_key=os.environ.get("FIREBASE_API_KEY", ""),
                          firebase_project_id=os.environ.get("FIREBASE_PROJECT_ID", ""),
                          firebase_app_id=os.environ.get("FIREBASE_APP_ID", ""))
 
-@tools_bp.route('/image-compress')
-def image_compress():
-    return render_template('tools/image_compress.html',
-                         firebase_api_key=os.environ.get("FIREBASE_API_KEY", ""),
-                         firebase_project_id=os.environ.get("FIREBASE_PROJECT_ID", ""),
-                         firebase_app_id=os.environ.get("FIREBASE_APP_ID", ""))
-
-@tools_bp.route('/video-trim')
-def video_trim():
-    return render_template('tools/video_trim.html',
-                         firebase_api_key=os.environ.get("FIREBASE_API_KEY", ""),
-                         firebase_project_id=os.environ.get("FIREBASE_PROJECT_ID", ""),
-                         firebase_app_id=os.environ.get("FIREBASE_APP_ID", ""))
+# All tools use generic template through main route /<tool_name>
