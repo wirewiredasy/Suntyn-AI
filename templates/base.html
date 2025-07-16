@@ -439,7 +439,7 @@
                 <div class="sidebar-nav-section">
                     <!-- Main Navigation -->
                     <a href="{{ url_for('main.index') }}" 
-                       @click="$store.navigation.closeMobileMenu()"
+                       @click="$store.navigation.mobileMenuOpen = false"
                        class="professional-nav-item">
                         <div class="flex items-center space-x-3">
                             <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
@@ -454,7 +454,7 @@
                     </a>
 
                     <a href="{{ url_for('tools.index') }}" 
-                       @click="$store.navigation.closeMobileMenu()"
+                       @click="$store.navigation.mobileMenuOpen = false"
                        class="professional-nav-item">
                         <div class="flex items-center space-x-3">
                             <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center">
@@ -473,25 +473,25 @@
                         <h3 class="text-sm font-semibold text-gray-600 dark:text-gray-300 mb-3 uppercase tracking-wide">Popular Tools</h3>
                         <div class="grid grid-cols-2 gap-2">
                             <a href="{{ url_for('tools.tool_page', tool_name='pdf-merge') }}" 
-                               @click="$store.navigation.closeMobileMenu()"
+                               @click="$store.navigation.mobileMenuOpen = false"
                                class="quick-tool-card">
                                 <i data-lucide="file-text" class="w-6 h-6 text-red-500 mb-2"></i>
                                 <span class="text-xs font-medium text-gray-700 dark:text-gray-300 text-center">PDF Merge</span>
                             </a>
                             <a href="{{ url_for('tools.tool_page', tool_name='image-compress') }}" 
-                               @click="$store.navigation.closeMobileMenu()"
+                               @click="$store.navigation.mobileMenuOpen = false"
                                class="quick-tool-card">
                                 <i data-lucide="image" class="w-6 h-6 text-green-500 mb-2"></i>
                                 <span class="text-xs font-medium text-gray-700 dark:text-gray-300 text-center">Image Compress</span>
                             </a>
                             <a href="{{ url_for('tools.tool_page', tool_name='background-remover') }}" 
-                               @click="$store.navigation.closeMobileMenu()"
+                               @click="$store.navigation.mobileMenuOpen = false"
                                class="quick-tool-card">
                                 <i data-lucide="scissors" class="w-6 h-6 text-purple-500 mb-2"></i>
                                 <span class="text-xs font-medium text-gray-700 dark:text-gray-300 text-center">BG Remover</span>
                             </a>
                             <a href="{{ url_for('tools.tool_page', tool_name='qr-generator') }}" 
-                               @click="$store.navigation.closeMobileMenu()"
+                               @click="$store.navigation.mobileMenuOpen = false"
                                class="quick-tool-card">
                                 <i data-lucide="qr-code" class="w-6 h-6 text-blue-500 mb-2"></i>
                                 <span class="text-xs font-medium text-gray-700 dark:text-gray-300 text-center">QR Generator</span>
@@ -504,7 +504,7 @@
                 <div class="sidebar-bottom-section">
                     <!-- Contact Link -->
                     <a href="{{ url_for('main.contact') }}" 
-                       @click="$store.navigation.closeMobileMenu()"
+                       @click="$store.navigation.mobileMenuOpen = false"
                        class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors mb-4">
                         <i data-lucide="mail" class="w-5 h-5 text-gray-500"></i>
                         <span class="text-sm text-gray-700 dark:text-gray-300 font-medium">Contact Support</span>
@@ -513,13 +513,13 @@
                     <!-- Authentication Buttons -->
                     <div class="grid grid-cols-2 gap-3">
                         <a href="{{ url_for('auth.login') }}" 
-                           @click="$store.navigation.closeMobileMenu()"
+                           @click="$store.navigation.mobileMenuOpen = false"
                            class="py-3 px-4 text-center text-sm border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-xl font-semibold hover:border-orange-500 hover:text-orange-600 dark:hover:text-orange-400 transition-all duration-300">
                             Log in
                         </a>
 
                         <a href="{{ url_for('auth.register') }}" 
-                           @click="$store.navigation.closeMobileMenu()"
+                           @click="$store.navigation.mobileMenuOpen = false"
                            class="py-3 px-4 text-center text-sm bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-xl font-semibold hover:from-orange-600 hover:to-orange-700 transition-all duration-300 shadow-lg">
                             Sign up
                         </a>
