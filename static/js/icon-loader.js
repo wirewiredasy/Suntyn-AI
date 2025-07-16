@@ -20,7 +20,14 @@ class ToolIconLoader {
             script.onload = () => {
                 this.updateToolIcons();
             };
-            document.head.appendChild(script);
+            script.onerror = () => {
+                console.warn('Tool icons script failed to load, using default icons');
+            };
+            if (document.head) {
+                document.head.appendChild(script);
+            } else {
+                console.warn('document.head not available, skipping tool icons script');
+            }
         } else {
             this.updateToolIcons();
         }
