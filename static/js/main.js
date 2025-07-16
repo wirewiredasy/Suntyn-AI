@@ -301,7 +301,7 @@ window.ToolaraApp = {
 
 
     setupMobileSidebar: function() {
-        // Enhanced mobile sidebar functionality with smooth animations
+        // Professional Zapier-style mobile sidebar functionality
         document.addEventListener('alpine:init', () => {
             Alpine.store('navigation', {
                 mobileMenuOpen: false,
@@ -309,37 +309,67 @@ window.ToolaraApp = {
                 toggleMobileMenu() {
                     this.mobileMenuOpen = !this.mobileMenuOpen;
                     
-                    // Enhanced body scroll prevention
+                    // Professional body lock and blur
                     if (this.mobileMenuOpen) {
+                        // Lock body scrolling
                         document.body.style.overflow = 'hidden';
                         document.documentElement.style.overflow = 'hidden';
-                        // Add blur effect to main content
-                        const mainContent = document.querySelector('main');
-                        if (mainContent) {
-                            mainContent.style.filter = 'blur(2px)';
-                            mainContent.style.transition = 'filter 0.3s ease';
+                        
+                        // Add strong blur to background content
+                        const header = document.querySelector('nav');
+                        const main = document.querySelector('main');
+                        const footer = document.querySelector('footer');
+                        
+                        if (header) {
+                            header.style.filter = 'blur(4px)';
+                            header.style.transition = 'filter 0.3s ease';
                         }
+                        if (main) {
+                            main.style.filter = 'blur(4px)';
+                            main.style.transition = 'filter 0.3s ease';
+                        }
+                        if (footer) {
+                            footer.style.filter = 'blur(4px)';
+                            footer.style.transition = 'filter 0.3s ease';
+                        }
+                        
+                        // Add dark overlay to body
+                        document.body.style.backgroundColor = 'rgba(0, 0, 0, 0.1)';
+                        document.body.style.transition = 'background-color 0.3s ease';
                     } else {
+                        // Restore normal state
                         document.body.style.overflow = '';
                         document.documentElement.style.overflow = '';
-                        // Remove blur effect
-                        const mainContent = document.querySelector('main');
-                        if (mainContent) {
-                            mainContent.style.filter = '';
-                        }
+                        document.body.style.backgroundColor = '';
+                        
+                        // Remove blur effects
+                        const header = document.querySelector('nav');
+                        const main = document.querySelector('main');
+                        const footer = document.querySelector('footer');
+                        
+                        [header, main, footer].forEach(element => {
+                            if (element) {
+                                element.style.filter = '';
+                            }
+                        });
                     }
                 },
                 
                 closeMobileMenu() {
                     this.mobileMenuOpen = false;
+                    
+                    // Clean up all effects
                     document.body.style.overflow = '';
                     document.documentElement.style.overflow = '';
+                    document.body.style.backgroundColor = '';
                     
-                    // Remove blur effect
-                    const mainContent = document.querySelector('main');
-                    if (mainContent) {
-                        mainContent.style.filter = '';
-                    }
+                    // Remove all blur effects
+                    const elements = document.querySelectorAll('nav, main, footer');
+                    elements.forEach(element => {
+                        if (element) {
+                            element.style.filter = '';
+                        }
+                    });
                 }
             });
         });
