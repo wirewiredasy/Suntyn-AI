@@ -508,28 +508,6 @@ window.ToolaraApp = {
         updateHeader();
     },
 
-
-                            this.messages.push({
-                                id: Date.now() + 1,
-                                sender: 'bot',
-                                text: 'Thank you for your message! Our team will get back to you soon.',
-                                time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
-                            });
-
-                            // Auto-scroll to bottom
-                            this.$nextTick(() => {
-                                const chatMessages = document.getElementById('chat-messages');
-                                if (chatMessages) {
-                                    chatMessages.scrollTop = chatMessages.scrollHeight;
-                                }
-                            });
-                        }, 800);
-                    }
-                }
-            });
-        }, 2000); // Load chat after 2 seconds
-    },
-
     setupToolClicks: function() {
         // Handle tool card clicks with smooth animations
         document.addEventListener('click', function(e) {
