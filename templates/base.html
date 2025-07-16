@@ -39,8 +39,8 @@
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/performance.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/enhanced-design.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/icon-system.css') }}">
 
     <!-- Search Fix Script -->
     <script src="{{ url_for('static', filename='js/search-fix.js') }}"></script>
@@ -486,10 +486,8 @@
                         <li><a href="{{ url_for('tools.tool_page', tool_name='meme-generator') }}" class="hover:text-gray-900 dark:hover:text-white">Meme Generator</a></li>
                         <li><a href="{{ url_for('tools.tool_page', tool_name='mindmap-creator') }}" class="hover:text-gray-900 dark:hover:text-white">Mindmap Creator</a></li>
                         <li><a href="{{ url_for('tools.tool_page', tool_name='handwriting-to-text') }}" class="hover:text-gray-900 dark:hover:text-white">Handwriting to Text</a></li>
-                        <li><a href="{{ url_for('tools.tool_page', tool_name='subtitle-generator') }}" class="hover:Now, let me apply the provided change.
-</previous_generation>
-```python
-Applying the changes to fix the navigation links.text-gray-900 dark:hover:text-white">Subtitle Generator</a></li>
+                        <li><a href="{{ url_for('tools.tool_page', tool_name='subtitle-generator') }}" class="hover:text```python
+-gray-900 dark:hover:text-white">Subtitle Generator</a></li>
                         <li><a href="{{ url_for('tools.index') }}" class="hover:text-gray-900 dark:hover:text-white text-orange-500">Show more</a></li>
                     </ul>
                 </div>
@@ -633,6 +631,10 @@ Applying the changes to fix the navigation links.text-gray-900 dark:hover:text-w
 
     <!-- Tools Carousel Script -->
     <script src="{{ url_for('static', filename='js/tools-carousel.js') }}"></script>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/theme.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/icon-manager.js') }}"></script>
 
     {% block scripts %}{% endblock %}
 </body>

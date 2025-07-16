@@ -1,0 +1,28 @@
+
+<!-- Social Media Square (1200x1200) -->
+<svg id="toolora-social-square" width="1200" height="1200" viewBox="0 0 1200 1200" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="1200" fill="url(#primaryBrand)" opacity="0.05"/>
+  <circle cx="600" cy="600" r="500" fill="url(#primaryBrand)" opacity="0.1"/>
+  <rect x="150" y="450" width="900" height="120" rx="60" fill="url(#primaryBrand)" filter="url(#glow)"/>
+  <rect x="540" y="450" width="120" height="600" rx="60" fill="url(#primaryBrand)" filter="url(#glow)"/>
+  <circle cx="300" cy="510" r="30" fill="white" opacity="0.8"/>
+  <circle cx="900" cy="510" r="30" fill="white" opacity="0.8"/>
+  <circle cx="600" cy="900" r="30" fill="white" opacity="0.8"/>
+</svg>
+
+<!-- Social Media Rectangle (1200x630) -->
+<svg id="toolora-social-rect" width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" fill="url(#primaryBrand)" opacity="0.05"/>
+  <rect x="200" y="230" width="800" height="80" rx="40" fill="url(#primaryBrand)" filter="url(#glow)"/>
+  <rect x="560" y="230" width="80" height="400" rx="40" fill="url(#primaryBrand)" filter="url(#glow)"/>
+  <text x="600" y="150" text-anchor="middle" font-family="Arial, sans-serif" font-size="48" font-weight="bold" fill="url(#primaryBrand)">Toolora AI</text>
+</svg>
+
+<!-- Profile Picture Circle -->
+<svg id="toolora-profile-circle" width="400" height="400" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="200" cy="200" r="200" fill="url(#primaryBrand)"/>
+  <circle cx="200" cy="200" r="180" fill="white" opacity="0.1"/>
+  <rect x="50" y="150" width="300" height="40" rx="20" fill="white"/>
+  <rect x="180" y="150" width="40" height="200" rx="20" fill="white"/>
+  <circle cx="200" cy="200" r="195" stroke="white" stroke-width="5" fill="none" opacity="0.3"/>
+</svg>

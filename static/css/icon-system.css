@@ -1,0 +1,206 @@
+
+/* Toolora Icon System Styles */
+
+/* Base icon classes */
+.toolora-icon {
+    display: inline-block;
+    vertical-align: middle;
+    transition: all 0.3s ease;
+}
+
+/* Size variants */
+.toolora-icon--xs { width: 16px; height: 16px; }
+.toolora-icon--sm { width: 24px; height: 24px; }
+.toolora-icon--md { width: 32px; height: 32px; }
+.toolora-icon--lg { width: 48px; height: 48px; }
+.toolora-icon--xl { width: 64px; height: 64px; }
+.toolora-icon--2xl { width: 80px; height: 80px; }
+.toolora-icon--3xl { width: 120px; height: 120px; }
+
+/* Context-specific styling */
+.navbar .toolora-icon {
+    width: 32px;
+    height: 32px;
+    transition: transform 0.3s ease;
+}
+
+.navbar .toolora-icon:hover {
+    transform: scale(1.1);
+}
+
+.hero .toolora-icon {
+    width: 80px;
+    height: 80px;
+    filter: drop-shadow(0 4px 12px rgba(59, 130, 246, 0.3));
+}
+
+.footer .toolora-icon {
+    width: 24px;
+    height: 24px;
+    opacity: 0.8;
+}
+
+.card .toolora-icon {
+    width: 48px;
+    height: 48px;
+}
+
+/* Badge styles */
+.toolora-badge {
+    position: relative;
+    display: inline-block;
+}
+
+.toolora-badge--square {
+    border-radius: 12px;
+    background: linear-gradient(135deg, #00d4ff, #8b5cf6);
+    padding: 8px;
+}
+
+.toolora-badge--circle {
+    border-radius: 50%;
+    background: linear-gradient(135deg, #00d4ff, #8b5cf6);
+    padding: 8px;
+}
+
+/* Animation effects */
+.toolora-icon--pulse {
+    animation: tooloraPulse 2s infinite;
+}
+
+.toolora-icon--glow {
+    filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.5));
+}
+
+.toolora-icon--rotate {
+    animation: tooloraRotate 8s linear infinite;
+}
+
+.toolora-icon--float {
+    animation: tooloraFloat 3s ease-in-out infinite;
+}
+
+/* Keyframe animations */
+@keyframes tooloraPulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.05); opacity: 0.8; }
+}
+
+@keyframes tooloraRotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes tooloraFloat {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-6px); }
+}
+
+/* Interactive states */
+.toolora-icon--interactive {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.toolora-icon--interactive:hover {
+    transform: scale(1.1);
+    filter: drop-shadow(0 4px 12px rgba(59, 130, 246, 0.4));
+}
+
+.toolora-icon--interactive:active {
+    transform: scale(0.95);
+}
+
+/* Theme adaptations */
+.dark .toolora-icon {
+    filter: brightness(1.1);
+}
+
+.dark .toolora-icon--glow {
+    filter: drop-shadow(0 0 12px rgba(52, 211, 153, 0.6));
+}
+
+/* Loading states */
+.toolora-icon--loading {
+    opacity: 0.5;
+    animation: tooloraPulse 1.5s infinite;
+}
+
+.toolora-icon--loaded {
+    opacity: 1;
+    animation: none;
+}
+
+/* Responsive breakpoints */
+@media (max-width: 768px) {
+    .hero .toolora-icon { width: 60px; height: 60px; }
+    .navbar .toolora-icon { width: 28px; height: 28px; }
+}
+
+@media (max-width: 480px) {
+    .hero .toolora-icon { width: 48px; height: 48px; }
+    .navbar .toolora-icon { width: 24px; height: 24px; }
+}
+
+/* Social media optimized */
+.toolora-social-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #00d4ff, #8b5cf6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+.toolora-social-icon:hover {
+    transform: scale(1.1) rotate(5deg);
+}
+
+/* Brand consistency helpers */
+.toolora-brand-primary {
+    background: linear-gradient(135deg, #00d4ff, #8b5cf6);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.toolora-brand-bg {
+    background: linear-gradient(135deg, #00d4ff 0%, #0099ff 30%, #6366f1 70%, #8b5cf6 100%);
+}
+
+/* Icon grid for showcasing */
+.toolora-icon-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.toolora-icon-grid-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 16px;
+    border-radius: 12px;
+    background: rgba(59, 130, 246, 0.05);
+    transition: all 0.3s ease;
+}
+
+.toolora-icon-grid-item:hover {
+    background: rgba(59, 130, 246, 0.1);
+    transform: translateY(-2px);
+}
+
+.toolora-icon-grid-item .toolora-icon {
+    width: 48px;
+    height: 48px;
+}
+
+.toolora-icon-grid-item .icon-label {
+    font-size: 12px;
+    color: #6b7280;
+    text-align: center;
+}
