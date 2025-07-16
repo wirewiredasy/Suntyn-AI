@@ -346,27 +346,32 @@
         </div>
     </nav>
 
-    <!-- Professional Mobile Sidebar -->
+    <!-- Enhanced Professional Mobile Sidebar -->
     <div x-show="$store.navigation.mobileMenuOpen" 
          @click.away="$store.navigation.mobileMenuOpen = false" 
-         class="md:hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm" 
-         x-transition:enter="transition ease-out duration-300"
+         class="md:hidden mobile-sidebar-container" 
+         x-transition:enter="transition ease-out duration-400"
          x-transition:enter-start="opacity-0"
          x-transition:enter-end="opacity-100"
-         x-transition:leave="transition ease-in duration-200"
+         x-transition:leave="transition ease-in duration-300"
          x-transition:leave-start="opacity-100"
          x-transition:leave-end="opacity-0"
          style="display: none;">
         
-        <!-- Sidebar Container -->
-        <div class="fixed inset-y-0 left-0 w-80 bg-white dark:bg-gray-900 shadow-2xl"
+        <!-- Enhanced Backdrop -->
+        <div class="mobile-sidebar-backdrop"
+             :class="{ 'active': $store.navigation.mobileMenuOpen }"></div>
+        
+        <!-- Enhanced Sidebar Panel -->
+        <div class="mobile-sidebar-panel"
+             :class="{ 'active': $store.navigation.mobileMenuOpen }"
              x-show="$store.navigation.mobileMenuOpen"
-             x-transition:enter="transition ease-out duration-300"
-             x-transition:enter-start="transform -translate-x-full"
-             x-transition:enter-end="transform translate-x-0"
-             x-transition:leave="transition ease-in duration-200"
-             x-transition:leave-start="transform translate-x-0"
-             x-transition:leave-end="transform -translate-x-full">
+             x-transition:enter="transition ease-out duration-400"
+             x-transition:enter-start="transform -translate-x-full scale-95"
+             x-transition:enter-end="transform translate-x-0 scale-100"
+             x-transition:leave="transition ease-in duration-300"
+             x-transition:leave-start="transform translate-x-0 scale-100"
+             x-transition:leave-end="transform -translate-x-full scale-95">
             
             <!-- Header Section -->
             <div class="flex items-center justify-between p-6 bg-gradient-to-r from-orange-500 via-orange-600 to-orange-700 text-white">
@@ -538,8 +543,8 @@
         </div>
     </div>
 
-    <!-- Main Content -->
-    <main class="min-h-screen">
+    <!-- Main Content with Header Spacing -->
+    <main class="main-content min-h-screen">
         {% block content %}
 
         {% endblock %}

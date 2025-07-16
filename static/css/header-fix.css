@@ -1,25 +1,53 @@
-/* Enhanced Header Fixes */
+/* Ultra-Smooth Header Scroll Experience */
 .sticky-header {
-    position: sticky !important;
+    position: fixed !important;
     top: 0;
+    left: 0;
+    right: 0;
     z-index: 1000;
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     background: rgba(255, 255, 255, 0.95);
-    border-bottom: 1px solid rgba(229, 231, 235, 0.5);
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-    transition: all 0.3s ease;
+    border-bottom: 1px solid rgba(229, 231, 235, 0.2);
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateY(0) translateZ(0);
+    will-change: transform, background, box-shadow;
+    height: 80px;
 }
 
 .dark .sticky-header {
     background: rgba(17, 24, 39, 0.95);
+    border-bottom: 1px solid rgba(55, 65, 81, 0.3);
+}
+
+/* Enhanced scrolled state */
+.sticky-header.scrolled {
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    box-shadow: 
+        0 4px 20px rgba(0, 0, 0, 0.08),
+        0 1px 3px rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(229, 231, 235, 0.4);
+}
+
+.dark .sticky-header.scrolled {
+    background: rgba(17, 24, 39, 0.98);
+    box-shadow: 
+        0 4px 20px rgba(0, 0, 0, 0.25),
+        0 1px 3px rgba(0, 0, 0, 0.3);
     border-bottom: 1px solid rgba(55, 65, 81, 0.5);
 }
 
-/* Prevent header jumping during scroll */
-.sticky-header.scrolled {
-    transform: translateZ(0);
-    will-change: transform;
+/* Header hiding on scroll down */
+.sticky-header.hidden {
+    transform: translateY(-100%) translateZ(0);
+}
+
+/* Smooth reveal on hover near top */
+.sticky-header.reveal {
+    transform: translateY(0) translateZ(0);
 }
 
 /* Mobile header improvements */

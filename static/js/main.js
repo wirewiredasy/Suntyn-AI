@@ -301,7 +301,7 @@ window.ToolaraApp = {
 
 
     setupMobileSidebar: function() {
-        // Enhanced mobile sidebar functionality
+        // Enhanced mobile sidebar functionality with smooth animations
         document.addEventListener('alpine:init', () => {
             Alpine.store('navigation', {
                 mobileMenuOpen: false,
@@ -309,60 +309,150 @@ window.ToolaraApp = {
                 toggleMobileMenu() {
                     this.mobileMenuOpen = !this.mobileMenuOpen;
                     
-                    // Prevent body scroll when sidebar is open
+                    // Enhanced body scroll prevention
                     if (this.mobileMenuOpen) {
                         document.body.style.overflow = 'hidden';
+                        document.documentElement.style.overflow = 'hidden';
+                        // Add blur effect to main content
+                        const mainContent = document.querySelector('main');
+                        if (mainContent) {
+                            mainContent.style.filter = 'blur(2px)';
+                            mainContent.style.transition = 'filter 0.3s ease';
+                        }
                     } else {
                         document.body.style.overflow = '';
+                        document.documentElement.style.overflow = '';
+                        // Remove blur effect
+                        const mainContent = document.querySelector('main');
+                        if (mainContent) {
+                            mainContent.style.filter = '';
+                        }
                     }
                 },
                 
                 closeMobileMenu() {
                     this.mobileMenuOpen = false;
                     document.body.style.overflow = '';
+                    document.documentElement.style.overflow = '';
+                    
+                    // Remove blur effect
+                    const mainContent = document.querySelector('main');
+                    if (mainContent) {
+                        mainContent.style.filter = '';
+                    }
                 }
             });
         });
 
-        // Add swipe to close functionality
+        // Enhanced smooth scroll handling for header
+        this.setupSmoothHeaderScroll();
+
+        // Enhanced swipe to close functionality
         let startX = 0;
         let currentX = 0;
         let isSwipe = false;
+        let sidebarPanel = null;
 
         document.addEventListener('touchstart', (e) => {
             if (window.Alpine && window.Alpine.store('navigation').mobileMenuOpen) {
                 startX = e.touches[0].clientX;
                 isSwipe = true;
+                sidebarPanel = document.querySelector('.mobile-sidebar-panel');
             }
         }, { passive: true });
 
         document.addEventListener('touchmove', (e) => {
-            if (!isSwipe) return;
+            if (!isSwipe || !sidebarPanel) return;
+            
             currentX = e.touches[0].clientX;
+            const diffX = startX - currentX;
+            
+            // Live swipe feedback
+            if (diffX > 0) {
+                const percentage = Math.min(diffX / 200, 1);
+                sidebarPanel.style.transform = `translateX(-${percentage * 100}%)`;
+                sidebarPanel.style.opacity = 1 - (percentage * 0.5);
+            }
         }, { passive: true });
 
         document.addEventListener('touchend', (e) => {
-            if (!isSwipe) return;
+            if (!isSwipe || !sidebarPanel) return;
             
             const diffX = startX - currentX;
             
-            // Swipe left to close (threshold: 50px)
-            if (diffX > 50 && window.Alpine && window.Alpine.store('navigation').mobileMenuOpen) {
+            // Swipe left to close (threshold: 80px)
+            if (diffX > 80 && window.Alpine && window.Alpine.store('navigation').mobileMenuOpen) {
                 window.Alpine.store('navigation').closeMobileMenu();
+            } else {
+                // Snap back if swipe wasn't enough
+                sidebarPanel.style.transform = '';
+                sidebarPanel.style.opacity = '';
             }
             
             isSwipe = false;
+            sidebarPanel = null;
         }, { passive: true });
 
-        // Close sidebar on route change
+        // Close sidebar on route change with animation
         document.addEventListener('click', (e) => {
             const link = e.target.closest('a[href]');
             if (link && link.closest('.mobile-sidebar-content')) {
+                // Add click ripple effect
+                this.addRippleEffect(link, e);
+                
                 setTimeout(() => {
                     if (window.Alpine && window.Alpine.store('navigation')) {
                         window.Alpine.store('navigation').closeMobileMenu();
                     }
-                }, 100);
+                }, 150);
+            }
+        });
+    },
+
+    setupSmoothHeaderScroll: function() {
+        let lastScrollY = window.scrollY;
+        let ticking = false;
+        const header = document.querySelector('.sticky-header');
+        
+        if (!header) return;
+
+        function updateHeader() {
+            const currentScrollY = window.scrollY;
+            
+            // Add/remove scrolled class based on scroll position
+            if (currentScrollY > 10) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+            
+            // Hide/show header based on scroll direction
+            if (currentScrollY > lastScrollY && currentScrollY > 100) {
+                // Scrolling down & past threshold - hide header
+                header.style.transform = 'translateY(-100%)';
+            } else {
+                // Scrolling up or at top - show header
+                header.style.transform = 'translateY(0)';
+            }
+            
+            lastScrollY = currentScrollY;
+            ticking = false;
+        }
+
+        function requestTick() {
+            if (!ticking) {
+                requestAnimationFrame(updateHeader);
+                ticking = true;
+            }
+        }
+
+        // Use passive scroll listener for better performance
+        window.addEventListener('scroll', requestTick, { passive: true });
+        
+        // Show header when mouse moves to top
+        document.addEventListener('mousemove', (e) => {
+            if (e.clientY < 60) {
+                header.style.transform = 'translateY(0)';
             }
         });
     },
