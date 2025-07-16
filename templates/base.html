@@ -346,10 +346,10 @@
         </div>
     </nav>
 
-    <!-- Enhanced Zapier-Style Mobile Sidebar -->
+    <!-- Zapier-Style Full-Screen Mobile Sidebar -->
     <div x-show="$store.navigation.mobileMenuOpen" 
-         @click.away="$store.navigation.mobileMenuOpen = false" 
-         class="md:hidden fixed inset-0 z-[9999]" 
+         class="mobile-sidebar-container md:hidden"
+         :class="{ 'active': $store.navigation.mobileMenuOpen }"
          x-transition:enter="transition ease-out duration-300"
          x-transition:enter-start="opacity-0"
          x-transition:enter-end="opacity-100"
@@ -358,22 +358,17 @@
          x-transition:leave-end="opacity-0"
          style="display: none;">
         
-        <!-- Overlay -->
-        <div class="absolute inset-0 bg-black/20 backdrop-blur-sm"></div>
+        <!-- Full-Screen Dark Overlay -->
+        <div class="mobile-sidebar-backdrop"
+             :class="{ 'active': $store.navigation.mobileMenuOpen }"
+             @click="$store.navigation.mobileMenuOpen = false"></div>
         
-        <!-- Zapier-Style Sidebar Panel -->
-        <div class="absolute left-0 top-0 h-full w-80 max-w-[85vw] bg-white dark:bg-gray-900 shadow-2xl overflow-y-auto"
-             x-show="$store.navigation.mobileMenuOpen"
-             x-transition:enter="transition ease-out duration-300"
-             x-transition:enter-start="transform -translate-x-full"
-             x-transition:enter-end="transform translate-x-0"
-             x-transition:leave="transition ease-in duration-200"
-             x-transition:leave-start="transform translate-x-0"
-             x-transition:leave-end="transform -translate-x-full"
-             @click.stop>
+        <!-- Full-Screen Sidebar Panel -->
+        <div class="mobile-sidebar-panel"
+             :class="{ 'active': $store.navigation.mobileMenuOpen }">
             
-            <!-- Clean Header like Zapier -->
-            <div class="flex items-center justify-between p-6 border-b border-gray-100 dark:border-gray-800">
+            <!-- Zapier-Style Header -->
+            <div class="zapier-mobile-header">
                 <div class="flex items-center space-x-3">
                     <div class="w-8 h-8 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center">
                         <span class="text-white font-bold text-sm">T</span>
@@ -381,104 +376,73 @@
                     <span class="text-lg font-semibold text-gray-900 dark:text-white">Toolora AI</span>
                 </div>
                 <button @click="$store.navigation.mobileMenuOpen = false" 
-                        class="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors">
-                    <i data-lucide="x" class="w-5 h-5 text-gray-500 dark:text-gray-400"></i>
+                        class="zapier-close-btn">
+                    <i data-lucide="x" class="w-5 h-5"></i>
                 </button>
             </div>
 
-            <!-- Navigation Menu - Zapier Style -->
-            <div class="p-4">
-                <!-- Primary Navigation -->
-                <div class="space-y-1">
+            <!-- Navigation Content -->
+            <div class="zapier-nav-content">
+                <!-- Main Navigation Items -->
+                <div class="zapier-nav-main">
                     <a href="{{ url_for('tools.index') }}" 
                        @click="$store.navigation.mobileMenuOpen = false"
-                       class="zapier-menu-item">
-                        <div class="flex items-center justify-between">
-                            <span class="text-gray-900 dark:text-white font-medium">Tools</span>
-                            <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400"></i>
-                        </div>
+                       class="zapier-nav-item">
+                        <span>Products</span>
+                        <i data-lucide="chevron-right" class="w-5 h-5 text-gray-400"></i>
                     </a>
 
                     <a href="{{ url_for('main.about') }}" 
                        @click="$store.navigation.mobileMenuOpen = false"
-                       class="zapier-menu-item">
-                        <div class="flex items-center justify-between">
-                            <span class="text-gray-900 dark:text-white font-medium">Solutions</span>
-                            <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400"></i>
-                        </div>
+                       class="zapier-nav-item">
+                        <span>Solutions</span>
+                        <i data-lucide="chevron-right" class="w-5 h-5 text-gray-400"></i>
                     </a>
 
                     <a href="{{ url_for('main.contact') }}" 
                        @click="$store.navigation.mobileMenuOpen = false"
-                       class="zapier-menu-item">
-                        <div class="flex items-center justify-between">
-                            <span class="text-gray-900 dark:text-white font-medium">Resources</span>
-                            <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400"></i>
-                        </div>
+                       class="zapier-nav-item">
+                        <span>Resources</span>
+                        <i data-lucide="chevron-right" class="w-5 h-5 text-gray-400"></i>
                     </a>
 
                     <a href="/dashboard" 
                        @click="$store.navigation.mobileMenuOpen = false"
-                       class="zapier-menu-item">
-                        <span class="text-gray-900 dark:text-white font-medium">Enterprise</span>
+                       class="zapier-nav-item">
+                        <span>Enterprise</span>
+                        <i data-lucide="chevron-right" class="w-5 h-5 text-gray-400"></i>
                     </a>
 
                     <a href="{{ url_for('main.about') }}" 
                        @click="$store.navigation.mobileMenuOpen = false"
-                       class="zapier-menu-item">
-                        <span class="text-gray-900 dark:text-white font-medium">Pricing</span>
+                       class="zapier-nav-item">
+                        <span>Pricing</span>
+                        <i data-lucide="chevron-right" class="w-5 h-5 text-gray-400"></i>
                     </a>
                 </div>
 
-                <!-- Divider -->
-                <div class="my-6 border-t border-gray-100 dark:border-gray-800"></div>
-
-                <!-- Bottom Actions - Zapier Style -->
-                <div class="space-y-4">
-                    <!-- Explore Apps -->
-                    <div class="flex items-center justify-between py-3">
-                        <div class="flex items-center space-x-3">
-                            <i data-lucide="grid-3x3" class="w-5 h-5 text-gray-500"></i>
-                            <a href="{{ url_for('tools.index') }}" 
-                               @click="$store.navigation.mobileMenuOpen = false"
-                               class="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors">
-                                Explore apps
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Contact Sales -->
-                    <div class="py-3">
-                        <a href="{{ url_for('main.contact') }}" 
-                           @click="$store.navigation.mobileMenuOpen = false"
-                           class="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors">
-                            Contact sales
-                        </a>
-                    </div>
+                <!-- Bottom Section -->
+                <div class="zapier-nav-bottom">
+                    <!-- Contact Sales Link -->
+                    <a href="{{ url_for('main.contact') }}" 
+                       @click="$store.navigation.mobileMenuOpen = false"
+                       class="zapier-contact-link">
+                        Contact sales
+                    </a>
 
                     <!-- Authentication Buttons -->
-                    <div class="space-y-3 pt-4">
-                        <!-- Log in Button -->
+                    <div class="zapier-auth-buttons">
                         <a href="{{ url_for('auth.login') }}" 
                            @click="$store.navigation.mobileMenuOpen = false"
-                           class="block w-full text-center py-3 px-4 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors font-medium">
+                           class="zapier-login-btn">
                             Log in
                         </a>
 
-                        <!-- Sign up Button -->
                         <a href="{{ url_for('auth.register') }}" 
                            @click="$store.navigation.mobileMenuOpen = false"
-                           class="block w-full text-center py-3 px-4 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors font-medium">
+                           class="zapier-signup-btn">
                             Sign up
                         </a>
-
-                        <!-- Dark Mode Toggle -->
-                        <button @click="darkMode = !darkMode" 
-                                class="w-full py-3 px-4 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg transition-colors font-medium flex items-center justify-center space-x-2">
-                            <i data-lucide="sun" class="w-4 h-4" x-show="darkMode"></i>
-                            <i data-lucide="moon" class="w-4 h-4" x-show="!darkMode"></i>
-                            <span x-text="darkMode ? 'Light Mode' : 'Dark Mode'"></span>
-                        </button>
                     </div>
                 </div>
             </div>

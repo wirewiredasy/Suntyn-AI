@@ -1971,7 +1971,7 @@ footer img[alt="Toolora AI"]:hover {
     border-bottom: 1px solid rgba(55, 65, 81, 0.5);
 }
 
-/* Professional Zapier-Style Mobile Sidebar */
+/* Zapier-Style Full-Screen Overlay Sidebar */
 .mobile-sidebar-container {
     position: fixed;
     top: 0;
@@ -1980,11 +1980,13 @@ footer img[alt="Toolora AI"]:hover {
     height: 100vh;
     z-index: 9999;
     pointer-events: none;
-    transition: all 0.3s ease;
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
 .mobile-sidebar-container.active {
     pointer-events: all;
+    opacity: 1;
 }
 
 .mobile-sidebar-backdrop {
@@ -1993,40 +1995,37 @@ footer img[alt="Toolora AI"]:hover {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
     opacity: 0;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: opacity 0.3s ease;
 }
 
 .mobile-sidebar-backdrop.active {
     opacity: 1;
 }
 
+/* Full-Screen Sidebar Panel - Zapier Style */
 .mobile-sidebar-panel {
     position: absolute;
     top: 0;
     left: 0;
-    width: 90%;
-    max-width: 400px;
+    width: 100%;
     height: 100%;
-    background: rgba(255, 255, 255, 0.98);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-right: 1px solid rgba(229, 231, 235, 0.2);
+    background: #ffffff;
     transform: translateX(-100%);
-    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     -ms-overflow-style: none;
-    box-shadow: 20px 0 60px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
 }
 
 .dark .mobile-sidebar-panel {
-    background: rgba(17, 24, 39, 0.98);
-    border-right: 1px solid rgba(55, 65, 81, 0.3);
+    background: #111827;
 }
 
 .mobile-sidebar-panel::-webkit-scrollbar {
@@ -2035,6 +2034,202 @@ footer img[alt="Toolora AI"]:hover {
 
 .mobile-sidebar-panel.active {
     transform: translateX(0);
+}
+
+/* Zapier-style Header */
+.zapier-mobile-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    border-bottom: 1px solid #e5e7eb;
+    background: #ffffff;
+    position: relative;
+    z-index: 10;
+}
+
+.dark .zapier-mobile-header {
+    background: #111827;
+    border-bottom-color: #374151;
+}
+
+/* Zapier-style Navigation Content */
+.zapier-nav-content {
+    flex: 1;
+    padding: 32px 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 0;
+}
+
+/* Main Navigation Items */
+.zapier-nav-main {
+    flex: 1;
+}
+
+.zapier-nav-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 0;
+    border-bottom: 1px solid #f3f4f6;
+    color: #111827;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.dark .zapier-nav-item {
+    color: #f9fafb;
+    border-bottom-color: #374151;
+}
+
+.zapier-nav-item:hover {
+    color: #f97316;
+}
+
+.zapier-nav-item:last-child {
+    border-bottom: none;
+}
+
+/* Bottom Actions Section */
+.zapier-nav-bottom {
+    margin-top: 32px;
+    padding-top: 32px;
+    border-top: 1px solid #f3f4f6;
+}
+
+.dark .zapier-nav-bottom {
+    border-top-color: #374151;
+}
+
+/* Contact Sales Link */
+.zapier-contact-link {
+    display: block;
+    padding: 16px 0;
+    color: #6b7280;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    transition: color 0.2s ease;
+    margin-bottom: 24px;
+}
+
+.dark .zapier-contact-link {
+    color: #9ca3af;
+}
+
+.zapier-contact-link:hover {
+    color: #111827;
+}
+
+.dark .zapier-contact-link:hover {
+    color: #f9fafb;
+}
+
+/* Auth Buttons - Zapier Style */
+.zapier-auth-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.zapier-login-btn {
+    width: 100%;
+    padding: 16px 24px;
+    background: transparent;
+    border: 2px solid #d1d5db;
+    color: #374151;
+    text-decoration: none;
+    text-align: center;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    display: block;
+}
+
+.dark .zapier-login-btn {
+    border-color: #4b5563;
+    color: #d1d5db;
+}
+
+.zapier-login-btn:hover {
+    border-color: #9ca3af;
+    background: #f9fafb;
+}
+
+.dark .zapier-login-btn:hover {
+    border-color: #6b7280;
+    background: #1f2937;
+}
+
+.zapier-signup-btn {
+    width: 100%;
+    padding: 16px 24px;
+    background: #ff6900;
+    border: 2px solid #ff6900;
+    color: #ffffff;
+    text-decoration: none;
+    text-align: center;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    display: block;
+}
+
+.zapier-signup-btn:hover {
+    background: #e55a00;
+    border-color: #e55a00;
+}
+
+/* Close Button */
+.zapier-close-btn {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f3f4f6;
+    border: none;
+    border-radius: 8px;
+    color: #6b7280;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.dark .zapier-close-btn {
+    background: #374151;
+    color: #9ca3af;
+}
+
+.zapier-close-btn:hover {
+    background: #e5e7eb;
+    color: #374151;
+}
+
+.dark .zapier-close-btn:hover {
+    background: #4b5563;
+    color: #d1d5db;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    .zapier-mobile-header {
+        padding: 16px 20px;
+    }
+
+    .zapier-nav-content {
+        padding: 24px 20px;
+    }
+
+    .zapier-nav-item {
+        font-size: 16px;
+        padding: 18px 0;
+    }
 }
 
 .professional-nav-item {
@@ -2313,11 +2508,11 @@ footer img[alt="Toolora AI"]:hover {
     .professional-nav-item {
         padding: 12px;
     }
-    
+
     .quick-tool-card {
         padding: 12px;
     }
-    
+
     .professional-nav-item .w-10 {
         width: 36px;
         height: 36px;
@@ -2421,4 +2616,3 @@ footer img[alt="Toolora AI"]:hover {
 .zapier-menu-item:hover i {
     @apply transform rotate-180;
 }
-

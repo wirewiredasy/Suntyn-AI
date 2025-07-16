@@ -301,7 +301,7 @@ window.ToolaraApp = {
 
 
     setupMobileSidebar: function() {
-        // Professional Zapier-style mobile sidebar functionality
+        // Zapier-style full-screen mobile sidebar functionality
         document.addEventListener('alpine:init', () => {
             Alpine.store('navigation', {
                 mobileMenuOpen: false,
@@ -309,67 +309,42 @@ window.ToolaraApp = {
                 toggleMobileMenu() {
                     this.mobileMenuOpen = !this.mobileMenuOpen;
                     
-                    // Professional body lock and blur
+                    // Full-screen overlay behavior
                     if (this.mobileMenuOpen) {
-                        // Lock body scrolling
+                        // Prevent body scrolling when sidebar is open
                         document.body.style.overflow = 'hidden';
                         document.documentElement.style.overflow = 'hidden';
                         
-                        // Add strong blur to background content
-                        const header = document.querySelector('nav');
-                        const main = document.querySelector('main');
-                        const footer = document.querySelector('footer');
-                        
-                        if (header) {
-                            header.style.filter = 'blur(4px)';
-                            header.style.transition = 'filter 0.3s ease';
+                        // Add sidebar container to DOM if it doesn't exist
+                        const sidebarContainer = document.querySelector('.mobile-sidebar-container');
+                        if (sidebarContainer) {
+                            sidebarContainer.classList.add('active');
                         }
-                        if (main) {
-                            main.style.filter = 'blur(4px)';
-                            main.style.transition = 'filter 0.3s ease';
-                        }
-                        if (footer) {
-                            footer.style.filter = 'blur(4px)';
-                            footer.style.transition = 'filter 0.3s ease';
-                        }
-                        
-                        // Add dark overlay to body
-                        document.body.style.backgroundColor = 'rgba(0, 0, 0, 0.1)';
-                        document.body.style.transition = 'background-color 0.3s ease';
                     } else {
-                        // Restore normal state
+                        // Restore normal scrolling
                         document.body.style.overflow = '';
                         document.documentElement.style.overflow = '';
-                        document.body.style.backgroundColor = '';
                         
-                        // Remove blur effects
-                        const header = document.querySelector('nav');
-                        const main = document.querySelector('main');
-                        const footer = document.querySelector('footer');
-                        
-                        [header, main, footer].forEach(element => {
-                            if (element) {
-                                element.style.filter = '';
-                            }
-                        });
+                        // Remove active class from sidebar container
+                        const sidebarContainer = document.querySelector('.mobile-sidebar-container');
+                        if (sidebarContainer) {
+                            sidebarContainer.classList.remove('active');
+                        }
                     }
                 },
                 
                 closeMobileMenu() {
                     this.mobileMenuOpen = false;
                     
-                    // Clean up all effects
+                    // Clean up overflow styles
                     document.body.style.overflow = '';
                     document.documentElement.style.overflow = '';
-                    document.body.style.backgroundColor = '';
                     
-                    // Remove all blur effects
-                    const elements = document.querySelectorAll('nav, main, footer');
-                    elements.forEach(element => {
-                        if (element) {
-                            element.style.filter = '';
-                        }
-                    });
+                    // Remove active class
+                    const sidebarContainer = document.querySelector('.mobile-sidebar-container');
+                    if (sidebarContainer) {
+                        sidebarContainer.classList.remove('active');
+                    }
                 }
             });
         });
@@ -377,7 +352,7 @@ window.ToolaraApp = {
         // Enhanced smooth scroll handling for header
         this.setupSmoothHeaderScroll();
 
-        // Enhanced swipe to close functionality
+        // Swipe to close functionality for full-screen sidebar
         let startX = 0;
         let currentX = 0;
         let isSwipe = false;
@@ -397,11 +372,10 @@ window.ToolaraApp = {
             currentX = e.touches[0].clientX;
             const diffX = startX - currentX;
             
-            // Live swipe feedback
+            // Live swipe feedback for full-screen panel
             if (diffX > 0) {
-                const percentage = Math.min(diffX / 200, 1);
+                const percentage = Math.min(diffX / 300, 1);
                 sidebarPanel.style.transform = `translateX(-${percentage * 100}%)`;
-                sidebarPanel.style.opacity = 1 - (percentage * 0.5);
             }
         }, { passive: true });
 
@@ -410,31 +384,37 @@ window.ToolaraApp = {
             
             const diffX = startX - currentX;
             
-            // Swipe left to close (threshold: 80px)
-            if (diffX > 80 && window.Alpine && window.Alpine.store('navigation').mobileMenuOpen) {
+            // Swipe left to close (threshold: 100px for full-screen)
+            if (diffX > 100 && window.Alpine && window.Alpine.store('navigation').mobileMenuOpen) {
                 window.Alpine.store('navigation').closeMobileMenu();
             } else {
                 // Snap back if swipe wasn't enough
                 sidebarPanel.style.transform = '';
-                sidebarPanel.style.opacity = '';
             }
             
             isSwipe = false;
             sidebarPanel = null;
         }, { passive: true });
 
-        // Close sidebar on route change with animation
+        // Close sidebar on route change
         document.addEventListener('click', (e) => {
             const link = e.target.closest('a[href]');
-            if (link && link.closest('.mobile-sidebar-content')) {
-                // Add click ripple effect
+            if (link && link.closest('.mobile-sidebar-panel')) {
+                // Add click animation
                 this.addRippleEffect(link, e);
                 
                 setTimeout(() => {
                     if (window.Alpine && window.Alpine.store('navigation')) {
                         window.Alpine.store('navigation').closeMobileMenu();
                     }
-                }, 150);
+                }, 100);
+            }
+        });
+
+        // Escape key to close sidebar
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && window.Alpine && window.Alpine.store('navigation').mobileMenuOpen) {
+                window.Alpine.store('navigation').closeMobileMenu();
             }
         });
     },
