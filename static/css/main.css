@@ -1782,6 +1782,41 @@ nav img[alt="Toolora AI"]:hover {
     transform: scale(1.05);
 }
 
+/* Dark mode logo visibility improvements */
+.dark nav img[alt="Toolora AI"] {
+    filter: brightness(1.2) contrast(1.1);
+}
+
+/* Logo consistency fixes */
+.professional-logo {
+    transition: all 0.3s ease;
+}
+
+.dark .professional-logo {
+    filter: brightness(1.1) contrast(1.05);
+}
+
+/* SVG logo dark mode support */
+svg.professional-logo .light-mode,
+svg[class*="toolora"] .light-mode {
+    display: block;
+}
+
+svg.professional-logo .dark-mode,
+svg[class*="toolora"] .dark-mode {
+    display: none;
+}
+
+.dark svg.professional-logo .light-mode,
+.dark svg[class*="toolora"] .light-mode {
+    display: none;
+}
+
+.dark svg.professional-logo .dark-mode,
+.dark svg[class*="toolora"] .dark-mode {
+    display: block !important;
+}
+
 /* Logo text gradient animation */
 .header-logo {
     background: linear-gradient(135deg, #10B981, #06B6D4, #8B5CF6);
