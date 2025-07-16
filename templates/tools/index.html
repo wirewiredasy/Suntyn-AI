@@ -70,62 +70,42 @@
 
     <!-- Tools Grid -->
     <div id="tools-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {% for category_id, category_data in categories.items() %}
-            {% if selected_category == 'all' or selected_category == category_id %}
-                {% for tool_name in category_data.tools %}
-                <div class="tool-card bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border border-gray-200 dark:border-gray-700" 
-                     data-tool="{{ tool_name }}" 
-                     data-category="{{ category_id }}">
-                    <div class="p-6">
-                        <div class="flex items-center mb-4">
-                            <div class="w-12 h-12 bg-{{ category_data.color }}-100 dark:bg-{{ category_data.color }}-900 rounded-lg flex items-center justify-center">
-                                <i data-lucide="{{ tool_custom_icon or category_data.icon }}" class="w-6 h-6 text-{{ category_data.color }}-600 dark:text-{{ category_data.color }}-400"></i>
-                            </div>
-                            <div class="ml-4">
-                                <h3 class="text-lg font-semibold text-gray-800 dark:text-white">
-                                    {{ tool_name.replace('-', ' ').title() }}
-                                </h3>
-                                <p class="text-sm text-{{ category_data.color }}-600 dark:text-{{ category_data.color }}-400">
-                                    {{ category_data.name }}
-                                </p>
-                            </div>
-                        </div>
-
-                        <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">
-                            {% if tool_name == 'pdf-merge' %}
-                                Merge multiple PDF files into a single document quickly and securely.
-                            {% elif tool_name == 'pdf-split' %}
-                                Split PDF files into separate pages or extract specific page ranges.
-                            {% elif tool_name == 'image-compress' %}
-                                Reduce image file sizes while maintaining quality for faster loading.
-                            {% elif tool_name == 'image-resize' %}
-                                Resize images to specific dimensions for web, social media, or print.
-                            {% elif tool_name == 'video-to-mp3' %}
-                                Extract audio from video files and convert to MP3 format.
-                            {% elif tool_name == 'resume-generator' %}
-                                Create professional resumes with AI assistance and modern templates.
-                            {% elif tool_name == 'qr-generator' %}
-                                Generate QR codes for URLs, text, contacts, and more.
-                            {% else %}
-                                Professional {{ tool_name.replace('-', ' ') }} tool for quick and secure processing.
-                            {% endif %}
+        {% for tool in tools %}
+        <div class="tool-card bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border border-gray-200 dark:border-gray-700" 
+             data-tool="{{ tool.name }}" 
+             data-category="{{ tool.category.name }}">
+            <div class="p-6">
+                <div class="flex items-center mb-4">
+                    <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
+                        <i data-lucide="{{ tool_icons.get(tool.name, tool.icon) }}" class="w-6 h-6 text-blue-600 dark:text-blue-400"></i>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-white">
+                            {{ tool.display_name }}
+                        </h3>
+                        <p class="text-sm text-blue-600 dark:text-blue-400">
+                            {{ tool.category.display_name }}
                         </p>
-
-                        <div class="flex justify-between items-center">
-                            <a href="/tools/{{ tool_name }}" 
-                               class="inline-flex items-center px-4 py-2 bg-{{ category_data.color }}-600 hover:bg-{{ category_data.color }}-700 text-white font-medium rounded-lg transition-colors">
-                                <i data-lucide="arrow-right" class="w-4 h-4 mr-2"></i>
-                                Use Tool
-                            </a>
-                            <div class="flex items-center text-sm text-gray-500 dark:text-gray-400">
-                                <i data-lucide="star" class="w-4 h-4 mr-1"></i>
-                                Free
-                            </div>
-                        </div>
                     </div>
                 </div>
-                {% endfor %}
-            {% endif %}
+
+                <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">
+                    {{ tool.description }}
+                </p>
+
+                <div class="flex justify-between items-center">
+                    <a href="/tools/{{ tool.name }}" 
+                       class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors">
+                        <i data-lucide="arrow-right" class="w-4 h-4 mr-2"></i>
+                        Use Tool
+                    </a>
+                    <div class="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                        <i data-lucide="star" class="w-4 h-4 mr-1"></i>
+                        {% if tool.is_premium %}Premium{% else %}Free{% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
         {% endfor %}
     </div>
 

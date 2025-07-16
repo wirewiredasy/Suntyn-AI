@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, jsonify, redirect, url_for, abort
 from config import Config
+from models import Tool, ToolCategory
 import os
 
 # Custom icon mapping for all tools
@@ -57,10 +58,38 @@ def index():
     category = request.args.get('category', 'all')
     search_query = request.args.get('search', '')
 
+    # Get tools from database
+    tools_query = Tool.query.filter_by(is_active=True)
+    
+    if category != 'all':
+        # Filter by category
+        category_obj = ToolCategory.query.filter_by(name=category).first()
+        if category_obj:
+            tools_query = tools_query.filter_by(category_id=category_obj.id)
+    
+    if search_query:
+        # Search in tool names and descriptions
+        tools_query = tools_query.filter(
+            Tool.display_name.ilike(f'%{search_query}%') |
+            Tool.description.ilike(f'%{search_query}%')
+        )
+    
+    tools = tools_query.all()
+    
+    # Get all categories
+    all_categories = ToolCategory.query.filter_by(is_active=True).all()
+    
+    print(f"DEBUG: Found {len(tools)} tools")  # Debug line
+    for tool in tools[:3]:
+        print(f"DEBUG: Tool {tool.name} - {tool.display_name}")  # Debug line
+    
     return render_template('tools/index.html',
                          categories=Config.TOOL_CATEGORIES,
+                         tools=tools,
+                         all_categories=all_categories,
                          selected_category=category,
                          search_query=search_query,
+                         tool_icons=TOOL_CUSTOM_ICONS,
                          firebase_api_key=os.environ.get("FIREBASE_API_KEY", ""),
                          firebase_project_id=os.environ.get("FIREBASE_PROJECT_ID", ""),
                          firebase_app_id=os.environ.get("FIREBASE_APP_ID", ""))
