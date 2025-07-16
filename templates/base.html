@@ -15,11 +15,11 @@
     <meta property="og:description" content="{% block og_description %}85+ professional tools for PDF, Image, Video, AI processing and more. Free, fast, and secure.{% endblock %}">
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ request.url }}">
-    <meta property="og:image" content="{{ url_for('static', filename='images/toolora-logo.svg') }}">
+    <meta property="og:image" content="{{ url_for('static', filename='images/toolora-professional-logo.svg') }}">
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon.svg') }}">
-    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}"></old_str>
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -222,9 +222,9 @@
                 <!-- Logo Section -->
                 <div class="flex items-center">
                     <a href="{{ url_for('main.index') }}" class="flex items-center space-x-3 group">
-                        <img src="{{ url_for('static', filename='images/toolora-3d-logo.svg') }}" 
+                        <img src="{{ url_for('static', filename='images/toolora-professional-logo.svg') }}" 
                          alt="Toolora AI" 
-                         class="h-8 w-auto sm:h-10 toolora-3d-logo toolora-3d-logo--interactive">
+                         class="h-8 w-auto sm:h-10 professional-logo transition-transform duration-200 hover:scale-105"></old_str>
                     </a>
                 </div>
 
@@ -567,12 +567,11 @@
             <!-- Copyright -->
             <div class="flex items-center justify-center space-x-4 text-sm text-gray-600 dark:text-gray-400">
                 <div class="flex items-center space-x-2">
-                    <div class="w-8 h-8 bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 rounded-xl flex items-center justify-center shadow-lg transform hover:scale-105 transition-all duration-300 relative overflow-hidden">
-                        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 hover:opacity-30 transition-opacity duration-300 transform -skew-x-12"></div>
-                        <span class="text-white font-bold text-sm relative z-10">T</span>
-                    </div>
+                    <img src="{{ url_for('static', filename='images/toolora-icon-only.svg') }}" 
+                         alt="Toolora AI" 
+                         class="w-8 h-8 transition-transform duration-200 hover:scale-105">
                     <span class="font-bold text-orange-600 dark:text-orange-400">Toolora AI</span>
-                </div>
+                </div></old_str>
                 <span>© 2024 Toolora Inc.</span>
                 <a href="{{ url_for('main.terms') }}" class="hover:text-orange-600 dark:hover:text-orange-400 transition-colors">Legal</a>
                 <a href="{{ url_for('main.privacy') }}" class="hover:text-orange-600 dark:hover:text-orange-400 transition-colors">Privacy</a>

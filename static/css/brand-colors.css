@@ -9,17 +9,12 @@
     --toolora-shadow: 0 8px 25px rgba(139, 92, 246, 0.15);
 }
 
-/* Enhanced logo text with better visibility */
+/* Professional logo text */
 .header-logo {
-    background: linear-gradient(135deg, #059669, #0891b2, #1d4ed8, #7c3aed);
-    background-size: 300% 300%;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    animation: gradientFlow 4s ease infinite;
-    font-weight: 700;
-    text-shadow: 0 0 1px rgba(0, 0, 0, 0.1);
-    filter: contrast(1.2) brightness(1.1);
+    color: #1f2937;
+    font-weight: 600;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    transition: color 0.2s ease;
 }
 
 /* Dark mode logo enhancement */

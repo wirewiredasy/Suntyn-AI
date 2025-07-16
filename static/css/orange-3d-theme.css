@@ -17,19 +17,14 @@
     --toolora-3d-glow: 0 0 30px rgba(249, 115, 22, 0.4);
 }
 
-/* 3D Logo Styles */
-.toolora-3d-logo {
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    filter: drop-shadow(0 4px 8px rgba(234, 88, 12, 0.3));
+/* Professional Logo Styles */
+.professional-logo {
+    transition: transform 0.2s ease;
+    filter: none;
 }
 
-.toolora-3d-logo:hover {
-    transform: scale(1.05) translateY(-2px) rotateY(5deg);
-    filter: drop-shadow(0 8px 16px rgba(234, 88, 12, 0.4)) brightness(1.1);
-}
-
-.toolora-3d-logo--interactive:hover {
-    animation: logoFloat 0.6s ease-in-out;
+.professional-logo:hover {
+    transform: scale(1.05);
 }
 
 @keyframes logoFloat {

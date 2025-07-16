@@ -1,7 +1,7 @@
 
 <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="faviconOrange" x1="0%" y1="0%" x2="100%" y2="0%">
+    <linearGradient id="iconOrange" x1="0%" y1="0%" x2="100%" y2="0%">
       <stop offset="0%" style="stop-color:#ff6f00;stop-opacity:1" />
       <stop offset="50%" style="stop-color:#ff8f00;stop-opacity:1" />
       <stop offset="100%" style="stop-color:#ff6f00;stop-opacity:1" />
@@ -11,8 +11,8 @@
   <!-- Clean T Icon -->
   <g>
     <!-- Vertical bar -->
-    <rect x="10" y="6" width="4" height="20" rx="1" fill="url(#faviconOrange)"/>
+    <rect x="10" y="6" width="4" height="20" rx="1" fill="url(#iconOrange)"/>
     <!-- Horizontal bar -->
-    <rect x="7" y="6" width="10" height="4" rx="1" fill="url(#faviconOrange)"/>
+    <rect x="7" y="6" width="10" height="4" rx="1" fill="url(#iconOrange)"/>
   </g>
 </svg>

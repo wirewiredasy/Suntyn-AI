@@ -1771,17 +1771,15 @@ html {
     filter: brightness(1.1);
 }
 
-/* Enhanced logo image styling */
+/* Professional logo image styling */
 nav img[alt="Toolora AI"] {
     background-color: transparent;
-    border-radius: 8px;
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    filter: drop-shadow(0 0 10px rgba(139, 92, 246, 0.2));
+    transition: transform 0.2s ease;
+    filter: none;
 }
 
 nav img[alt="Toolora AI"]:hover {
-    filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.4)) 
-            drop-shadow(0 0 30px rgba(6, 182, 212, 0.3));
+    transform: scale(1.05);
 }
 
 /* Logo text gradient animation */
@@ -1799,15 +1797,14 @@ nav img[alt="Toolora AI"]:hover {
     50% { background-position: 100% 50%; }
 }
 
-/* Footer logo enhancements */
+/* Professional footer logo */
 footer img[alt="Toolora AI"] {
-    transition: all 0.3s ease;
-    filter: brightness(0.9);
+    transition: transform 0.2s ease;
+    filter: none;
 }
 
 footer img[alt="Toolora AI"]:hover {
-    filter: brightness(1.1) drop-shadow(0 0 15px rgba(139, 92, 246, 0.3));
-    transform: scale(1.1) rotate(10deg);
+    transform: scale(1.05);
 }
 
 /* Mobile logo optimizations */
