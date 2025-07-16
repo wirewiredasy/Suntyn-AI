@@ -1772,14 +1772,24 @@ html {
 }
 
 /* Professional logo image styling */
-nav img[alt="Toolora AI"] {
+nav img[alt="Toolora AI"],
+.professional-logo {
     background-color: transparent;
     transition: transform 0.2s ease;
     filter: none;
+    max-height: 40px;
+    width: auto;
 }
 
-nav img[alt="Toolora AI"]:hover {
+nav img[alt="Toolora AI"]:hover,
+.professional-logo:hover {
     transform: scale(1.05);
+}
+
+/* Ensure logo is always visible */
+a img[alt="Toolora AI"] {
+    display: block !important;
+    visibility: visible !important;
 }
 
 /* Dark mode logo visibility improvements */

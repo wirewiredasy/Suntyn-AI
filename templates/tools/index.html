@@ -30,7 +30,7 @@
                     >
                 </div>
             </div>
-            
+
             <!-- Category Filter -->
             <div class="flex-shrink-0">
                 <select 
@@ -47,7 +47,7 @@
                 </select>
             </div>
         </div>
-        
+
         <!-- Category Pills -->
         <div class="flex flex-wrap gap-2 mb-6">
             <button 
@@ -90,7 +90,7 @@
                                 </p>
                             </div>
                         </div>
-                        
+
                         <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">
                             {% if tool_name == 'pdf-merge' %}
                                 Merge multiple PDF files into a single document quickly and securely.
@@ -110,7 +110,7 @@
                                 Professional {{ tool_name.replace('-', ' ') }} tool for quick and secure processing.
                             {% endif %}
                         </p>
-                        
+
                         <div class="flex justify-between items-center">
                             <a href="/tools/{{ tool_name }}" 
                                class="inline-flex items-center px-4 py-2 bg-{{ category_data.color }}-600 hover:bg-{{ category_data.color }}-700 text-white font-medium rounded-lg transition-colors">
