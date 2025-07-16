@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, request, jsonify, session, redirect, url_for
+from flask_login import login_user, logout_user, current_user
 from models import User
 from app import db
 from firebase_config import verify_firebase_token
@@ -79,9 +80,10 @@ def verify_token():
         
         db.session.commit()
         
-        # Set session
+        # Set session and login user
         session['user_id'] = user.id
         session['firebase_uid'] = user.firebase_uid
+        login_user(user)
         
         return jsonify({'success': True, 'user': {
             'id': user.id,
@@ -97,6 +99,7 @@ def verify_token():
 @auth_bp.route('/logout', methods=['POST'])
 def logout():
     """Clear user session"""
+    logout_user()
     session.clear()
     return jsonify({'success': True})
 

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Server Error - Toolora AI</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-orange-50 to-white">
+    <div class="min-h-screen flex items-center justify-center px-4">
+        <div class="text-center max-w-md mx-auto">
+            <!-- Orange Logo -->
+            <div class="mb-8">
+                <svg class="w-20 h-20 mx-auto" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="orangeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#ff6b35;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#f97316;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <circle cx="50" cy="50" r="45" fill="url(#orangeGradient)" class="drop-shadow-lg"/>
+                    <text x="50" y="65" font-family="Arial, sans-serif" font-size="48" font-weight="bold" text-anchor="middle" fill="white">T</text>
+                </svg>
+            </div>
+            
+            <!-- Error Message -->
+            <h1 class="text-6xl font-bold text-red-500 mb-4">500</h1>
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">Server Error</h2>
+            <p class="text-gray-600 mb-8">
+                Sorry, something went wrong on our server. We're working to fix this issue. Please try again later.
+            </p>
+            
+            <!-- Action Buttons -->
+            <div class="space-y-4">
+                <a href="/" class="btn btn-primary bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 border-none text-white">
+                    <i data-lucide="home" class="w-4 h-4"></i>
+                    Go Home
+                </a>
+                <div class="flex gap-4 justify-center">
+                    <button onclick="location.reload()" class="btn btn-outline btn-sm">
+                        <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+                        Try Again
+                    </button>
+                    <a href="/contact" class="btn btn-outline btn-sm">
+                        <i data-lucide="mail" class="w-4 h-4"></i>
+                        Contact Support
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
