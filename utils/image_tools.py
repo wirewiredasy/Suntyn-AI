@@ -1,162 +1,228 @@
+"""
+Image processing utilities for Toolora AI
+Handles image compression, resizing, format conversion, and other operations
+"""
 
 import os
-from PIL import Image, ImageDraw, ImageFont
-from werkzeug.utils import secure_filename
+import uuid
+from PIL import Image, ImageEnhance, ImageFilter
+import tempfile
+import logging
 
 class ImageProcessor:
+    """Image processing utilities"""
+    
     @staticmethod
-    def compress_image(file_path, quality=85, format='JPEG'):
+    def compress_image(input_file, quality=85):
         """Compress image file"""
-        image = Image.open(file_path)
-        
-        # Convert to RGB if necessary
-        if image.mode in ('RGBA', 'P'):
-            image = image.convert('RGB')
-        
-        os.makedirs('uploads', exist_ok=True)
-        filename = secure_filename(os.path.basename(file_path))
-        name, ext = os.path.splitext(filename)
-        output_filename = f"compressed_{name}.{format.lower()}"
-        output_path = os.path.join('uploads', output_filename)
-        
-        image.save(output_path, format=format, quality=quality, optimize=True)
-        return output_path
-    
-    @staticmethod
-    def resize_image(file_path, width, height, maintain_aspect=True):
-        """Resize image"""
-        image = Image.open(file_path)
-        
-        if maintain_aspect:
-            image.thumbnail((width, height), Image.Resampling.LANCZOS)
-        else:
-            image = image.resize((width, height), Image.Resampling.LANCZOS)
-        
-        os.makedirs('uploads', exist_ok=True)
-        filename = secure_filename(os.path.basename(file_path))
-        name, ext = os.path.splitext(filename)
-        output_filename = f"resized_{name}{ext}"
-        output_path = os.path.join('uploads', output_filename)
-        
-        image.save(output_path)
-        return output_path
-    
-    @staticmethod
-    def convert_image(file_path, format='PNG'):
-        """Convert image format"""
-        image = Image.open(file_path)
-        
-        # Convert to RGB for JPEG
-        if format.upper() == 'JPEG' and image.mode in ('RGBA', 'P'):
-            image = image.convert('RGB')
-        
-        os.makedirs('uploads', exist_ok=True)
-        filename = secure_filename(os.path.basename(file_path))
-        name, ext = os.path.splitext(filename)
-        output_filename = f"converted_{name}.{format.lower()}"
-        output_path = os.path.join('uploads', output_filename)
-        
-        image.save(output_path, format=format.upper())
-        return output_path
-    
-    @staticmethod
-    def crop_image(file, x, y, width, height):
-        """Crop image"""
-        image = Image.open(file)
-        cropped = image.crop((x, y, x + width, y + height))
-        
-        os.makedirs('uploads', exist_ok=True)
-        filename = secure_filename(file.filename)
-        name, ext = os.path.splitext(filename)
-        output_filename = f"cropped_{name}{ext}"
-        output_path = os.path.join('uploads', output_filename)
-        
-        cropped.save(output_path)
-        return output_path
-    
-    @staticmethod
-    def rotate_image(file, angle):
-        """Rotate image"""
-        image = Image.open(file)
-        rotated = image.rotate(angle, expand=True)
-        
-        os.makedirs('uploads', exist_ok=True)
-        filename = secure_filename(file.filename)
-        name, ext = os.path.splitext(filename)
-        output_filename = f"rotated_{name}{ext}"
-        output_path = os.path.join('uploads', output_filename)
-        
-        rotated.save(output_path)
-        return output_path
-    
-    @staticmethod
-    def add_watermark(file, watermark_text, position='bottom-right', opacity=0.7):
-        """Add text watermark to image"""
-        image = Image.open(file)
-        
-        # Create transparent overlay
-        overlay = Image.new('RGBA', image.size, (255, 255, 255, 0))
-        draw = ImageDraw.Draw(overlay)
-        
-        # Try to use a font, fallback to default
         try:
-            font = ImageFont.truetype("arial.ttf", 36)
-        except:
-            font = ImageFont.load_default()
-        
-        # Get text size
-        bbox = draw.textbbox((0, 0), watermark_text, font=font)
-        text_width = bbox[2] - bbox[0]
-        text_height = bbox[3] - bbox[1]
-        
-        # Position watermark
-        if position == 'bottom-right':
-            x = image.width - text_width - 10
-            y = image.height - text_height - 10
-        elif position == 'bottom-left':
-            x = 10
-            y = image.height - text_height - 10
-        elif position == 'top-right':
-            x = image.width - text_width - 10
-            y = 10
-        elif position == 'top-left':
-            x = 10
-            y = 10
-        else:  # center
-            x = (image.width - text_width) // 2
-            y = (image.height - text_height) // 2
-        
-        # Draw watermark
-        alpha = int(255 * opacity)
-        draw.text((x, y), watermark_text, font=font, fill=(255, 255, 255, alpha))
-        
-        # Composite
-        watermarked = Image.alpha_composite(image.convert('RGBA'), overlay)
-        
-        os.makedirs('uploads', exist_ok=True)
-        filename = secure_filename(file.filename)
-        name, ext = os.path.splitext(filename)
-        output_filename = f"watermarked_{name}.png"
-        output_path = os.path.join('uploads', output_filename)
-        
-        watermarked.save(output_path)
-        return output_path
+            with Image.open(input_file) as img:
+                # Convert to RGB if necessary
+                if img.mode in ('RGBA', 'LA', 'P'):
+                    background = Image.new('RGB', img.size, (255, 255, 255))
+                    if img.mode == 'P':
+                        img = img.convert('RGBA')
+                    background.paste(img, mask=img.split()[-1] if img.mode == 'RGBA' else None)
+                    img = background
+                
+                # Generate output filename
+                file_ext = os.path.splitext(input_file)[1].lower()
+                if file_ext not in ['.jpg', '.jpeg']:
+                    file_ext = '.jpg'
+                
+                output_filename = f"compressed_{uuid.uuid4()}{file_ext}"
+                output_path = os.path.join('uploads', output_filename)
+                
+                # Ensure uploads directory exists
+                os.makedirs('uploads', exist_ok=True)
+                
+                # Save compressed image
+                img.save(output_path, 'JPEG', quality=quality, optimize=True)
+                
+                # Cleanup input file
+                try:
+                    os.remove(input_file)
+                except:
+                    pass
+                
+                return output_path
+                
+        except Exception as e:
+            logging.error(f"Image compress error: {str(e)}")
+            return None
     
     @staticmethod
-    def remove_background(file):
-        """Remove background from image (simple version)"""
-        # This is a simplified version - for real background removal, 
-        # you'd need a more sophisticated library like rembg
-        image = Image.open(file)
-        
-        # Convert to RGBA
-        image = image.convert('RGBA')
-        
-        os.makedirs('uploads', exist_ok=True)
-        filename = secure_filename(file.filename)
-        name, ext = os.path.splitext(filename)
-        output_filename = f"no_bg_{name}.png"
-        output_path = os.path.join('uploads', output_filename)
-        
-        image.save(output_path)
-        return output_path
+    def resize_image(input_file, width=None, height=None, maintain_aspect=True):
+        """Resize image file"""
+        try:
+            with Image.open(input_file) as img:
+                original_width, original_height = img.size
+                
+                if width and height and not maintain_aspect:
+                    new_size = (width, height)
+                elif width and maintain_aspect:
+                    aspect_ratio = original_height / original_width
+                    new_size = (width, int(width * aspect_ratio))
+                elif height and maintain_aspect:
+                    aspect_ratio = original_width / original_height
+                    new_size = (int(height * aspect_ratio), height)
+                else:
+                    new_size = (original_width // 2, original_height // 2)
+                
+                # Resize image
+                resized_img = img.resize(new_size, Image.Resampling.LANCZOS)
+                
+                # Generate output filename
+                file_ext = os.path.splitext(input_file)[1].lower()
+                output_filename = f"resized_{uuid.uuid4()}{file_ext}"
+                output_path = os.path.join('uploads', output_filename)
+                
+                # Ensure uploads directory exists
+                os.makedirs('uploads', exist_ok=True)
+                
+                # Save resized image
+                resized_img.save(output_path)
+                
+                # Cleanup input file
+                try:
+                    os.remove(input_file)
+                except:
+                    pass
+                
+                return output_path
+                
+        except Exception as e:
+            logging.error(f"Image resize error: {str(e)}")
+            return None
+    
+    @staticmethod
+    def convert_image(input_file, output_format='JPEG'):
+        """Convert image to different format"""
+        try:
+            with Image.open(input_file) as img:
+                # Convert format
+                if output_format.upper() == 'JPEG' and img.mode in ('RGBA', 'LA', 'P'):
+                    background = Image.new('RGB', img.size, (255, 255, 255))
+                    if img.mode == 'P':
+                        img = img.convert('RGBA')
+                    background.paste(img, mask=img.split()[-1] if img.mode == 'RGBA' else None)
+                    img = background
+                
+                # Generate output filename
+                format_extensions = {
+                    'JPEG': '.jpg',
+                    'PNG': '.png',
+                    'WEBP': '.webp',
+                    'BMP': '.bmp'
+                }
+                
+                file_ext = format_extensions.get(output_format.upper(), '.jpg')
+                output_filename = f"converted_{uuid.uuid4()}{file_ext}"
+                output_path = os.path.join('uploads', output_filename)
+                
+                # Ensure uploads directory exists
+                os.makedirs('uploads', exist_ok=True)
+                
+                # Save converted image
+                save_kwargs = {}
+                if output_format.upper() == 'JPEG':
+                    save_kwargs['quality'] = 90
+                    save_kwargs['optimize'] = True
+                
+                img.save(output_path, output_format.upper(), **save_kwargs)
+                
+                # Cleanup input file
+                try:
+                    os.remove(input_file)
+                except:
+                    pass
+                
+                return output_path
+                
+        except Exception as e:
+            logging.error(f"Image convert error: {str(e)}")
+            return None
+    
+    @staticmethod
+    def crop_image(input_file, left=0, top=0, right=None, bottom=None):
+        """Crop image"""
+        try:
+            with Image.open(input_file) as img:
+                width, height = img.size
+                
+                # Default crop to center if not specified
+                if right is None:
+                    right = width
+                if bottom is None:
+                    bottom = height
+                
+                # Crop image
+                cropped_img = img.crop((left, top, right, bottom))
+                
+                # Generate output filename
+                file_ext = os.path.splitext(input_file)[1].lower()
+                output_filename = f"cropped_{uuid.uuid4()}{file_ext}"
+                output_path = os.path.join('uploads', output_filename)
+                
+                # Ensure uploads directory exists
+                os.makedirs('uploads', exist_ok=True)
+                
+                # Save cropped image
+                cropped_img.save(output_path)
+                
+                # Cleanup input file
+                try:
+                    os.remove(input_file)
+                except:
+                    pass
+                
+                return output_path
+                
+        except Exception as e:
+            logging.error(f"Image crop error: {str(e)}")
+            return None
+    
+    @staticmethod
+    def enhance_image(input_file, brightness=1.0, contrast=1.0, saturation=1.0, sharpness=1.0):
+        """Enhance image with brightness, contrast, saturation, and sharpness"""
+        try:
+            with Image.open(input_file) as img:
+                # Apply enhancements
+                if brightness != 1.0:
+                    enhancer = ImageEnhance.Brightness(img)
+                    img = enhancer.enhance(brightness)
+                
+                if contrast != 1.0:
+                    enhancer = ImageEnhance.Contrast(img)
+                    img = enhancer.enhance(contrast)
+                
+                if saturation != 1.0:
+                    enhancer = ImageEnhance.Color(img)
+                    img = enhancer.enhance(saturation)
+                
+                if sharpness != 1.0:
+                    enhancer = ImageEnhance.Sharpness(img)
+                    img = enhancer.enhance(sharpness)
+                
+                # Generate output filename
+                file_ext = os.path.splitext(input_file)[1].lower()
+                output_filename = f"enhanced_{uuid.uuid4()}{file_ext}"
+                output_path = os.path.join('uploads', output_filename)
+                
+                # Ensure uploads directory exists
+                os.makedirs('uploads', exist_ok=True)
+                
+                # Save enhanced image
+                img.save(output_path)
+                
+                # Cleanup input file
+                try:
+                    os.remove(input_file)
+                except:
+                    pass
+                
+                return output_path
+                
+        except Exception as e:
+            logging.error(f"Image enhance error: {str(e)}")
+            return None

@@ -21,26 +21,38 @@ class EnhancedToolHandler {
 
     setupEventListeners() {
         // File selection
-        document.getElementById('file-select-btn')?.addEventListener('click', () => {
-            document.getElementById('file-input').click();
-        });
+        const fileSelectBtn = document.getElementById('file-select-btn');
+        if (fileSelectBtn) {
+            fileSelectBtn.addEventListener('click', () => {
+                document.getElementById('file-input').click();
+            });
+        }
 
         // File input change
-        document.getElementById('file-input')?.addEventListener('change', (e) => {
-            this.handleFileSelection(e.target.files);
-        });
+        const fileInput = document.getElementById('file-input');
+        if (fileInput) {
+            fileInput.addEventListener('change', (e) => {
+                this.handleFileSelection(e.target.files);
+            });
+        }
 
         // Process button
-        document.getElementById('process-btn')?.addEventListener('click', (e) => {
-            e.preventDefault();
-            this.processFiles();
-        });
+        const processBtn = document.getElementById('process-btn');
+        if (processBtn) {
+            processBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.processFiles();
+            });
+        }
 
         // Form submission
-        document.getElementById('tool-form')?.addEventListener('submit', (e) => {
-            e.preventDefault();
-            this.processFiles();
-        });
+        const toolForm = document.getElementById('tool-form');
+        if (toolForm) {
+            toolForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.processFiles();
+            });
+        }
     }
 
     setupFileUpload() {
@@ -534,8 +546,8 @@ class EnhancedToolHandler {
             'video-trimmer': '/api/video/trim',
             
             // AI tools
-            'resume-generator': '/api/ai/resume',
-            'business-name-generator': '/api/ai/business-names',
+            'resume-generator': '/api/ai/generate-resume',
+            'business-name-generator': '/api/ai/generate-business-names',
             'blog-title-generator': '/api/ai/blog-titles',
             'product-description': '/api/ai/product-description',
             'ad-copy-generator': '/api/ai/ad-copy',
