@@ -1,161 +1,190 @@
+
 {% extends "base.html" %}
 
 {% block title %}Dashboard - Toolora AI{% endblock %}
 
 {% block content %}
-<section class="min-h-screen bg-gray-50 dark:bg-gray-900">
-    <div class="container mx-auto px-4 py-8">
-        <!-- Header -->
-        <div class="mb-8">
-            <div class="flex items-center space-x-4 mb-4">
-                <div class="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-500 rounded-xl flex items-center justify-center shadow-lg">
-                    <span class="text-white font-bold text-lg">T</span>
+<div class="min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-100 dark:from-gray-900 dark:via-gray-800 dark:to-orange-900/20">
+    <!-- Hero Section -->
+    <div class="bg-gradient-to-r from-orange-500 via-orange-600 to-orange-700 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <div class="w-20 h-20 bg-white/20 rounded-3xl flex items-center justify-center mx-auto mb-6 backdrop-blur-sm shadow-2xl">
+                    <img src="{{ url_for('static', filename='images/toolora-3d-icon.svg') }}" alt="Toolora AI" class="w-12 h-12">
                 </div>
-                <div>
-                    <h1 class="text-4xl font-bold text-gray-800 dark:text-white">Dashboard</h1>
-                    <p class="text-lg text-gray-600 dark:text-gray-300">Welcome back! Here's your activity overview.</p>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Stats Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <div class="enhanced-card dark:enhanced-card-dark p-6">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Tools Used</p>
-                        <p class="text-3xl font-bold text-gray-800 dark:text-white">24</p>
-                    </div>
-                    <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
-                        <i data-lucide="activity" class="w-6 h-6 text-white"></i>
-                    </div>
-                </div>
-                <div class="mt-4 flex items-center">
-                    <span class="text-sm font-medium text-green-600">+12%</span>
-                    <span class="text-sm text-gray-500 dark:text-gray-400 ml-2">from last month</span>
-                </div>
-            </div>
-            
-            <div class="enhanced-card dark:enhanced-card-dark p-6">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Files Processed</p>
-                        <p class="text-3xl font-bold text-gray-800 dark:text-white">156</p>
-                    </div>
-                    <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center">
-                        <i data-lucide="file" class="w-6 h-6 text-white"></i>
-                    </div>
-                </div>
-                <div class="mt-4 flex items-center">
-                    <span class="text-sm font-medium text-green-600">+8%</span>
-                    <span class="text-sm text-gray-500 dark:text-gray-400 ml-2">from last month</span>
-                </div>
-            </div>
-            
-            <div class="enhanced-card dark:enhanced-card-dark p-6">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Time Saved</p>
-                        <p class="text-3xl font-bold text-gray-800 dark:text-white">8.5h</p>
-                    </div>
-                    <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center">
-                        <i data-lucide="clock" class="w-6 h-6 text-white"></i>
-                    </div>
-                </div>
-                <div class="mt-4 flex items-center">
-                    <span class="text-sm font-medium text-green-600">+15%</span>
-                    <span class="text-sm text-gray-500 dark:text-gray-400 ml-2">from last month</span>
-                </div>
-            </div>
-            
-            <div class="enhanced-card dark:enhanced-card-dark p-6">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Favorite Tools</p>
-                        <p class="text-3xl font-bold text-gray-800 dark:text-white">7</p>
-                    </div>
-                    <div class="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center">
-                        <i data-lucide="heart" class="w-6 h-6 text-white"></i>
-                    </div>
-                </div>
-                <div class="mt-4 flex items-center">
-                    <span class="text-sm font-medium text-green-600">+2</span>
-                    <span class="text-sm text-gray-500 dark:text-gray-400 ml-2">new favorites</span>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Recent Activity -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <div class="enhanced-card dark:enhanced-card-dark p-6">
-                <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-6">Recent Activity</h3>
-                <div class="space-y-4">
-                    <div class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
-                        <div class="w-10 h-10 bg-red-100 dark:bg-red-900/30 rounded-lg flex items-center justify-center">
-                            <i data-lucide="file-text" class="w-5 h-5 text-red-600 dark:text-red-400"></i>
-                        </div>
-                        <div class="flex-1">
-                            <p class="font-medium text-gray-800 dark:text-white">PDF Merge</p>
-                            <p class="text-sm text-gray-500 dark:text-gray-400">2 hours ago</p>
-                        </div>
-                    </div>
-                    
-                    <div class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
-                        <div class="w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center">
-                            <i data-lucide="image" class="w-5 h-5 text-green-600 dark:text-green-400"></i>
-                        </div>
-                        <div class="flex-1">
-                            <p class="font-medium text-gray-800 dark:text-white">Image Compress</p>
-                            <p class="text-sm text-gray-500 dark:text-gray-400">5 hours ago</p>
-                        </div>
-                    </div>
-                    
-                    <div class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
-                        <div class="w-10 h-10 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center">
-                            <i data-lucide="video" class="w-5 h-5 text-purple-600 dark:text-purple-400"></i>
-                        </div>
-                        <div class="flex-1">
-                            <p class="font-medium text-gray-800 dark:text-white">Video Trim</p>
-                            <p class="text-sm text-gray-500 dark:text-gray-400">1 day ago</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Quick Access -->
-            <div class="enhanced-card dark:enhanced-card-dark p-6">
-                <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-6">Quick Access</h3>
-                <div class="grid grid-cols-2 gap-4">
-                    <a href="/tools/pdf-merge" class="group flex flex-col items-center p-4 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-primary-300 dark:hover:border-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-all">
-                        <div class="w-12 h-12 bg-red-100 dark:bg-red-900/30 rounded-xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
-                            <i data-lucide="layers" class="w-6 h-6 text-red-600 dark:text-red-400"></i>
-                        </div>
-                        <span class="font-medium text-gray-800 dark:text-white text-center">PDF Merge</span>
+                <h1 class="text-4xl md:text-5xl font-bold mb-4">
+                    Welcome to <span class="text-orange-200">Toolora AI</span>
+                </h1>
+                <p class="text-xl text-orange-100 mb-8 max-w-2xl mx-auto">
+                    Your professional AI-powered toolkit with 85+ tools at your fingertips
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="{{ url_for('tools.index') }}" class="btn-3d-orange px-8 py-3 rounded-xl font-semibold text-white inline-flex items-center justify-center">
+                        <i data-lucide="zap" class="w-5 h-5 mr-2"></i>
+                        Explore All Tools
                     </a>
-                    
-                    <a href="/tools/image-compress" class="group flex flex-col items-center p-4 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-primary-300 dark:hover:border-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-all">
-                        <div class="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
-                            <i data-lucide="minimize-2" class="w-6 h-6 text-green-600 dark:text-green-400"></i>
-                        </div>
-                        <span class="font-medium text-gray-800 dark:text-white text-center">Image Compress</span>
-                    </a>
-                    
-                    <a href="/tools/video-trimmer" class="group flex flex-col items-center p-4 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-primary-300 dark:hover:border-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-all">
-                        <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
-                            <i data-lucide="scissors" class="w-6 h-6 text-purple-600 dark:text-purple-400"></i>
-                        </div>
-                        <span class="font-medium text-gray-800 dark:text-white text-center">Video Trim</span>
-                    </a>
-                    
-                    <a href="/tools/resume-generator" class="group flex flex-col items-center p-4 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-primary-300 dark:hover:border-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-all">
-                        <div class="w-12 h-12 bg-violet-100 dark:bg-violet-900/30 rounded-xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
-                            <i data-lucide="briefcase" class="w-6 h-6 text-violet-600 dark:text-violet-400"></i>
-                        </div>
-                        <span class="font-medium text-gray-800 dark:text-white text-center">Resume Gen</span>
+                    <a href="#features" class="bg-white/20 hover:bg-white/30 px-8 py-3 rounded-xl font-semibold text-white backdrop-blur-sm transition-all duration-300 inline-flex items-center justify-center">
+                        <i data-lucide="info" class="w-5 h-5 mr-2"></i>
+                        Learn More
                     </a>
                 </div>
             </div>
         </div>
     </div>
-</section>
+
+    <!-- Quick Stats -->
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div class="card-3d-orange rounded-2xl p-6 text-center">
+                    <div class="icon-3d-orange w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-4">
+                        <i data-lucide="file-text" class="w-6 h-6 text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-2">25+</h3>
+                    <p class="text-gray-600 dark:text-gray-400">PDF Tools</p>
+                </div>
+                
+                <div class="card-3d-orange rounded-2xl p-6 text-center">
+                    <div class="icon-3d-orange w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-4">
+                        <i data-lucide="image" class="w-6 h-6 text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-2">20+</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Image Tools</p>
+                </div>
+                
+                <div class="card-3d-orange rounded-2xl p-6 text-center">
+                    <div class="icon-3d-orange w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-4">
+                        <i data-lucide="brain" class="w-6 h-6 text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-2">15+</h3>
+                    <p class="text-gray-600 dark:text-gray-400">AI Tools</p>
+                </div>
+                
+                <div class="card-3d-orange rounded-2xl p-6 text-center">
+                    <div class="icon-3d-orange w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-4">
+                        <i data-lucide="video" class="w-6 h-6 text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-2">25+</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Video & More</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popular Tools -->
+    <div id="features" class="py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 dark:text-white mb-4">
+                    Popular <span class="text-3d-orange">Tools</span>
+                </h2>
+                <p class="text-lg text-gray-600 dark:text-gray-400">
+                    Most used tools by our professional users
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- PDF Merge -->
+                <div class="card-3d-orange rounded-2xl p-6 hover:scale-105 transition-all duration-300">
+                    <div class="flex items-center mb-4">
+                        <div class="icon-3d-orange w-10 h-10 rounded-lg flex items-center justify-center mr-3">
+                            <i data-lucide="file-plus" class="w-5 h-5 text-white"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-white">PDF Merge</h3>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">Combine multiple PDF files into one document</p>
+                    <a href="{{ url_for('tools.tool_page', tool_name='pdf-merge') }}" class="btn-3d-orange px-4 py-2 rounded-lg text-sm font-medium text-white inline-flex items-center">
+                        Use Tool <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i>
+                    </a>
+                </div>
+
+                <!-- Image Compress -->
+                <div class="card-3d-orange rounded-2xl p-6 hover:scale-105 transition-all duration-300">
+                    <div class="flex items-center mb-4">
+                        <div class="icon-3d-orange w-10 h-10 rounded-lg flex items-center justify-center mr-3">
+                            <i data-lucide="image" class="w-5 h-5 text-white"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Image Compress</h3>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">Reduce image file size while maintaining quality</p>
+                    <a href="{{ url_for('tools.tool_page', tool_name='image-compress') }}" class="btn-3d-orange px-4 py-2 rounded-lg text-sm font-medium text-white inline-flex items-center">
+                        Use Tool <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i>
+                    </a>
+                </div>
+
+                <!-- QR Generator -->
+                <div class="card-3d-orange rounded-2xl p-6 hover:scale-105 transition-all duration-300">
+                    <div class="flex items-center mb-4">
+                        <div class="icon-3d-orange w-10 h-10 rounded-lg flex items-center justify-center mr-3">
+                            <i data-lucide="qr-code" class="w-5 h-5 text-white"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-white">QR Generator</h3>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">Generate custom QR codes for any content</p>
+                    <a href="{{ url_for('tools.tool_page', tool_name='qr-generator') }}" class="btn-3d-orange px-4 py-2 rounded-lg text-sm font-medium text-white inline-flex items-center">
+                        Use Tool <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i>
+                    </a>
+                </div>
+
+                <!-- Resume Generator -->
+                <div class="card-3d-orange rounded-2xl p-6 hover:scale-105 transition-all duration-300">
+                    <div class="flex items-center mb-4">
+                        <div class="icon-3d-orange w-10 h-10 rounded-lg flex items-center justify-center mr-3">
+                            <i data-lucide="file-user" class="w-5 h-5 text-white"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Resume Generator</h3>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">Create professional resumes with AI assistance</p>
+                    <a href="{{ url_for('tools.tool_page', tool_name='resume-generator') }}" class="btn-3d-orange px-4 py-2 rounded-lg text-sm font-medium text-white inline-flex items-center">
+                        Use Tool <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i>
+                    </a>
+                </div>
+
+                <!-- Background Remover -->
+                <div class="card-3d-orange rounded-2xl p-6 hover:scale-105 transition-all duration-300">
+                    <div class="flex items-center mb-4">
+                        <div class="icon-3d-orange w-10 h-10 rounded-lg flex items-center justify-center mr-3">
+                            <i data-lucide="scissors" class="w-5 h-5 text-white"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Background Remover</h3>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">Remove backgrounds from images automatically</p>
+                    <a href="{{ url_for('tools.tool_page', tool_name='background-remover') }}" class="btn-3d-orange px-4 py-2 rounded-lg text-sm font-medium text-white inline-flex items-center">
+                        Use Tool <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i>
+                    </a>
+                </div>
+
+                <!-- Video Trimmer -->
+                <div class="card-3d-orange rounded-2xl p-6 hover:scale-105 transition-all duration-300">
+                    <div class="flex items-center mb-4">
+                        <div class="icon-3d-orange w-10 h-10 rounded-lg flex items-center justify-center mr-3">
+                            <i data-lucide="video" class="w-5 h-5 text-white"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Video Trimmer</h3>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">Trim and cut video files with precision</p>
+                    <a href="{{ url_for('tools.tool_page', tool_name='video-trimmer') }}" class="btn-3d-orange px-4 py-2 rounded-lg text-sm font-medium text-white inline-flex items-center">
+                        Use Tool <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="py-12 bg-gradient-to-r from-orange-500 via-orange-600 to-orange-700">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
+                Ready to boost your productivity?
+            </h2>
+            <p class="text-xl text-orange-100 mb-8">
+                Join thousands of professionals using Toolora AI for their daily tasks
+            </p>
+            <a href="{{ url_for('tools.index') }}" class="bg-white text-orange-600 hover:text-orange-700 px-8 py-4 rounded-2xl font-bold text-lg transition-all duration-300 hover:shadow-2xl hover:scale-105 inline-flex items-center">
+                <i data-lucide="rocket" class="w-6 h-6 mr-3"></i>
+                Explore All 85+ Tools
+            </a>
+        </div>
+    </div>
+</div>
 {% endblock %}

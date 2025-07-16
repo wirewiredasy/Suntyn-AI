@@ -1,31 +1,24 @@
 
 <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="faviconBrand" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#4facfe"/>
-      <stop offset="50%" style="stop-color:#00f2fe"/>
-      <stop offset="100%" style="stop-color:#43e97b"/>
+    <linearGradient id="faviconGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ff7b00;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#e65100;stop-opacity:1" />
     </linearGradient>
     
-    <filter id="faviconGlow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="1" result="coloredBlur"/>
-      <feMerge>
-        <feMergeNode in="coloredBlur"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
+    <filter id="faviconShadow">
+      <feDropShadow dx="1" dy="1" stdDeviation="1" flood-color="#bf360c" flood-opacity="0.6"/>
     </filter>
   </defs>
   
-  <!-- T shape -->
-  <rect x="6" y="8" width="20" height="4" rx="2" fill="url(#faviconBrand)" filter="url(#faviconGlow)"/>
-  <rect x="14" y="8" width="4" height="16" rx="2" fill="url(#faviconBrand)" filter="url(#faviconGlow)"/>
+  <!-- Background circle -->
+  <circle cx="16" cy="16" r="15" fill="url(#faviconGradient)" filter="url(#faviconShadow)"/>
   
-  <!-- AI indicator -->
-  <circle cx="16" cy="5" r="2" fill="url(#faviconBrand)" opacity="0.9"/>
-  
-  <!-- Corner accents -->
-  <rect x="2" y="2" width="2" height="2" rx="1" fill="url(#faviconBrand)" opacity="0.6"/>
-  <rect x="28" y="2" width="2" height="2" rx="1" fill="url(#faviconBrand)" opacity="0.6"/>
-  <rect x="2" y="28" width="2" height="2" rx="1" fill="url(#faviconBrand)" opacity="0.6"/>
-  <rect x="28" y="28" width="2" height="2" rx="1" fill="url(#faviconBrand)" opacity="0.6"/>
+  <!-- T Icon -->
+  <g fill="#ffffff">
+    <rect x="11" y="8" width="4" height="14" rx="1"/>
+    <rect x="8" y="10" width="8" height="3" rx="1"/>
+    <!-- Highlight -->
+    <rect x="12" y="9" width="1" height="12" fill="#ffab40" opacity="0.8"/>
+  </g>
 </svg>

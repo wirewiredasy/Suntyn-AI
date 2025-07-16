@@ -1,0 +1,35 @@
+
+<svg width="50" height="50" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="icon3DGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ff7b00;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#ff6f00;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#e65100;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="iconLight" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffab40;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ff9800;stop-opacity:1" />
+    </linearGradient>
+    
+    <filter id="iconShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="2" dy="2" stdDeviation="2" flood-color="#bf360c" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+  
+  <!-- 3D Shadow -->
+  <g transform="translate(1, 1)" opacity="0.3">
+    <rect x="15" y="10" width="8" height="25" rx="2" fill="#bf360c"/>
+    <rect x="12" y="15" width="14" height="6" rx="2" fill="#bf360c"/>
+  </g>
+  
+  <!-- Main Icon -->
+  <g filter="url(#iconShadow)">
+    <rect x="14" y="9" width="8" height="25" rx="2" fill="url(#icon3DGradient)"/>
+    <rect x="11" y="14" width="14" height="6" rx="2" fill="url(#icon3DGradient)"/>
+    
+    <!-- 3D Highlights -->
+    <rect x="15" y="10" width="2" height="23" rx="1" fill="url(#iconLight)" opacity="0.8"/>
+    <rect x="12" y="15" width="12" height="2" rx="1" fill="url(#iconLight)" opacity="0.8"/>
+  </g>
+</svg>
