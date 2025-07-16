@@ -71,9 +71,10 @@
     <!-- Tools Grid -->
     <div id="tools-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {% for tool in tools %}
-        <div class="tool-card bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border border-gray-200 dark:border-gray-700" 
+        <div class="tool-card bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border border-gray-200 dark:border-gray-700 cursor-pointer" 
              data-tool="{{ tool.name }}" 
-             data-category="{{ tool.category.name }}">
+             data-category="{{ tool.category.name }}"
+             onclick="window.location.href='/tools/{{ tool.name }}'; console.log('Card clicked, navigating to: /tools/{{ tool.name }}')">
             <div class="p-6">
                 <div class="flex items-center mb-4">
                     <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
@@ -95,7 +96,8 @@
 
                 <div class="flex justify-between items-center">
                     <a href="/tools/{{ tool.name }}" 
-                       class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors">
+                       onclick="console.log('Navigating to:', this.href); return true;"
+                       class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors shadow-lg hover:shadow-xl">
                         <i data-lucide="arrow-right" class="w-4 h-4 mr-2"></i>
                         Use Tool
                     </a>

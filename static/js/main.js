@@ -20,7 +20,7 @@ window.ToolaraApp = {
     },
 
     setupSPANavigation: function() {
-        // Enhanced SPA navigation with better loading states
+        // Disable SPA for tool links - let them navigate normally
         document.addEventListener('click', (e) => {
             const link = e.target.closest('a');
             if (link && link.href && link.href.startsWith(window.location.origin) && !link.target) {
@@ -31,6 +31,11 @@ window.ToolaraApp = {
 
                 // Skip external links
                 if (link.hostname !== window.location.hostname) return;
+
+                // Skip tool links - let them navigate normally for better functionality
+                if (href.includes('/tools/') && !href.endsWith('/tools')) {
+                    return; // Don't prevent default for tool pages
+                }
 
                 // Skip if already navigating
                 if (this.isNavigating) return;
@@ -216,10 +221,10 @@ window.ToolaraApp = {
         document.addEventListener('alpine:init', () => {
             Alpine.store('navigation', {
                 mobileMenuOpen: false,
-                toggleMobileMenu() {
+                toggleMobileMenu: function() {
                     this.mobileMenuOpen = !this.mobileMenuOpen;
                 },
-                closeMobileMenu() {
+                closeMobileMenu: function() {
                     this.mobileMenuOpen = false;
                 }
             });
@@ -381,7 +386,7 @@ window.ToolaraApp = {
                     delete document.body.dataset.scrollY;
                 },
                 
-                closeMobileMenu() {
+                closeMobileMenu: function() {
                     this.mobileMenuOpen = false;
                     this.unlockScroll();
                 }
