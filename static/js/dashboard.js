@@ -232,9 +232,17 @@ window.trackToolUsage = async function(toolName, category, fileCount = 1, fileSi
     }
 };
 
+// Make dashboard function globally available
+window.dashboard = dashboard;
+
 // Initialize dashboard when page loads
 document.addEventListener('DOMContentLoaded', function() {
     if (window.location.pathname === '/dashboard') {
         console.log('📊 Professional Dashboard Loading...');
+        
+        // Initialize dashboard if Alpine.js is available
+        if (typeof Alpine !== 'undefined') {
+            console.log('✅ Alpine.js found, dashboard ready');
+        }
     }
 });

@@ -3,7 +3,6 @@
 {% block title %}Dashboard - Toolora AI{% endblock %}
 
 {% block head %}
-    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
     <style>
         [x-cloak] { display: none !important; }
     </style>
@@ -248,4 +247,16 @@
         </div>
     </div>
 </div>
+
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+<script>
+// Initialize dashboard data
+document.addEventListener('DOMContentLoaded', function() {
+    if (typeof window.dashboard === 'function') {
+        console.log('✅ Dashboard function loaded successfully');
+    } else {
+        console.error('❌ Dashboard function not found');
+    }
+});
+</script>
 {% endblock %}
