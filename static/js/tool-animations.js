@@ -507,10 +507,10 @@ class AdvancedButtonEffects {
 }
 
 // Initialize enhanced effects
-const advancedAnimationManager = new ToolAnimationManager();
-advancedAnimationManager.setupAdvancedButtonEffects();
-advancedAnimationManager.addAdvancedAnimations();
+const advancedButtonEffects = new AdvancedButtonEffects();
+advancedButtonEffects.setupAdvancedButtonEffects();
+advancedButtonEffects.addAdvancedAnimations();
 
 // Export for global use
 window.toolAnimationManager = toolAnimationManager;
-        window.addInstantPageTransitions = this.addInstantPageTransitions.bind(this);
+window.advancedButtonEffects = advancedButtonEffects;
