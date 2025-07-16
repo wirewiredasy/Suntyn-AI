@@ -443,27 +443,26 @@ window.ToolaraApp = {
     setupSmoothHeaderScroll: function() {
         let lastScrollY = window.scrollY;
         let ticking = false;
-        const header = document.querySelector('.sticky-header');
+        const header = document.querySelector('.professional-header');
         
         if (!header) return;
+
+        // Lock header at top - never hide
+        header.classList.add('locked');
 
         function updateHeader() {
             const currentScrollY = window.scrollY;
             
-            // Add/remove scrolled class based on scroll position
-            if (currentScrollY > 10) {
+            // Always keep header visible and locked
+            header.style.position = 'fixed';
+            header.style.top = '0';
+            header.style.transform = 'translateY(0)';
+            
+            // Add/remove scrolled class for visual enhancement
+            if (currentScrollY > 20) {
                 header.classList.add('scrolled');
             } else {
                 header.classList.remove('scrolled');
-            }
-            
-            // Hide/show header based on scroll direction
-            if (currentScrollY > lastScrollY && currentScrollY > 100) {
-                // Scrolling down & past threshold - hide header
-                header.style.transform = 'translateY(-100%)';
-            } else {
-                // Scrolling up or at top - show header
-                header.style.transform = 'translateY(0)';
             }
             
             lastScrollY = currentScrollY;
@@ -480,12 +479,15 @@ window.ToolaraApp = {
         // Use passive scroll listener for better performance
         window.addEventListener('scroll', requestTick, { passive: true });
         
-        // Show header when mouse moves to top
-        document.addEventListener('mousemove', (e) => {
-            if (e.clientY < 60) {
-                header.style.transform = 'translateY(0)';
-            }
+        // Ensure header stays locked on resize
+        window.addEventListener('resize', () => {
+            header.style.position = 'fixed';
+            header.style.top = '0';
+            header.style.transform = 'translateY(0)';
         });
+
+        // Initialize header position
+        updateHeader();
     },
 
 
