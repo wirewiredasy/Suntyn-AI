@@ -11,6 +11,7 @@ window.ToolaraApp = {
         this.setupSPANavigation();
         this.setupInstantPageLoad();
         this.setupDarkMode();
+        this.setupMobileSidebar();
         this.setupChatWidget();
         this.setupToolClicks();
         this.setupAnimations();
@@ -297,6 +298,76 @@ window.ToolaraApp = {
 
                         // Auto-reply with slight delay
                         setTimeout(() => {
+
+
+    setupMobileSidebar: function() {
+        // Enhanced mobile sidebar functionality
+        document.addEventListener('alpine:init', () => {
+            Alpine.store('navigation', {
+                mobileMenuOpen: false,
+                
+                toggleMobileMenu() {
+                    this.mobileMenuOpen = !this.mobileMenuOpen;
+                    
+                    // Prevent body scroll when sidebar is open
+                    if (this.mobileMenuOpen) {
+                        document.body.style.overflow = 'hidden';
+                    } else {
+                        document.body.style.overflow = '';
+                    }
+                },
+                
+                closeMobileMenu() {
+                    this.mobileMenuOpen = false;
+                    document.body.style.overflow = '';
+                }
+            });
+        });
+
+        // Add swipe to close functionality
+        let startX = 0;
+        let currentX = 0;
+        let isSwipe = false;
+
+        document.addEventListener('touchstart', (e) => {
+            if (window.Alpine && window.Alpine.store('navigation').mobileMenuOpen) {
+                startX = e.touches[0].clientX;
+                isSwipe = true;
+            }
+        }, { passive: true });
+
+        document.addEventListener('touchmove', (e) => {
+            if (!isSwipe) return;
+            currentX = e.touches[0].clientX;
+        }, { passive: true });
+
+        document.addEventListener('touchend', (e) => {
+            if (!isSwipe) return;
+            
+            const diffX = startX - currentX;
+            
+            // Swipe left to close (threshold: 50px)
+            if (diffX > 50 && window.Alpine && window.Alpine.store('navigation').mobileMenuOpen) {
+                window.Alpine.store('navigation').closeMobileMenu();
+            }
+            
+            isSwipe = false;
+        }, { passive: true });
+
+        // Close sidebar on route change
+        document.addEventListener('click', (e) => {
+            const link = e.target.closest('a[href]');
+            if (link && link.closest('.mobile-sidebar-content')) {
+                setTimeout(() => {
+                    if (window.Alpine && window.Alpine.store('navigation')) {
+                        window.Alpine.store('navigation').closeMobileMenu();
+                    }
+                }, 100);
+            }
+        });
+    },
+
+
                             this.messages.push({
                                 id: Date.now() + 1,
                                 sender: 'bot',

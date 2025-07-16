@@ -1934,3 +1934,132 @@ footer img[alt="Toolora AI"]:hover {
                 box-shadow: 0 6px 16px rgba(59, 130, 246, 0.25);
                 transform: translateY(-1px);
             }
+
+
+/* Professional Mobile Sidebar Styles */
+.professional-nav-item {
+    @apply flex items-center justify-between p-4 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-300 cursor-pointer;
+    border: 1px solid transparent;
+}
+
+.professional-nav-item:hover {
+    border-color: rgba(249, 115, 22, 0.2);
+    box-shadow: 0 4px 12px rgba(249, 115, 22, 0.1);
+}
+
+.quick-tool-card {
+    @apply flex flex-col items-center justify-center p-4 bg-gray-50 dark:bg-gray-800 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-300 text-center cursor-pointer;
+    border: 1px solid transparent;
+}
+
+.quick-tool-card:hover {
+    border-color: rgba(249, 115, 22, 0.2);
+    box-shadow: 0 2px 8px rgba(249, 115, 22, 0.1);
+    transform: translateY(-2px);
+}
+
+/* Mobile Sidebar Animations */
+.professional-nav-item .w-10 {
+    transition: all 0.3s ease;
+}
+
+.professional-nav-item:hover .w-10 {
+    transform: scale(1.1);
+}
+
+/* Backdrop blur enhancement for mobile */
+@supports (backdrop-filter: blur(10px)) {
+    .mobile-sidebar-backdrop {
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+    }
+}
+
+/* Mobile-specific improvements */
+@media (max-width: 480px) {
+    .professional-nav-item {
+        padding: 12px;
+    }
+    
+    .quick-tool-card {
+        padding: 12px;
+    }
+    
+    .professional-nav-item .w-10 {
+        width: 36px;
+        height: 36px;
+    }
+}
+
+/* Smooth scrolling for mobile sidebar */
+.mobile-sidebar-content {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.mobile-sidebar-content::-webkit-scrollbar {
+    display: none;
+}
+
+/* Professional gradient header for mobile */
+.mobile-sidebar-header {
+    background: linear-gradient(135deg, #f97316 0%, #ea580c 50%, #dc2626 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.mobile-sidebar-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, transparent 0%, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.mobile-sidebar-header:hover::before {
+    opacity: 1;
+}
+
+/* Enhanced mobile menu button */
+.mobile-menu-toggle {
+    position: relative;
+    overflow: hidden;
+}
+
+.mobile-menu-toggle::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: radial-gradient(circle, rgba(249, 115, 22, 0.3) 0%, transparent 70%);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: all 0.3s ease;
+}
+
+.mobile-menu-toggle:active::after {
+    width: 40px;
+    height: 40px;
+}
+
+/* Professional mobile sidebar shadows */
+.mobile-sidebar-shadow {
+    box-shadow: 
+        20px 0 40px rgba(0, 0, 0, 0.1),
+        0 0 60px rgba(249, 115, 22, 0.05);
+}
+
+.dark .mobile-sidebar-shadow {
+    box-shadow: 
+        20px 0 40px rgba(0, 0, 0, 0.3),
+        0 0 60px rgba(249, 115, 22, 0.1);
+}
+
