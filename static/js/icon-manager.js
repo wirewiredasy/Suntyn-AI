@@ -135,6 +135,18 @@ class IconManager {
         this.updateSVGLogos(isDark);
     }
 
+    adaptToTheme(isDark) {
+        // Theme adaptation logic
+        const icons = document.querySelectorAll('[data-lucide]');
+        icons.forEach(icon => {
+            if (isDark) {
+                icon.style.color = '#ffffff';
+            } else {
+                icon.style.color = '#000000';
+            }
+        });
+    }
+
     updateSVGLogos(isDark) {
         // Update SVG logos for dark mode
         const svgLogos = document.querySelectorAll('svg.professional-logo, svg[class*="toolora"]');

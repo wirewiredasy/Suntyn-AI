@@ -9,9 +9,12 @@
             <div class="flex justify-between h-16">
                 <div class="flex items-center">
                     <a href="{{ url_for('main.index') }}" class="flex items-center space-x-3">
-                        <img src="{{ url_for('static', filename='images/toolora-professional-logo.svg') }}" 
-                             alt="Toolora AI" 
-                             class="h-8 w-auto professional-logo transition-transform duration-200 hover:scale-105">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-8 h-8 bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600 rounded-lg flex items-center justify-center shadow-lg">
+                                <span class="text-white font-bold text-lg">T</span>
+                            </div>
+                            <span class="text-xl font-bold text-gray-900 dark:text-white">Toolora AI</span>
+                        </div>
                     </a>
                 </div>
 
@@ -47,9 +50,9 @@
                 <!-- Logo -->
                 <div class="text-center mb-8">
                     <div class="w-16 h-16 mx-auto mb-4">
-                        <img src="{{ url_for('static', filename='images/toolora-professional-logo.svg') }}" 
-                             alt="Toolora AI" 
-                             class="w-full h-full professional-logo">
+                        <div class="w-full h-full bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600 rounded-xl flex items-center justify-center shadow-lg">
+                            <span class="text-white font-bold text-3xl">T</span>
+                        </div>
                     </div>
                     <h1 class="text-3xl font-bold text-gray-800 dark:text-white mb-2">Welcome Back!</h1>
                     <p class="text-gray-600 dark:text-gray-300">Sign in to access your professional tools</p>

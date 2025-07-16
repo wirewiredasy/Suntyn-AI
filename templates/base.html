@@ -45,6 +45,9 @@
 
     <!-- Search Fix Script -->
     <script src="{{ url_for('static', filename='js/search-fix.js') }}"></script>
+    
+    <!-- Icon Manager Script -->
+    <script src="{{ url_for('static', filename='js/icon-manager.js') }}"></script>
 
     <!-- Tailwind Config -->
     <script>
@@ -222,9 +225,12 @@
                 <!-- Logo Section -->
                 <div class="flex items-center">
                     <a href="{{ url_for('main.index') }}" class="flex items-center space-x-3 group">
-                        <img src="{{ url_for('static', filename='images/toolora-professional-logo.svg') }}" 
-                         alt="Toolora AI" 
-                         class="h-8 w-auto sm:h-10 professional-logo transition-transform duration-200 hover:scale-105">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600 rounded-lg flex items-center justify-center shadow-lg">
+                                <span class="text-white font-bold text-lg sm:text-xl">T</span>
+                            </div>
+                            <span class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">Toolora AI</span>
+                        </div>
                     </a>
                 </div>
 
@@ -569,9 +575,9 @@
             <!-- Copyright -->
             <div class="flex items-center justify-center space-x-4 text-sm text-gray-600 dark:text-gray-400">
                 <div class="flex items-center space-x-2">
-                    <img src="{{ url_for('static', filename='images/toolora-icon-only.svg') }}" 
-                         alt="Toolora AI" 
-                         class="w-8 h-8 transition-transform duration-200 hover:scale-105">
+                    <div class="w-8 h-8 bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600 rounded-lg flex items-center justify-center shadow-lg">
+                        <span class="text-white font-bold text-sm">T</span>
+                    </div>
                     <span class="font-bold text-orange-600 dark:text-orange-400">Toolora AI</span>
                 </div>
                 <span>© 2024 Toolora Inc.</span>
@@ -649,50 +655,11 @@
 
     <!-- Tools Carousel Script -->
     <script src="{{ url_for('static', filename='js/tools-carousel.js') }}"></script>
-
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     <script src="{{ url_for('static', filename='js/theme.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/icon-manager.js') }}"></script>
 
     {% block scripts %}
 
-    <script>
-        document.addEventListener('alpine:init', () => {
-            Alpine.data('profileCard', () => ({
-                user: null,
-                init() {
-                    // Simulate fetching user data (replace with your actual fetch)
-                    setTimeout(() => {
-                        this.user = {
-                            displayName: 'John Doe',
-                            email: 'john.doe@example.com'
-                        };
-                    }, 500); // Simulate loading delay
-                }
-            }));
-        });
-    </script>
-
-    <div x-data="profileCard()" class="container mx-auto mt-8">
-        <div class="bg-white dark:bg-gray-800 shadow-lg rounded-2xl overflow-hidden">
-            <div class="relative">
-                <img src="https://source.unsplash.com/random/800x400" alt="Profile Banner" class="w-full h-48 object-cover">
-                <div class="absolute bottom-0 left-0 p-6 text-white">
-                    
-                    <div>
-                                    <p class="font-medium text-gray-800 dark:text-white" x-text="(user && user.displayName) || 'User'"></p>
-                                    <p class="text-sm text-gray-500 dark:text-gray-400" x-text="(user && user.email) || 'user@example.com'"></p>
-                                </div>
-                </div>
-            </div>
-            <div class="p-6">
-                <h2 class="text-2xl font-semibold text-gray-800 dark:text-white">About Me</h2>
-                <p class="text-gray-600 dark:text-gray-300 mt-2">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                </p>
-            </div>
-        </div>
-    </div>
 
     {% endblock %}
 </body>
