@@ -223,10 +223,12 @@ class EnhancedToolSearch {
 
         // Position dropdown
         const container = input.closest('.relative') || input.parentElement;
-        if (!container.style.position) {
+        if (container && !container.style.position) {
             container.style.position = 'relative';
         }
-        container.appendChild(dropdown);
+        if (container) {
+            container.appendChild(dropdown);
+        }
 
         // Close on click outside
         const closeHandler = (e) => {
@@ -551,8 +553,10 @@ class EnhancedSearch {
 
         // Position container
         const inputContainer = input.parentElement;
-        inputContainer.style.position = 'relative';
-        inputContainer.appendChild(resultsContainer);
+        if (inputContainer) {
+            inputContainer.style.position = 'relative';
+            inputContainer.appendChild(resultsContainer);
+        }
         
         // Initialize Lucide icons for new elements
         if (typeof lucide !== 'undefined') {
@@ -560,13 +564,15 @@ class EnhancedSearch {
         }
         
         // Add fade-in animation
-        resultsContainer.style.opacity = '0';
-        resultsContainer.style.transform = 'translateY(-10px)';
-        requestAnimationFrame(() => {
-            resultsContainer.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
-            resultsContainer.style.opacity = '1';
-            resultsContainer.style.transform = 'translateY(0)';
-        });
+        if (resultsContainer.style) {
+            resultsContainer.style.opacity = '0';
+            resultsContainer.style.transform = 'translateY(-10px)';
+            requestAnimationFrame(() => {
+                resultsContainer.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
+                resultsContainer.style.opacity = '1';
+                resultsContainer.style.transform = 'translateY(0)';
+            });
+        }
     }
 
     hideResults(input) {

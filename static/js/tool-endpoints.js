@@ -72,12 +72,12 @@ if (typeof window.TOOL_ENDPOINTS === 'undefined') {
 }
 
 // Get API endpoint for a tool
-function getToolEndpoint(toolName) {
+window.getToolEndpoint = function(toolName) {
     return window.TOOL_ENDPOINTS[toolName] || `/api/tools/generic/${toolName}`;
-}
+};
 
 // Helper function to determine if tool requires files
-function toolRequiresFiles(toolName) {
+window.toolRequiresFiles = function(toolName) {
     const noFileTools = [
         'resume-generator', 'business-name-generator', 'blog-title-generator',
         'password-generator', 'qr-generator', 'age-bmi-calculator',
@@ -85,10 +85,10 @@ function toolRequiresFiles(toolName) {
         'text-case-converter', 'url-shortener'
     ];
     return !noFileTools.includes(toolName);
-}
+};
 
 // Helper function to get accepted file types for a tool
-function getAcceptedFileTypes(toolName) {
+window.getAcceptedFileTypes = function(toolName) {
     const fileTypeMap = {
         // PDF tools
         'pdf-merge': '.pdf',
@@ -124,5 +124,10 @@ function getAcceptedFileTypes(toolName) {
 
 // Export for use in other scripts
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { TOOL_ENDPOINTS, getToolEndpoint, toolRequiresFiles, getAcceptedFileTypes };
+    module.exports = { 
+        TOOL_ENDPOINTS: window.TOOL_ENDPOINTS, 
+        getToolEndpoint: window.getToolEndpoint, 
+        toolRequiresFiles: window.toolRequiresFiles, 
+        getAcceptedFileTypes: window.getAcceptedFileTypes 
+    };
 }
