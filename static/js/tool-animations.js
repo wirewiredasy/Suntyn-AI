@@ -21,8 +21,10 @@ class ToolAnimationManager {
     staggerToolCards() {
         const toolCards = document.querySelectorAll('.tool-card');
         toolCards.forEach((card, index) => {
-            card.style.animationDelay = `${index * 0.1}s`;
-            card.classList.add('animate-fade-in-up');
+            if (card && card.style) {
+                card.style.animationDelay = `${index * 0.1}s`;
+                card.classList.add('animate-fade-in-up');
+            }
         });
     }
 
@@ -149,13 +151,19 @@ class ToolAnimationManager {
             // Add hover effects to buttons
             const buttons = document.querySelectorAll('.btn');
             buttons.forEach(button => {
-                button.addEventListener('mouseenter', () => {
-                    button.style.transform = 'translateY(-2px)';
-                });
+                if (button && button.style) {
+                    button.addEventListener('mouseenter', () => {
+                        if (button.style) {
+                            button.style.transform = 'translateY(-2px)';
+                        }
+                    });
 
-                button.addEventListener('mouseleave', () => {
-                    button.style.transform = 'translateY(0)';
-                });
+                    button.addEventListener('mouseleave', () => {
+                        if (button.style) {
+                            button.style.transform = 'translateY(0)';
+                        }
+                    });
+                }
             });
 
             // Add ripple effect to buttons
@@ -173,26 +181,32 @@ class ToolAnimationManager {
                 const x = e.clientX - rect.left - size / 2;
                 const y = e.clientY - rect.top - size / 2;
 
-                ripple.style.cssText = `
-                    position: absolute;
-                    width: ${size}px;
-                    height: ${size}px;
-                    left: ${x}px;
-                    top: ${y}px;
-                    background: rgba(255, 255, 255, 0.3);
-                    border-radius: 50%;
+                if (ripple && ripple.style) {
+                    ripple.style.cssText = `
+                        position: absolute;
+                        width: ${size}px;
+                        height: ${size}px;
+                        left: ${x}px;
+                        top: ${y}px;
+                        background: rgba(255, 255, 255, 0.3);
+                        border-radius: 50%;
                     transform: scale(0);
                     animation: ripple 0.6s ease-out;
                     pointer-events: none;
                 `;
 
-                button.style.position = 'relative';
-                button.style.overflow = 'hidden';
-                button.appendChild(ripple);
+                    if (button && button.style) {
+                        button.style.position = 'relative';
+                        button.style.overflow = 'hidden';
+                        button.appendChild(ripple);
+                    }
 
-                setTimeout(() => {
-                    ripple.remove();
-                }, 600);
+                    setTimeout(() => {
+                        if (ripple && ripple.parentElement) {
+                            ripple.remove();
+                        }
+                    }, 600);
+                }
             });
         });
 
@@ -224,7 +238,9 @@ class ToolAnimationManager {
 
             const bar = document.createElement('div');
             bar.className = `bg-${color}-600 h-2 rounded-full progress-bar`;
-            bar.style.width = `${progress}%`;
+            if (bar && bar.style) {
+                bar.style.width = `${progress}%`;
+            }
 
             container.appendChild(bar);
             return container;
@@ -232,8 +248,8 @@ class ToolAnimationManager {
 
         // Animate progress updates
         window.animateProgress = (element, targetProgress) => {
-            const bar = element.querySelector('.progress-bar');
-            if (bar) {
+            const bar = element?.querySelector('.progress-bar');
+            if (bar && bar.style) {
                 bar.style.width = `${targetProgress}%`;
             }
         };
@@ -260,10 +276,16 @@ class ToolAnimationManager {
 
     // Utility methods for animations
     fadeIn(element, duration = 300) {
+        if (!element || !element.style) return;
+        
         element.style.opacity = '0';
         element.style.display = 'block';
 
         const fadeEffect = setInterval(() => {
+            if (!element || !element.style) {
+                clearInterval(fadeEffect);
+                return;
+            }
             if (!element.style.opacity) {
                 element.style.opacity = '0';
             }
@@ -276,7 +298,13 @@ class ToolAnimationManager {
     }
 
     fadeOut(element, duration = 300) {
+        if (!element || !element.style) return;
+        
         const fadeEffect = setInterval(() => {
+            if (!element || !element.style) {
+                clearInterval(fadeEffect);
+                return;
+            }
             if (!element.style.opacity) {
                 element.style.opacity = '1';
             }
@@ -284,7 +312,9 @@ class ToolAnimationManager {
                 element.style.opacity = (parseFloat(element.style.opacity) - 0.1).toString();
             } else {
                 clearInterval(fadeEffect);
-                element.style.display = 'none';
+                if (element && element.style) {
+                    element.style.display = 'none';
+                }
             }
         }, duration / 10);
     }

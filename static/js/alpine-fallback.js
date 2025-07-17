@@ -89,7 +89,20 @@
             // Alpine not available, create fallback
             console.log('Alpine.js not found, creating fallback');
             
-            window.toolHandlerFallback = {
+            // Create global Alpine fallback
+            window.Alpine = {
+                data: function(name, callback) {
+                    window[`alpineData_${name}`] = callback();
+                    return window[`alpineData_${name}`];
+                },
+                store: function(name, data) {
+                    window[`alpineStore_${name}`] = data;
+                    return data;
+                }
+            };
+            
+            // Initialize toolHandler globally
+            window.alpineData_toolHandler = {
                 files: [],
                 processing: false,
                 progress: 0,
@@ -111,6 +124,12 @@
                     }
                 }
             };
+            
+            // Make variables globally accessible for templates
+            window.processing = false;
+            window.progress = 0;
+            window.results = [];
+            window.files = [];
         }
     }
 

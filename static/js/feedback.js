@@ -61,19 +61,23 @@ function showNotification(message, type = 'info') {
     
     // Animation
     setTimeout(() => {
-        notification.style.transform = 'translateX(0)';
-        notification.style.opacity = '1';
+        if (notification && notification.style) {
+            notification.style.transform = 'translateX(0)';
+            notification.style.opacity = '1';
+        }
     }, 100);
     
     // Remove after 3 seconds
     setTimeout(() => {
-        notification.style.transform = 'translateX(100%)';
-        notification.style.opacity = '0';
-        setTimeout(() => {
-            if (notification.parentNode) {
-                notification.parentNode.removeChild(notification);
-            }
-        }, 300);
+        if (notification && notification.style) {
+            notification.style.transform = 'translateX(100%)';
+            notification.style.opacity = '0';
+            setTimeout(() => {
+                if (notification && notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 300);
+        }
     }, 3000);
 }
 
@@ -83,19 +87,27 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Add stagger animation to tool cards
     toolCards.forEach((card, index) => {
-        card.style.animationDelay = `${index * 0.1}s`;
-        card.classList.add('animate-fade-in-up');
+        if (card && card.style) {
+            card.style.animationDelay = `${index * 0.1}s`;
+            card.classList.add('animate-fade-in-up');
+        }
     });
     
     // Enhanced hover effects
     toolCards.forEach(card => {
-        card.addEventListener('mouseenter', function() {
-            this.style.transform = 'translateY(-8px) scale(1.02)';
-        });
-        
-        card.addEventListener('mouseleave', function() {
-            this.style.transform = 'translateY(0) scale(1)';
-        });
+        if (card) {
+            card.addEventListener('mouseenter', function() {
+                if (this.style) {
+                    this.style.transform = 'translateY(-8px) scale(1.02)';
+                }
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                if (this.style) {
+                    this.style.transform = 'translateY(0) scale(1)';
+                }
+            });
+        }
     });
 });
 
