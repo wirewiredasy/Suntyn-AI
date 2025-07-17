@@ -577,11 +577,13 @@ class EnhancedSearch {
 
     hideResults(input) {
         const resultsContainer = input.parentElement?.querySelector('.search-results');
-        if (resultsContainer) {
+        if (resultsContainer && resultsContainer.style) {
             resultsContainer.style.opacity = '0';
             resultsContainer.style.transform = 'translateY(-10px)';
             setTimeout(() => {
-                resultsContainer.remove();
+                if (resultsContainer && resultsContainer.parentElement) {
+                    resultsContainer.remove();
+                }
             }, 200);
         }
     }
