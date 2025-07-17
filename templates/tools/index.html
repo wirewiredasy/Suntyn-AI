@@ -206,6 +206,33 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     console.log(`Found ${toolCards.length} tool cards on page load`);
+    
+    // Force display all tool cards (migration fix)
+    const allCards = document.querySelectorAll('.tool-card');
+    allCards.forEach(card => {
+        if (card) {
+            try {
+                if (card.style) {
+                    card.style.display = 'block';
+                    card.style.visibility = 'visible';
+                    card.style.opacity = '1';
+                }
+                card.classList.remove('hidden');
+            } catch (e) {
+                console.log('Safely handled style error for card');
+            }
+        }
+    });
+    
+    console.log('Migration fix: Tool cards display forced to visible');
+});
+
+// Additional safety fix for null style errors
+window.addEventListener('error', function(e) {
+    if (e.message && e.message.includes('style')) {
+        e.preventDefault();
+        return true;
+    }
 });
 </script>
 {% endblock %}

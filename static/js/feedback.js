@@ -93,17 +93,17 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Enhanced hover effects
+    // Enhanced hover effects - with proper null checks
     toolCards.forEach(card => {
-        if (card) {
+        if (card && typeof card.addEventListener === 'function') {
             card.addEventListener('mouseenter', function() {
-                if (this.style) {
+                if (this && this.style) {
                     this.style.transform = 'translateY(-8px) scale(1.02)';
                 }
             });
             
             card.addEventListener('mouseleave', function() {
-                if (this.style) {
+                if (this && this.style) {
                     this.style.transform = 'translateY(0) scale(1)';
                 }
             });
