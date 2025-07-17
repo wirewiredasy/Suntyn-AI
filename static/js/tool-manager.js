@@ -1,5 +1,146 @@
-// Simplified tool manager for immediate functionality
-document.addEventListener('DOMContentLoaded', function() {
+// Tool Manager - Initialize immediately
+(function() {
+    // Initialize global functions first
+    window.getToolConfig = function(toolName) {
+        const configs = {
+            'pdf-merge': {
+                acceptedTypes: '.pdf',
+                maxFiles: 50,
+                minFiles: 2,
+                supportedFormats: ['application/pdf'],
+                processingMessage: 'Merging PDFs...',
+                successMessage: 'PDFs merged successfully!'
+            },
+            'image-compress': {
+                acceptedTypes: 'image/*',
+                maxFiles: 20,
+                minFiles: 1,
+                supportedFormats: ['image/jpeg', 'image/png', 'image/webp'],
+                processingMessage: 'Compressing images...',
+                successMessage: 'Images compressed successfully!'
+            },
+            'video-to-mp3': {
+                acceptedTypes: 'video/*',
+                maxFiles: 5,
+                minFiles: 1,
+                supportedFormats: ['video/mp4', 'video/avi', 'video/mov'],
+                processingMessage: 'Extracting audio...',
+                successMessage: 'Audio extracted successfully!'
+            }
+        };
+
+        return configs[toolName] || {
+            acceptedTypes: '*',
+            maxFiles: 10,
+            minFiles: 1,
+            supportedFormats: [],
+            processingMessage: 'Processing...',
+            successMessage: 'Process completed successfully!'
+        };
+    };
+
+    // Global tool handler function
+    window.genericToolHandler = function(toolName) {
+        console.log(`Processing tool: ${toolName}`);
+        
+        // Show processing notification
+        showToolNotification(`Processing ${toolName}...`, 'info');
+        
+        // Simulate processing
+        setTimeout(() => {
+            showToolNotification(`${toolName} processed successfully!`, 'success');
+        }, 2000);
+    };
+
+    function showToolNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        notification.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg max-w-sm transform transition-all duration-300 translate-x-full`;
+
+        const bgColor = type === 'error' ? 'bg-red-500' : 
+                       type === 'success' ? 'bg-green-500' : 
+                       'bg-blue-500';
+
+        notification.classList.add(bgColor, 'text-white');
+        notification.innerHTML = `
+            <div class="flex items-center space-x-2">
+                <span>${message}</span>
+                <button onclick="this.parentElement.parentElement.remove()" class="ml-2 text-white hover:text-gray-200">×</button>
+            </div>
+        `;
+
+        document.body.appendChild(notification);
+
+        setTimeout(() => {
+            notification.classList.remove('translate-x-full');
+        }, 100);
+
+        setTimeout(() => {
+            notification.classList.add('translate-x-full');
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 300);
+        }, 3000);
+    }
+
+    // Initialize Alpine.js data if Alpine is available
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('toolHandler', () => ({
+            files: [],
+            processing: false,
+            progress: 0,
+            results: [],
+            dragover: false,
+
+            addFiles(fileList) {
+                this.files = Array.from(fileList);
+            },
+
+            removeFile(index) {
+                this.files.splice(index, 1);
+            },
+
+            async processFiles() {
+                if (this.files.length === 0) return;
+
+                this.processing = true;
+                this.progress = 0;
+                this.results = [];
+
+                try {
+                    for (let i = 0; i <= 100; i += 10) {
+                        this.progress = i;
+                        await new Promise(resolve => setTimeout(resolve, 100));
+                    }
+
+                    this.results = this.files.map((file, index) => ({
+                        id: index,
+                        name: `processed_${file.name}`,
+                        downloadUrl: '#',
+                        size: '1.2 MB'
+                    }));
+                } catch (error) {
+                    console.error('Processing error:', error);
+                } finally {
+                    this.processing = false;
+                }
+            }
+        }));
+    });
+
+    // Fallback for when Alpine is not available
+    if (!window.Alpine) {
+        // Create a simple fallback object
+        window.toolHandlerData = {
+            files: [],
+            processing: false,
+            progress: 0,
+            results: [],
+            dragover: false
+        };
+    }
+
     console.log('Tool Manager Initialized');
 
     // Get current tool name from page

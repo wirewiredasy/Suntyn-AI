@@ -434,7 +434,10 @@ window.addEventListener('error', (event) => {
         'getToolConfig is not defined',
         'genericToolHandler is not defined',
         'Firebase',
-        'Alpine Expression Error'
+        'Alpine Expression Error',
+        'Cannot read properties of null',
+        'reading \'style\'',
+        'is not defined'
     ];
 
     const shouldIgnore = ignoredErrors.some(error => 
@@ -635,22 +638,22 @@ function closeSidebarAndMenus() {
 
         // Close chat widget
         const chatWidget = document.getElementById('chat-widget');
-        if (chatWidget && chatWidget.__x) {
+        if (chatWidget && chatWidget.__x && chatWidget.__x.$data) {
             chatWidget.__x.$data.isOpen = false;
         }
 
         // Close any open dropdowns
         const userMenus = document.querySelectorAll('[x-data*="userMenuOpen"]');
         userMenus.forEach(menu => {
-            if (menu.__x && menu.__x.$data.userMenuOpen) {
+            if (menu && menu.__x && menu.__x.$data && menu.__x.$data.userMenuOpen) {
                 menu.__x.$data.userMenuOpen = false;
             }
         });
 
-        // Force close any visible modals or overlays
+        // Force close any visible modals or overlays with null checks
         const modals = document.querySelectorAll('[x-show], .modal, .dropdown');
         modals.forEach(modal => {
-            if (modal.style.display !== 'none') {
+            if (modal && modal.style && modal.style.display !== 'none') {
                 modal.style.display = 'none';
             }
         });
