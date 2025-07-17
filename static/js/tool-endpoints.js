@@ -1,5 +1,6 @@
 // Tool API endpoint mappings for Toolora AI
-const TOOL_ENDPOINTS = {
+if (typeof window.TOOL_ENDPOINTS === 'undefined') {
+    window.TOOL_ENDPOINTS = {
     // PDF Tools
     'pdf-merge': '/api/pdf/merge',
     'pdf-split': '/api/pdf/split', 
@@ -67,11 +68,12 @@ const TOOL_ENDPOINTS = {
     'chat-with-notes': '/api/student/chat-notes',
     'timetable-generator': '/api/student/generate-timetable',
     'syllabus-extractor': '/api/student/extract-syllabus'
-};
+    };
+}
 
 // Get API endpoint for a tool
 function getToolEndpoint(toolName) {
-    return TOOL_ENDPOINTS[toolName] || `/api/tools/generic/${toolName}`;
+    return window.TOOL_ENDPOINTS[toolName] || `/api/tools/generic/${toolName}`;
 }
 
 // Helper function to determine if tool requires files

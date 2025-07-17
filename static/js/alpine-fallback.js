@@ -73,6 +73,12 @@
             // Set up global Alpine data
             Alpine.store('toolData', {
                 files: [],
+                closeMobileMenu() {
+                    const sidebar = document.getElementById('mobile-sidebar');
+                    if (sidebar) {
+                        sidebar.style.transform = 'translateX(-100%)';
+                    }
+                },
                 processing: false,
                 progress: 0,
                 results: [],
