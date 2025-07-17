@@ -54,6 +54,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/tabs-enhancement.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/header-fix.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/tool-specific-styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/icon-fixes.css') }}">
 
     <!-- Fixed Search Script -->
     <script src="{{ url_for('static', filename='js/fixed-search.js') }}"></script>
@@ -65,6 +66,12 @@
     <script src="{{ url_for('static', filename='js/header-scroll-fix.js') }}"></script>
 
     <!-- No Authentication Required -->
+
+    <!-- Tool Icons System (Load First) -->
+    <script src="{{ url_for('static', filename='js/tool-icons.js') }}"></script>
+
+    <!-- Icon Loader (Load Second) -->
+    <script src="{{ url_for('static', filename='js/icon-loader.js') }}"></script>
 
     <!-- Tool Endpoints Configuration -->
     <script src="{{ url_for('static', filename='js/tool-endpoints.js') }}"></script>
@@ -764,10 +771,27 @@
     <!-- JavaScript Initialization -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Initialize tool icons first
+            if (typeof window.ToolIcons !== 'undefined') {
+                window.ToolIcons.initializeToolIcons();
+            }
+
             // Initialize Lucide icons
             if (typeof lucide !== 'undefined') {
                 lucide.createIcons();
+                
+                // Retry after short delay for dynamic content
+                setTimeout(() => {
+                    lucide.createIcons();
+                }, 500);
             }
+
+            // Force refresh icons after everything loads
+            setTimeout(() => {
+                if (typeof window.refreshToolIcons === 'function') {
+                    window.refreshToolIcons();
+                }
+            }, 1000);
 
             // Set theme based on stored preference
             const isDark = localStorage.getItem('darkMode') === 'true';
