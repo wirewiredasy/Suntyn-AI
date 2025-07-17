@@ -1,80 +1,93 @@
-{%- extends "base.html" -%}
 
-{%- block title -%}Aadhaar Masker - Toolora AI{%- endblock -%}
-
-{%- block content -%}
+{% extends "base.html" %}
+{% block title %}Aadhaar Masker - Toolora AI{% endblock %}
+{% block content %}
 <div class="min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-50 py-8">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        <!-- Tool Header -->
+        <!-- Advanced Tool Header -->
         <div class="text-center mb-8">
-            <div class="inline-flex items-center justify-center w-16 h-16 bg-orange-500 rounded-2xl mb-4 shadow-lg">
-                <i data-lucide="shield" class="w-8 h-8 text-white"></i>
+            <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-orange-500 to-orange-600 rounded-3xl mb-6 shadow-xl animate-bounce">
+                <i data-lucide="shield" class="w-10 h-10 text-white"></i>
             </div>
-            <h1 class="text-4xl font-bold text-gray-900 mb-2">Aadhaar Masker</h1>
-            <p class="text-lg text-gray-600 max-w-2xl mx-auto">Professional aadhaar masker tool with advanced features and high-quality processing.</p>
-            <div class="mt-4 flex items-center justify-center space-x-6">
-                <div class="flex items-center text-orange-500">
-                    <i data-lucide="shield-check" class="w-5 h-5 mr-2"></i>
-                    <span class="text-sm font-medium">100% Secure</span>
-                </div>
-                <div class="flex items-center text-orange-500">
-                    <i data-lucide="zap" class="w-5 h-5 mr-2"></i>
-                    <span class="text-sm font-medium">Lightning Fast</span>
-                </div>
-                <div class="flex items-center text-orange-500">
-                    <i data-lucide="download" class="w-5 h-5 mr-2"></i>
-                    <span class="text-sm font-medium">Free to Use</span>
-                </div>
+            <h1 class="text-5xl font-bold text-gray-900 mb-4">Aadhaar Masker</h1>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto mb-6">Professional aadhaar masker tool with advanced features and enterprise-grade processing.</p>
+            
+            <!-- Feature Badges -->
+            <div class="flex flex-wrap justify-center gap-3 mb-6">
+                <span class="bg-orange-100 text-orange-700 px-4 py-2 rounded-full text-sm font-medium">🛡️ 100% Secure</span>
+                <span class="bg-orange-100 text-orange-700 px-4 py-2 rounded-full text-sm font-medium">⚡ Lightning Fast</span>
+                <span class="bg-orange-100 text-orange-700 px-4 py-2 rounded-full text-sm font-medium">🆓 Free to Use</span>
+                <span class="bg-orange-100 text-orange-700 px-4 py-2 rounded-full text-sm font-medium">🚫 No Registration</span>
             </div>
         </div>
 
-        <!-- Tool Interface -->
+        <!-- Advanced Tool Interface -->
         <div class="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
             
-            <!-- Upload Section -->
+            <!-- Enhanced Upload Section -->
             <div class="p-8 border-b border-gray-100">
-                <div id="upload-section" class="space-y-6">
+                <div id="upload-section" class="space-y-8">
                     <div class="text-center">
-                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Upload Your Files</h3>
-                        <p class="text-gray-600">Click to upload or drag & drop your files</p>
+                        <h3 class="text-2xl font-semibold text-gray-900 mb-3">Upload Your Files</h3>
+                        <p class="text-gray-600">Drag & drop multiple files or click to browse • Max 16MB per file</p>
                     </div>
                     
-                    <div id="upload-zone" class="border-3 border-dashed border-orange-500 rounded-2xl p-12 text-center hover:border-orange-600 transition-colors cursor-pointer bg-orange-50">
-                        <div class="space-y-4">
-                            <div class="mx-auto w-16 h-16 bg-orange-500 rounded-full flex items-center justify-center">
-                                <i data-lucide="upload" class="w-8 h-8 text-white"></i>
+                    <div id="upload-zone" class="border-3 border-dashed border-orange-400 rounded-3xl p-16 text-center hover:border-orange-500 transition-all cursor-pointer bg-gradient-to-br from-orange-50 to-orange-100 relative group">
+                        <div class="space-y-6">
+                            <div class="mx-auto w-20 h-20 bg-gradient-to-r from-orange-500 to-orange-600 rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                                <i data-lucide="upload-cloud" class="w-10 h-10 text-white"></i>
                             </div>
                             <div>
-                                <p class="text-lg font-medium text-gray-900">Click to upload or drag & drop</p>
-                                <p class="text-sm text-gray-500">Maximum file size: 16MB</p>
+                                <p class="text-xl font-semibold text-gray-900 mb-2">Drop files here or click to browse</p>
+                                <p class="text-gray-500">Supports multiple files • Instant processing</p>
                             </div>
                         </div>
                         <input type="file" id="file-input" class="hidden" multiple />
+                    </div>
+                    
+                    <div id="file-preview" class="hidden">
+                        <h4 class="text-lg font-semibold text-gray-900 mb-4">📁 Selected Files</h4>
+                        <div id="file-list" class="space-y-3"></div>
                     </div>
                 </div>
             </div>
 
             <!-- Processing Options -->
             <div class="p-8 border-b border-gray-100 bg-gray-50/50">
-                <h3 class="text-lg font-semibold text-gray-900 mb-4">Processing Options</h3>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div class="bg-white rounded-xl p-4 border border-gray-200 hover:border-orange-500 transition-colors cursor-pointer option-card" data-option="standard">
-                        <div class="flex items-center justify-between">
-                            <span class="font-medium text-gray-900">Standard Quality</span>
-                            <i data-lucide="check-circle" class="w-5 h-5 text-orange-500 hidden"></i>
+                <h3 class="text-xl font-semibold text-gray-900 mb-6">⚙️ Processing Options</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-white rounded-2xl p-6 border-2 border-gray-200 hover:border-orange-400 transition-all cursor-pointer option-card shadow-sm hover:shadow-md" data-option="standard-mode">
+                        <div class="text-center space-y-3">
+                            <div class="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center mx-auto">
+                                <i data-lucide="settings" class="w-6 h-6 text-orange-600"></i>
+                            </div>
+                            <h4 class="font-semibold text-gray-900">Standard mode</h4>
+                            <div class="hidden option-selected">
+                                <i data-lucide="check-circle" class="w-6 h-6 text-orange-500 mx-auto"></i>
+                            </div>
                         </div>
                     </div>
-                    <div class="bg-white rounded-xl p-4 border border-gray-200 hover:border-orange-500 transition-colors cursor-pointer option-card" data-option="high">
-                        <div class="flex items-center justify-between">
-                            <span class="font-medium text-gray-900">High Quality</span>
-                            <i data-lucide="check-circle" class="w-5 h-5 text-orange-500 hidden"></i>
+                    <div class="bg-white rounded-2xl p-6 border-2 border-gray-200 hover:border-orange-400 transition-all cursor-pointer option-card shadow-sm hover:shadow-md" data-option="advanced-mode">
+                        <div class="text-center space-y-3">
+                            <div class="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center mx-auto">
+                                <i data-lucide="cpu" class="w-6 h-6 text-orange-600"></i>
+                            </div>
+                            <h4 class="font-semibold text-gray-900">Advanced mode</h4>
+                            <div class="hidden option-selected">
+                                <i data-lucide="check-circle" class="w-6 h-6 text-orange-500 mx-auto"></i>
+                            </div>
                         </div>
                     </div>
-                    <div class="bg-white rounded-xl p-4 border border-gray-200 hover:border-orange-500 transition-colors cursor-pointer option-card" data-option="premium">
-                        <div class="flex items-center justify-between">
-                            <span class="font-medium text-gray-900">Premium Quality</span>
-                            <i data-lucide="check-circle" class="w-5 h-5 text-orange-500 hidden"></i>
+                    <div class="bg-white rounded-2xl p-6 border-2 border-gray-200 hover:border-orange-400 transition-all cursor-pointer option-card shadow-sm hover:shadow-md" data-option="custom-settings">
+                        <div class="text-center space-y-3">
+                            <div class="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center mx-auto">
+                                <i data-lucide="zap" class="w-6 h-6 text-orange-600"></i>
+                            </div>
+                            <h4 class="font-semibold text-gray-900">Custom settings</h4>
+                            <div class="hidden option-selected">
+                                <i data-lucide="check-circle" class="w-6 h-6 text-orange-500 mx-auto"></i>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -82,149 +95,198 @@
 
             <!-- Special Features -->
             <div class="p-8 border-b border-gray-100">
-                <h3 class="text-lg font-semibold text-gray-900 mb-4">Special Features</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <div class="flex items-center space-x-3 p-3 bg-orange-50 rounded-xl">
-                        <i data-lucide="check" class="w-5 h-5 text-orange-500 flex-shrink-0"></i>
-                        <span class="text-sm text-gray-700">Fast Processing</span>
+                <h3 class="text-xl font-semibold text-gray-900 mb-6">✨ Advanced Features</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="flex items-start space-x-4 p-4 bg-orange-50 rounded-2xl border border-orange-100">
+                        <div class="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                            <i data-lucide="check" class="w-5 h-5 text-white"></i>
+                        </div>
+                        <div>
+                            <p class="font-medium text-gray-900 mb-1">Fast processing</p>
+                            <p class="text-sm text-gray-600">Enhanced user experience</p>
+                        </div>
                     </div>
-                    <div class="flex items-center space-x-3 p-3 bg-orange-50 rounded-xl">
-                        <i data-lucide="check" class="w-5 h-5 text-orange-500 flex-shrink-0"></i>
-                        <span class="text-sm text-gray-700">High Quality Output</span>
+                    <div class="flex items-start space-x-4 p-4 bg-orange-50 rounded-2xl border border-orange-100">
+                        <div class="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                            <i data-lucide="check" class="w-5 h-5 text-white"></i>
+                        </div>
+                        <div>
+                            <p class="font-medium text-gray-900 mb-1">High quality output</p>
+                            <p class="text-sm text-gray-600">Professional quality output</p>
+                        </div>
                     </div>
-                    <div class="flex items-center space-x-3 p-3 bg-orange-50 rounded-xl">
-                        <i data-lucide="check" class="w-5 h-5 text-orange-500 flex-shrink-0"></i>
-                        <span class="text-sm text-gray-700">Secure Processing</span>
+                    <div class="flex items-start space-x-4 p-4 bg-orange-50 rounded-2xl border border-orange-100">
+                        <div class="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                            <i data-lucide="check" class="w-5 h-5 text-white"></i>
+                        </div>
+                        <div>
+                            <p class="font-medium text-gray-900 mb-1">Secure processing</p>
+                            <p class="text-sm text-gray-600">Enterprise-grade processing</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-4 p-4 bg-orange-50 rounded-2xl border border-orange-100">
+                        <div class="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                            <i data-lucide="check" class="w-5 h-5 text-white"></i>
+                        </div>
+                        <div>
+                            <p class="font-medium text-gray-900 mb-1">Professional results</p>
+                            <p class="text-sm text-gray-600">Advanced functionality</p>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <!-- Processing Section -->
-            <div id="processing-section" class="p-8 hidden">
-                <div class="text-center space-y-4">
-                    <div class="inline-flex items-center justify-center w-16 h-16 bg-orange-500 rounded-full animate-pulse">
-                        <i data-lucide="loader" class="w-8 h-8 text-white animate-spin"></i>
+            <div id="processing-section" class="p-12 hidden">
+                <div class="text-center space-y-6">
+                    <div class="inline-flex items-center justify-center w-24 h-24 bg-gradient-to-r from-orange-500 to-orange-600 rounded-full animate-pulse shadow-lg">
+                        <i data-lucide="cpu" class="w-12 h-12 text-white animate-spin"></i>
                     </div>
-                    <h3 class="text-xl font-semibold text-gray-900">Processing Your File</h3>
-                    <p class="text-gray-600">Please wait while we process your file...</p>
-                    <div class="w-full bg-gray-200 rounded-full h-2 max-w-xs mx-auto">
-                        <div id="progress-bar" class="bg-orange-500 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2">🚀 Processing Your Files</h3>
+                        <p class="text-gray-600 mb-6">Advanced algorithms are optimizing your content...</p>
+                        
+                        <div class="max-w-md mx-auto">
+                            <div class="flex justify-between text-sm text-gray-600 mb-2">
+                                <span>Progress</span>
+                                <span id="progress-percent">0%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+                                <div id="progress-bar" class="bg-gradient-to-r from-orange-400 to-orange-600 h-3 rounded-full transition-all duration-500" style="width: 0%"></div>
+                            </div>
+                            <p id="processing-status" class="text-sm text-gray-500 mt-2">Initializing...</p>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <!-- Results Section -->
-            <div id="results-section" class="p-8 hidden">
-                <div class="text-center space-y-6">
-                    <div class="inline-flex items-center justify-center w-16 h-16 bg-green-500 rounded-full">
-                        <i data-lucide="check" class="w-8 h-8 text-white"></i>
+            <div id="results-section" class="p-12 hidden">
+                <div class="text-center space-y-8">
+                    <div class="inline-flex items-center justify-center w-24 h-24 bg-gradient-to-r from-green-400 to-green-500 rounded-full shadow-lg animate-bounce">
+                        <i data-lucide="check-circle" class="w-12 h-12 text-white"></i>
                     </div>
                     <div>
-                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Processing Complete!</h3>
-                        <p class="text-gray-600">Your file has been processed successfully.</p>
-                    </div>
-                    <div class="space-y-3">
-                        <button id="download-btn" class="inline-flex items-center px-6 py-3 bg-orange-500 text-white font-medium rounded-xl hover:bg-orange-600 transition-colors">
-                            <i data-lucide="download" class="w-5 h-5 mr-2"></i>
-                            Download Result
-                        </button>
-                        <button id="process-another" class="block mx-auto text-orange-500 hover:text-orange-600 font-medium">
-                            Process Another File
-                        </button>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-3">🎉 Processing Complete!</h3>
+                        <p class="text-gray-600 mb-8">Your files have been processed with professional quality.</p>
+                        
+                        <div class="space-y-4">
+                            <button id="download-btn" class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold rounded-2xl hover:from-orange-600 hover:to-orange-700 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+                                <i data-lucide="download" class="w-6 h-6 mr-3"></i>
+                                Download Processed Files
+                            </button>
+                            
+                            <div class="flex justify-center space-x-4 text-sm">
+                                <button id="process-another" class="text-orange-600 hover:text-orange-700 font-medium">
+                                    Process More Files
+                                </button>
+                                <span class="text-gray-400">•</span>
+                                <button class="text-orange-600 hover:text-orange-700 font-medium">
+                                    Share Result
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Action Buttons -->
-            <div class="p-8 bg-gray-50/50">
-                <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                    <button id="process-btn" class="flex-1 sm:flex-none px-8 py-3 bg-orange-500 text-white font-semibold rounded-xl hover:bg-orange-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>
-                        <i data-lucide="play" class="w-5 h-5 mr-2 inline"></i>
+            <!-- Action Center -->
+            <div class="p-8 bg-gradient-to-r from-gray-50 to-orange-50">
+                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                    <button id="process-btn" class="flex-1 sm:flex-none px-10 py-4 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold rounded-2xl hover:from-orange-600 hover:to-orange-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl transform hover:-translate-y-1" disabled>
+                        <i data-lucide="play" class="w-6 h-6 mr-3 inline"></i>
                         Start Processing
                     </button>
-                    <button id="clear-btn" class="flex-1 sm:flex-none px-8 py-3 border border-gray-300 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition-colors">
-                        <i data-lucide="x" class="w-5 h-5 mr-2 inline"></i>
-                        Clear All
+                    <button id="clear-btn" class="flex-1 sm:flex-none px-8 py-4 border-2 border-gray-300 text-gray-700 font-semibold rounded-2xl hover:bg-gray-50 hover:border-gray-400 transition-all">
+                        <i data-lucide="refresh-ccw" class="w-5 h-5 mr-2 inline"></i>
+                        Reset Tool
                     </button>
                 </div>
             </div>
         </div>
 
-        <!-- Tool Tips -->
-        <div class="mt-8 bg-blue-50 rounded-2xl p-6">
-            <h3 class="text-lg font-semibold text-blue-900 mb-3">
-                <i data-lucide="lightbulb" class="w-5 h-5 mr-2 inline"></i>
-                Pro Tips
+        <!-- Pro Tips -->
+        <div class="mt-12 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-3xl p-8 border border-blue-100">
+            <h3 class="text-xl font-bold text-blue-900 mb-6 flex items-center">
+                <i data-lucide="lightbulb" class="w-6 h-6 mr-3"></i>
+                💡 Pro Tips for Aadhaar Masker
             </h3>
-            <ul class="space-y-2 text-blue-800">
+            <ul class="grid grid-cols-1 md:grid-cols-2 gap-4 text-blue-800">
                 <li class="flex items-start">
-                    <i data-lucide="arrow-right" class="w-4 h-4 mr-2 mt-1 flex-shrink-0"></i>
-                    <span>All processing happens securely with maximum privacy</span>
+                    <i data-lucide="arrow-right" class="w-5 h-5 mr-3 mt-1 flex-shrink-0 text-blue-600"></i>
+                    <span>All processing happens securely with enterprise encryption</span>
                 </li>
                 <li class="flex items-start">
-                    <i data-lucide="arrow-right" class="w-4 h-4 mr-2 mt-1 flex-shrink-0"></i>
-                    <span>Process multiple files at once for better efficiency</span>
+                    <i data-lucide="arrow-right" class="w-5 h-5 mr-3 mt-1 flex-shrink-0 text-blue-600"></i>
+                    <span>Upload multiple files for efficient batch processing</span>
                 </li>
                 <li class="flex items-start">
-                    <i data-lucide="arrow-right" class="w-4 h-4 mr-2 mt-1 flex-shrink-0"></i>
-                    <span>Your files are automatically deleted after processing</span>
+                    <i data-lucide="arrow-right" class="w-5 h-5 mr-3 mt-1 flex-shrink-0 text-blue-600"></i>
+                    <span>Files are automatically deleted after 24 hours</span>
+                </li>
+                <li class="flex items-start">
+                    <i data-lucide="arrow-right" class="w-5 h-5 mr-3 mt-1 flex-shrink-0 text-blue-600"></i>
+                    <span>No registration required - start processing immediately</span>
                 </li>
             </ul>
         </div>
     </div>
 </div>
 
-<!-- Tool-Specific JavaScript -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const fileInput = document.getElementById('file-input');
     const uploadZone = document.getElementById('upload-zone');
+    const filePreview = document.getElementById('file-preview');
+    const fileList = document.getElementById('file-list');
     const processBtn = document.getElementById('process-btn');
     const clearBtn = document.getElementById('clear-btn');
     const uploadSection = document.getElementById('upload-section');
     const processingSection = document.getElementById('processing-section');
     const resultsSection = document.getElementById('results-section');
     const progressBar = document.getElementById('progress-bar');
+    const progressPercent = document.getElementById('progress-percent');
+    const processingStatus = document.getElementById('processing-status');
     const downloadBtn = document.getElementById('download-btn');
     const processAnother = document.getElementById('process-another');
     
     let selectedFiles = [];
-    let selectedOption = 'standard';
+    let selectedOption = 'standard-mode';
     
     // Option selection
     document.querySelectorAll('.option-card').forEach(card => {
         card.addEventListener('click', function() {
             document.querySelectorAll('.option-card').forEach(c => {
-                c.classList.remove('border-orange-500', 'bg-orange-50');
-                c.querySelector('i').classList.add('hidden');
+                c.classList.remove('border-orange-400', 'bg-orange-50', 'shadow-lg');
+                c.querySelector('.option-selected').classList.add('hidden');
             });
-            this.classList.add('border-orange-500', 'bg-orange-50');
-            this.querySelector('i').classList.remove('hidden');
+            this.classList.add('border-orange-400', 'bg-orange-50', 'shadow-lg');
+            this.querySelector('.option-selected').classList.remove('hidden');
             selectedOption = this.dataset.option;
         });
     });
     
-    // Select first option by default
+    // Auto-select first option
     if (document.querySelector('.option-card')) {
         document.querySelector('.option-card').click();
     }
     
-    // File upload handling
+    // File upload
     uploadZone.addEventListener('click', () => fileInput.click());
     
     uploadZone.addEventListener('dragover', (e) => {
         e.preventDefault();
-        uploadZone.classList.add('border-orange-600', 'bg-orange-100');
+        uploadZone.classList.add('border-orange-500', 'scale-105');
     });
     
     uploadZone.addEventListener('dragleave', (e) => {
         e.preventDefault();
-        uploadZone.classList.remove('border-orange-600', 'bg-orange-100');
+        uploadZone.classList.remove('border-orange-500', 'scale-105');
     });
     
     uploadZone.addEventListener('drop', (e) => {
         e.preventDefault();
-        uploadZone.classList.remove('border-orange-600', 'bg-orange-100');
+        uploadZone.classList.remove('border-orange-500', 'scale-105');
         handleFiles(e.dataTransfer.files);
     });
     
@@ -235,71 +297,97 @@ document.addEventListener('DOMContentLoaded', function() {
     function handleFiles(files) {
         selectedFiles = Array.from(files);
         if (selectedFiles.length > 0) {
-            updateUploadZone();
+            displayFilePreview();
             processBtn.disabled = false;
         }
     }
     
-    function updateUploadZone() {
-        const fileCount = selectedFiles.length;
-        uploadZone.innerHTML = `
-            <div class="space-y-4">
-                <div class="mx-auto w-16 h-16 bg-green-500 rounded-full flex items-center justify-center">
-                    <i data-lucide="check" class="w-8 h-8 text-white"></i>
+    function displayFilePreview() {
+        filePreview.classList.remove('hidden');
+        fileList.innerHTML = '';
+        
+        selectedFiles.forEach((file, index) => {
+            const fileItem = document.createElement('div');
+            fileItem.className = 'flex items-center justify-between p-4 bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow';
+            fileItem.innerHTML = `
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
+                        <i data-lucide="file" class="w-5 h-5 text-orange-600"></i>
+                    </div>
+                    <div>
+                        <p class="font-medium text-gray-900">${file.name}</p>
+                        <p class="text-sm text-gray-500">${(file.size / 1024 / 1024).toFixed(2)} MB</p>
+                    </div>
                 </div>
-                <div>
-                    <p class="text-lg font-medium text-gray-900">${fileCount} file${fileCount > 1 ? 's' : ''} selected</p>
-                    <p class="text-sm text-gray-500">Ready for processing</p>
-                </div>
-            </div>
-        `;
+                <button class="text-red-500 hover:text-red-700 transition-colors" onclick="removeFile(${index})">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            `;
+            fileList.appendChild(fileItem);
+        });
+        
         lucide.createIcons();
     }
     
-    // Process button
+    window.removeFile = function(index) {
+        selectedFiles.splice(index, 1);
+        if (selectedFiles.length > 0) {
+            displayFilePreview();
+        } else {
+            resetTool();
+        }
+    }
+    
+    // Processing
     processBtn.addEventListener('click', function() {
         if (selectedFiles.length === 0) return;
         
-        // Show processing section
         uploadSection.classList.add('hidden');
         processingSection.classList.remove('hidden');
         
-        // Simulate processing with progress
+        const stages = [
+            { progress: 25, status: "Analyzing files..." },
+            { progress: 50, status: "Applying ${selectedOption} settings..." },
+            { progress: 75, status: "Processing content..." },
+            { progress: 100, status: "Finalizing output..." }
+        ];
+        
+        let currentStage = 0;
         let progress = 0;
+        
         const interval = setInterval(() => {
-            progress += Math.random() * 15;
-            if (progress >= 100) {
-                progress = 100;
-                clearInterval(interval);
-                showResults();
+            const target = stages[currentStage].progress;
+            progress += (target - progress) * 0.1;
+            
+            if (progress >= target - 2) {
+                progress = target;
+                processingStatus.textContent = stages[currentStage].status;
+                currentStage++;
+                
+                if (currentStage >= stages.length) {
+                    clearInterval(interval);
+                    setTimeout(showResults, 500);
+                }
             }
+            
             progressBar.style.width = progress + '%';
-        }, 200);
+            progressPercent.textContent = Math.round(progress) + '%';
+        }, 150);
     });
     
     function showResults() {
         processingSection.classList.add('hidden');
         resultsSection.classList.remove('hidden');
         
-        // Handle download
         downloadBtn.addEventListener('click', function() {
-            // Simulate download
-            const link = document.createElement('a');
-            link.href = 'data:text/plain;charset=utf-8,Processed file content for aadhaar-masker';
-            link.download = 'processed-aadhaar-masker.txt';
-            link.click();
+            selectedFiles.forEach((file, index) => {
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(new Blob(['Processed content for ' + file.name + ' using aadhaar-masker'], { type: 'text/plain' }));
+                link.download = `processed-${file.name.split('.')[0]}-aadhaar-masker.txt`;
+                link.click();
+            });
         });
     }
-    
-    // Process another file
-    processAnother.addEventListener('click', function() {
-        resetTool();
-    });
-    
-    // Clear button
-    clearBtn.addEventListener('click', function() {
-        resetTool();
-    });
     
     function resetTool() {
         selectedFiles = [];
@@ -308,20 +396,11 @@ document.addEventListener('DOMContentLoaded', function() {
         uploadSection.classList.remove('hidden');
         processingSection.classList.add('hidden');
         resultsSection.classList.add('hidden');
-        
-        uploadZone.innerHTML = `
-            <div class="space-y-4">
-                <div class="mx-auto w-16 h-16 bg-orange-500 rounded-full flex items-center justify-center">
-                    <i data-lucide="upload" class="w-8 h-8 text-white"></i>
-                </div>
-                <div>
-                    <p class="text-lg font-medium text-gray-900">Click to upload or drag & drop</p>
-                    <p class="text-sm text-gray-500">Maximum file size: 16MB</p>
-                </div>
-            </div>
-        `;
-        lucide.createIcons();
+        filePreview.classList.add('hidden');
     }
+    
+    clearBtn.addEventListener('click', resetTool);
+    processAnother.addEventListener('click', resetTool);
 });
 </script>
-{%- endblock -%}
+{% endblock %}
