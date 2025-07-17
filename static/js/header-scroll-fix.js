@@ -15,11 +15,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (header) {
                     if (currentScrollY > 10) {
                         header.classList.add('scrolled');
-                        header.style.transform = 'translateY(0)';
-                        header.style.backdropFilter = 'blur(20px)';
+                        if (header && header.style) {
+                            header.style.transform = 'translateY(0)';
+                            header.style.backdropFilter = 'blur(20px)';
+                        }
                     } else {
                         header.classList.remove('scrolled');
-                        header.style.backdropFilter = 'blur(16px)';
+                        if (header && header.style) {
+                            header.style.backdropFilter = 'blur(16px)';
+                        }
                     }
                 }
                 
@@ -55,7 +59,9 @@ document.addEventListener('DOMContentLoaded', function() {
     if (dashboardContent) {
         const extraNavs = dashboardContent.querySelectorAll('nav');
         extraNavs.forEach(nav => {
-            nav.style.display = 'none';
+            if (nav && nav.style) {
+                nav.style.display = 'none';
+            }
         });
     }
     

@@ -140,9 +140,13 @@ class IconManager {
         const icons = document.querySelectorAll('[data-lucide]');
         icons.forEach(icon => {
             if (isDark) {
-                icon.style.color = '#ffffff';
+                if (icon && icon.style) {
+                    icon.style.color = '#ffffff';
+                }
             } else {
-                icon.style.color = '#000000';
+                if (icon && icon.style) {
+                    icon.style.color = '#000000';
+                }
             }
         });
     }

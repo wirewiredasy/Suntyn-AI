@@ -85,18 +85,26 @@ class FirebaseAuthHandler {
         userElements.forEach(element => {
             if (user) {
                 element.textContent = user.displayName || user.email || 'User';
-                element.style.display = 'block';
+                if (element && element.style) {
+                    element.style.display = 'block';
+                }
             } else {
-                element.style.display = 'none';
+                if (element && element.style) {
+                    element.style.display = 'none';
+                }
             }
         });
 
         loginElements.forEach(element => {
-            element.style.display = user ? 'none' : 'block';
+            if (element && element.style) {
+                element.style.display = user ? 'none' : 'block';
+            }
         });
 
         logoutElements.forEach(element => {
-            element.style.display = user ? 'block' : 'none';
+            if (element && element.style) {
+                element.style.display = user ? 'block' : 'none';
+            }
         });
     }
 

@@ -76,7 +76,9 @@ class EnhancedToolHandler {
     showProcessingStatus(isProcessing) {
         const statusElement = document.getElementById('processing-status');
         if (statusElement) {
-            statusElement.style.display = isProcessing ? 'block' : 'none';
+            if (statusElement && statusElement.style) {
+                statusElement.style.display = isProcessing ? 'block' : 'none';
+            }
         }
 
         const processBtn = document.getElementById('process-btn');
