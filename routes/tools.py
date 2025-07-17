@@ -62,25 +62,62 @@ logger = logging.getLogger(__name__)
 def index():
     """Tools index page with category filtering"""
     try:
+        from config import Config
         category = request.args.get('category', 'all')
         search_query = request.args.get('search', '')
 
-        # Get all active tools
-        tools_query = Tool.query.filter_by(is_active=True)
+        # Get all tools from database OR fallback to config
+        try:
+            tools_query = Tool.query.filter_by(is_active=True)
+            
+            # Filter by category if specified
+            if category and category != 'all':
+                tools_query = tools_query.join(ToolCategory).filter(ToolCategory.name == category)
 
-        # Filter by category if specified
-        if category and category != 'all':
-            tools_query = tools_query.join(ToolCategory).filter(ToolCategory.name == category)
+            if search_query:
+                tools_query = tools_query.filter(
+                    Tool.display_name.ilike(f'%{search_query}%') |
+                    Tool.description.ilike(f'%{search_query}%')
+                )
 
-        if search_query:
-            # Search in tool names and descriptions
-            tools_query = tools_query.filter(
-                Tool.display_name.ilike(f'%{search_query}%') |
-                Tool.description.ilike(f'%{search_query}%')
-            )
-
-        tools = tools_query.all()
-        categories = ToolCategory.query.all()
+            tools = tools_query.all()
+            categories = ToolCategory.query.all()
+            
+            # If no tools found, use fallback
+            if not tools:
+                raise Exception("No tools in database, using fallback")
+                
+        except Exception as db_error:
+            logger.warning(f"Database error, using fallback: {db_error}")
+            # Fallback to config-based tools
+            tools = []
+            categories = []
+            
+            # Create tool objects from config
+            for cat_id, cat_data in Config.TOOL_CATEGORIES.items():
+                for tool_name in cat_data['tools']:
+                    if category == 'all' or category == cat_id:
+                        if not search_query or search_query.lower() in tool_name.lower():
+                            # Create a mock tool object
+                            tool_obj = type('Tool', (), {
+                                'name': tool_name,
+                                'display_name': tool_name.replace('-', ' ').title(),
+                                'description': f"Professional {tool_name.replace('-', ' ')} tool",
+                                'category': type('Category', (), {'name': cat_id})(),
+                                'icon': TOOL_CUSTOM_ICONS.get(tool_name, 'tool'),
+                                'color': cat_data['color'],
+                                'is_popular': tool_name in ['pdf-merge', 'image-compress', 'qr-generator', 'resume-generator']
+                            })
+                            tools.append(tool_obj)
+                
+                # Create category object
+                if category == 'all' or category == cat_id:
+                    cat_obj = type('Category', (), {
+                        'name': cat_id,
+                        'display_name': cat_data['name']
+                    })()
+                    if cat_obj not in [c for c in categories if hasattr(c, 'name') and c.name == cat_id]:
+                        categories.append(cat_obj)
 
         logger.info(f"Loading tools index: found {len(tools)} tools")
 
@@ -89,21 +126,29 @@ def index():
                              categories=categories, 
                              selected_category=category,
                              search_query=search_query,
-                             tool_icons=TOOL_CUSTOM_ICONS,
-                             # No authentication required
-                             firebase_project_id=os.environ.get("FIREBASE_PROJECT_ID", ""),
-                             firebase_app_id=os.environ.get("FIREBASE_APP_ID", ""))
+                             tool_icons=TOOL_CUSTOM_ICONS)
     except Exception as e:
         logger.error(f"Error loading tools index: {e}")
+        # Final fallback with essential tools
+        essential_tools = []
+        for tool_name in ['pdf-merge', 'pdf-split', 'image-compress', 'image-resize', 'video-to-mp3', 'qr-generator']:
+            tool_obj = type('Tool', (), {
+                'name': tool_name,
+                'display_name': tool_name.replace('-', ' ').title(),
+                'description': f"Professional {tool_name.replace('-', ' ')} tool",
+                'category': type('Category', (), {'name': 'utility'})(),
+                'icon': TOOL_CUSTOM_ICONS.get(tool_name, 'tool'),
+                'color': 'blue',
+                'is_popular': True
+            })
+            essential_tools.append(tool_obj)
+            
         return render_template('tools/index.html', 
-                             tools=[], 
+                             tools=essential_tools, 
                              categories=[], 
                              selected_category='all',
                              search_query='',
-                             tool_icons=TOOL_CUSTOM_ICONS,
-                             # No authentication required
-                             firebase_project_id=os.environ.get("FIREBASE_PROJECT_ID", ""),
-                             firebase_app_id=os.environ.get("FIREBASE_APP_ID", ""))
+                             tool_icons=TOOL_CUSTOM_ICONS)
 
 @tools_bp.route('/api/tools')
 def api_tools():
