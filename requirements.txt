@@ -84,3 +84,8 @@ psycopg2-binary
 pillow
 pymupdf
 qrcode
+email_validator
+flask
+flask-sqlalchemy
+gunicorn
+psycopg2-binary
