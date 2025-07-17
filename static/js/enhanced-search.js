@@ -1,5 +1,5 @@
 /**
- * Enhanced Search Functionality for Toolora AI
+ * Enhanced Search Functionality for Suntyn AI
  * Provides real-time search across all 85+ tools with fuzzy matching and categories
  */
 

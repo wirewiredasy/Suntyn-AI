@@ -1,5 +1,5 @@
 /**
- * Main JavaScript for Toolora AI
+ * Main JavaScript for Suntyn AI
  * Handles page transitions, animations, and global functionality
  */
 

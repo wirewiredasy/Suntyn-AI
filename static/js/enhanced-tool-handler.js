@@ -1,4 +1,4 @@
-// Enhanced Tool Handler for Toolora AI
+// Enhanced Tool Handler for Suntyn AI
 class EnhancedToolHandler {
     constructor() {
         this.processingQueue = [];

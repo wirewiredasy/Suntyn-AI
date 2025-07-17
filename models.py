@@ -6,7 +6,7 @@ from sqlalchemy import JSON
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
-    
+
     id = db.Column(db.Integer, primary_key=True)
     # Removed Firebase authentication
     email = db.Column(db.String(120), unique=True, nullable=False)
@@ -14,19 +14,19 @@ class User(UserMixin, db.Model):
     photo_url = db.Column(db.String(255), nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     last_login = db.Column(db.DateTime, default=datetime.utcnow)
-    
+
     # User preferences
     theme = db.Column(db.String(10), default='light')
     language = db.Column(db.String(10), default='en')
-    
+
     # Premium features
     is_premium = db.Column(db.Boolean, default=False)
     premium_until = db.Column(db.DateTime, nullable=True)
     credits = db.Column(db.Integer, default=100)
-    
+
     # Settings
     preferences = db.Column(JSON, default=lambda: {})
-    
+
     # Relationships
     tool_history = db.relationship('ToolHistory', backref='user', lazy=True, cascade='all, delete-orphan')
     saved_files = db.relationship('SavedFile', backref='user', lazy=True, cascade='all, delete-orphan')
@@ -49,7 +49,7 @@ class User(UserMixin, db.Model):
 
 class ToolHistory(db.Model):
     __tablename__ = 'tool_history'
-    
+
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
     tool_name = db.Column(db.String(100), nullable=False)
@@ -67,7 +67,7 @@ class ToolHistory(db.Model):
 
 class SavedFile(db.Model):
     __tablename__ = 'saved_files'
-    
+
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
     original_filename = db.Column(db.String(255), nullable=False)
@@ -92,7 +92,7 @@ class SavedFile(db.Model):
 
 class ToolCategory(db.Model):
     __tablename__ = 'tool_categories'
-    
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False, unique=True)
     display_name = db.Column(db.String(100), nullable=False)
@@ -106,7 +106,7 @@ class ToolCategory(db.Model):
 
 class Tool(db.Model):
     __tablename__ = 'tools'
-    
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False, unique=True)
     display_name = db.Column(db.String(150), nullable=False)
@@ -120,14 +120,14 @@ class Tool(db.Model):
     file_types = db.Column(JSON, default=lambda: [])
     max_file_size_mb = db.Column(db.Integer, default=16)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    
+
     # Relationships
     category = db.relationship('ToolCategory', backref='tools')
 
 
 class UserAnalytics(db.Model):
     __tablename__ = 'user_analytics'
-    
+
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
     session_id = db.Column(db.String(100), nullable=False)
@@ -141,7 +141,7 @@ class UserAnalytics(db.Model):
 
 class APIKey(db.Model):
     __tablename__ = 'api_keys'
-    
+
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     key_name = db.Column(db.String(100), nullable=False)
@@ -151,14 +151,14 @@ class APIKey(db.Model):
     rate_limit = db.Column(db.Integer, default=1000)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     expires_at = db.Column(db.DateTime, nullable=True)
-    
+
     # Relationships
     user = db.relationship('User', backref='api_keys')
 
 
 class Subscription(db.Model):
     __tablename__ = 'subscriptions'
-    
+
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     plan_name = db.Column(db.String(50), nullable=False)
@@ -167,6 +167,8 @@ class Subscription(db.Model):
     current_period_end = db.Column(db.DateTime, nullable=False)
     cancel_at_period_end = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    
+
     # Relationships
     user = db.relationship('User', backref='subscriptions')
+
+# Models are clean - no "Toolora AI" references found in database schema

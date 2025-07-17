@@ -1,4 +1,4 @@
-// Tool API endpoint mappings for Toolora AI
+// Tool API endpoint mappings for Suntyn AI
 if (typeof window.TOOL_ENDPOINTS === 'undefined') {
     window.TOOL_ENDPOINTS = {
     // PDF Tools

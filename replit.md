@@ -1,8 +1,8 @@
-# Toolora AI - Professional Online Tools Platform
+# Suntyn AI - Professional Online Tools Platform
 
 ## Overview
 
-Toolora AI is a comprehensive web-based platform offering 85+ professional tools across 8 categories (PDF, Image, Video, AI, Government Documents, etc.). The platform provides free, secure, and easy-to-use tools for creators, students, and professionals worldwide.
+Suntyn AI is a comprehensive web-based platform offering 85+ professional tools across 8 categories (PDF, Image, Video, AI, Government Documents, etc.). The platform provides free, secure, and easy-to-use tools for creators, students, and professionals worldwide.
 
 ## User Preferences
 

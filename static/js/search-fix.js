@@ -1,4 +1,4 @@
-// Enhanced search functionality for Toolora AI
+// Enhanced search functionality for Suntyn AI
 (function() {
     'use strict';
     

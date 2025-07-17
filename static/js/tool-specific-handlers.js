@@ -1,5 +1,5 @@
 /**
- * Tool-Specific Handlers for Toolora AI
+ * Tool-Specific Handlers for Suntyn AI
  * Enhanced functionality for individual tools
  */
 

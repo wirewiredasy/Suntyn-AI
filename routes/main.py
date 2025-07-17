@@ -47,7 +47,7 @@ def dashboard():
 def dashboard_stats():
     """Get real dashboard statistics for current user"""
     user_id = request.args.get('user_id')
-    
+
     if not user_id:
         # Return generic stats for demo mode
         return jsonify({
@@ -58,7 +58,7 @@ def dashboard_stats():
             'recent_activity': [],
             'quick_tools': get_popular_tools()
         })
-    
+
     try:
         # Get user from database
         # Return generic stats for guest user
@@ -70,24 +70,24 @@ def dashboard_stats():
             'recent_activity': [],
             'quick_tools': get_popular_tools()
         })
-        
+
         # Calculate real statistics
         total_tools_used = ToolHistory.query.filter_by(user_id=user.id).count()
         total_files = db.session.query(db.func.sum(ToolHistory.file_count)).filter_by(user_id=user.id).scalar() or 0
-        
+
         # Calculate data saved (sum of file sizes)
         total_size_mb = db.session.query(db.func.sum(ToolHistory.file_size_mb)).filter_by(user_id=user.id).scalar() or 0
         data_saved = f"{total_size_mb:.1f} MB" if total_size_mb < 1024 else f"{total_size_mb/1024:.1f} GB"
-        
+
         # Calculate time saved (estimated based on tool usage)
         time_saved_minutes = total_tools_used * 5  # Assume 5 minutes saved per tool use
         time_saved = f"{time_saved_minutes//60} hours {time_saved_minutes%60} min" if time_saved_minutes >= 60 else f"{time_saved_minutes} min"
-        
+
         # Get recent activity
         recent_activity = ToolHistory.query.filter_by(user_id=user.id)\
             .order_by(ToolHistory.used_at.desc())\
             .limit(10).all()
-        
+
         activity_data = []
         for activity in recent_activity:
             activity_data.append({
@@ -98,7 +98,7 @@ def dashboard_stats():
                 'file_count': activity.file_count,
                 'processing_time': activity.processing_time
             })
-        
+
         return jsonify({
             'tools_used': total_tools_used,
             'files_processed': total_files,
@@ -107,7 +107,7 @@ def dashboard_stats():
             'recent_activity': activity_data,
             'quick_tools': get_popular_tools()
         })
-        
+
     except Exception as e:
         print(f"Dashboard stats error: {e}")
         return jsonify({
@@ -128,7 +128,7 @@ def get_popular_tools():
     ).group_by(ToolHistory.tool_name, ToolHistory.tool_category)\
      .order_by(db.func.count(ToolHistory.id).desc())\
      .limit(6).all()
-    
+
     tools_data = []
     for tool in popular:
         tools_data.append({
@@ -137,7 +137,7 @@ def get_popular_tools():
             'usage_count': tool.usage_count,
             'display_name': tool.tool_name.replace('-', ' ').title()
         })
-    
+
     # Add default tools if no usage data
     if len(tools_data) < 6:
         default_tools = [
@@ -149,7 +149,7 @@ def get_popular_tools():
             {'name': 'text-case-converter', 'category': 'utility', 'display_name': 'Text Case Converter', 'usage_count': 0}
         ]
         tools_data.extend(default_tools[len(tools_data):])
-    
+
     return tools_data[:6]
 
 @main_bp.route('/api/dashboard/track', methods=['POST'])
@@ -162,10 +162,10 @@ def track_tool_usage():
         tool_category = data.get('tool_category')
         file_count = data.get('file_count', 1)
         file_size_mb = data.get('file_size_mb', 0)
-        
+
         if not user_id or not tool_name:
             return jsonify({'error': 'Missing required fields'}), 400
-        
+
         # Get or create user
         user = User.query.filter_by(email="guest@toolora.ai").first()
         if not user:
@@ -175,7 +175,7 @@ def track_tool_usage():
             )
             db.session.add(user)
             db.session.commit()
-        
+
         # Create tool history record
         tool_history = ToolHistory(
             user_id=user.id,
@@ -187,12 +187,12 @@ def track_tool_usage():
             ip_address=request.remote_addr,
             user_agent=request.headers.get('User-Agent', '')
         )
-        
+
         db.session.add(tool_history)
         db.session.commit()
-        
+
         return jsonify({'success': True, 'message': 'Tool usage tracked'})
-        
+
     except Exception as e:
         print(f"Error tracking tool usage: {e}")
         return jsonify({'error': 'Failed to track usage'}), 500
@@ -234,49 +234,49 @@ def sitemap():
     sitemap_xml = '''<?xml version="1.0" encoding="UTF-8"?>
     <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
         <url>
-            <loc>https://toolora-ai.replit.app/</loc>
+            <loc>https://suntyn-ai.replit.app/</loc>
             <lastmod>{}</lastmod>
             <changefreq>daily</changefreq>
             <priority>1.0</priority>
         </url>
         <url>
-            <loc>https://toolora-ai.replit.app/tools</loc>
+            <loc>https://suntyn-ai.replit.app/tools</loc>
             <lastmod>{}</lastmod>
             <changefreq>daily</changefreq>
             <priority>0.9</priority>
         </url>
         <url>
-            <loc>https://toolora-ai.replit.app/about</loc>
+            <loc>https://suntyn-ai.replit.app/about</loc>
             <lastmod>{}</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.7</priority>
         </url>
         <url>
-            <loc>https://toolora-ai.replit.app/contact</loc>
+            <loc>https://suntyn-ai.replit.app/contact</loc>
             <lastmod>{}</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.7</priority>
         </url>
         <url>
-            <loc>https://toolora-ai.replit.app/privacy</loc>
+            <loc>https://suntyn-ai.replit.app/privacy</loc>
             <lastmod>{}</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.6</priority>
         </url>
         <url>
-            <loc>https://toolora-ai.replit.app/terms</loc>
+            <loc>https://suntyn-ai.replit.app/terms</loc>
             <lastmod>{}</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.6</priority>
         </url>
         <url>
-            <loc>https://toolora-ai.replit.app/cookies</loc>
+            <loc>https://suntyn-ai.replit.app/cookies</loc>
             <lastmod>{}</lastmod>
             <changefreq>monthly</changefreq>
-            <priority>0.5</priority>
+            <priority>0.6</priority>
         </url>
         <url>
-            <loc>https://toolora-ai.replit.app/faq</loc>
+            <loc>https://suntyn-ai.replit.app/faq</loc>
             <lastmod>{}</lastmod>
             <changefreq>weekly</changefreq>
             <priority>0.8</priority>
