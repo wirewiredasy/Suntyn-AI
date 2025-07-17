@@ -1,18 +1,18 @@
 class IconManager {
     constructor() {
         this.iconVariants = {
-            'toolora-16': '/static/images/toolora-icon-only.svg',
-            'toolora-24': '/static/images/toolora-icon-only.svg',
-            'toolora-32': '/static/images/toolora-icon-only.svg',
-            'toolora-48': '/static/images/toolora-professional-logo.svg',
-            'toolora-64': '/static/images/toolora-professional-logo.svg',
-            'toolora-mono-minimal': '/static/images/toolora-icon-only.svg',
-            'toolora-square-badge': '/static/images/toolora-icon-only.svg',
-            'toolora-circle-badge': '/static/images/toolora-icon-only.svg',
-            'toolora-modern-square': '/static/images/toolora-professional-logo.svg',
-            'toolora-social-square': '/static/images/toolora-professional-logo.svg',
-            'toolora-social-rect': '/static/images/toolora-professional-logo.svg',
-            'toolora-profile-circle': '/static/images/toolora-professional-logo.svg'
+            'suntyn-16': '/static/images/suntyn-ai-logo.svg',
+            'suntyn-24': '/static/images/suntyn-ai-logo.svg',
+            'suntyn-32': '/static/images/suntyn-ai-logo.svg',
+            'suntyn-48': '/static/images/suntyn-ai-logo.svg',
+            'suntyn-64': '/static/images/suntyn-ai-logo.svg',
+            'suntyn-mono-minimal': '/static/images/suntyn-icon-only.svg',
+            'suntyn-square-badge': '/static/images/suntyn-icon-only.svg',
+            'suntyn-circle-badge': '/static/images/suntyn-icon-only.svg',
+            'suntyn-modern-square': '/static/images/suntyn-ai-logo.svg',
+            'suntyn-social-square': '/static/images/suntyn-ai-logo.svg',
+            'suntyn-social-rect': '/static/images/suntyn-ai-logo.svg',
+            'suntyn-profile-circle': '/static/images/suntyn-ai-logo.svg'
         };
         this.init();
     }
@@ -187,7 +187,7 @@ class IconManager {
                 if (mutation.type === 'childList') {
                     mutation.addedNodes.forEach(node => {
                         if (node.nodeType === 1) { // Element node
-                            const logos = node.querySelectorAll?.('img[alt*="toolora"], img[alt*="Toolora"], .toolora-logo');
+                            const logos = node.querySelectorAll?.('img[alt*="suntyn"], img[alt*="Suntyn"], .suntyn-logo');
                             logos?.forEach(logo => {
                                 const context = this.detectContext(logo);
                                 this.updateIcon(logo, context);
@@ -211,7 +211,7 @@ class IconManager {
 
         const link = document.createElement('a');
         link.href = iconUrl;
-        link.download = `toolora-${variant}.${format}`;
+        link.download = `suntyn-${variant}.${format}`;
         link.click();
     }
 
@@ -230,11 +230,11 @@ class IconManager {
 
     getClosestSize(targetSize) {
         const sizes = {
-            16: 'toolora-16',
-            24: 'toolora-24', 
-            32: 'toolora-32',
-            48: 'toolora-48',
-            64: 'toolora-64'
+            16: 'suntyn-16',
+            24: 'suntyn-24', 
+            32: 'suntyn-32',
+            48: 'suntyn-48',
+            64: 'suntyn-64'
         };
 
         const availableSizes = Object.keys(sizes).map(Number);

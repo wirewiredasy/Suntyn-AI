@@ -1,6 +1,7 @@
+
 #!/usr/bin/env python3
 """
-Fixed fresh database setup for Toolora AI - Local SQLite
+Fresh database setup for Suntyn AI - Local SQLite
 """
 import os
 from app import app, db
@@ -8,7 +9,7 @@ from config import Config
 
 def setup_fresh_database():
     """Create fresh local database with all 85 tools"""
-    print('🚀 Setting up fresh local database...')
+    print('🚀 Setting up fresh local database for Suntyn AI...')
     
     with app.app_context():
         # Drop all existing tables
@@ -54,7 +55,7 @@ def setup_fresh_database():
         
         db.session.commit()
         print(f'✅ Successfully added {total_tools} tools across {len(Config.TOOL_CATEGORIES)} categories')
-        print('🎉 Fresh database setup complete!')
+        print('🎉 Fresh Suntyn AI database setup complete!')
         
         # Verify database
         categories = ToolCategory.query.all()

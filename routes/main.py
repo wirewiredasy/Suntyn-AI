@@ -1,3 +1,4 @@
+
 from flask import Blueprint, render_template, request, jsonify
 from models import User, ToolHistory, ToolCategory
 from app import db
@@ -167,10 +168,10 @@ def track_tool_usage():
             return jsonify({'error': 'Missing required fields'}), 400
 
         # Get or create user
-        user = User.query.filter_by(email="guest@toolora.ai").first()
+        user = User.query.filter_by(email="guest@suntyn.ai").first()
         if not user:
             user = User(
-                email="guest@toolora.ai",
+                email="guest@suntyn.ai",
                 display_name=data.get('display_name', 'Guest User')
             )
             db.session.add(user)
@@ -297,7 +298,7 @@ def sitemap():
         for tool in category_data['tools']:
             sitemap_xml += '''
         <url>
-            <loc>https://toolora-ai.replit.app/tools/{}</loc>
+            <loc>https://suntyn-ai.replit.app/tools/{}</loc>
             <lastmod>{}</lastmod>
             <changefreq>weekly</changefreq>
             <priority>0.8</priority>
@@ -315,9 +316,7 @@ def robots():
 
     robots_txt = '''User-agent: *
 Allow: /
-Sitemap: https://toolora-ai.replit.app/sitemap.xml
+Sitemap: https://suntyn-ai.replit.app/sitemap.xml
 '''
 
     return Response(robots_txt, mimetype='text/plain')
-
-# Remove this local 404 handler since we have a global one
