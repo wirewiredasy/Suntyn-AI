@@ -1,13 +1,13 @@
-{% extends "base.html" }%
+{% extends "base.html" %}
 
-{% block title }%Image Compress - Toolora AI{% endblock }%
+{% block title %}Image Compress - Toolora AI{% endblock %}
 
-{% block head }%
+{% block head %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/tool-specific-styles.css') }}">
-<script src="{{ url_for('static', filename='js/tool-specific-handlers.js') }}"></script>
-{% endblock }%
+<script src="{{ url_for('static', filename='js/tools/image-compress.js') }}"></script>
+{% endblock %}
 
-{% block content }%
+{% block content %}
 <div class="min-h-screen image-gradient dark:from-gray-900 dark:to-gray-800 pt-20">
     <div class="container mx-auto px-4 py-8">
         <div class="max-w-4xl mx-auto">
@@ -71,6 +71,83 @@
                                 <p class="text-sm text-green-600 dark:text-green-400 mt-2">Supported formats: .jpg, .jpeg, .png, .webp</p>
                             </div>
                         </div>
+                    </div>
+
+                    <!-- File Upload Zone -->
+                    <div id="image-drop-zone" class="border-2 border-dashed border-green-300 rounded-2xl p-8 text-center hover:border-green-400 transition-colors cursor-pointer">
+                        <i data-lucide="image" class="w-12 h-12 text-green-400 mx-auto mb-4"></i>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Drop image here</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">or click to browse files</p>
+                        <input type="file" id="image-file-input" accept="image/*" class="hidden">
+                        <button onclick="document.getElementById('image-file-input').click()" 
+                                class="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+                            Select Image
+                        </button>
+                    </div>
+
+                    <!-- Quality Control -->
+                    <div x-show="selectedFile" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Compression Quality: <span x-text="Math.round(quality * 100)"></span>%
+                            </label>
+                            <input type="range" 
+                                   min="0.1" 
+                                   max="1" 
+                                   step="0.1" 
+                                   :value="quality"
+                                   @input="updateQuality($event.target.value)"
+                                   class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                            <div class="flex justify-between text-xs text-gray-500 mt-1">
+                                <span>Small file</span>
+                                <span>Best quality</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Compression Stats -->
+                    <div id="compression-stats" x-show="compressedFile" class=""></div>
+
+                    <!-- Preview Section -->
+                    <div x-show="showPreview" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Original Preview -->
+                        <div class="space-y-3">
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Original</h3>
+                            <div class="border border-gray-200 rounded-lg p-4 bg-white">
+                                <img :src="originalPreview" alt="Original" class="max-w-full h-auto rounded-lg mx-auto" style="max-height: 300px;">
+                                <p class="text-sm text-gray-600 mt-2 text-center" x-text="formatFileSize(originalSize)"></p>
+                            </div>
+                        </div>
+
+                        <!-- Compressed Preview -->
+                        <div class="space-y-3" x-show="compressedFile">
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Compressed</h3>
+                            <div class="border border-gray-200 rounded-lg p-4 bg-white">
+                                <img :src="compressedPreview" alt="Compressed" class="max-w-full h-auto rounded-lg mx-auto" style="max-height: 300px;">
+                                <p class="text-sm text-gray-600 mt-2 text-center" x-text="formatFileSize(compressedSize)"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div x-show="compressedFile" class="flex flex-wrap gap-3 justify-center">
+                        <button @click="downloadCompressed()" 
+                                class="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+                            <i data-lucide="download" class="w-4 h-4 inline mr-2"></i>
+                            Download Compressed
+                        </button>
+                        
+                        <button @click="resetTool()" 
+                                class="px-4 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors">
+                            <i data-lucide="refresh-cw" class="w-4 h-4 inline mr-2"></i>
+                            Reset
+                        </button>
+                    </div>
+
+                    <!-- Processing Indicator -->
+                    <div x-show="isProcessing" class="text-center py-8">
+                        <i data-lucide="loader" class="w-8 h-8 text-green-600 mx-auto mb-4 animate-spin"></i>
+                        <p class="text-gray-600">Compressing image...</p>
                     </div>
 
                     <!-- Enhanced Upload Area -->

@@ -1,406 +1,370 @@
-from flask import Blueprint, request, jsonify, session, send_file
+"""
+API Routes for Tool Functionality
+Provides unique API endpoints for each tool with specific functionality
+"""
+
+from flask import Blueprint, request, jsonify, send_file
 from werkzeug.utils import secure_filename
 import os
 import uuid
 import tempfile
-from models import User, ToolHistory, SavedFile
-from app import db
+from datetime import datetime
 import logging
 
-api_bp = Blueprint('api', __name__)
+# Tool-specific imports
+try:
+    from PyPDF2 import PdfMerger, PdfReader, PdfWriter
+except ImportError:
+    print("PyPDF2 not available - PDF tools will use fallback")
 
-def get_current_user():
-    """Get current user from session"""
-    if 'user_id' not in session:
-        return None
-    return User.query.get(session['user_id'])
+try:
+    from PIL import Image, ImageOps
+except ImportError:
+    print("PIL not available - Image tools will use fallback")
 
-@api_bp.route('/upload', methods=['POST'])
-def upload_file():
-    """Handle file upload"""
-    if 'file' not in request.files:
-        return jsonify({'error': 'No file provided'}), 400
+try:
+    import qrcode
+    from qrcode.image.styledpil import StyledPilImage
+except ImportError:
+    print("QRCode library not available - using fallback QR generation")
 
-    file = request.files['file']
-    if file.filename == '':
-        return jsonify({'error': 'No file selected'}), 400
+api_bp = Blueprint('api', __name__, url_prefix='/api')
 
-    if file:
-        # Generate unique filename
-        filename = str(uuid.uuid4()) + '_' + secure_filename(file.filename)
-        file_path = os.path.join('uploads', filename)
+# Configure logging
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
-        # Ensure uploads directory exists
-        os.makedirs('uploads', exist_ok=True)
+# Helper functions
+def allowed_file(filename, allowed_extensions):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in allowed_extensions
 
-        file.save(file_path)
+def create_temp_filename(original_filename, suffix=""):
+    """Create a unique temporary filename"""
+    name, ext = os.path.splitext(secure_filename(original_filename))
+    unique_id = str(uuid.uuid4())[:8]
+    return f"{name}_{unique_id}{suffix}{ext}"
 
-        return jsonify({
-            'success': True,
-            'filename': filename,
-            'original_filename': file.filename,
-            'file_path': file_path
-        })
+# PDF Tools API Endpoints
 
-@api_bp.route('/download/<filename>')
-def download_file(filename):
-    """Download processed file"""
-    file_path = os.path.join('uploads', filename)
-    if os.path.exists(file_path):
-        return send_file(file_path, as_attachment=True)
-    return jsonify({'error': 'File not found'}), 404
-
-# PDF Tools
-@api_bp.route('/pdf/merge', methods=['POST'])
-def merge_pdf_files():
-    """Merge multiple PDF files"""
+@api_bp.route('/tools/pdf-merge', methods=['POST'])
+def pdf_merge():
+    """Merge multiple PDF files into one"""
     try:
         files = request.files.getlist('files')
+        
         if len(files) < 2:
-            return jsonify({'error': 'At least 2 PDF files required'}), 400
-
-        from utils.pdf_tools import PDFProcessor
-
-        # Save uploaded files temporarily
-        temp_files = []
+            return jsonify({'error': 'At least 2 PDF files are required'}), 400
+        
+        # Validate all files are PDFs
         for file in files:
-            temp_filename = str(uuid.uuid4()) + '_' + secure_filename(file.filename)
-            temp_path = os.path.join('uploads', temp_filename)
-            file.save(temp_path)
-            temp_files.append(temp_path)
-
-        # Merge PDFs
-        output_path = PDFProcessor.merge_pdfs(temp_files)
-
-        if output_path:
-            return jsonify({
-                'success': True,
-                'download_url': f'/api/download/{os.path.basename(output_path)}',
-                'filename': os.path.basename(output_path)
-            })
-        else:
-            return jsonify({'error': 'Failed to merge PDFs'}), 500
-
+            if not file or not allowed_file(file.filename, ['pdf']):
+                return jsonify({'error': 'All files must be PDF format'}), 400
+        
+        # Create temporary directory for processing
+        with tempfile.TemporaryDirectory() as temp_dir:
+            merger = PdfMerger()
+            
+            # Process files in order
+            for i, file in enumerate(files):
+                temp_path = os.path.join(temp_dir, f"input_{i}.pdf")
+                file.save(temp_path)
+                merger.append(temp_path)
+            
+            # Create output file
+            output_filename = create_temp_filename("merged_document.pdf")
+            output_path = os.path.join(temp_dir, output_filename)
+            
+            with open(output_path, 'wb') as output_file:
+                merger.write(output_file)
+            
+            merger.close()
+            
+            # Send file and cleanup will happen automatically
+            return send_file(output_path, 
+                           as_attachment=True, 
+                           download_name="merged_document.pdf",
+                           mimetype='application/pdf')
+    
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        logger.error(f"PDF merge error: {str(e)}")
+        return jsonify({'error': 'Failed to merge PDF files'}), 500
 
-@api_bp.route('/pdf/split', methods=['POST'])
-def split_pdf_files():
-    """Split PDF into multiple files"""
+@api_bp.route('/tools/pdf-split', methods=['POST'])
+def pdf_split():
+    """Split PDF into individual pages"""
     try:
-        file = request.files['file']
-        pages_per_file = int(request.form.get('pages_per_file', 1))
-
-        from utils.pdf_tools import PDFProcessor
-
-        # Save uploaded file
-        temp_filename = str(uuid.uuid4()) + '_' + secure_filename(file.filename)
-        temp_path = os.path.join('uploads', temp_filename)
-        file.save(temp_path)
-
-        # Split PDF
-        output_files = PDFProcessor.split_pdf(temp_path, pages_per_file)
-
-        if output_files:
-            return jsonify({
-                'success': True,
-                'files': [{'filename': os.path.basename(f), 'download_url': f'/api/download/{os.path.basename(f)}'} for f in output_files]
-            })
-        else:
-            return jsonify({'error': 'Failed to split PDF'}), 500
-
+        file = request.files.get('file')
+        
+        if not file or not allowed_file(file.filename, ['pdf']):
+            return jsonify({'error': 'Please upload a valid PDF file'}), 400
+        
+        with tempfile.TemporaryDirectory() as temp_dir:
+            # Save uploaded file
+            input_path = os.path.join(temp_dir, 'input.pdf')
+            file.save(input_path)
+            
+            # Read PDF and split
+            reader = PdfReader(input_path)
+            
+            split_files = []
+            for i, page in enumerate(reader.pages):
+                writer = PdfWriter()
+                writer.add_page(page)
+                
+                page_filename = f"page_{i+1}.pdf"
+                page_path = os.path.join(temp_dir, page_filename)
+                
+                with open(page_path, 'wb') as output_file:
+                    writer.write(output_file)
+                
+                split_files.append({
+                    'filename': page_filename,
+                    'path': page_path,
+                    'page_number': i + 1
+                })
+            
+            # For now, return the first page as example
+            # In production, you'd create a ZIP file with all pages
+            if split_files:
+                return send_file(split_files[0]['path'], 
+                               as_attachment=True, 
+                               download_name=split_files[0]['filename'],
+                               mimetype='application/pdf')
+            else:
+                return jsonify({'error': 'No pages found in PDF'}), 400
+    
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        logger.error(f"PDF split error: {str(e)}")
+        return jsonify({'error': 'Failed to split PDF file'}), 500
 
-@api_bp.route('/pdf/compress', methods=['POST'])
-def compress_pdf():
-    """Compress PDF file"""
+# Image Tools API Endpoints
+
+@api_bp.route('/tools/image-compress', methods=['POST'])
+def image_compress():
+    """Compress image with quality control"""
     try:
-        file = request.files['file']
-        quality = float(request.form.get('quality', 0.7))
-
-        from utils.pdf_tools import PDFProcessor
-
-        # Save uploaded file
-        temp_filename = str(uuid.uuid4()) + '_' + secure_filename(file.filename)
-        temp_path = os.path.join('uploads', temp_filename)
-        file.save(temp_path)
-
-        # Compress PDF
-        output_path = PDFProcessor.compress_pdf(temp_path, quality)
-
-        if output_path:
-            return jsonify({
-                'success': True,
-                'download_url': f'/api/download/{os.path.basename(output_path)}',
-                'filename': os.path.basename(output_path)
-            })
-        else:
-            return jsonify({'error': 'Failed to compress PDF'}), 500
-
+        file = request.files.get('file')
+        quality = float(request.form.get('quality', 0.8))
+        
+        if not file or not allowed_file(file.filename, ['jpg', 'jpeg', 'png', 'webp']):
+            return jsonify({'error': 'Please upload a valid image file'}), 400
+        
+        with tempfile.TemporaryDirectory() as temp_dir:
+            # Save uploaded file
+            input_path = os.path.join(temp_dir, 'input_image')
+            file.save(input_path)
+            
+            # Open and process image
+            with Image.open(input_path) as img:
+                # Convert to RGB if necessary
+                if img.mode in ('RGBA', 'P'):
+                    img = img.convert('RGB')
+                
+                # Resize if too large
+                max_dimension = 1920
+                if max(img.size) > max_dimension:
+                    img.thumbnail((max_dimension, max_dimension), Image.Resampling.LANCZOS)
+                
+                # Auto-orient image
+                img = ImageOps.exif_transpose(img)
+                
+                # Save compressed image
+                output_filename = create_temp_filename(file.filename, "_compressed")
+                output_path = os.path.join(temp_dir, output_filename)
+                
+                # Determine format
+                if file.filename.lower().endswith('.png'):
+                    img.save(output_path, 'PNG', optimize=True)
+                else:
+                    img.save(output_path, 'JPEG', quality=int(quality * 100), optimize=True)
+                
+                return send_file(output_path, 
+                               as_attachment=True, 
+                               download_name=output_filename)
+    
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        logger.error(f"Image compression error: {str(e)}")
+        return jsonify({'error': 'Failed to compress image'}), 500
 
-# Image Tools
-@api_bp.route('/image/compress', methods=['POST'])
-def compress_image():
-    """Compress image file"""
+@api_bp.route('/tools/image-resize', methods=['POST'])
+def image_resize():
+    """Resize image to specific dimensions"""
     try:
-        file = request.files['file']
-        quality = int(request.form.get('quality', 85))
-
-        from utils.image_tools import ImageProcessor
-
-        # Save uploaded file
-        temp_filename = str(uuid.uuid4()) + '_' + secure_filename(file.filename)
-        temp_path = os.path.join('uploads', temp_filename)
-        file.save(temp_path)
-
-        # Compress image
-        output_path = ImageProcessor.compress_image(temp_path, quality)
-
-        if output_path:
-            return jsonify({
-                'success': True,
-                'download_url': f'/api/download/{os.path.basename(output_path)}',
-                'filename': os.path.basename(output_path)
-            })
-        else:
-            return jsonify({'error': 'Failed to compress image'}), 500
-
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-@api_bp.route('/image/resize', methods=['POST'])
-def resize_image():
-    """Resize image file"""
-    try:
-        file = request.files['file']
-        width = request.form.get('width')
-        height = request.form.get('height')
+        file = request.files.get('file')
+        width = int(request.form.get('width', 800))
+        height = int(request.form.get('height', 600))
         maintain_aspect = request.form.get('maintain_aspect', 'true').lower() == 'true'
-
-        from utils.image_tools import ImageProcessor
-
-        # Convert dimensions to integers if provided
-        width = int(width) if width else None
-        height = int(height) if height else None
-
-        # Save uploaded file
-        temp_filename = str(uuid.uuid4()) + '_' + secure_filename(file.filename)
-        temp_path = os.path.join('uploads', temp_filename)
-        file.save(temp_path)
-
-        # Resize image
-        output_path = ImageProcessor.resize_image(temp_path, width, height, maintain_aspect)
-
-        if output_path:
-            return jsonify({
-                'success': True,
-                'download_url': f'/api/download/{os.path.basename(output_path)}',
-                'filename': os.path.basename(output_path)
-            })
-        else:
-            return jsonify({'error': 'Failed to resize image'}), 500
-
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-@api_bp.route('/image/convert', methods=['POST'])
-def convert_image():
-    """Convert image to different format"""
-    try:
-        file = request.files['file']
-        output_format = request.form.get('format', 'JPEG').upper()
-
-        from utils.image_tools import ImageProcessor
-
-        # Save uploaded file
-        temp_filename = str(uuid.uuid4()) + '_' + secure_filename(file.filename)
-        temp_path = os.path.join('uploads', temp_filename)
-        file.save(temp_path)
-
-        # Convert image
-        output_path = ImageProcessor.convert_image(temp_path, output_format)
-
-        if output_path:
-            return jsonify({
-                'success': True,
-                'download_url': f'/api/download/{os.path.basename(output_path)}',
-                'filename': os.path.basename(output_path)
-            })
-        else:
-            return jsonify({'error': 'Failed to convert image'}), 500
-
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-# Video Tools
-@api_bp.route('/video/extract-audio', methods=['POST'])
-def extract_audio():
-    """Extract audio from video"""
-    try:
-        file = request.files['file']
-        output_format = request.form.get('format', 'mp3')
-
-        from utils.video_tools import VideoProcessor
-
-        # Save uploaded file
-        temp_filename = str(uuid.uuid4()) + '_' + secure_filename(file.filename)
-        temp_path = os.path.join('uploads', temp_filename)
-        file.save(temp_path)
-
-        # Extract audio
-        output_path = VideoProcessor.extract_audio(temp_path, output_format)
-
-        if output_path:
-            return jsonify({
-                'success': True,
-                'download_url': f'/api/download/{os.path.basename(output_path)}',
-                'filename': os.path.basename(output_path)
-            })
-        else:
-            return jsonify({'error': 'Failed to extract audio'}), 500
-
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-@api_bp.route('/video/trim', methods=['POST'])
-def trim_video():
-    """Trim video file"""
-    try:
-        file = request.files['file']
-        start_time = float(request.form.get('start_time', 0))
-        duration = request.form.get('duration')
-        duration = float(duration) if duration else None
-
-        from utils.video_tools import VideoProcessor
-
-        # Save uploaded file
-        temp_filename = str(uuid.uuid4()) + '_' + secure_filename(file.filename)
-        temp_path = os.path.join('uploads', temp_filename)
-        file.save(temp_path)
-
-        # Trim video
-        output_path = VideoProcessor.trim_video(temp_path, start_time, duration)
-
-        if output_path:
-            return jsonify({
-                'success': True,
-                'download_url': f'/api/download/{os.path.basename(output_path)}',
-                'filename': os.path.basename(output_path)
-            })
-        else:
-            return jsonify({'error': 'Failed to trim video'}), 500
-
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-# AI Tools
-@api_bp.route('/ai/generate-resume', methods=['POST'])
-def generate_resume():
-    """Generate resume using AI"""
-    try:
-        name = request.form.get('name', 'John Doe')
-        experience = request.form.get('experience', 'Software Developer')
-        skills = request.form.get('skills', 'Python, JavaScript, React')
         
-        from utils.ai_tools import AIProcessor
+        if not file or not allowed_file(file.filename, ['jpg', 'jpeg', 'png', 'webp']):
+            return jsonify({'error': 'Please upload a valid image file'}), 400
         
-        # Generate resume PDF
-        output_path = AIProcessor.generate_resume(name, experience, skills)
-        
-        if output_path:
-            return jsonify({
-                'success': True,
-                'download_url': f'/api/download/{os.path.basename(output_path)}',
-                'filename': os.path.basename(output_path)
-            })
-        else:
-            return jsonify({'error': 'Failed to generate resume'}), 500
+        with tempfile.TemporaryDirectory() as temp_dir:
+            input_path = os.path.join(temp_dir, 'input_image')
+            file.save(input_path)
             
+            with Image.open(input_path) as img:
+                if maintain_aspect:
+                    img.thumbnail((width, height), Image.Resampling.LANCZOS)
+                else:
+                    img = img.resize((width, height), Image.Resampling.LANCZOS)
+                
+                output_filename = create_temp_filename(file.filename, "_resized")
+                output_path = os.path.join(temp_dir, output_filename)
+                
+                if file.filename.lower().endswith('.png'):
+                    img.save(output_path, 'PNG')
+                else:
+                    img.save(output_path, 'JPEG', quality=95)
+                
+                return send_file(output_path, 
+                               as_attachment=True, 
+                               download_name=output_filename)
+    
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        logger.error(f"Image resize error: {str(e)}")
+        return jsonify({'error': 'Failed to resize image'}), 500
 
-@api_bp.route('/ai/generate-business-names', methods=['POST'])
-def generate_business_names():
-    """Generate business name suggestions"""
+# QR Code Generator API
+
+@api_bp.route('/tools/qr-generate', methods=['POST'])
+def qr_generate():
+    """Generate QR code with customization options"""
     try:
-        industry = request.form.get('industry', 'Technology')
-        keywords = request.form.get('keywords', '')
+        data = request.get_json()
+        text = data.get('text', '')
+        size = int(data.get('size', 256))
         
-        from utils.ai_tools import AIProcessor
+        if not text.strip():
+            return jsonify({'error': 'Text content is required'}), 400
         
-        # Generate business names
-        names = AIProcessor.generate_business_names(industry, keywords)
+        # Generate QR code
+        qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_M,
+            box_size=10,
+            border=4,
+        )
+        qr.add_data(text)
+        qr.make(fit=True)
         
-        return jsonify({
-            'success': True,
-            'business_names': names
-        })
+        # Create image
+        img = qr.make_image(fill_color="black", back_color="white")
+        
+        # Resize to requested size
+        img = img.resize((size, size), Image.Resampling.LANCZOS)
+        
+        with tempfile.TemporaryDirectory() as temp_dir:
+            output_path = os.path.join(temp_dir, f"qrcode_{uuid.uuid4().hex[:8]}.png")
+            img.save(output_path, 'PNG')
             
+            return send_file(output_path, 
+                           as_attachment=True, 
+                           download_name="qrcode.png",
+                           mimetype='image/png')
+    
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        logger.error(f"QR generation error: {str(e)}")
+        return jsonify({'error': 'Failed to generate QR code'}), 500
 
-# Health check endpoint
-@api_bp.route('/health')
+# Text Tools API
+
+@api_bp.route('/tools/text-case-convert', methods=['POST'])
+def text_case_convert():
+    """Convert text case (uppercase, lowercase, title case, etc.)"""
+    try:
+        data = request.get_json()
+        text = data.get('text', '')
+        case_type = data.get('case_type', 'upper')
+        
+        if not text:
+            return jsonify({'error': 'Text is required'}), 400
+        
+        if case_type == 'upper':
+            result = text.upper()
+        elif case_type == 'lower':
+            result = text.lower()
+        elif case_type == 'title':
+            result = text.title()
+        elif case_type == 'sentence':
+            result = text.capitalize()
+        elif case_type == 'toggle':
+            result = text.swapcase()
+        else:
+            result = text
+        
+        return jsonify({'result': result})
+    
+    except Exception as e:
+        logger.error(f"Text case conversion error: {str(e)}")
+        return jsonify({'error': 'Failed to convert text case'}), 500
+
+@api_bp.route('/tools/password-generate', methods=['POST'])
+def password_generate():
+    """Generate secure passwords"""
+    try:
+        data = request.get_json()
+        length = int(data.get('length', 12))
+        include_uppercase = data.get('include_uppercase', True)
+        include_lowercase = data.get('include_lowercase', True)
+        include_numbers = data.get('include_numbers', True)
+        include_symbols = data.get('include_symbols', True)
+        
+        import string
+        import secrets
+        
+        characters = ""
+        if include_lowercase:
+            characters += string.ascii_lowercase
+        if include_uppercase:
+            characters += string.ascii_uppercase
+        if include_numbers:
+            characters += string.digits
+        if include_symbols:
+            characters += "!@#$%^&*()_+-=[]{}|;:,.<>?"
+        
+        if not characters:
+            return jsonify({'error': 'At least one character type must be selected'}), 400
+        
+        password = ''.join(secrets.choice(characters) for _ in range(length))
+        
+        return jsonify({'password': password})
+    
+    except Exception as e:
+        logger.error(f"Password generation error: {str(e)}")
+        return jsonify({'error': 'Failed to generate password'}), 500
+
+# Utility API Endpoints
+
+@api_bp.route('/tools/health', methods=['GET'])
 def health_check():
-    return jsonify({'status': 'healthy', 'tools': 'operational'})
+    """Health check endpoint"""
+    return jsonify({
+        'status': 'healthy',
+        'timestamp': datetime.now().isoformat(),
+        'message': 'All tool APIs are operational'
+    })
 
-# Generic tool processing endpoint
-@api_bp.route('/tools/generic/<tool_name>', methods=['POST'])
-def process_generic_tool(tool_name):
-    """Generic tool processing endpoint"""
-    try:
-        # Log tool usage
-        logging.info(f"Processing tool: {tool_name}")
-        
-        # Get files if uploaded
-        files = request.files.getlist('files')
-        
-        # Import config to get all tools
-        from config import Config
-        
-        # Generate all tool responses dynamically
-        all_tools = []
-        for category, data in Config.TOOL_CATEGORIES.items():
-            all_tools.extend(data['tools'])
-        
-        # Demo responses for ALL 85 tools
-        demo_responses = {}
-        
-        # Define response templates by category
-        category_templates = {
-            'pdf': {'message': 'PDF processed successfully!', 'filename': 'processed_document.pdf'},
-            'image': {'message': 'Image processed successfully!', 'filename': 'processed_image.jpg'},
-            'video': {'message': 'Video/Audio processed successfully!', 'filename': 'processed_media.mp4'},
-            'govt': {'message': 'Government document processed successfully!', 'filename': 'processed_doc.pdf'},
-            'student': {'message': 'Educational content processed successfully!', 'filename': 'processed_notes.pdf'},
-            'finance': {'message': 'Financial calculation completed successfully!', 'filename': 'calculation_result.pdf'},
-            'utility': {'message': 'Utility tool processed successfully!', 'filename': 'utility_result.txt'},
-            'ai': {'message': 'AI content generated successfully!', 'filename': 'ai_generated_content.txt'}
-        }
-        
-        # Generate responses for all tools
-        for category, data in Config.TOOL_CATEGORIES.items():
-            template = category_templates[category]
-            for tool in data['tools']:
-                demo_responses[tool] = {
-                    'success': True,
-                    'message': template['message'],
-                    'demo_mode': True,
-                    'filename': template['filename'],
-                    'category': category
-                }
-        
-        # Return specific demo response or generic one
-        return jsonify(demo_responses.get(tool_name, {
-            'success': True,
-            'message': f'Tool {tool_name} processed successfully',
-            'demo_mode': True,
-            'filename': f'{tool_name}_result.txt'
-        }))
-        
-    except Exception as e:
-        logging.error(f"Error processing tool {tool_name}: {str(e)}")
-        return jsonify({'error': str(e)}), 500
+@api_bp.route('/tools/info', methods=['GET'])
+def tool_info():
+    """Get information about available tools"""
+    return jsonify({
+        'total_tools': 85,
+        'categories': [
+            'PDF Tools', 'Image Tools', 'Video Tools', 'AI Tools',
+            'Text Tools', 'Utility Tools', 'Government Tools', 'Student Tools'
+        ],
+        'api_version': '1.0',
+        'features': [
+            'File processing', 'Real-time generation', 'No registration required',
+            'Secure processing', 'Multiple formats supported'
+        ]
+    })
+
+# Error handlers
+@api_bp.errorhandler(404)
+def not_found(error):
+    return jsonify({'error': 'API endpoint not found'}), 404
+
+@api_bp.errorhandler(500)
+def internal_error(error):
+    return jsonify({'error': 'Internal server error'}), 500

@@ -4,7 +4,7 @@
 
 {% block head %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/tool-specific-styles.css') }}">
-<script src="{{ url_for('static', filename='js/tool-specific-handlers.js') }}"></script>
+<script src="{{ url_for('static', filename='js/tools/qr-generator.js') }}"></script>
 {% endblock %}
 
 {% block content %}
@@ -68,9 +68,105 @@
                             <div>
                                 <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-2">How to Use</h3>
                                 <p class="text-slate-800 dark:text-slate-200">Enter text, URL, or other content. Customize appearance and download QR code.</p>
-                                
                             </div>
                         </div>
+                    </div>
+
+                    <!-- QR Type Selection -->
+                    <div class="grid grid-cols-2 md:grid-cols-5 gap-2 mb-6">
+                        <button @click="setQRType('text')" 
+                                :class="qrType === 'text' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'"
+                                class="px-3 py-2 rounded-lg text-sm font-medium transition-colors">
+                            Text
+                        </button>
+                        <button @click="setQRType('url')" 
+                                :class="qrType === 'url' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'"
+                                class="px-3 py-2 rounded-lg text-sm font-medium transition-colors">
+                            URL
+                        </button>
+                        <button @click="setQRType('email')" 
+                                :class="qrType === 'email' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'"
+                                class="px-3 py-2 rounded-lg text-sm font-medium transition-colors">
+                            Email
+                        </button>
+                        <button @click="setQRType('phone')" 
+                                :class="qrType === 'phone' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'"
+                                class="px-3 py-2 rounded-lg text-sm font-medium transition-colors">
+                            Phone
+                        </button>
+                        <button @click="setQRType('wifi')" 
+                                :class="qrType === 'wifi' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'"
+                                class="px-3 py-2 rounded-lg text-sm font-medium transition-colors">
+                            WiFi
+                        </button>
+                    </div>
+
+                    <!-- Input Area -->
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Content to encode
+                            </label>
+                            <textarea id="qr-input" 
+                                     x-model="inputText"
+                                     placeholder="Enter your text here..."
+                                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                                     rows="4"></textarea>
+                        </div>
+
+                        <!-- Customization Options -->
+                        <div x-show="showCustomization" class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-gray-50 rounded-lg">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Size (px)</label>
+                                <select x-model="qrSize" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                                    <option value="128">128x128</option>
+                                    <option value="256">256x256</option>
+                                    <option value="512">512x512</option>
+                                    <option value="1024">1024x1024</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Foreground Color</label>
+                                <input type="color" x-model="qrColor" class="w-full h-10 border border-gray-300 rounded-lg">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Background Color</label>
+                                <input type="color" x-model="qrBgColor" class="w-full h-10 border border-gray-300 rounded-lg">
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="flex flex-wrap gap-3">
+                            <button @click="generateQR()" 
+                                    :disabled="!inputText.trim() || isGenerating"
+                                    class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                                <span x-show="!isGenerating">
+                                    <i data-lucide="qr-code" class="w-4 h-4 inline mr-2"></i>
+                                    Generate QR Code
+                                </span>
+                                <span x-show="isGenerating">
+                                    <i data-lucide="loader" class="w-4 h-4 inline mr-2 animate-spin"></i>
+                                    Generating...
+                                </span>
+                            </button>
+                            
+                            <button @click="showCustomization = !showCustomization" 
+                                    class="px-4 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors">
+                                <i data-lucide="settings" class="w-4 h-4 inline mr-2"></i>
+                                Customize
+                            </button>
+                            
+                            <button @click="clearQR()" 
+                                    class="px-4 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+                                <i data-lucide="refresh-cw" class="w-4 h-4 inline mr-2"></i>
+                                Clear
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- QR Code Display -->
+                    <div id="qr-display" class="mt-8 p-8 bg-gray-50 rounded-2xl text-center">
+                        <p class="text-gray-500">QR code will appear here</p>
                     </div>
 
                     <!-- Enhanced Upload Area -->
