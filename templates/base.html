@@ -27,6 +27,8 @@
 
     <!-- TailwindCSS & DaisyUI -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Professional Mode - Disable Authentication -->
+    <script src="{{ url_for('static', filename='js/professional-mode.js') }}"></script>
     <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.20/dist/full.min.css" rel="stylesheet" type="text/css" />
 
     <!-- Alpine.js -->
@@ -76,6 +78,7 @@
     <script src="{{ url_for('static', filename='js/auth-handlers.js') }}"></script>
 
     <!-- Domain Check for Firebase -->
+    <script src="{{ url_for('static', filename='js/auth-bypass.js') }}"></script>
     <script src="{{ url_for('static', filename='js/domain-check.js') }}"></script>
 
     <!-- Temporary Auth Fallback -->
