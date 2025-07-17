@@ -207,24 +207,25 @@ document.addEventListener('DOMContentLoaded', function() {
     
     console.log(`Found ${toolCards.length} tool cards on page load`);
     
-    // Force display all tool cards (migration fix)
-    const allCards = document.querySelectorAll('.tool-card');
-    allCards.forEach(card => {
-        if (card) {
-            try {
-                if (card.style) {
-                    card.style.display = 'block';
-                    card.style.visibility = 'visible';
-                    card.style.opacity = '1';
+    // Use safe display functions
+    if (window.fixToolDisplays) {
+        window.fixToolDisplays();
+    } else {
+        // Fallback fix
+        const allCards = document.querySelectorAll('.tool-card, .bg-white, .rounded-xl');
+        allCards.forEach(card => {
+            if (card && window.safeSetStyle) {
+                window.safeSetStyle(card, 'display', 'block');
+                window.safeSetStyle(card, 'visibility', 'visible');
+                window.safeSetStyle(card, 'opacity', '1');
+                if (card.classList) {
+                    card.classList.remove('hidden');
                 }
-                card.classList.remove('hidden');
-            } catch (e) {
-                console.log('Safely handled style error for card');
             }
-        }
-    });
+        });
+    }
     
-    console.log('Migration fix: Tool cards display forced to visible');
+    console.log('✅ Tool cards safely displayed');
 });
 
 // Additional safety fix for null style errors

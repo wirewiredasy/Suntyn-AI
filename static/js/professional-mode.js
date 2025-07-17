@@ -7,15 +7,16 @@
 (function() {
     'use strict';
     
-    // Block Firebase configuration immediately
+    // Complete Firebase blocking
     window.firebaseConfig = null;
+    window.firebase = null;
     
-    // Override Firebase if it exists
-    if (typeof window.firebase !== 'undefined') {
-        window.firebase = null;
-    }
+    // Block Firebase initialization attempts
+    window.initializeApp = function() { return null; };
+    window.getAuth = function() { return null; };
+    window.getFirestore = function() { return null; };
     
-    console.log('🚀 Firebase authentication disabled for professional experience');
+    console.log('🚀 Firebase completely disabled for professional experience');
 })();
 
 // When DOM loads, ensure tools are accessible
