@@ -33,7 +33,8 @@ def setup_fresh_database():
         # Populate with all tool categories and tools
         for category_name, category_data in Config.TOOL_CATEGORIES.items():
             category = ToolCategory(
-                name=category_data['name'],
+                name=category_name,
+                display_name=category_data['name'],
                 icon=category_data['icon'],
                 color=category_data['color'],
                 description=category_data['description']
