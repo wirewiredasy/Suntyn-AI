@@ -1,0 +1,99 @@
+cdn.tailwindcss.com should not be used in production. To use Tailwind CSS in production, install it as a PostCSS plugin or use the Tailwind CLI: https://tailwindcss.com/docs/installation
+Alpine Expression Error: genericToolHandler is not defined
+
+Expression: "genericToolHandler('pdf-unlock')"
+
+ 
+<div x-data="genericToolHandler('pdf-unlock')" class="space-y-6">…</div>
+Alpine Expression Error: dragover is not defined
+
+Expression: "{ 'border-blue-400 bg-blue-50 dark:bg-blue-900/20': dragover }"
+
+ 
+<div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-2xl p-8 text-center hover:border-blue-400 dark:hover:border-blue-500 transition-colors" @dragover.prevent="dragover = true" @dragleave.prevent="dragover = false" @drop.prevent="handleDrop($event)" :class="{ 'border-blue-400 bg-blue-50 dark:bg-blue-900/20': dragover }">…</div>
+Alpine Expression Error: files is not defined
+
+Expression: "files.length > 0"
+
+ 
+<div x-show="files.length > 0" class="space-y-3" style="display: none;">…</div>
+Alpine Expression Error: files is not defined
+
+Expression: "files"
+
+ 
+<template x-for="(file, index) in files" :key="index"></template>
+Alpine Expression Error: files is not defined
+
+Expression: "files.length > 0"
+
+ 
+<div x-show="files.length > 0" class="text-center" style="display: none;">…</div>
+Alpine Expression Error: processing is not defined
+
+Expression: "processing"
+
+ 
+<button @click="processFiles()" :disabled="processing" class="btn btn-primary btn-lg" :class="{ 'loading': processing }">…</button>
+Alpine Expression Error: processing is not defined
+
+Expression: "{ 'loading': processing }"
+
+ 
+<button @click="processFiles()" :disabled="processing" class="btn btn-primary btn-lg" :class="{ 'loading': processing }">…</button>
+Alpine Expression Error: processing is not defined
+
+Expression: "!processing"
+
+ 
+<i data-lucide="play" class="w-5 h-5 mr-2" x-show="!processing" style="display: none;"></i>
+Alpine Expression Error: processing is not defined
+
+Expression: "processing ? 'Processing...' : 'Process Files'"
+
+ 
+<span x-text="processing ? 'Processing...' : 'Process Files'"></span>
+Alpine Expression Error: processing is not defined
+
+Expression: "processing"
+
+ 
+<div x-show="processing" class="space-y-4" style="display: none;">…</div>
+Alpine Expression Error: progress is not defined
+
+Expression: "`width: ${progress}%`"
+
+ 
+<div class="bg-blue-600 h-2 rounded-full transition-all duration-300" :style="`width: ${progress}%`" style="undefined"></div>
+Alpine Expression Error: progress is not defined
+
+Expression: "`Processing... ${progress}%`"
+
+ 
+<p class="text-center text-gray-600 dark:text-gray-300" x-text="`Processing... ${progress}%`"></p>
+Alpine Expression Error: results is not defined
+
+Expression: "results.length > 0"
+
+ 
+<div x-show="results.length > 0" class="space-y-4" style="display: none;">…</div>
+Alpine Expression Error: results is not defined
+
+Expression: "results"
+
+ 
+<template x-for="result in results" :key="result.id"></template>
+Header scroll fixes applied
+Firebase configuration missing
+Firebase not available or configuration missing
+Current domain: 0d7696ad-7b37-4960-a955-9b25dae78efd-00-3dukuh8alc7ih.spock.replit.dev
+Tool Manager Initialized
+Current tool: pdf-unlock
+getToolConfig is not defined
+Script error caught: Uncaught ReferenceError: getToolConfig is not defined
+Alpine Expression Error: processing is not defined
+
+Expression: "!processing"
+
+ 
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="play" class="lucide lucide-play w-5 h-5 mr-2" x-show="!processing" style="display: none; color: rgb(255, 255, 255);">…</svg>
