@@ -69,12 +69,13 @@
     </div>
 
     <!-- Tools Grid -->
-    <div id="tools-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {% if tools %}
+    <div id="tools-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" style="min-height: 400px;">
+        {% if tools and tools|length > 0 %}
             {% for tool in tools %}
             <div class="tool-card bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border border-gray-200 dark:border-gray-700 cursor-pointer" 
                  data-tool="{{ tool.name }}" 
                  data-category="{{ tool.category.name if tool.category else 'unknown' }}"
+                 style="display: block !important; visibility: visible !important; opacity: 1 !important;"
                  onclick="window.location.href='/tools/{{ tool.name }}'; console.log('Card clicked, navigating to: /tools/{{ tool.name }}')">
                 <div class="p-6">
                     <div class="flex items-center mb-4">
@@ -116,8 +117,11 @@
                 <div class="w-16 h-16 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center mx-auto mb-4">
                     <i data-lucide="search" class="w-8 h-8 text-gray-400"></i>
                 </div>
-                <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">Loading tools...</h3>
-                <p class="text-gray-600 dark:text-gray-300">Please wait while we load your tools</p>
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">No tools found</h3>
+                <p class="text-gray-600 dark:text-gray-300">Try refreshing the page or contact support</p>
+                <div class="mt-4 text-sm text-gray-500">
+                    Debug: Found {{ tools|length if tools else 0 }} tools
+                </div>
             </div>
         {% endif %}
     </div>
@@ -144,16 +148,24 @@ function filterTools() {
     let visibleCount = 0;
 
     toolCards.forEach(card => {
-        const toolName = card.dataset.tool.toLowerCase();
-        const category = card.dataset.category.toLowerCase();
+        if (!card || !card.dataset) return; // Add safety check
+        
+        const toolName = (card.dataset.tool || '').toLowerCase();
+        const category = (card.dataset.category || '').toLowerCase();
         const isVisible = query === '' || toolName.includes(query) || category.includes(query);
 
         if (isVisible) {
-            card.style.display = 'block';
+            if (card.style) {
+                card.style.display = 'block';
+                card.style.visibility = 'visible';
+                card.style.opacity = '1';
+            }
             card.classList.add('animate__animated', 'animate__fadeInUp');
             visibleCount++;
         } else {
-            card.style.display = 'none';
+            if (card.style) {
+                card.style.display = 'none';
+            }
         }
     });
 
@@ -171,12 +183,29 @@ function clearSearch() {
     filterTools();
 }
 
-// Initialize search functionality
+// Initialize search functionality and ensure tools are visible
 document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.querySelector('input[placeholder*="Search tools"]');
     if (searchInput) {
         searchInput.addEventListener('input', filterTools);
     }
+    
+    // Ensure all tool cards are visible on page load
+    const toolCards = document.querySelectorAll('.tool-card');
+    toolCards.forEach(card => {
+        if (card && card.style) {
+            card.style.display = 'block';
+            card.style.visibility = 'visible'; 
+            card.style.opacity = '1';
+        }
+    });
+    
+    // Initialize Lucide icons
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+    }
+    
+    console.log(`Found ${toolCards.length} tool cards on page load`);
 });
 </script>
 {% endblock %}
