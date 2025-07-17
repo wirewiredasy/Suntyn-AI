@@ -181,7 +181,7 @@ class ToolAnimationManager {
                 const x = e.clientX - rect.left - size / 2;
                 const y = e.clientY - rect.top - size / 2;
 
-                if (ripple && ripple.style) {
+                if (ripple && ripple.style && button && button.style) {
                     ripple.style.cssText = `
                         position: absolute;
                         width: ${size}px;
@@ -190,16 +190,14 @@ class ToolAnimationManager {
                         top: ${y}px;
                         background: rgba(255, 255, 255, 0.3);
                         border-radius: 50%;
-                    transform: scale(0);
-                    animation: ripple 0.6s ease-out;
-                    pointer-events: none;
-                `;
+                        transform: scale(0);
+                        animation: ripple 0.6s ease-out;
+                        pointer-events: none;
+                    `;
 
-                    if (button && button.style) {
-                        button.style.position = 'relative';
-                        button.style.overflow = 'hidden';
-                        button.appendChild(ripple);
-                    }
+                    button.style.position = 'relative';
+                    button.style.overflow = 'hidden';
+                    button.appendChild(ripple);
 
                     setTimeout(() => {
                         if (ripple && ripple.parentElement) {
