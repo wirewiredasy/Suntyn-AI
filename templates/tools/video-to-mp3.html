@@ -1,8 +1,8 @@
-{% extends "base.html" %}
+{{ extends "base.html" }}
 
-{% block title %}Video to MP3 Converter - Suntyn AI{% endblock %}
+{{ block title }}Video to MP3 - Suntyn AI{{ endblock }}
 
-{% block content %}
+{{ block content }}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/hybrid-design.css') }}">
 
 <div class="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 py-8">
@@ -14,7 +14,7 @@
                 <li><i data-lucide="chevron-right" class="w-4 h-4"></i></li>
                 <li><a href="{{ url_for('tools.index') }}" class="hover:text-blue-600">Tools</a></li>
                 <li><i data-lucide="chevron-right" class="w-4 h-4"></i></li>
-                <li class="text-gray-900">Video to MP3 Converter</li>
+                <li class="text-gray-900">Video to MP3</li>
             </ol>
         </nav>
 
@@ -23,11 +23,11 @@
             <div class="bg-white rounded-3xl shadow-xl p-8 mb-8">
                 <div class="flex items-center space-x-6 mb-8">
                     <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center shadow-lg">
-                        <i data-lucide="music" class="w-10 h-10 text-white"></i>
+                        <i data-lucide="video" class="w-10 h-10 text-white"></i>
                     </div>
                     <div>
-                        <h1 class="text-4xl font-bold text-gray-900 mb-2">Video to MP3 Converter</h1>
-                        <p class="text-xl text-gray-600">Extract high-quality audio from video files in various formats.</p>
+                        <h1 class="text-4xl font-bold text-gray-900 mb-2">Video to MP3</h1>
+                        <p class="text-xl text-gray-600">Extract audio from videos</p>
                     </div>
                 </div>
                 
@@ -270,4 +270,4 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
-{% endblock %}
+{{ endblock }}
