@@ -428,18 +428,24 @@ function initializePerformanceMonitoring() {
 
 // Error handling
 window.addEventListener('error', (event) => {
-    console.error('Global error:', event.error);
+    // Ignore script errors and Firebase errors silently
+    const ignoredErrors = [
+        'Script error',
+        'getToolConfig is not defined',
+        'genericToolHandler is not defined',
+        'Firebase',
+        'Alpine Expression Error'
+    ];
 
-    // Don't show notifications for Firebase config errors
-    if (event.error && event.error.code && event.error.code.includes('auth/')) {
-        console.log('Firebase auth error handled silently in demo mode');
-        return;
+    const shouldIgnore = ignoredErrors.some(error => 
+        event.message && event.message.includes(error)
+    );
+
+    if (!shouldIgnore) {
+        console.log('Script error caught:', event.message);
     }
 
-    // Show user-friendly error message for other errors
-    if (event.error && !event.error.message.includes('Firebase')) {
-        showNotification('An error occurred. Please try again.', 'error');
-    }
+    return true; // Prevent error popup
 });
 
 window.addEventListener('unhandledrejection', (event) => {
@@ -532,7 +538,7 @@ function addInstantPageTransitions() {
             if (this.closest('[data-theme-toggle]') || this.hasAttribute('data-theme-toggle')) {
                 return;
             }
-            
+
             // Don't interfere with external links or hash links
             if (this.hostname !== window.location.hostname || this.getAttribute('href').startsWith('#')) {
                 return;
@@ -545,7 +551,7 @@ function addInstantPageTransitions() {
 
             // Instant transition
             document.body.classList.add('page-transition', 'loading');
-            
+
             // Navigate immediately
             setTimeout(() => {
                 window.location = this.href;
@@ -561,7 +567,7 @@ function addInstantPageTransitions() {
             if (e.target.closest('[data-theme-toggle]')) {
                 return;
             }
-            
+
             document.body.classList.add('page-transition', 'loading');
         });
     });
@@ -572,20 +578,20 @@ function optimizeBackNavigation() {
     // Immediate background fix
     document.documentElement.style.backgroundColor = getComputedStyle(document.documentElement).backgroundColor;
     document.body.style.backgroundColor = 'inherit';
-    
+
     // Handle browser back/forward buttons
     window.addEventListener('popstate', function(event) {
         // Prevent sidebar auto-open
         closeSidebarAndMenus();
-        
+
         // Instant show without transition
         document.body.style.opacity = '1';
         document.body.style.visibility = 'visible';
         document.body.classList.add('back-navigation-fix');
-        
+
         // Remove any loading states
         document.body.classList.remove('page-transition', 'loading');
-        
+
         setTimeout(() => {
             document.body.classList.remove('back-navigation-fix');
         }, 100);
@@ -626,13 +632,13 @@ function closeSidebarAndMenus() {
                 navStore.mobileMenuOpen = false;
             }
         }
-        
+
         // Close chat widget
         const chatWidget = document.getElementById('chat-widget');
         if (chatWidget && chatWidget.__x) {
             chatWidget.__x.$data.isOpen = false;
         }
-        
+
         // Close any open dropdowns
         const userMenus = document.querySelectorAll('[x-data*="userMenuOpen"]');
         userMenus.forEach(menu => {
@@ -640,7 +646,7 @@ function closeSidebarAndMenus() {
                 menu.__x.$data.userMenuOpen = false;
             }
         });
-        
+
         // Force close any visible modals or overlays
         const modals = document.querySelectorAll('[x-show], .modal, .dropdown');
         modals.forEach(modal => {

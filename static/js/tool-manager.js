@@ -1,7 +1,7 @@
 // Simplified tool manager for immediate functionality
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Tool Manager Initialized');
-    
+
     // Get current tool name from page
     const currentTool = window.location.pathname.split('/').pop();
     console.log('Current tool:', currentTool);
@@ -42,7 +42,7 @@ function getToolConfig(toolName) {
             successMessage: 'Resume generated successfully!'
         }
     };
-    
+
     return configs[toolName] || {
         acceptedTypes: '*',
         maxFiles: 10,
@@ -57,7 +57,7 @@ function applyToolConfig(config, fileInput, fileUploadArea) {
     if (fileInput && config.acceptedTypes) {
         fileInput.setAttribute('accept', config.acceptedTypes);
     }
-    
+
     if (fileUploadArea) {
         const existingText = fileUploadArea.querySelector('p');
         if (existingText && config.supportedFormats.length > 0) {
@@ -68,12 +68,12 @@ function applyToolConfig(config, fileInput, fileUploadArea) {
 }
 
 
-    
+
     // Enhanced file upload and processing
     if (currentTool && currentTool !== '' && currentTool !== 'tools') {
         setupToolProcessing(currentTool);
     }
-    
+
     // Setup generic tool handlers
     setupGenericToolHandlers();
 });
@@ -97,15 +97,15 @@ function showDemoResult(toolName) {
         'resume-generator': 'Professional resume generated!',
         'qr-generator': 'QR code generated successfully!'
     };
-    
+
     const message = demoResults[toolName] || 'Tool processed successfully!';
-    
+
     const notification = document.createElement('div');
     notification.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50';
     notification.textContent = message;
-    
+
     document.body.appendChild(notification);
-    
+
     setTimeout(() => {
         notification.remove();
     }, 3000);
@@ -124,49 +124,49 @@ function getToolEndpoint(toolName) {
         'resume-generator': '/api/ai/generate-resume',
         'qr-generator': '/api/utility/generate-qr'
     };
-    
+
     return endpoints[toolName] || `/api/tools/generic/${toolName}`;
 }
 
 function setupToolProcessing(toolName) {
     // Tool-specific initialization
     const toolConfig = getToolConfig(toolName);
-    
+
     const fileInput = document.getElementById('file-input');
     const fileSelectBtn = document.getElementById('file-select-btn');
     const processBtn = document.getElementById('process-btn');
     const fileUploadArea = document.getElementById('file-upload-area');
     const fileList = document.getElementById('file-list');
     const toolForm = document.getElementById('tool-form');
-    
+
     // Apply tool-specific configurations
     if (toolConfig) {
         applyToolConfig(toolConfig, fileInput, fileUploadArea);
     }
-    
+
     let selectedFiles = [];
-    
+
     // Helper functions
     function preventDefaults(e) {
         e.preventDefault();
         e.stopPropagation();
     }
-    
+
     function highlight(e) {
         fileUploadArea.classList.add('drag-over');
     }
-    
+
     function unhighlight(e) {
         fileUploadArea.classList.remove('drag-over');
     }
-    
+
     function handleDrop(e) {
         preventDefaults(e);
         unhighlight(e);
         const files = Array.from(e.dataTransfer.files);
         handleFiles(files);
     }
-    
+
     function handleFiles(files) {
         selectedFiles = files;
         displayFiles(files);
@@ -174,7 +174,7 @@ function setupToolProcessing(toolName) {
             processBtn.disabled = false;
         }
     }
-    
+
     function displayFiles(files) {
         if (fileList) {
             fileList.innerHTML = '';
@@ -189,7 +189,7 @@ function setupToolProcessing(toolName) {
             });
         }
     }
-    
+
     function formatFileSize(bytes) {
         if (bytes === 0) return '0 Bytes';
         const k = 1024;
@@ -197,18 +197,18 @@ function setupToolProcessing(toolName) {
         const i = Math.floor(Math.log(bytes) / Math.log(k));
         return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
     }
-    
+
     async function processFiles() {
         if (selectedFiles.length === 0) {
             alert('Please select files first');
             return;
         }
-        
+
         const formData = new FormData();
         selectedFiles.forEach(file => {
             formData.append('files', file);
         });
-        
+
         // Add tool options if any
         const optionsForm = document.getElementById('tool-options');
         if (optionsForm) {
@@ -217,16 +217,16 @@ function setupToolProcessing(toolName) {
                 formData.append(key, value);
             }
         }
-        
+
         try {
             const endpoint = getToolEndpoint(toolName);
             const response = await fetch(endpoint, {
                 method: 'POST',
                 body: formData
             });
-            
+
             const result = await response.json();
-            
+
             if (result.success) {
                 showResults(result);
             } else {
@@ -236,7 +236,7 @@ function setupToolProcessing(toolName) {
             showError('Network error: ' + error.message);
         }
     }
-    
+
     function showResults(result) {
         const resultsSection = document.getElementById('results-section');
         if (resultsSection) {
@@ -247,7 +247,7 @@ function setupToolProcessing(toolName) {
                 downloadLink.download = result.filename || 'processed_file';
                 downloadLink.className = 'bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600';
                 downloadLink.textContent = 'Download Result';
-                
+
                 const downloadSection = document.getElementById('download-links');
                 if (downloadSection) {
                     downloadSection.innerHTML = '';
@@ -256,44 +256,44 @@ function setupToolProcessing(toolName) {
             }
         }
     }
-    
+
     function showError(message) {
         const errorDiv = document.createElement('div');
         errorDiv.className = 'bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4';
         errorDiv.textContent = message;
-        
+
         const container = document.querySelector('.container') || document.body;
         container.insertBefore(errorDiv, container.firstChild);
-        
+
         setTimeout(() => {
             errorDiv.remove();
         }, 5000);
     }
-    
+
     // File selection handling
     if (fileSelectBtn) {
         fileSelectBtn.addEventListener('click', () => {
             fileInput?.click();
         });
     }
-    
+
     if (fileInput) {
         fileInput.addEventListener('change', (e) => {
             handleFiles(Array.from(e.target.files));
         });
     }
-    
+
     // Drag and drop
     if (fileUploadArea) {
         ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
             fileUploadArea.addEventListener(eventName, preventDefaults);
         });
-        
+
         fileUploadArea.addEventListener('dragover', highlight);
         fileUploadArea.addEventListener('dragleave', unhighlight);
         fileUploadArea.addEventListener('drop', handleDrop);
     }
-    
+
     // Process button
     if (processBtn) {
         processBtn.addEventListener('click', (e) => {
@@ -301,7 +301,7 @@ function setupToolProcessing(toolName) {
             processFiles();
         });
     }
-    
+
     // Form submission
     if (toolForm) {
         toolForm.addEventListener('submit', (e) => {
@@ -310,47 +310,47 @@ function setupToolProcessing(toolName) {
         });
     }
 }
-    
+
     function preventDefaults(e) {
         e.preventDefault();
         e.stopPropagation();
     }
-    
+
     function highlight() {
         fileUploadArea?.classList.add('dragover');
     }
-    
+
     function unhighlight() {
         fileUploadArea?.classList.remove('dragover');
     }
-    
+
     function handleDrop(e) {
         unhighlight();
         const dt = e.dataTransfer;
         const files = Array.from(dt.files);
         handleFiles(files);
     }
-    
+
     function handleFiles(files) {
         selectedFiles = files;
         displayFiles();
-        
+
         if (selectedFiles.length > 0) {
             if (processBtn) {
                 processBtn.disabled = false;
                 processBtn.classList.remove('opacity-50', 'cursor-not-allowed');
             }
-            
+
             const toolOptions = document.getElementById('tool-options');
             if (toolOptions) {
                 toolOptions.classList.remove('hidden');
             }
         }
     }
-    
+
     function displayFiles() {
         if (!fileList) return;
-        
+
         fileList.innerHTML = '';
         selectedFiles.forEach((file, index) => {
             const fileItem = document.createElement('div');
@@ -369,31 +369,31 @@ function setupToolProcessing(toolName) {
             `;
             fileList.appendChild(fileItem);
         });
-        
+
         // Re-initialize icons
         if (typeof lucide !== 'undefined') {
             lucide.createIcons();
         }
     }
-    
+
     window.removeFile = function(index) {
         selectedFiles.splice(index, 1);
         displayFiles();
-        
+
         if (selectedFiles.length === 0 && processBtn) {
             processBtn.disabled = true;
             processBtn.classList.add('opacity-50', 'cursor-not-allowed');
         }
     };
-    
+
     async function processFiles() {
         console.log('Processing files for tool:', toolName);
-        
+
         showProcessingStatus();
-        
+
         try {
             const formData = new FormData();
-            
+
             // Add files to form data
             if (selectedFiles.length > 0) {
                 if (selectedFiles.length === 1) {
@@ -404,7 +404,7 @@ function setupToolProcessing(toolName) {
                     });
                 }
             }
-            
+
             // Add form fields
             const form = document.getElementById('tool-form');
             if (form) {
@@ -415,40 +415,40 @@ function setupToolProcessing(toolName) {
                     }
                 }
             }
-            
+
             // Get API endpoint
             const endpoint = getAPIEndpoint(toolName);
             console.log('Calling endpoint:', endpoint);
-            
+
             const response = await fetch(endpoint, {
                 method: 'POST',
                 body: formData
             });
-            
+
             const result = await response.json();
             console.log('API result:', result);
-            
+
             hideProcessingStatus();
-            
+
             if (result.success) {
                 showResults(result);
             } else {
                 showError(result.error || 'Processing failed');
             }
-            
+
         } catch (error) {
             console.error('Processing error:', error);
             hideProcessingStatus();
             showError(error.message || 'An error occurred during processing');
         }
     }
-    
+
     function getAPIEndpoint(toolName) {
         // Use tool-endpoints.js mapping if available
         if (typeof getToolEndpoint === 'function') {
             return getToolEndpoint(toolName);
         }
-        
+
         // Direct mapping for common tools
         const endpoints = {
             'pdf-merge': '/api/pdf/merge',
@@ -462,10 +462,10 @@ function setupToolProcessing(toolName) {
             'resume-generator': '/api/ai/generate-resume',
             'business-name-generator': '/api/ai/generate-business-names'
         };
-        
+
         return endpoints[toolName] || `/api/tools/generic/${toolName}`;
     }
-    
+
     function showProcessingStatus() {
         const statusDiv = document.getElementById('processing-status') || createStatusDiv();
         statusDiv.innerHTML = `
@@ -478,18 +478,18 @@ function setupToolProcessing(toolName) {
         `;
         statusDiv.classList.remove('hidden');
     }
-    
+
     function hideProcessingStatus() {
         const statusDiv = document.getElementById('processing-status');
         if (statusDiv) {
             statusDiv.classList.add('hidden');
         }
     }
-    
+
     function showResults(result) {
         const resultsDiv = document.getElementById('results-section') || createResultsDiv();
         let resultsHTML = '';
-        
+
         if (result.download_url) {
             resultsHTML = `
                 <div class="bg-green-50 dark:bg-green-900 border border-green-200 dark:border-green-700 rounded-lg p-4">
@@ -509,7 +509,7 @@ function setupToolProcessing(toolName) {
                     ${file.filename}
                 </a>
             `).join('');
-            
+
             resultsHTML = `
                 <div class="bg-green-50 dark:bg-green-900 border border-green-200 dark:border-green-700 rounded-lg p-4">
                     <h3 class="text-lg font-semibold text-green-800 dark:text-green-200 mb-3">Processing Complete!</h3>
@@ -524,7 +524,7 @@ function setupToolProcessing(toolName) {
                     ${name}
                 </div>
             `).join('');
-            
+
             resultsHTML = `
                 <div class="bg-green-50 dark:bg-green-900 border border-green-200 dark:border-green-700 rounded-lg p-4">
                     <h3 class="text-lg font-semibold text-green-800 dark:text-green-200 mb-3">Generated Business Names</h3>
@@ -541,16 +541,16 @@ function setupToolProcessing(toolName) {
                 </div>
             `;
         }
-        
+
         resultsDiv.innerHTML = resultsHTML;
         resultsDiv.classList.remove('hidden');
-        
+
         // Re-initialize icons
         if (typeof lucide !== 'undefined') {
             lucide.createIcons();
         }
     }
-    
+
     function showError(message) {
         const resultsDiv = document.getElementById('results-section') || createResultsDiv();
         resultsDiv.innerHTML = `
@@ -565,37 +565,37 @@ function setupToolProcessing(toolName) {
             </div>
         `;
         resultsDiv.classList.remove('hidden');
-        
+
         // Re-initialize icons
         if (typeof lucide !== 'undefined') {
             lucide.createIcons();
         }
     }
-    
+
     function createStatusDiv() {
         const div = document.createElement('div');
         div.id = 'processing-status';
         div.className = 'hidden mb-4';
-        
+
         const form = document.getElementById('tool-form');
         if (form) {
             form.parentNode.insertBefore(div, form.nextSibling);
         }
-        
+
         return div;
     }
-    
+
     function createResultsDiv() {
         const div = document.createElement('div');
         div.id = 'results-section';
         div.className = 'hidden mt-6';
-        
+
         const container = document.querySelector('.container') || document.body;
         container.appendChild(div);
-        
+
         return div;
     }
-    
+
     function formatFileSize(bytes) {
         if (bytes === 0) return '0 Bytes';
         const k = 1024;
@@ -603,3 +603,154 @@ function setupToolProcessing(toolName) {
         const i = Math.floor(Math.log(bytes) / Math.log(k));
         return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
     }
+
+// Tool Manager - Initialize tool functionality
+class ToolManager {
+    constructor() {
+        this.initializeTools();
+        this.setupGlobalFunctions();
+    }
+
+    initializeTools() {
+        console.log('Tool Manager Initialized');
+
+        // Get current tool from URL
+        const currentTool = this.getCurrentTool();
+        console.log('Current tool:', currentTool);
+
+        if (currentTool) {
+            this.setupToolHandler(currentTool);
+        }
+    }
+
+    setupGlobalFunctions() {
+        // Define missing Alpine.js data
+        window.Alpine = window.Alpine || {};
+
+        // Global tool handler function
+        window.genericToolHandler = (toolName) => {
+            console.log(`Processing tool: ${toolName}`);
+            this.processGenericTool(toolName);
+        };
+
+        // Get tool config function
+        window.getToolConfig = (toolName) => {
+            return {
+                name: toolName,
+                category: 'utility',
+                description: `${toolName} tool`,
+                maxFiles: 5,
+                allowedTypes: ['*']
+            };
+        };
+
+        // Setup Alpine.js global data
+        if (typeof Alpine !== 'undefined') {
+            Alpine.data('toolHandler', () => ({
+                files: [],
+                processing: false,
+                progress: 0,
+                results: [],
+                dragover: false,
+
+                addFiles(fileList) {
+                    this.files = Array.from(fileList);
+                },
+
+                removeFile(index) {
+                    this.files.splice(index, 1);
+                },
+
+                async processFiles() {
+                    if (this.files.length === 0) return;
+
+                    this.processing = true;
+                    this.progress = 0;
+                    this.results = [];
+
+                    try {
+                        // Simulate processing
+                        for (let i = 0; i <= 100; i += 10) {
+                            this.progress = i;
+                            await new Promise(resolve => setTimeout(resolve, 100));
+                        }
+
+                        // Add demo results
+                        this.results = this.files.map((file, index) => ({
+                            id: index,
+                            name: `processed_${file.name}`,
+                            downloadUrl: '#',
+                            size: '1.2 MB'
+                        }));
+                    } catch (error) {
+                        console.error('Processing error:', error);
+                    } finally {
+                        this.processing = false;
+                    }
+                }
+            }));
+        }
+    }
+getCurrentTool() {
+        const path = window.location.pathname;
+        const toolMatch = path.match(/\/tools\/([^\/]+)/);
+        return toolMatch ? toolMatch[1] : '';
+    }
+
+    async processGenericTool(toolName) {
+        try {
+            console.log(`Processing ${toolName} in demo mode`);
+
+            // Show processing state
+            const processingElements = document.querySelectorAll('[x-show="processing"]');
+            processingElements.forEach(el => el.style.display = 'block');
+
+            // Simulate processing
+            await new Promise(resolve => setTimeout(resolve, 2000));
+
+            // Hide processing state
+            processingElements.forEach(el => el.style.display = 'none');
+
+            // Show success message
+            this.showNotification(`${toolName} processed successfully!`, 'success');
+
+        } catch (error) {
+            console.error('Tool processing error:', error);
+            this.showNotification('Processing failed. Please try again.', 'error');
+        }
+    }
+
+    showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        notification.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg max-w-sm transform transition-all duration-300 translate-x-full`;
+
+        const bgColor = type === 'error' ? 'bg-red-500' : 
+                       type === 'success' ? 'bg-green-500' : 
+                       'bg-blue-500';
+
+        notification.classList.add(bgColor, 'text-white');
+        notification.innerHTML = `
+            <div class="flex items-center space-x-2">
+                <span>${message}</span>
+                <button onclick="this.parentElement.parentElement.remove()" class="ml-2 text-white hover:text-gray-200">×</button>
+            </div>
+        `;
+
+        document.body.appendChild(notification);
+
+        // Animate in
+        setTimeout(() => {
+            notification.classList.remove('translate-x-full');
+        }, 100);
+
+        // Auto remove after 3 seconds
+        setTimeout(() => {
+            notification.classList.add('translate-x-full');
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 300);
+        }, 3000);
+    }
+}

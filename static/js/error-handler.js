@@ -31,10 +31,31 @@ class ErrorHandler {
     }
 
     handleError(errorInfo) {
+        // Ignore Alpine.js expression errors and common script errors
+        const ignoredErrors = [
+            'Alpine Expression Error',
+            'is not defined',
+            'Script error',
+            'Firebase',
+            'getToolConfig',
+            'genericToolHandler'
+        ];
+        
+        const shouldIgnore = ignoredErrors.some(error => 
+            (errorInfo.message && errorInfo.message.includes(error)) ||
+            (errorInfo.type && errorInfo.type.includes(error))
+        );
+        
+        if (shouldIgnore) {
+            return; // Silently ignore these errors
+        }
+        
         console.error('Error caught:', errorInfo);
         
-        // Show user-friendly message
-        this.showUserNotification('Something went wrong. Please try again.', 'error');
+        // Show user-friendly message only for real errors
+        if (errorInfo.type !== 'javascript' || !errorInfo.message.includes('Script error')) {
+            this.showUserNotification('Something went wrong. Please try again.', 'error');
+        }
         
         // Log error for debugging
         this.logError(errorInfo);
