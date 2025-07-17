@@ -90,7 +90,7 @@ def index():
                              selected_category=category,
                              search_query=search_query,
                              tool_icons=TOOL_CUSTOM_ICONS,
-                             firebase_api_key=os.environ.get("FIREBASE_API_KEY", ""),
+                             # No authentication required
                              firebase_project_id=os.environ.get("FIREBASE_PROJECT_ID", ""),
                              firebase_app_id=os.environ.get("FIREBASE_APP_ID", ""))
     except Exception as e:
@@ -101,7 +101,7 @@ def index():
                              selected_category='all',
                              search_query='',
                              tool_icons=TOOL_CUSTOM_ICONS,
-                             firebase_api_key=os.environ.get("FIREBASE_API_KEY", ""),
+                             # No authentication required
                              firebase_project_id=os.environ.get("FIREBASE_PROJECT_ID", ""),
                              firebase_app_id=os.environ.get("FIREBASE_APP_ID", ""))
 
@@ -165,7 +165,7 @@ def tool_page(tool_name):
         try:
             return render_template(f'tools/{tool_name}.html', 
                                  tool=tool,
-                                 firebase_api_key=os.environ.get("FIREBASE_API_KEY", ""),
+                                 # No authentication required
                                  firebase_project_id=os.environ.get("FIREBASE_PROJECT_ID", ""),
                                  firebase_app_id=os.environ.get("FIREBASE_APP_ID", ""))
         except:
@@ -173,7 +173,7 @@ def tool_page(tool_name):
             return render_template('tools/generic_tool.html', 
                                  tool_name=tool_name, 
                                  tool_info=tool,
-                                 firebase_api_key=os.environ.get("FIREBASE_API_KEY", ""),
+                                 # No authentication required
                                  firebase_project_id=os.environ.get("FIREBASE_PROJECT_ID", ""),
                                  firebase_app_id=os.environ.get("FIREBASE_APP_ID", ""))
 

@@ -30,8 +30,7 @@
     
     <!-- TailwindCSS & DaisyUI -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Professional Mode - Disable Authentication -->
-    <script src="{{ url_for('static', filename='js/professional-mode.js') }}"></script>
+    <!-- No Authentication Mode -->
     <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.20/dist/full.min.css" rel="stylesheet" type="text/css" />
 
     <!-- Alpine.js -->
@@ -65,27 +64,7 @@
     <!-- Header Scroll Fix -->
     <script src="{{ url_for('static', filename='js/header-scroll-fix.js') }}"></script>
 
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-
-    <!-- Firebase Meta Tags -->
-    <meta name="firebase-api-key" content="{{ firebase_api_key }}">
-    <meta name="firebase-project-id" content="{{ firebase_project_id }}">
-    <meta name="firebase-app-id" content="{{ firebase_app_id }}">
-
-    <!-- Authentication Fix -->
-    <script src="{{ url_for('static', filename='js/auth-fix.js') }}"></script>
-
-    <!-- Authentication Form Handlers -->
-    <script src="{{ url_for('static', filename='js/auth-handlers.js') }}"></script>
-
-    <!-- Domain Check for Firebase -->
-    <script src="{{ url_for('static', filename='js/auth-bypass.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/domain-check.js') }}"></script>
-
-    <!-- Temporary Auth Fallback -->
-    <script src="{{ url_for('static', filename='js/temp-auth-fallback.js') }}"></script>
+    <!-- No Authentication Required -->
 
     <!-- Tool Endpoints Configuration -->
     <script src="{{ url_for('static', filename='js/tool-endpoints.js') }}"></script>

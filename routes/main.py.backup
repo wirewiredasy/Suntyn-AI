@@ -61,15 +61,7 @@ def dashboard_stats():
     
     try:
         # Get user from database
-        # Return generic stats for guest user
-        return jsonify({
-            'tools_used': 0,
-            'files_processed': 0,
-            'data_saved': '0 MB',
-            'time_saved': '0 hours',
-            'recent_activity': [],
-            'quick_tools': get_popular_tools()
-        })
+        # No authentication - return generic stats
         
         # Calculate real statistics
         total_tools_used = ToolHistory.query.filter_by(user_id=user.id).count()
@@ -171,7 +163,8 @@ def track_tool_usage():
         if not user:
             user = User(
                 email="guest@toolora.ai",
-                display_name=data.get('display_name', 'Guest User')
+                email=data.get('email', ''),
+                display_name=data.get('display_name', '')
             )
             db.session.add(user)
             db.session.commit()
