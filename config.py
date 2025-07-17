@@ -1,10 +1,7 @@
 import os
 
 class Config:
-    # Firebase Configuration
-    FIREBASE_API_KEY = os.environ.get("FIREBASE_API_KEY", "AIzaSyBInx-JTjhFilUKR61lZLqj7o-UBv18BME")
-    FIREBASE_PROJECT_ID = os.environ.get("FIREBASE_PROJECT_ID", "tooloraai-eccee")
-    FIREBASE_APP_ID = os.environ.get("FIREBASE_APP_ID", "1:258154771843:web:b08bdc010bdfa191a872b6")
+    # Clean configuration - no external services
     
     # Tool Categories Configuration
     TOOL_CATEGORIES = {
