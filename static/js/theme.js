@@ -5,22 +5,28 @@ class ThemeManager {
         this.systemTheme = 'light';
         this.userPreference = 'system';
         this.listeners = [];
+        this.isInitialized = false;
         
         this.init();
     }
 
     init() {
-        // Load saved theme preference
+        // Prevent multiple initializations
+        if (this.isInitialized) return;
+        
+        // Load saved theme preference first
         this.loadThemePreference();
+        
+        // Apply theme immediately before any UI rendering
+        this.applyThemeInstantly();
         
         // Listen for system theme changes
         this.setupSystemThemeListener();
         
-        // Apply initial theme
-        this.applyTheme();
-        
         // Setup theme toggle handlers
         this.setupThemeToggles();
+        
+        this.isInitialized = true;
     }
 
     loadThemePreference() {
@@ -62,8 +68,14 @@ class ThemeManager {
         const toggles = document.querySelectorAll('[data-theme-toggle]');
         
         toggles.forEach(toggle => {
-            toggle.addEventListener('click', () => {
-                this.toggleTheme();
+            toggle.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                // Only toggle if this is an intentional click on theme toggle
+                if (e.target.closest('[data-theme-toggle]')) {
+                    this.toggleTheme();
+                }
             });
         });
         
@@ -72,6 +84,8 @@ class ThemeManager {
         
         selectors.forEach(selector => {
             selector.addEventListener('change', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
                 this.setTheme(e.target.value);
             });
             
@@ -99,9 +113,13 @@ class ThemeManager {
         this.notifyListeners();
     }
 
-    applyTheme() {
+    applyThemeInstantly() {
         const html = document.documentElement;
         const body = document.body;
+        
+        // Apply theme immediately without transitions
+        html.style.transition = 'none';
+        body.style.transition = 'none';
         
         // Remove existing theme classes
         html.classList.remove('light', 'dark');
@@ -111,6 +129,28 @@ class ThemeManager {
         html.classList.add(this.currentTheme);
         body.classList.add(this.currentTheme);
         
+        // Set background immediately
+        if (this.currentTheme === 'dark') {
+            html.style.backgroundColor = '#111827';
+            body.style.backgroundColor = '#111827';
+        } else {
+            html.style.backgroundColor = '#f9fafb';
+            body.style.backgroundColor = '#f9fafb';
+        }
+        
+        // Apply theme-specific styles
+        this.applyThemeStyles();
+        
+        // Re-enable transitions after a frame
+        requestAnimationFrame(() => {
+            html.style.transition = '';
+            body.style.transition = '';
+        });
+    }
+
+    applyTheme() {
+        this.applyThemeInstantly();
+        
         // Update meta theme-color
         this.updateMetaThemeColor();
         
@@ -119,9 +159,6 @@ class ThemeManager {
         
         // Update theme selector values
         this.updateThemeSelectors();
-        
-        // Apply theme-specific styles
-        this.applyThemeStyles();
     }
 
     updateMetaThemeColor() {

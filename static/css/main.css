@@ -1419,27 +1419,27 @@ body {
     background: inherit;
 }
 
-/* Ultimate Smooth Transitions */
+/* Ultimate Smooth Transitions - No Flash */
 .page-transition {
     position: relative;
     overflow: hidden;
 }
 
-.page-transition::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
-    z-index: 9999;
-    transition: left var(--transition-speed) var(--ease-curve);
+.page-transition.loading {
+    opacity: 0.98 !important;
     pointer-events: none;
 }
 
-.page-transition.active::before {
-    left: 100%;
+/* Prevent theme flash during transitions */
+.page-transition.loading * {
+    transition: none !important;
+    animation: none !important;
+}
+
+.page-transition.loading .dark,
+.page-transition.loading .light {
+    background-color: inherit !important;
+    color: inherit !important;
 }
 
 /* Smooth navigation overlay */
@@ -1501,6 +1501,21 @@ html {
 
 html.dark {
     background-color: var(--bg-dark) !important;
+}
+
+/* Lock theme during navigation */
+html.theme-locked,
+html.theme-locked * {
+    transition: none !important;
+    animation: none !important;
+}
+
+html.theme-locked.dark {
+    background-color: var(--bg-dark) !important;
+}
+
+html.theme-locked.light {
+    background-color: var(--bg-light) !important;
 }
 
 body {

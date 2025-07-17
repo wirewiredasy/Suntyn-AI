@@ -528,9 +528,19 @@ function addInstantPageTransitions() {
     const links = document.querySelectorAll('a[href^="/"], a[href^="' + window.location.origin + '"]');
     links.forEach(link => {
         link.addEventListener('click', function(e) {
+            // Don't interfere with theme toggles
+            if (this.closest('[data-theme-toggle]') || this.hasAttribute('data-theme-toggle')) {
+                return;
+            }
+            
             // Don't interfere with external links or hash links
             if (this.hostname !== window.location.hostname || this.getAttribute('href').startsWith('#')) {
                 return;
+            }
+
+            // Lock current theme during transition
+            if (window.themeManager) {
+                window.themeManager.lockTheme = true;
             }
 
             // Instant transition
@@ -546,7 +556,12 @@ function addInstantPageTransitions() {
     // Handle form submissions instantly
     const forms = document.querySelectorAll('form');
     forms.forEach(form => {
-        form.addEventListener('submit', function() {
+        form.addEventListener('submit', function(e) {
+            // Don't interfere with theme toggles
+            if (e.target.closest('[data-theme-toggle]')) {
+                return;
+            }
+            
             document.body.classList.add('page-transition', 'loading');
         });
     });
@@ -601,32 +616,41 @@ function optimizeBackNavigation() {
 
 // Close all sidebars and menus
 function closeSidebarAndMenus() {
-    // Close mobile menu
-    if (window.Alpine && window.Alpine.store('navigation')) {
-        window.Alpine.store('navigation').mobileMenuOpen = false;
-    }
-    
-    // Close chat widget
-    const chatWidget = document.getElementById('chat-widget');
-    if (chatWidget && chatWidget.__x) {
-        chatWidget.__x.$data.isOpen = false;
-    }
-    
-    // Close any open dropdowns
-    const userMenus = document.querySelectorAll('[x-data*="userMenuOpen"]');
-    userMenus.forEach(menu => {
-        if (menu.__x && menu.__x.$data.userMenuOpen) {
-            menu.__x.$data.userMenuOpen = false;
+    try {
+        // Close mobile menu
+        if (window.Alpine && window.Alpine.store && window.Alpine.store('navigation')) {
+            const navStore = window.Alpine.store('navigation');
+            if (navStore && typeof navStore.closeMobileMenu === 'function') {
+                navStore.closeMobileMenu();
+            } else if (navStore) {
+                navStore.mobileMenuOpen = false;
+            }
         }
-    });
-    
-    // Force close any visible modals or overlays
-    const modals = document.querySelectorAll('[x-show], .modal, .dropdown');
-    modals.forEach(modal => {
-        if (modal.style.display !== 'none') {
-            modal.style.display = 'none';
+        
+        // Close chat widget
+        const chatWidget = document.getElementById('chat-widget');
+        if (chatWidget && chatWidget.__x) {
+            chatWidget.__x.$data.isOpen = false;
         }
-    });
+        
+        // Close any open dropdowns
+        const userMenus = document.querySelectorAll('[x-data*="userMenuOpen"]');
+        userMenus.forEach(menu => {
+            if (menu.__x && menu.__x.$data.userMenuOpen) {
+                menu.__x.$data.userMenuOpen = false;
+            }
+        });
+        
+        // Force close any visible modals or overlays
+        const modals = document.querySelectorAll('[x-show], .modal, .dropdown');
+        modals.forEach(modal => {
+            if (modal.style.display !== 'none') {
+                modal.style.display = 'none';
+            }
+        });
+    } catch (error) {
+        console.log('Navigation cleanup completed with minor issues');
+    }
 }
 
 // Export functions for use in other scripts

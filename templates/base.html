@@ -38,7 +38,11 @@
     <!-- Animate.css -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 
-    <!-- Custom CSS -->
+    <!-- Instant Theme Script (must load first) -->
+    <script src="{{ url_for('static', filename='js/instant-theme.js') }}"></script>
+
+    <!-- CSS Files -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/enhanced-design.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/icon-system.css') }}">
@@ -82,10 +86,10 @@
 
     <!-- Simplified Tool Manager -->
     <script src="{{ url_for('static', filename='js/tool-manager.js') }}"></script>
-    
+
     <!-- Tool-Specific Handlers -->
     <script src="{{ url_for('static', filename='js/tool-specific-handlers.js') }}"></script>
-    
+
     <!-- Mobile Responsive Enhancements -->
     <script src="{{ url_for('static', filename='js/mobile-responsive-enhancements.js') }}"></script>
 
