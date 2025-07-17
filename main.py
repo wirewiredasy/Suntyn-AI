@@ -1,11 +1,4 @@
 from app import app  # noqa: F401
-# No authentication required - all tools are freely accessible
-
-# Register blueprints
-app.register_blueprint(main_bp)
-app.register_blueprint(tools_bp)
-app.register_blueprint(auth_bp)
-app.register_blueprint(api_bp)
 
 # Register enhanced API
 try:

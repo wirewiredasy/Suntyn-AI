@@ -48,21 +48,21 @@ def load_user(user_id):
     from models import User
     return User.query.get(int(user_id))
 
-# Import routes after app creation to avoid circular imports
-from routes.main import main_bp
-from routes.tools import tools_bp
-from routes.auth import auth_bp
-from routes.api import api_bp
-
-app.register_blueprint(main_bp)
-app.register_blueprint(tools_bp, url_prefix='/tools')
-app.register_blueprint(auth_bp, url_prefix='/auth')
-app.register_blueprint(api_bp, url_prefix='/api')
-
 with app.app_context():
     # Import models here so their tables are created
     import models
     db.create_all()
+    
+    # Import and register blueprints after database setup
+    from routes.main import main_bp
+    from routes.tools import tools_bp
+    from routes.auth import auth_bp
+    from routes.api import api_bp
+
+    app.register_blueprint(main_bp)
+    app.register_blueprint(tools_bp, url_prefix='/tools')
+    app.register_blueprint(auth_bp, url_prefix='/auth')
+    app.register_blueprint(api_bp, url_prefix='/api')
 
 # No authentication configuration needed
 
